@@ -1080,7 +1080,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         label: &quot;Time&quot;,
         summary: &quot;How states, events, and effects are located, ordered, and changed.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;],
-        children: [&quot;past&quot;, &quot;present&quot;, &quot;future&quot;, &quot;duration&quot;, &quot;sequence&quot;, &quot;change&quot;],
+        children: [&quot;past&quot;, &quot;present&quot;, &quot;future&quot;, &quot;duration&quot;, &quot;sequence&quot;],
       },
       resources: {
         id: &quot;resources&quot;,
@@ -1094,14 +1094,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         label: &quot;Processes&quot;,
         summary: &quot;A navigation shortcut to transformations that move reality between states.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;],
-        children: [&quot;creation&quot;, &quot;transformation&quot;, &quot;movement&quot;, &quot;exchange&quot;, &quot;maintenance&quot;, &quot;decay&quot;],
+        children: [&quot;process-change&quot;, &quot;transformation&quot;, &quot;exchange&quot;, &quot;learning&quot;, &quot;production&quot;],
       },
       relationships: {
         id: &quot;relationships&quot;,
         label: &quot;Relationships&quot;,
         summary: &quot;A navigation shortcut to connections through which entities affect one another.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;],
-        children: [&quot;causation&quot;, &quot;dependency&quot;, &quot;composition&quot;, &quot;association&quot;, &quot;communication&quot;, &quot;cooperation&quot;, &quot;competition&quot;],
+        children: [&quot;ownership&quot;, &quot;dependency&quot;, &quot;communication&quot;, &quot;competition&quot;, &quot;cooperation&quot;],
       },
       physical: { id: &quot;physical&quot;, label: &quot;Physical&quot;, summary: &quot;Matter, energy, space, and the forces that govern physical systems.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Physical&quot;] },
       biological: { id: &quot;biological&quot;, label: &quot;Biological&quot;, summary: &quot;Living systems, organisms, adaptation, and ecosystems.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Biological&quot;] },
@@ -1139,23 +1139,19 @@ html&gt;body{padding:0}&lt;/style&gt;
       future: { id: &quot;future&quot;, label: &quot;Future&quot;, summary: &quot;Possible or expected states after the present reference point.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;, &quot;Future&quot;] },
       duration: { id: &quot;duration&quot;, label: &quot;Duration&quot;, summary: &quot;The amount of time between a beginning and an end.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;, &quot;Duration&quot;] },
       sequence: { id: &quot;sequence&quot;, label: &quot;Sequence&quot;, summary: &quot;The order in which events, states, or actions occur.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;, &quot;Sequence&quot;] },
-      change: { id: &quot;change&quot;, label: &quot;Change&quot;, summary: &quot;A difference in state observed across time.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;, &quot;Change&quot;] },
       &quot;resource-time&quot;: { id: &quot;resource-time&quot;, label: &quot;Time&quot;, summary: &quot;The finite duration available for attention, action, or change.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Time&quot;] },
       energy: { id: &quot;energy&quot;, label: &quot;Energy&quot;, summary: &quot;The capacity to perform work or produce change.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Energy&quot;] },
       capital: { id: &quot;capital&quot;, label: &quot;Capital&quot;, summary: &quot;Accumulated assets that can support future production or value creation.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Capital&quot;] },
       information: { id: &quot;information&quot;, label: &quot;Information&quot;, summary: &quot;Meaningful representation that reduces uncertainty and guides action.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Information&quot;] },
       attention: { id: &quot;attention&quot;, label: &quot;Attention&quot;, summary: &quot;The limited capacity to select and sustain mental focus.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Attention&quot;] },
       compute: { id: &quot;compute&quot;, label: &quot;Compute&quot;, summary: &quot;The processing capacity available to transform data or state.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Compute&quot;] },
-      creation: { id: &quot;creation&quot;, label: &quot;Creation&quot;, summary: &quot;A process that brings a new entity, state, or arrangement into existence.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Creation&quot;] },
+      &quot;process-change&quot;: { id: &quot;process-change&quot;, label: &quot;Change&quot;, summary: &quot;A process through which a state, condition, or arrangement becomes different.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Change&quot;] },
       transformation: { id: &quot;transformation&quot;, label: &quot;Transformation&quot;, summary: &quot;A process that converts an entity or state into another form.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Transformation&quot;] },
-      movement: { id: &quot;movement&quot;, label: &quot;Movement&quot;, summary: &quot;A process that changes position, location, or distribution.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Movement&quot;] },
       exchange: { id: &quot;exchange&quot;, label: &quot;Exchange&quot;, summary: &quot;A process in which entities transfer resources, information, or value.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Exchange&quot;] },
-      maintenance: { id: &quot;maintenance&quot;, label: &quot;Maintenance&quot;, summary: &quot;A process that preserves function, condition, or stability over time.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Maintenance&quot;] },
-      decay: { id: &quot;decay&quot;, label: &quot;Decay&quot;, summary: &quot;A process through which order, capacity, or structure diminishes.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Decay&quot;] },
-      causation: { id: &quot;causation&quot;, label: &quot;Causation&quot;, summary: &quot;A relationship in which one condition contributes to producing another.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Causation&quot;] },
+      learning: { id: &quot;learning&quot;, label: &quot;Learning&quot;, summary: &quot;A process through which knowledge, capability, or behaviour changes through experience.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Learning&quot;] },
+      production: { id: &quot;production&quot;, label: &quot;Production&quot;, summary: &quot;A process that creates goods, services, information, or other valued outputs.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Production&quot;] },
+      ownership: { id: &quot;ownership&quot;, label: &quot;Ownership&quot;, summary: &quot;A relationship that assigns recognised possession, control, or rights over something.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Ownership&quot;] },
       dependency: { id: &quot;dependency&quot;, label: &quot;Dependency&quot;, summary: &quot;A relationship in which one entity relies on another.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Dependency&quot;] },
-      composition: { id: &quot;composition&quot;, label: &quot;Composition&quot;, summary: &quot;A whole-part relationship between an entity and its constituents.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Composition&quot;] },
-      association: { id: &quot;association&quot;, label: &quot;Association&quot;, summary: &quot;A meaningful link without necessarily implying ownership or causation.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Association&quot;] },
       communication: { id: &quot;communication&quot;, label: &quot;Communication&quot;, summary: &quot;A relationship formed through the exchange of signals or meaning.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Communication&quot;] },
       cooperation: { id: &quot;cooperation&quot;, label: &quot;Cooperation&quot;, summary: &quot;A relationship in which parties coordinate toward compatible outcomes.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Cooperation&quot;] },
       competition: { id: &quot;competition&quot;, label: &quot;Competition&quot;, summary: &quot;A relationship in which parties pursue scarce or incompatible outcomes.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Competition&quot;] },
@@ -1197,7 +1193,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       });
     };
 
-    const expansionPrompt = (node) =&gt; `Expand the ontology node: ${node.canonicalPath.join(&quot; → &quot;)}\n\nCanonical Ontology Expansion Contract:\n- Expand only the requested node.\n- Return exactly one level of 5–10 Pareto-essential children.\n- Make children mutually exclusive where practical and use timeless concepts.\n- Give each child a name and one-line description.\n- Do not change existing canonical nodes.\n- Do not include grandchildren unless requested.\n- If the node is invalid, suggest the closest valid canonical node.`;
+    const expansionPrompt = (node) =&gt; `Canonical Ontology Expansion Contract\n\nYou are expanding the Canonical Reality Ontology.\n\nThis ontology is the source of truth. Do not redesign, rename, merge, remove, or reorder existing canonical nodes unless explicitly instructed.\n\nExpand: ${node.canonicalPath.join(&quot; → &quot;)}\n\nExpansion Rules\n1. Expand only the requested node.\n2. Expand exactly one level deeper.\n3. Return between 5 and 10 Pareto-essential children.\n4. Children should collectively cover the parent.\n5. Children should be mutually exclusive where practical.\n6. Prefer timeless concepts over current implementations, tools, or technologies.\n7. Give every child a name and one-line description.\n8. Preserve the existing ontology naming conventions.\n9. If multiple taxonomies exist, choose the most widely accepted and explain the rationale.\n10. Never expand grandchildren unless explicitly requested.\n\nOutput Format\nParent\n├── Child 1\n│   One-line description\n├── Child 2\n│   One-line description\n…\n\nValidation Checklist\n✓ One level only\n✓ Pareto: 5–10 children\n✓ Canonical terminology\n✓ No duplicated concepts\n✓ Covers the parent\n✓ Suitable for long-term navigation\n✓ Stable across industries and time\n\nIf the requested node exists, expand it. If it does not exist, explain why and suggest the closest valid canonical node. Never modify the canonical ontology while expanding it.`;
 
     const showToast = (message) =&gt; {
       window.clearTimeout(toastTimer);

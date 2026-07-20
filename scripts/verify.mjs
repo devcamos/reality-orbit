@@ -56,6 +56,26 @@ if (!fragment.includes('canonicalPath: ["Reality", "Category", "Resource"]')) {
   failures.push("Resources must remain a shortcut into the Category dimension.");
 }
 
+const canonicalExpansions = [
+  '["physical", "biological", "psychological", "social", "economic", "informational", "mathematical"]',
+  '["law", "principle", "theory", "model", "framework", "pattern", "method", "heuristic"]',
+  '["resource-time", "energy", "capital", "information", "attention", "compute"]',
+  '["process-change", "transformation", "exchange", "learning", "production"]',
+  '["ownership", "dependency", "communication", "competition", "cooperation"]',
+];
+
+for (const expansion of canonicalExpansions) {
+  if (!fragment.includes(expansion)) {
+    failures.push(`Missing verified canonical expansion: ${expansion}.`);
+  }
+}
+
+for (const contractRule of ["Children should collectively cover the parent", "Never expand grandchildren", "Stable across industries and time"]) {
+  if (!fragment.includes(contractRule)) {
+    failures.push(`Missing expansion-contract rule: ${contractRule}.`);
+  }
+}
+
 for (const label of requiredLabels) {
   if (!fragment.includes(label)) {
     failures.push(`Missing required orbit label: ${label}.`);

@@ -113,16 +113,45 @@ Each ontology node is defined once:
 Use this request whenever a selected node has not yet been curated:
 
 ```text
-Expand the ontology node: [canonical path]
+You are expanding the Canonical Reality Ontology.
 
-Canonical Ontology Expansion Contract:
-- Expand only the requested node.
-- Return exactly one level of 5–10 Pareto-essential children.
-- Make children mutually exclusive where practical and use timeless concepts.
-- Give each child a name and one-line description.
-- Do not change existing canonical nodes.
-- Do not include grandchildren unless requested.
-- If the node is invalid, suggest the closest valid canonical node.
+This ontology is the source of truth. Do not redesign, rename, merge,
+remove, or reorder existing canonical nodes unless explicitly instructed.
+
+Expand: [canonical path]
+
+Expansion Rules
+1. Expand only the requested node.
+2. Expand exactly one level deeper.
+3. Return between 5 and 10 Pareto-essential children.
+4. Children should collectively cover the parent.
+5. Children should be mutually exclusive where practical.
+6. Prefer timeless concepts over current implementations, tools, or technologies.
+7. Give every child a name and one-line description.
+8. Preserve the existing ontology naming conventions.
+9. If multiple taxonomies exist, choose the most widely accepted and explain the rationale.
+10. Never expand grandchildren unless explicitly requested.
+
+Output Format
+Parent
+├── Child 1
+│   One-line description
+├── Child 2
+│   One-line description
+…
+
+Validation Checklist
+✓ One level only
+✓ Pareto: 5–10 children
+✓ Canonical terminology
+✓ No duplicated concepts
+✓ Covers the parent
+✓ Suitable for long-term navigation
+✓ Stable across industries and time
+
+If the requested node exists, expand it. If it does not exist, explain why
+and suggest the closest valid canonical node. Never modify the canonical
+ontology while expanding it.
 ```
 
 Review and approve the returned concepts in Notion first. Only then add them to the application ontology. This preserves the boundary between research and published knowledge.
