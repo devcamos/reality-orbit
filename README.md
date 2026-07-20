@@ -1,6 +1,12 @@
 # Reality Orbit
 
-Reality Orbit is a small interactive knowledge map. Reality stays at the centre while Domain, Knowledge, Category, Scale, Time, Resources, Processes, and Relationships form the surrounding orbit.
+Reality Orbit is an expandable knowledge map. Reality begins at the centre with eight useful navigation shortcuts; exploring a node moves it to the centre and reveals exactly one level of immediate children.
+
+The app distinguishes its simple visual navigation from the canonical ontology:
+
+- Canonical dimensions: Domain, Category, Time, Scale, and Perspective.
+- Navigation shortcuts: Domain, Knowledge, Category, Scale, Time, Resources, Processes, and Relationships.
+- Knowledge, Resource, Process, and Relationship are category paths, not additional top-level dimensions.
 
 ## Product boundary
 
@@ -14,6 +20,8 @@ This prototype is independent from Law Explorer. Law Explorer remains a law-only
 - `scripts/verify.mjs` — dependency-free production validation.
 - `vercel.json` — security headers and static deployment configuration.
 
+The repository is the source of truth for the published interaction and its curated ontology data. Notion remains the research and governance workspace.
+
 ## Validate locally
 
 ```bash
@@ -21,6 +29,12 @@ npm run check
 ```
 
 Open `index.html` directly or serve this directory with a local static server.
+
+```bash
+npm run start
+```
+
+The local preview is then available at `http://127.0.0.1:4175/`.
 
 ## Release workflow
 

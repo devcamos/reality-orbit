@@ -4,10 +4,44 @@
     color: var(--foreground);
   }
 
+  #reality-orbit-prototype .orbit-shell {
+    border: 1px solid color-mix(in srgb, var(--border) 84%, transparent);
+    background: color-mix(in srgb, var(--background) 94%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-toolbar {
+    display: flex;
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.65rem 0.8rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-path {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--muted-foreground);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  #reality-orbit-prototype .orbit-path strong {
+    color: var(--foreground);
+  }
+
+  #reality-orbit-prototype .orbit-path-segment {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   #reality-orbit-prototype .orbit-stage {
     position: relative;
     width: 100%;
-    height: clamp(420px, 68vw, 620px);
+    height: clamp(430px, 68vw, 620px);
     overflow: hidden;
     background:
       radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--viz-series-1) 14%, transparent) 0, transparent 24%),
@@ -39,7 +73,7 @@
   }
 
   #reality-orbit-prototype .orbit-connection[data-active="true"] {
-    opacity: 0.9;
+    opacity: 0.92;
     stroke: var(--viz-series-1);
     stroke-width: 2;
   }
@@ -49,12 +83,21 @@
     z-index: 2;
     left: var(--orbit-x);
     top: var(--orbit-y);
+    max-width: min(11rem, 30vw);
     transform: translate(-50%, -50%);
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-expandable="false"]::after {
+    content: " +";
+    color: var(--muted-foreground);
   }
 
   #reality-orbit-prototype .orbit-core {
     display: inline-flex;
+    max-width: min(13rem, 38vw);
     gap: 0.4rem;
     align-items: center;
   }
@@ -63,63 +106,116 @@
     color: var(--viz-series-1);
   }
 
-  #reality-orbit-prototype .orbit-status {
-    display: flex;
-    justify-content: center;
-    gap: 0.35rem;
-    min-height: 1.5rem;
-    margin: 0.75rem 0 0;
-    text-align: center;
+  #reality-orbit-prototype .orbit-detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 4.4rem;
+    padding: 0.75rem 0.8rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   }
 
-  #reality-orbit-prototype .orbit-status span:last-child {
+  #reality-orbit-prototype .orbit-status {
+    min-width: 0;
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .orbit-status strong,
+  #reality-orbit-prototype .orbit-status span {
+    display: block;
+  }
+
+  #reality-orbit-prototype .orbit-status span {
+    margin-top: 0.15rem;
     color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .orbit-action[hidden],
+  #reality-orbit-prototype .orbit-back[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-toast {
+    position: absolute;
+    z-index: 4;
+    right: 0.8rem;
+    bottom: 0.8rem;
+    max-width: min(23rem, calc(100% - 1.6rem));
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--background);
+    box-shadow: 0 0.75rem 2rem color-mix(in srgb, var(--foreground) 12%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.35rem);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  #reality-orbit-prototype .orbit-toast[data-visible="true"] {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @media (max-width: 480px) {
     #reality-orbit-prototype .orbit-stage {
-      height: 520px;
+      height: 540px;
+    }
+
+    #reality-orbit-prototype .orbit-toolbar {
+      padding-inline: 0.6rem;
     }
 
     #reality-orbit-prototype .orbit-node {
-      padding-inline: 0.55rem;
+      max-width: 36vw;
+      padding-inline: 0.5rem;
     }
 
-    #reality-orbit-prototype .orbit-status {
-      align-items: center;
-      flex-direction: column;
-      gap: 0.1rem;
+    #reality-orbit-prototype .orbit-detail {
+      grid-template-columns: 1fr;
     }
 
-    #reality-orbit-prototype .orbit-status .orbit-separator {
-      display: none;
+    #reality-orbit-prototype .orbit-action {
+      width: 100%;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #reality-orbit-prototype .orbit-connection {
+    #reality-orbit-prototype .orbit-connection,
+    #reality-orbit-prototype .orbit-toast {
       transition: none;
     }
   }
 </style>
 
-<section id="reality-orbit-prototype" aria-label="Reality knowledge orbit">
-  <div class="orbit-stage">
-    <svg class="orbit-map" viewBox="0 0 100 100" role="img" aria-labelledby="reality-orbit-title reality-orbit-desc" preserveAspectRatio="none">
-      <title id="reality-orbit-title">Reality surrounded by eight knowledge dimensions</title>
-      <desc id="reality-orbit-desc">Domain, Knowledge, Category, Scale, Time, Resources, Processes, and Relationships orbit the central concept Reality.</desc>
-      <ellipse class="orbit-ring" cx="50" cy="50" rx="42" ry="20"></ellipse>
-      <ellipse class="orbit-ring" cx="50" cy="50" rx="20" ry="42"></ellipse>
-      <ellipse class="orbit-ring" cx="50" cy="50" rx="36" ry="31" transform="rotate(32 50 50)"></ellipse>
-      <g data-orbit-connections></g>
-    </svg>
-    <div data-orbit-nodes></div>
+<section id="reality-orbit-prototype" aria-label="Expandable Reality ontology orbit">
+  <div class="orbit-shell">
+    <div class="orbit-toolbar">
+      <button class="btn btn-ghost orbit-back" type="button" data-orbit-back hidden aria-label="Return to the previous orbit">← Back</button>
+      <div class="orbit-path text-small" data-orbit-path aria-label="Current ontology path"></div>
+      <span class="text-small">One level at a time</span>
+    </div>
+    <div class="orbit-stage">
+      <svg class="orbit-map" viewBox="0 0 100 100" role="img" aria-labelledby="reality-orbit-title reality-orbit-desc" preserveAspectRatio="none">
+        <title id="reality-orbit-title">Expandable Reality ontology orbit</title>
+        <desc id="reality-orbit-desc">Select a concept, then explore it to move that concept to the centre and reveal one level of immediate children.</desc>
+        <ellipse class="orbit-ring" cx="50" cy="50" rx="42" ry="20"></ellipse>
+        <ellipse class="orbit-ring" cx="50" cy="50" rx="20" ry="42"></ellipse>
+        <ellipse class="orbit-ring" cx="50" cy="50" rx="36" ry="31" transform="rotate(32 50 50)"></ellipse>
+        <g data-orbit-connections></g>
+      </svg>
+      <div data-orbit-nodes></div>
+      <div class="orbit-toast text-small" data-orbit-toast role="status" aria-live="polite"></div>
+    </div>
+    <div class="orbit-detail">
+      <p class="orbit-status text-small" aria-live="polite">
+        <strong data-selected-label>Reality</strong>
+        <span data-selected-summary>Eight useful shortcuts into a canonical model of Domain, Category, Time, Scale, and Perspective.</span>
+      </p>
+      <button class="btn btn-primary orbit-action" type="button" data-orbit-action hidden></button>
+    </div>
   </div>
-  <p class="orbit-status text-small" aria-live="polite">
-    <strong data-selected-label>Reality</strong>
-    <span class="orbit-separator" aria-hidden="true">—</span>
-    <span data-selected-summary>The centre that every knowledge dimension helps us describe.</span>
-  </p>
 </section>
 
 <script>
@@ -127,76 +223,305 @@
     const root = document.getElementById("reality-orbit-prototype");
     if (!root) return;
 
-    const nodes = [
-      { id: "domain", label: "Domain", x: 50, y: 9, summary: "The broad area of reality being studied." },
-      { id: "knowledge", label: "Knowledge", x: 24, y: 28, summary: "What is known, claimed, represented, or inferred." },
-      { id: "category", label: "Category", x: 76, y: 28, summary: "The class used to group things that share relevant properties." },
-      { id: "scale", label: "Scale", x: 10, y: 52, summary: "The level of size, scope, or resolution at which reality is examined." },
-      { id: "time", label: "Time", x: 90, y: 52, summary: "How states, events, and effects change or accumulate." },
-      { id: "resources", label: "Resources", x: 25, y: 74, summary: "The finite inputs available to sustain activity or change." },
-      { id: "processes", label: "Processes", x: 75, y: 74, summary: "The transformations that move reality from one state to another." },
-      { id: "relationships", label: "Relationships", x: 50, y: 89, summary: "The dependencies and connections through which entities affect one another." },
-    ];
+    const ontology = {
+      reality: {
+        id: "reality",
+        label: "Reality",
+        summary: "Eight useful shortcuts into a canonical model of Domain, Category, Time, Scale, and Perspective.",
+        canonicalPath: ["Reality"],
+        children: ["domain", "knowledge", "category", "scale", "time", "resources", "processes", "relationships"],
+        positions: [[50, 9], [24, 28], [76, 28], [10, 52], [90, 52], [25, 74], [75, 74], [50, 89]],
+      },
+      domain: {
+        id: "domain",
+        label: "Domain",
+        summary: "The broad area of reality being studied.",
+        canonicalPath: ["Reality", "Domain"],
+        children: ["physical", "biological", "psychological", "social", "economic", "informational", "mathematical"],
+      },
+      knowledge: {
+        id: "knowledge",
+        label: "Knowledge",
+        summary: "What is known, claimed, represented, or inferred.",
+        canonicalPath: ["Reality", "Category", "Knowledge"],
+        children: ["law", "principle", "theory", "model", "framework", "pattern", "method", "heuristic"],
+      },
+      category: {
+        id: "category",
+        label: "Category",
+        summary: "The canonical types used to classify what exists in the ontology.",
+        canonicalPath: ["Reality", "Category"],
+        children: ["entity", "relationship", "process", "resource", "environment", "knowledge"],
+      },
+      scale: {
+        id: "scale",
+        label: "Scale",
+        summary: "The level of size, scope, or resolution at which reality is examined.",
+        canonicalPath: ["Reality", "Scale"],
+        children: ["individual", "group", "organisation", "society", "global"],
+      },
+      time: {
+        id: "time",
+        label: "Time",
+        summary: "How states, events, and effects are located, ordered, and changed.",
+        canonicalPath: ["Reality", "Time"],
+        children: ["past", "present", "future", "duration", "sequence", "change"],
+      },
+      resources: {
+        id: "resources",
+        label: "Resources",
+        summary: "A navigation shortcut to finite inputs that enable or constrain activity.",
+        canonicalPath: ["Reality", "Category", "Resource"],
+        children: ["resource-time", "energy", "capital", "information", "attention", "compute"],
+      },
+      processes: {
+        id: "processes",
+        label: "Processes",
+        summary: "A navigation shortcut to transformations that move reality between states.",
+        canonicalPath: ["Reality", "Category", "Process"],
+        children: ["creation", "transformation", "movement", "exchange", "maintenance", "decay"],
+      },
+      relationships: {
+        id: "relationships",
+        label: "Relationships",
+        summary: "A navigation shortcut to connections through which entities affect one another.",
+        canonicalPath: ["Reality", "Category", "Relationship"],
+        children: ["causation", "dependency", "composition", "association", "communication", "cooperation", "competition"],
+      },
+      physical: { id: "physical", label: "Physical", summary: "Matter, energy, space, and the forces that govern physical systems.", canonicalPath: ["Reality", "Domain", "Physical"] },
+      biological: { id: "biological", label: "Biological", summary: "Living systems, organisms, adaptation, and ecosystems.", canonicalPath: ["Reality", "Domain", "Biological"] },
+      psychological: { id: "psychological", label: "Psychological", summary: "Mind, cognition, emotion, perception, and behaviour.", canonicalPath: ["Reality", "Domain", "Psychological"] },
+      social: {
+        id: "social",
+        label: "Social",
+        summary: "People, collective behaviour, institutions, and shared meaning.",
+        canonicalPath: ["Reality", "Domain", "Social"],
+        children: ["social-individuals", "social-relationships", "groups", "organisations", "institutions", "culture", "social-communication", "governance"],
+      },
+      economic: { id: "economic", label: "Economic", summary: "Production, allocation, exchange, incentives, and value.", canonicalPath: ["Reality", "Domain", "Economic"] },
+      informational: { id: "informational", label: "Informational", summary: "Representation, communication, computation, and the reduction of uncertainty.", canonicalPath: ["Reality", "Domain", "Informational"] },
+      mathematical: { id: "mathematical", label: "Mathematical", summary: "Quantity, structure, pattern, relation, and formal reasoning.", canonicalPath: ["Reality", "Domain", "Mathematical"] },
+      law: { id: "law", label: "Law", summary: "A stable relationship or regularity within a defined scope.", canonicalPath: ["Reality", "Category", "Knowledge", "Law"] },
+      principle: { id: "principle", label: "Principle", summary: "A general rule that guides understanding or action.", canonicalPath: ["Reality", "Category", "Knowledge", "Principle"] },
+      theory: { id: "theory", label: "Theory", summary: "A structured explanation supported by reasoning and evidence.", canonicalPath: ["Reality", "Category", "Knowledge", "Theory"] },
+      model: { id: "model", label: "Model", summary: "A purposeful simplification used to explain, predict, or design.", canonicalPath: ["Reality", "Category", "Knowledge", "Model"] },
+      framework: { id: "framework", label: "Framework", summary: "A reusable structure that guides analysis or decision-making.", canonicalPath: ["Reality", "Category", "Knowledge", "Framework"] },
+      pattern: { id: "pattern", label: "Pattern", summary: "A named, reusable response to a recurring problem in context.", canonicalPath: ["Reality", "Category", "Knowledge", "Pattern"] },
+      method: { id: "method", label: "Method", summary: "A defined way of performing an investigation or task.", canonicalPath: ["Reality", "Category", "Knowledge", "Method"] },
+      heuristic: { id: "heuristic", label: "Heuristic", summary: "A practical rule of thumb that helps judgment without guaranteeing correctness.", canonicalPath: ["Reality", "Category", "Knowledge", "Heuristic"] },
+      entity: { id: "entity", label: "Entity", summary: "A distinct thing that can be identified and described; agents are a specialised entity.", canonicalPath: ["Reality", "Category", "Entity"] },
+      relationship: { id: "relationship", label: "Relationship", summary: "A meaningful connection between two or more entities.", canonicalPath: ["Reality", "Category", "Relationship"] },
+      process: { id: "process", label: "Process", summary: "An ordered transformation or activity that changes state over time.", canonicalPath: ["Reality", "Category", "Process"] },
+      resource: { id: "resource", label: "Resource", summary: "An input, capacity, or asset available to enable activity.", canonicalPath: ["Reality", "Category", "Resource"] },
+      environment: { id: "environment", label: "Environment", summary: "The surrounding conditions and context within which entities operate.", canonicalPath: ["Reality", "Category", "Environment"] },
+      individual: { id: "individual", label: "Individual", summary: "A single person, organism, agent, or unit of analysis.", canonicalPath: ["Reality", "Scale", "Individual"] },
+      group: { id: "group", label: "Group", summary: "A small collection whose members interact or share identity.", canonicalPath: ["Reality", "Scale", "Group"] },
+      organisation: { id: "organisation", label: "Organisation", summary: "A coordinated body with roles, boundaries, and goals.", canonicalPath: ["Reality", "Scale", "Organisation"] },
+      society: { id: "society", label: "Society", summary: "A large population connected by institutions, culture, and systems.", canonicalPath: ["Reality", "Scale", "Society"] },
+      global: { id: "global", label: "Global", summary: "The whole-world scale across regions, societies, and systems.", canonicalPath: ["Reality", "Scale", "Global"] },
+      past: { id: "past", label: "Past", summary: "States and events that occurred before the present reference point.", canonicalPath: ["Reality", "Time", "Past"] },
+      present: { id: "present", label: "Present", summary: "The current reference point from which change is observed.", canonicalPath: ["Reality", "Time", "Present"] },
+      future: { id: "future", label: "Future", summary: "Possible or expected states after the present reference point.", canonicalPath: ["Reality", "Time", "Future"] },
+      duration: { id: "duration", label: "Duration", summary: "The amount of time between a beginning and an end.", canonicalPath: ["Reality", "Time", "Duration"] },
+      sequence: { id: "sequence", label: "Sequence", summary: "The order in which events, states, or actions occur.", canonicalPath: ["Reality", "Time", "Sequence"] },
+      change: { id: "change", label: "Change", summary: "A difference in state observed across time.", canonicalPath: ["Reality", "Time", "Change"] },
+      "resource-time": { id: "resource-time", label: "Time", summary: "The finite duration available for attention, action, or change.", canonicalPath: ["Reality", "Category", "Resource", "Time"] },
+      energy: { id: "energy", label: "Energy", summary: "The capacity to perform work or produce change.", canonicalPath: ["Reality", "Category", "Resource", "Energy"] },
+      capital: { id: "capital", label: "Capital", summary: "Accumulated assets that can support future production or value creation.", canonicalPath: ["Reality", "Category", "Resource", "Capital"] },
+      information: { id: "information", label: "Information", summary: "Meaningful representation that reduces uncertainty and guides action.", canonicalPath: ["Reality", "Category", "Resource", "Information"] },
+      attention: { id: "attention", label: "Attention", summary: "The limited capacity to select and sustain mental focus.", canonicalPath: ["Reality", "Category", "Resource", "Attention"] },
+      compute: { id: "compute", label: "Compute", summary: "The processing capacity available to transform data or state.", canonicalPath: ["Reality", "Category", "Resource", "Compute"] },
+      creation: { id: "creation", label: "Creation", summary: "A process that brings a new entity, state, or arrangement into existence.", canonicalPath: ["Reality", "Category", "Process", "Creation"] },
+      transformation: { id: "transformation", label: "Transformation", summary: "A process that converts an entity or state into another form.", canonicalPath: ["Reality", "Category", "Process", "Transformation"] },
+      movement: { id: "movement", label: "Movement", summary: "A process that changes position, location, or distribution.", canonicalPath: ["Reality", "Category", "Process", "Movement"] },
+      exchange: { id: "exchange", label: "Exchange", summary: "A process in which entities transfer resources, information, or value.", canonicalPath: ["Reality", "Category", "Process", "Exchange"] },
+      maintenance: { id: "maintenance", label: "Maintenance", summary: "A process that preserves function, condition, or stability over time.", canonicalPath: ["Reality", "Category", "Process", "Maintenance"] },
+      decay: { id: "decay", label: "Decay", summary: "A process through which order, capacity, or structure diminishes.", canonicalPath: ["Reality", "Category", "Process", "Decay"] },
+      causation: { id: "causation", label: "Causation", summary: "A relationship in which one condition contributes to producing another.", canonicalPath: ["Reality", "Category", "Relationship", "Causation"] },
+      dependency: { id: "dependency", label: "Dependency", summary: "A relationship in which one entity relies on another.", canonicalPath: ["Reality", "Category", "Relationship", "Dependency"] },
+      composition: { id: "composition", label: "Composition", summary: "A whole-part relationship between an entity and its constituents.", canonicalPath: ["Reality", "Category", "Relationship", "Composition"] },
+      association: { id: "association", label: "Association", summary: "A meaningful link without necessarily implying ownership or causation.", canonicalPath: ["Reality", "Category", "Relationship", "Association"] },
+      communication: { id: "communication", label: "Communication", summary: "A relationship formed through the exchange of signals or meaning.", canonicalPath: ["Reality", "Category", "Relationship", "Communication"] },
+      cooperation: { id: "cooperation", label: "Cooperation", summary: "A relationship in which parties coordinate toward compatible outcomes.", canonicalPath: ["Reality", "Category", "Relationship", "Cooperation"] },
+      competition: { id: "competition", label: "Competition", summary: "A relationship in which parties pursue scarce or incompatible outcomes.", canonicalPath: ["Reality", "Category", "Relationship", "Competition"] },
+      "social-individuals": { id: "social-individuals", label: "Individuals", summary: "People acting as social agents with identities, roles, and choices.", canonicalPath: ["Reality", "Domain", "Social", "Individuals"] },
+      "social-relationships": { id: "social-relationships", label: "Relationships", summary: "Interpersonal connections through which trust, influence, and obligation form.", canonicalPath: ["Reality", "Domain", "Social", "Relationships"] },
+      groups: { id: "groups", label: "Groups", summary: "Small social collectives shaped by membership, norms, and interaction.", canonicalPath: ["Reality", "Domain", "Social", "Groups"] },
+      organisations: { id: "organisations", label: "Organisations", summary: "Coordinated social systems with roles, goals, and formal boundaries.", canonicalPath: ["Reality", "Domain", "Social", "Organisations"] },
+      institutions: { id: "institutions", label: "Institutions", summary: "Durable rules and structures that organise collective behaviour.", canonicalPath: ["Reality", "Domain", "Social", "Institutions"] },
+      culture: { id: "culture", label: "Culture", summary: "Shared meanings, values, symbols, and practices transmitted across people.", canonicalPath: ["Reality", "Domain", "Social", "Culture"] },
+      "social-communication": { id: "social-communication", label: "Communication", summary: "The creation and exchange of meaning between social actors.", canonicalPath: ["Reality", "Domain", "Social", "Communication"] },
+      governance: { id: "governance", label: "Governance", summary: "The processes through which collective decisions, authority, and accountability are organised.", canonicalPath: ["Reality", "Domain", "Social", "Governance"] },
+    };
 
+    const canonicalDimensions = ["Domain", "Category", "Time", "Scale", "Perspective"];
     const nodesLayer = root.querySelector("[data-orbit-nodes]");
     const connectionsLayer = root.querySelector("[data-orbit-connections]");
     const selectedLabel = root.querySelector("[data-selected-label]");
     const selectedSummary = root.querySelector("[data-selected-summary]");
+    const actionButton = root.querySelector("[data-orbit-action]");
+    const backButton = root.querySelector("[data-orbit-back]");
+    const pathElement = root.querySelector("[data-orbit-path]");
+    const toast = root.querySelector("[data-orbit-toast]");
     const svgNamespace = "http://www.w3.org/2000/svg";
+    const history = ["reality"];
+    let selectedId = "reality";
+    let toastTimer;
 
-    const setActiveNode = (nodeId) => {
-      const selectedNode = nodes.find((node) => node.id === nodeId);
+    const currentId = () => history[history.length - 1];
+    const currentNode = () => ontology[currentId()];
+
+    const positionChildren = (parent) => {
+      if (parent.positions) return parent.positions;
+      const count = parent.children.length;
+      const radiusX = count <= 5 ? 38 : 41;
+      const radiusY = count <= 5 ? 35 : 40;
+      return parent.children.map((_, index) => {
+        const angle = (-90 + (360 / count) * index) * (Math.PI / 180);
+        return [50 + Math.cos(angle) * radiusX, 50 + Math.sin(angle) * radiusY];
+      });
+    };
+
+    const expansionPrompt = (node) => `Expand the ontology node: ${node.canonicalPath.join(" → ")}\n\nCanonical Ontology Expansion Contract:\n- Expand only the requested node.\n- Return exactly one level of 5–10 Pareto-essential children.\n- Make children mutually exclusive where practical and use timeless concepts.\n- Give each child a name and one-line description.\n- Do not change existing canonical nodes.\n- Do not include grandchildren unless requested.\n- If the node is invalid, suggest the closest valid canonical node.`;
+
+    const showToast = (message) => {
+      window.clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.dataset.visible = "true";
+      toastTimer = window.setTimeout(() => {
+        toast.dataset.visible = "false";
+      }, 2600);
+    };
+
+    const copyExpansionPrompt = async (node) => {
+      const prompt = expansionPrompt(node);
+      try {
+        await navigator.clipboard.writeText(prompt);
+        showToast(`Expansion brief copied for ${node.label}.`);
+      } catch (_error) {
+        const helper = document.createElement("textarea");
+        helper.value = prompt;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.opacity = "0";
+        root.appendChild(helper);
+        helper.select();
+        const copied = document.execCommand("copy");
+        helper.remove();
+        showToast(copied ? `Expansion brief copied for ${node.label}.` : `Use the canonical path: ${node.canonicalPath.join(" → ")}`);
+      }
+    };
+
+    const renderPath = () => {
+      const path = currentNode().canonicalPath;
+      pathElement.replaceChildren();
+      path.forEach((segment, index) => {
+        if (index > 0) {
+          const separator = document.createElement("span");
+          separator.textContent = "›";
+          separator.setAttribute("aria-hidden", "true");
+          pathElement.appendChild(separator);
+        }
+        const item = document.createElement(index === path.length - 1 ? "strong" : "span");
+        item.className = "orbit-path-segment";
+        item.textContent = segment;
+        pathElement.appendChild(item);
+      });
+      backButton.hidden = history.length === 1;
+    };
+
+    const setSelectedNode = (nodeId) => {
+      selectedId = nodeId;
+      const node = ontology[nodeId];
       root.querySelectorAll("[data-node-id]").forEach((button) => {
         button.setAttribute("aria-pressed", String(button.dataset.nodeId === nodeId));
       });
       root.querySelectorAll("[data-connection-id]").forEach((line) => {
-        line.dataset.active = String(line.dataset.connectionId === nodeId);
+        line.dataset.active = String(line.dataset.connectionId === nodeId && nodeId !== currentId());
       });
+      selectedLabel.textContent = node.label;
+      selectedSummary.textContent = node.summary;
 
-      if (nodeId === "reality") {
-        selectedLabel.textContent = "Reality";
-        selectedSummary.textContent = "The centre that every knowledge dimension helps us describe.";
+      if (nodeId === currentId()) {
+        actionButton.hidden = true;
         return;
       }
 
-      if (selectedNode) {
-        selectedLabel.textContent = selectedNode.label;
-        selectedSummary.textContent = selectedNode.summary;
-      }
+      actionButton.hidden = false;
+      actionButton.textContent = node.children?.length ? `Explore ${node.label}` : `Copy expansion brief`;
+      actionButton.setAttribute("aria-label", node.children?.length ? `Explore one level inside ${node.label}` : `Copy the canonical expansion brief for ${node.label}`);
     };
 
-    nodes.forEach((node) => {
-      const line = document.createElementNS(svgNamespace, "line");
-      line.setAttribute("x1", "50");
-      line.setAttribute("y1", "50");
-      line.setAttribute("x2", String(node.x));
-      line.setAttribute("y2", String(node.y));
-      line.setAttribute("class", "orbit-connection");
-      line.dataset.connectionId = node.id;
-      line.dataset.active = "false";
-      connectionsLayer.appendChild(line);
+    const renderOrbit = () => {
+      const parent = currentNode();
+      const positions = positionChildren(parent);
+      nodesLayer.replaceChildren();
+      connectionsLayer.replaceChildren();
+      renderPath();
 
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "btn btn-ghost orbit-node";
-      button.textContent = node.label;
-      button.dataset.nodeId = node.id;
-      button.setAttribute("aria-pressed", "false");
-      button.style.setProperty("--orbit-x", `${node.x}%`);
-      button.style.setProperty("--orbit-y", `${node.y}%`);
-      button.addEventListener("click", () => setActiveNode(node.id));
-      nodesLayer.appendChild(button);
+      parent.children.forEach((childId, index) => {
+        const child = ontology[childId];
+        const [x, y] = positions[index];
+        const line = document.createElementNS(svgNamespace, "line");
+        line.setAttribute("x1", "50");
+        line.setAttribute("y1", "50");
+        line.setAttribute("x2", String(x));
+        line.setAttribute("y2", String(y));
+        line.setAttribute("class", "orbit-connection");
+        line.dataset.connectionId = child.id;
+        line.dataset.active = "false";
+        connectionsLayer.appendChild(line);
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn btn-ghost orbit-node";
+        button.textContent = child.label;
+        button.dataset.nodeId = child.id;
+        button.dataset.expandable = String(Boolean(child.children?.length));
+        button.setAttribute("aria-pressed", "false");
+        button.setAttribute("title", child.summary);
+        button.style.setProperty("--orbit-x", `${x}%`);
+        button.style.setProperty("--orbit-y", `${y}%`);
+        button.addEventListener("click", () => setSelectedNode(child.id));
+        button.addEventListener("dblclick", () => child.children?.length ? expandSelectedNode(child.id) : copyExpansionPrompt(child));
+        nodesLayer.appendChild(button);
+      });
+
+      const centreButton = document.createElement("button");
+      centreButton.type = "button";
+      centreButton.className = "btn btn-primary orbit-node orbit-core";
+      centreButton.dataset.nodeId = parent.id;
+      centreButton.setAttribute("aria-pressed", "true");
+      centreButton.style.setProperty("--orbit-x", "50%");
+      centreButton.style.setProperty("--orbit-y", "50%");
+      centreButton.innerHTML = `<span class="orbit-core-mark" aria-hidden="true">☀</span><span>${parent.label}</span>`;
+      centreButton.addEventListener("click", () => setSelectedNode(parent.id));
+      nodesLayer.appendChild(centreButton);
+      setSelectedNode(parent.id);
+    };
+
+    function expandSelectedNode(nodeId = selectedId) {
+      const node = ontology[nodeId];
+      if (!node.children?.length) {
+        copyExpansionPrompt(node);
+        return;
+      }
+      history.push(nodeId);
+      renderOrbit();
+    }
+
+    actionButton.addEventListener("click", () => {
+      const node = ontology[selectedId];
+      if (node.children?.length) expandSelectedNode(selectedId);
+      else copyExpansionPrompt(node);
     });
 
-    const realityButton = document.createElement("button");
-    realityButton.type = "button";
-    realityButton.className = "btn btn-primary orbit-node orbit-core";
-    realityButton.dataset.nodeId = "reality";
-    realityButton.setAttribute("aria-pressed", "true");
-    realityButton.style.setProperty("--orbit-x", "50%");
-    realityButton.style.setProperty("--orbit-y", "50%");
-    realityButton.innerHTML = '<span class="orbit-core-mark" aria-hidden="true">☀</span><span>Reality</span>';
-    realityButton.addEventListener("click", () => setActiveNode("reality"));
-    nodesLayer.appendChild(realityButton);
+    backButton.addEventListener("click", () => {
+      if (history.length > 1) history.pop();
+      renderOrbit();
+    });
+
+    root.dataset.canonicalDimensions = canonicalDimensions.join(",");
+    renderOrbit();
   })();
 </script>

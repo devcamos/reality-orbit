@@ -4,7 +4,8 @@
   "private": true,
   "description": "An interactive orbit map for exploring dimensions of reality.",
   "scripts": {
-    "check": "node scripts/verify.mjs"
+    "check": "node scripts/verify.mjs",
+    "start": "node scripts/serve.mjs"
   },
   "engines": {
     "node": ">=20"

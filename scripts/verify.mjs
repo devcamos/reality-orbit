@@ -10,6 +10,7 @@ const requiredLabels = [
   "Resources",
   "Processes",
   "Relationships",
+  "Perspective",
 ];
 
 const [document, fragment] = await Promise.all([
@@ -31,8 +32,28 @@ if (!fragment.includes('id="reality-orbit-prototype"')) {
   failures.push("The source fragment must keep its unique root ID.");
 }
 
-if (!fragment.includes("setActiveNode")) {
+if (!fragment.includes("setSelectedNode")) {
   failures.push("The source fragment must keep the selected-node state transition.");
+}
+
+if (!fragment.includes("expandSelectedNode")) {
+  failures.push("The source fragment must keep one-level orbit expansion.");
+}
+
+if (!fragment.includes("Canonical Ontology Expansion Contract")) {
+  failures.push("The source fragment must keep the strict expansion brief.");
+}
+
+if (!fragment.includes("data-orbit-back")) {
+  failures.push("The source fragment must keep reversible Back navigation.");
+}
+
+if (!fragment.includes('canonicalPath: ["Reality", "Category", "Knowledge"]')) {
+  failures.push("Knowledge must remain a shortcut into the Category dimension.");
+}
+
+if (!fragment.includes('canonicalPath: ["Reality", "Category", "Resource"]')) {
+  failures.push("Resources must remain a shortcut into the Category dimension.");
 }
 
 for (const label of requiredLabels) {
