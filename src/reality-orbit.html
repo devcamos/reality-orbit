@@ -1,0 +1,202 @@
+<style>
+  #reality-orbit-prototype {
+    width: 100%;
+    color: var(--foreground);
+  }
+
+  #reality-orbit-prototype .orbit-stage {
+    position: relative;
+    width: 100%;
+    height: clamp(420px, 68vw, 620px);
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--viz-series-1) 14%, transparent) 0, transparent 24%),
+      radial-gradient(circle at 22% 18%, color-mix(in srgb, var(--foreground) 9%, transparent) 0 1px, transparent 2px),
+      radial-gradient(circle at 78% 36%, color-mix(in srgb, var(--foreground) 8%, transparent) 0 1px, transparent 2px),
+      radial-gradient(circle at 35% 78%, color-mix(in srgb, var(--foreground) 7%, transparent) 0 1px, transparent 2px);
+    background-size: auto, 79px 83px, 113px 97px, 137px 121px;
+  }
+
+  #reality-orbit-prototype .orbit-map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  #reality-orbit-prototype .orbit-ring,
+  #reality-orbit-prototype .orbit-connection {
+    vector-effect: non-scaling-stroke;
+    fill: none;
+    stroke: color-mix(in srgb, var(--border) 72%, transparent);
+    stroke-width: 1;
+  }
+
+  #reality-orbit-prototype .orbit-connection {
+    opacity: 0.3;
+    transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
+  }
+
+  #reality-orbit-prototype .orbit-connection[data-active="true"] {
+    opacity: 0.9;
+    stroke: var(--viz-series-1);
+    stroke-width: 2;
+  }
+
+  #reality-orbit-prototype .orbit-node {
+    position: absolute;
+    z-index: 2;
+    left: var(--orbit-x);
+    top: var(--orbit-y);
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+
+  #reality-orbit-prototype .orbit-core {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+
+  #reality-orbit-prototype .orbit-core-mark {
+    color: var(--viz-series-1);
+  }
+
+  #reality-orbit-prototype .orbit-status {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 1.5rem;
+    margin: 0.75rem 0 0;
+    text-align: center;
+  }
+
+  #reality-orbit-prototype .orbit-status span:last-child {
+    color: var(--muted-foreground);
+  }
+
+  @media (max-width: 480px) {
+    #reality-orbit-prototype .orbit-stage {
+      height: 520px;
+    }
+
+    #reality-orbit-prototype .orbit-node {
+      padding-inline: 0.55rem;
+    }
+
+    #reality-orbit-prototype .orbit-status {
+      align-items: center;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    #reality-orbit-prototype .orbit-status .orbit-separator {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #reality-orbit-prototype .orbit-connection {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="reality-orbit-prototype" aria-label="Reality knowledge orbit">
+  <div class="orbit-stage">
+    <svg class="orbit-map" viewBox="0 0 100 100" role="img" aria-labelledby="reality-orbit-title reality-orbit-desc" preserveAspectRatio="none">
+      <title id="reality-orbit-title">Reality surrounded by eight knowledge dimensions</title>
+      <desc id="reality-orbit-desc">Domain, Knowledge, Category, Scale, Time, Resources, Processes, and Relationships orbit the central concept Reality.</desc>
+      <ellipse class="orbit-ring" cx="50" cy="50" rx="42" ry="20"></ellipse>
+      <ellipse class="orbit-ring" cx="50" cy="50" rx="20" ry="42"></ellipse>
+      <ellipse class="orbit-ring" cx="50" cy="50" rx="36" ry="31" transform="rotate(32 50 50)"></ellipse>
+      <g data-orbit-connections></g>
+    </svg>
+    <div data-orbit-nodes></div>
+  </div>
+  <p class="orbit-status text-small" aria-live="polite">
+    <strong data-selected-label>Reality</strong>
+    <span class="orbit-separator" aria-hidden="true">—</span>
+    <span data-selected-summary>The centre that every knowledge dimension helps us describe.</span>
+  </p>
+</section>
+
+<script>
+  (() => {
+    const root = document.getElementById("reality-orbit-prototype");
+    if (!root) return;
+
+    const nodes = [
+      { id: "domain", label: "Domain", x: 50, y: 9, summary: "The broad area of reality being studied." },
+      { id: "knowledge", label: "Knowledge", x: 24, y: 28, summary: "What is known, claimed, represented, or inferred." },
+      { id: "category", label: "Category", x: 76, y: 28, summary: "The class used to group things that share relevant properties." },
+      { id: "scale", label: "Scale", x: 10, y: 52, summary: "The level of size, scope, or resolution at which reality is examined." },
+      { id: "time", label: "Time", x: 90, y: 52, summary: "How states, events, and effects change or accumulate." },
+      { id: "resources", label: "Resources", x: 25, y: 74, summary: "The finite inputs available to sustain activity or change." },
+      { id: "processes", label: "Processes", x: 75, y: 74, summary: "The transformations that move reality from one state to another." },
+      { id: "relationships", label: "Relationships", x: 50, y: 89, summary: "The dependencies and connections through which entities affect one another." },
+    ];
+
+    const nodesLayer = root.querySelector("[data-orbit-nodes]");
+    const connectionsLayer = root.querySelector("[data-orbit-connections]");
+    const selectedLabel = root.querySelector("[data-selected-label]");
+    const selectedSummary = root.querySelector("[data-selected-summary]");
+    const svgNamespace = "http://www.w3.org/2000/svg";
+
+    const setActiveNode = (nodeId) => {
+      const selectedNode = nodes.find((node) => node.id === nodeId);
+      root.querySelectorAll("[data-node-id]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.nodeId === nodeId));
+      });
+      root.querySelectorAll("[data-connection-id]").forEach((line) => {
+        line.dataset.active = String(line.dataset.connectionId === nodeId);
+      });
+
+      if (nodeId === "reality") {
+        selectedLabel.textContent = "Reality";
+        selectedSummary.textContent = "The centre that every knowledge dimension helps us describe.";
+        return;
+      }
+
+      if (selectedNode) {
+        selectedLabel.textContent = selectedNode.label;
+        selectedSummary.textContent = selectedNode.summary;
+      }
+    };
+
+    nodes.forEach((node) => {
+      const line = document.createElementNS(svgNamespace, "line");
+      line.setAttribute("x1", "50");
+      line.setAttribute("y1", "50");
+      line.setAttribute("x2", String(node.x));
+      line.setAttribute("y2", String(node.y));
+      line.setAttribute("class", "orbit-connection");
+      line.dataset.connectionId = node.id;
+      line.dataset.active = "false";
+      connectionsLayer.appendChild(line);
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn btn-ghost orbit-node";
+      button.textContent = node.label;
+      button.dataset.nodeId = node.id;
+      button.setAttribute("aria-pressed", "false");
+      button.style.setProperty("--orbit-x", `${node.x}%`);
+      button.style.setProperty("--orbit-y", `${node.y}%`);
+      button.addEventListener("click", () => setActiveNode(node.id));
+      nodesLayer.appendChild(button);
+    });
+
+    const realityButton = document.createElement("button");
+    realityButton.type = "button";
+    realityButton.className = "btn btn-primary orbit-node orbit-core";
+    realityButton.dataset.nodeId = "reality";
+    realityButton.setAttribute("aria-pressed", "true");
+    realityButton.style.setProperty("--orbit-x", "50%");
+    realityButton.style.setProperty("--orbit-y", "50%");
+    realityButton.innerHTML = '<span class="orbit-core-mark" aria-hidden="true">☀</span><span>Reality</span>';
+    realityButton.addEventListener("click", () => setActiveNode("reality"));
+    nodesLayer.appendChild(realityButton);
+  })();
+</script>

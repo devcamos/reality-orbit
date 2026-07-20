@@ -1,0 +1,12 @@
+{
+  "name": "reality-orbit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An interactive orbit map for exploring dimensions of reality.",
+  "scripts": {
+    "check": "node scripts/verify.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
