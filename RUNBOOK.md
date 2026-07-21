@@ -52,9 +52,9 @@ They remain fully explorable, but only after the user enters Category. This keep
 - **Centre-to-node connections:** show that each dimension is a lens on Reality.
 - **Active connection:** only the selected node and its relationship to Reality receive emphasis.
 - **Selection explanation:** name, knowledge role, and definition stay in the permanent detail strip below the map; floating cards never cover destinations.
-- **Expansion:** exploring a selected node moves it to the centre and reveals one level of immediate children.
+- **Expansion:** exploring any selected non-root node moves it to the centre. Containers reveal one level of immediate children; terminal concepts become focused endpoints with no invented child level.
 - **Understand action:** every selected concept, including the current centre, exposes **Understand** and opens its Concept Anatomy.
-- **Explore action:** a selected concept with curated children additionally exposes **Explore selected**, keeping learning and traversal as separate decisions.
+- **Explore action:** every selected concept except Reality exposes **Explore selected**, keeping learning and traversal as separate decisions. Once focused, the visible active state reads **Exploring** rather than offering a redundant second traversal.
 - **Path and Back:** expose the canonical location and allow reversible traversal.
 - **Typed relationship:** each connection retains a machine-readable relationship so type and instance edges do not blur together; this structural value is not shown in the learner panel.
 
@@ -109,7 +109,7 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 4. Create the current node as the centre button.
 5. Select a child to read its learner-facing definition.
 6. Explore a curated child to push it into the history and rerender it as the centre.
-7. **Understand** opens the selected concept's anatomy without expanding the ontology; **Explore selected** alone changes the map centre.
+7. **Understand** opens the selected concept's anatomy without expanding the ontology; **Explore selected** alone changes the map centre. Reality is the only concept without Explore.
 
 ### State transition
 
@@ -118,7 +118,7 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 1. Sets `aria-current` and `data-selected` on the selected destination.
 2. Sets `data-active` on the matching SVG connection.
 3. Updates the live selected label and summary.
-4. Always offers **Understand** and additionally offers **Explore selected** when curated children exist.
+4. Always offers **Understand**; every non-root selection also offers **Explore selected**, including terminal concepts that form the final focused endpoint.
 5. Keeps internal grounded-chat context separate while showing only the selected concept's name, type, and explanation in the permanent detail strip.
 
 `history` stores the reversible centre path. Do not create separate view state for buttons, connections, text, and navigation; derive them from `selectedId`, the current history entry, and the ontology map.
@@ -187,9 +187,9 @@ Reality
 
 Instance is the maximum ontology depth, not a depth that every branch must artificially reach. A branch can stop earlier when its terminal concept is already the most specific approved type. Concept Anatomy is a teaching projection, not another ontology level.
 
-For example, `Reality → Category → Relationship → Ownership` currently stops at a terminal relationship type. Ownership is a complete learner-facing node, but it is not yet a concrete ownership instance. A true instance would bind a particular holder, object, bundle of rights, recognising authority, and context; the application must not invent one merely to fill level five.
+For example, `Reality → Category → Relationship → Ownership` currently stops at level 3 with a relationship type. Ownership has complete Understand content, but the branch is not structurally complete because it has not reached a level-4 instance. A true instance would bind a particular holder, object, bundle of rights, recognising authority, and context; the application must not invent one merely to satisfy the depth test.
 
-The renderer enforces this boundary through `canExploreNode(node)`: a level-five node never exposes traversal even if malformed future data accidentally supplies children.
+The renderer counts Reality as level 0 and enforces level 4 as the terminal boundary. A level-4 node may be focused as the final exploration destination, but it cannot introduce level 5; malformed future data that exceeds the boundary is rejected before render.
 
 Before the first render, `validateOntology()` also rejects key/ID drift, missing or duplicate child references, excessive depth, and child paths that do not extend their parent's canonical path by exactly one level.
 
@@ -208,6 +208,29 @@ Common confusion
 
 The baseline language varies by concept role: root, dimension, domain, domain concept, category type, relationship type, process type, resource type, knowledge type, named law, perspective, scale, or time. Authored `anatomy` content replaces the baseline when the subject requires a more specific structure. Amdahl's Law uses a law-specific anatomy containing variables, mechanism, prediction, assumptions, derivation, limitations, applications, visual demonstration, and related laws. Ownership is the authored reference for a terminal relationship type.
 
+The Understand presentation derives one responsive story from that anatomy:
+
+```text
+Header
+└── Concept role, name, and definition
+
+Primary story
+├── Governing question or problem
+├── Purpose or mechanism
+├── First principles
+└── Mental model
+
+Context rail
+├── Scope
+├── Application or how to use it
+└── Common confusion or limitations
+
+Complete anatomy
+└── Any specialised supporting fields not already presented
+```
+
+This is a projection of the existing Concept Anatomy, not a new schema. Baseline concepts usually fit entirely into the primary story and context rail. Richer law anatomy retains variables, predictions, assumptions, evidence, demonstrations, and related laws in the complete section.
+
 ```text
 Ontology answers: Where does this concept belong?
 Understand answers: What does it mean and how does it behave?
@@ -215,9 +238,30 @@ Understand answers: What does it mean and how does it behave?
 
 ## Content completeness contract
 
-Every reachable node must provide a non-empty stable ID, label, one-sentence definition, canonical path, classified concept role, and Concept Anatomy containing at least seven non-empty fields. Nodes with curated children must expose Explore; all nodes must expose Understand.
+Every reachable node must provide a non-empty stable ID, label, one-sentence definition, canonical path, classified concept role, and Concept Anatomy containing at least seven non-empty fields. Every non-root node must expose Explore; all nodes must expose Understand. Reality alone exposes only Understand.
 
 Both runtime and production checks traverse from Reality and reject unreachable nodes, missing child references, incomplete definitions, unclassified roles, or empty Concept Anatomy values. “Content exists” therefore means more than a node label: the learner can select it, understand its definition, inspect its reasoning anatomy, and return safely.
+
+### Automated selection contract
+
+`scripts/selection-contract.test.mjs` reads the same ontology and policy declarations used by the application, then tests every reachable selection. The suite proves that:
+
+- Reality is the only node without **Explore selected**.
+- Every non-root node exposes **Explore selected**.
+- Terminal concepts remain explorable as final focused destinations.
+- Every ontology record is reachable from Reality.
+- Every selectable node has an ID, label, definition, canonical path, classified role, and at least seven non-empty Concept Anatomy fields.
+- Every child reference exists, is unique within its parent, and extends the canonical path by exactly one level.
+- The visible Understand, Explore, and active Exploring states remain wired to the shared selection policy.
+- Every branch terminates at ontology level 4, where Reality is level 0 and a named law such as Amdahl's Law is level 4.
+
+Run `npm test` while authoring. `npm run check` includes these unit tests and remains the complete release gate.
+
+### Why a branch can stop at Understand
+
+The map renders children from the selected node's `children` array. A node such as `Reality → Domain → Economic` currently has no child IDs, so the renderer has nothing deeper to show. Once Economic is focused, Understand remains the meaningful action because the ontology data has ended—not because the interface cannot navigate farther.
+
+The earlier validator only rejected paths deeper than the boundary. It did not reject shallow terminal nodes, and the earlier selection test explicitly allowed any terminal node to become a focused endpoint. The level-4 branch test closes that gap. Until every shallow branch is curated, the test must fail and block release rather than allowing missing ontology depth to appear complete.
 
 ## Canonical Ontology Expansion Contract
 
@@ -280,7 +324,7 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 
 - Preserve the destination map and its stable positions; mobile is the same mental model, not a separate list-only interface.
 - Show only the current destination visually in the compact toolbar. The complete breadcrumb remains in the accessible DOM, while **Back** carries the visible ancestry interaction.
-- Move the responsive action group onto its own full-width toolbar row. **Understand** and, where available, **Explore selected** share that row as separate 44 px touch targets.
+- Move the responsive action group onto its own full-width toolbar row. **Understand** and, for every non-root selection, **Explore selected** share that row as separate 44 px touch targets.
 - Use the permanent detail below the map at every width as the single source of visible name, type, and explanation, avoiding duplicated information and covered destinations.
 - Reduce the mobile map to 500 px high while retaining safe space around the lowest destinations. This keeps the current action and selected explanation closer to the map.
 - Allow destination labels to use their complete text. Wider mobile node labels and reduced horizontal padding prevent knowledge terms such as `Psychological`, `Informational`, and `Mathematical` from being shortened.
@@ -307,18 +351,19 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 6. Explore Resource and confirm it becomes the centre with six immediate children.
 7. Use Back twice and confirm the Reality orbit is restored.
 8. Explore Perspective and confirm its five approved lenses render.
-9. Confirm Reality and every selected child expose **Understand**.
-10. Select a concept with children and confirm **Understand** and **Explore selected** are both available.
-11. Confirm selecting a node updates the permanent detail title, role, and explanation.
-12. Confirm canonical path, parent, typed relationship, and immediate children are absent from the visible panel but remain available in `buildChatContext(node)`.
-13. Confirm the selected label and summary match the node data.
-14. Open Reality, Domain, and Razor with **Understand** and confirm each renders the baseline Concept Anatomy fields.
-15. Explore Category → Knowledge → Law, select Amdahl's Law, and confirm **Understand** opens its authored law anatomy.
-16. Confirm the Amdahl breadcrumb stops at the fifth ontology level while its Concept Anatomy renders as content.
-17. Explore Category → Relationship → Ownership and confirm Ownership is labelled **Relationship type**, exposes its authored Concept Anatomy, and does not pretend to be a concrete instance.
-18. At mobile width, confirm the action group occupies its own full-width row and Back remains at least 44 px high.
-19. At mobile width, confirm only the current destination is visually shown in the toolbar while the complete path remains accessible.
-20. Confirm the mobile detail shows the selected name, knowledge type, and explanation without rendering a floating overlay.
+9. Confirm Reality exposes **Understand** and does not expose **Explore selected**.
+10. Select any non-root concept and confirm **Understand** and **Explore selected** are both present.
+11. Explore a terminal concept and confirm it becomes a focused endpoint, keeps **Understand**, shows the active **Exploring** state, and invents no child nodes.
+12. Confirm selecting a node updates the permanent detail title, role, and explanation.
+13. Confirm canonical path, parent, typed relationship, and immediate children are absent from the visible panel but remain available in `buildChatContext(node)`.
+14. Confirm the selected label and summary match the node data.
+15. Open Reality, Domain, and Razor with **Understand** and confirm each renders the baseline Concept Anatomy fields.
+16. Explore Category → Knowledge → Law, select Amdahl's Law, and confirm **Understand** opens its authored law anatomy.
+17. Confirm the Amdahl breadcrumb stops at level 4—five path entries including Reality—while its Concept Anatomy renders as content.
+18. Explore Category → Relationship → Ownership and confirm Ownership is labelled **Relationship type**, exposes its authored Concept Anatomy, and does not pretend to be a concrete instance.
+19. At mobile width, confirm the action group occupies its own full-width row and Back remains at least 44 px high.
+20. At mobile width, confirm only the current destination is visually shown in the toolbar while the complete path remains accessible.
+21. Confirm the mobile detail shows the selected name, knowledge type, and explanation without rendering a floating overlay.
 
 ### Responsive checks
 
@@ -414,6 +459,6 @@ When applying the orbit screen to another knowledge set:
 - **Reason:** it tests spatial interaction and responsive behaviour without introducing a framework or graph library.
 - **Design parent:** the abstract spatial destination-map interaction pattern, implemented with original visual assets and semantic rules.
 - **Corrected root:** the five canonical dimensions replaced the earlier eight-shortcut root because mixing Category with its children represented two abstraction levels as peers.
-- **Implemented:** deterministic asymmetric placement, dimension colour identity, container/instance shapes, typed parent relationships, five-level navigation, and Concept Anatomy Understand views.
+- **Implemented:** deterministic asymmetric placement, dimension colour identity, container/instance shapes, typed parent relationships, navigation from Reality at level 0 through level 4, and Concept Anatomy Understand views.
 - **Deferred:** physics simulation, dragging, persistence, route navigation, and external content loading.
 - **Promotion condition:** add a framework or graph library only when node counts, authoring workflow, or edge routing becomes complex enough to justify it.

@@ -87,6 +87,20 @@ if (!fragment.includes("understand-definition-label") || !fragment.includes(">De
   failures.push("Concept Anatomy must explicitly identify the selected concept's definition.");
 }
 
+for (const understandLayoutContract of [
+  "data-understand-eyebrow",
+  "data-understand-flow",
+  "data-understand-lead",
+  "data-understand-foundations",
+  "data-understand-context",
+  "data-understand-more",
+  "understandFlowForNode",
+]) {
+  if (!fragment.includes(understandLayoutContract)) {
+    failures.push(`Missing editorial Understand layout contract: ${understandLayoutContract}.`);
+  }
+}
+
 if (!fragment.includes('schemaVersion: "1.0"')) {
   failures.push("The chat context object must keep an explicit schema version.");
 }
@@ -107,8 +121,19 @@ for (const internalGuideField of ["data-guide-path", "data-guide-parent", "data-
   }
 }
 
-if (!fragment.includes("const maximumOntologyLevel = 5") || !fragment.includes("node.canonicalPath.length < maximumOntologyLevel") || !fragment.includes("canExploreNode(node)")) {
-  failures.push("The renderer must enforce the five-level instance boundary before exposing exploration.");
+if (!fragment.includes("const terminalOntologyLevel = 4") || !fragment.includes("ontologyLevel(node) > terminalOntologyLevel")) {
+  failures.push("The renderer must enforce the level-4 terminal boundary measured from Reality at level 0.");
+}
+
+for (const explorationContract of [
+  'const canExploreNode = (node) => node.id !== "reality"',
+  "exploreButton.hidden = !canExplore",
+  "exploreButton.disabled = canExplore && isCurrent",
+  'exploreButton.textContent = isCurrent ? "Exploring" : "Explore selected"',
+]) {
+  if (!fragment.includes(explorationContract)) {
+    failures.push(`Missing root-aware exploration contract: ${explorationContract}.`);
+  }
 }
 
 if (!fragment.includes("validateOntology") || !fragment.includes("Canonical path mismatch") || !fragment.includes("Duplicate child reference")) {

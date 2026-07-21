@@ -1,8 +1,10 @@
 # Reality Orbit
 
-Reality Orbit is an expandable spatial destination map. Reality begins at the centre with its five canonical dimensions. **Understand** teaches every selected concept through Concept Anatomy, while **Explore selected** separately travels into concepts that contain curated children.
+Reality Orbit is an expandable spatial destination map. Reality begins at the centre with its five canonical dimensions. **Understand** teaches every selected concept through Concept Anatomy, while **Explore selected** focuses any non-root concept. Focusing a container reveals its curated children; focusing a terminal concept establishes the final exploration endpoint. Reality is the only node that offers **Understand** without **Explore**.
 
 Selecting a node updates the permanent detail strip with its name, type, and explanation. Canonical paths, parents, typed relationships, and child IDs remain internal application context for traversal, validation, and a future grounded chat integration; they are not displayed as teaching content. Floating explanation cards are deliberately excluded because they can cover an unrelated destination and falsely imply that the explanation belongs to it.
+
+The Understand view uses an editorial Concept Anatomy layout: the concept and definition establish the header, one dominant story card presents the governing idea and foundations, a context rail highlights scope, application, and limits, and specialised supporting fields remain available below. This presentation hierarchy is derived from each node's existing anatomy rather than introducing a second content model.
 
 The app distinguishes its simple visual navigation from the canonical ontology:
 
@@ -11,7 +13,7 @@ The app distinguishes its simple visual navigation from the canonical ontology:
 - Knowledge, Resource, Process, and Relationship are never presented as top-level siblings of Category.
 - Knowledge contains seven first-class artifact types: Law, Principle, Razor, Framework, Model, Theorem, and Pattern.
 - Every canonical dimension exposes a third level, and the Knowledge → Law path continues through named-law instances.
-- The ontology stops at level five: Reality → Dimension → Value/type → Subtype → Instance.
+- The ontology stops at level 4 when Reality is counted as level 0: Reality → Dimension → Value/type → Subtype → Instance.
 - Every concept receives a baseline, role-aware Concept Anatomy covering purpose, governing question, first principles, mental model, scope, use, and common confusion.
 - Relationship, process, resource, and domain concepts receive reasoning appropriate to their actual role rather than the former generic ontology-node fallback.
 - Authored anatomy overrides the baseline when a concept needs a specialised teaching structure. Amdahl's Law provides the first law-specific anatomy; Ownership is the reference terminal relationship anatomy.
@@ -36,6 +38,16 @@ This prototype is independent from Law Explorer. Law Explorer remains a law-only
 The repository is the source of truth for the published interaction and its curated ontology data. Notion remains the research and governance workspace.
 
 ## Validate locally
+
+Run the unit tests to traverse every selection and prove the root-aware action and data-completeness contracts.
+
+```bash
+npm test
+```
+
+Ontology levels are zero-based from Reality: Reality is level 0 and a named law such as Amdahl's Law is level 4. The test suite rejects any branch that terminates before level 4, any node beyond level 4, or any level-4 node with children.
+
+Run the complete production gate—including the static safeguards and unit tests—with:
 
 ```bash
 npm run check

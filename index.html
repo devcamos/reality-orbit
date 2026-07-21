@@ -867,6 +867,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     gap: 0.5rem;
   }
 
+  #reality-orbit-prototype .orbit-action[data-exploring=&quot;true&quot;] {
+    cursor: default;
+    opacity: 0.72;
+  }
+
   #reality-orbit-prototype .orbit-stage {
     position: relative;
     width: 100%;
@@ -1015,52 +1020,141 @@ html&gt;body{padding:0}&lt;/style&gt;
     color: var(--muted-foreground);
   }
 
-  #reality-orbit-prototype .understand-fields div {
-    padding-top: 0.65rem;
-    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-  }
-
-  #reality-orbit-prototype .understand-fields dt {
-    color: var(--muted-foreground);
-  }
-
-  #reality-orbit-prototype .understand-fields dd {
-    margin: 0.2rem 0 0;
-  }
-
   #reality-orbit-prototype .understand-view {
-    padding: 1.2rem;
+    padding: 0;
+  }
+
+  #reality-orbit-prototype .understand-header {
+    display: grid;
+    justify-items: center;
+    gap: 0.55rem;
+    padding: clamp(1.4rem, 5vw, 3rem) 1rem;
+    text-align: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 12%, transparent), transparent 62%);
   }
 
   #reality-orbit-prototype .understand-header p,
-  #reality-orbit-prototype .understand-header h2 {
+  #reality-orbit-prototype .understand-header h2,
+  #reality-orbit-prototype .understand-story h3,
+  #reality-orbit-prototype .understand-story p,
+  #reality-orbit-prototype .understand-more-header h3,
+  #reality-orbit-prototype .understand-more-header p {
     margin: 0;
   }
 
-  #reality-orbit-prototype .understand-header h2 {
-    margin-top: 0.2rem;
+  #reality-orbit-prototype .understand-header-meta {
+    display: flex;
+    width: min(100%, 64rem);
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
-  #reality-orbit-prototype .understand-statement {
-    margin-top: 0.75rem;
-    max-width: 46rem;
+  #reality-orbit-prototype .understand-eyebrow,
+  #reality-orbit-prototype .understand-lead-label,
+  #reality-orbit-prototype .understand-context-card dt,
+  #reality-orbit-prototype .understand-fields dt {
+    color: var(--muted-foreground);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   #reality-orbit-prototype .understand-definition-label {
     display: block;
-    margin-top: 0.75rem;
     color: var(--muted-foreground);
   }
 
-  #reality-orbit-prototype .understand-definition-label + .understand-statement {
-    margin-top: 0.2rem;
+  #reality-orbit-prototype .understand-statement {
+    max-width: 52rem;
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .understand-body {
+    padding: 1rem;
+  }
+
+  #reality-orbit-prototype .understand-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(14rem, 0.8fr);
+    gap: 1rem;
+  }
+
+  #reality-orbit-prototype .understand-story {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #reality-orbit-prototype .understand-story-lead {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  #reality-orbit-prototype .understand-support {
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .understand-foundations {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: auto 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-foundations div,
+  #reality-orbit-prototype .understand-context-card,
+  #reality-orbit-prototype .understand-fields div {
+    min-width: 0;
+  }
+
+  #reality-orbit-prototype .understand-foundations dt,
+  #reality-orbit-prototype .understand-foundations dd,
+  #reality-orbit-prototype .understand-context-card dt,
+  #reality-orbit-prototype .understand-context-card dd,
+  #reality-orbit-prototype .understand-fields dt,
+  #reality-orbit-prototype .understand-fields dd {
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .understand-foundations dd,
+  #reality-orbit-prototype .understand-context-card dd,
+  #reality-orbit-prototype .understand-fields dd {
+    margin-top: 0.35rem;
+  }
+
+  #reality-orbit-prototype .understand-context {
+    display: grid;
+    grid-auto-rows: minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  #reality-orbit-prototype .understand-more {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-more-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   #reality-orbit-prototype .understand-fields {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem 1.4rem;
-    margin: 1.2rem 0 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem 1.25rem;
+    margin: 1rem 0 0;
+  }
+
+  #reality-orbit-prototype .understand-fields div {
+    padding-top: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   }
 
   #reality-orbit-prototype .orbit-actions[hidden],
@@ -1068,11 +1162,28 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-back[hidden],
   #reality-orbit-prototype .orbit-stage[hidden],
   #reality-orbit-prototype .orbit-detail[hidden],
+  #reality-orbit-prototype .understand-foundations[hidden],
+  #reality-orbit-prototype .understand-more[hidden],
   #reality-orbit-prototype .understand-view[hidden] {
     display: none;
   }
 
+  @media (max-width: 680px) {
+    #reality-orbit-prototype .understand-layout {
+      grid-template-columns: 1fr;
+    }
+
+    #reality-orbit-prototype .understand-context {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    #reality-orbit-prototype .understand-fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   @media (max-width: 520px) {
+    #reality-orbit-prototype .understand-context,
     #reality-orbit-prototype .understand-fields {
       grid-template-columns: 1fr;
     }
@@ -1127,7 +1238,27 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
 
     #reality-orbit-prototype .understand-view {
-      padding: 1rem 0.8rem;
+      padding: 0;
+    }
+
+    #reality-orbit-prototype .understand-header {
+      justify-items: start;
+      padding: 1.25rem 0.8rem;
+      text-align: left;
+    }
+
+    #reality-orbit-prototype .understand-header-meta {
+      align-items: flex-start;
+    }
+
+    #reality-orbit-prototype .understand-body {
+      padding: 0.8rem;
+    }
+
+    #reality-orbit-prototype .understand-foundations,
+    #reality-orbit-prototype .understand-context,
+    #reality-orbit-prototype .understand-fields {
+      grid-template-columns: 1fr;
     }
 
     #reality-orbit-prototype .understand-fields {
@@ -1158,7 +1289,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;div class=&quot;orbit-stage&quot;&gt;
           &lt;svg class=&quot;orbit-map&quot; viewBox=&quot;0 0 100 100&quot; role=&quot;img&quot; aria-labelledby=&quot;reality-orbit-title reality-orbit-desc&quot; preserveAspectRatio=&quot;none&quot;&gt;
             &lt;title id=&quot;reality-orbit-title&quot;&gt;Reality ontology destination map&lt;/title&gt;
-            &lt;desc id=&quot;reality-orbit-desc&quot;&gt;Select a concept destination to learn what it means. Understand any concept through its anatomy, or explore curated children to travel deeper.&lt;/desc&gt;
+            &lt;desc id=&quot;reality-orbit-desc&quot;&gt;Select a concept destination to learn what it means. Understand any concept through its anatomy, or explore any non-root concept as a focused destination.&lt;/desc&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;17&quot;&gt;&lt;/circle&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;31&quot;&gt;&lt;/circle&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;44&quot;&gt;&lt;/circle&gt;
@@ -1177,12 +1308,35 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;/div&gt;
         &lt;section class=&quot;understand-view&quot; data-understand-view hidden aria-labelledby=&quot;understand-title&quot;&gt;
           &lt;header class=&quot;understand-header&quot;&gt;
-            &lt;p class=&quot;text-small&quot;&gt;Understand · Concept anatomy&lt;/p&gt;
+            &lt;div class=&quot;understand-header-meta&quot;&gt;
+              &lt;p class=&quot;text-small understand-eyebrow&quot; data-understand-eyebrow&gt;&lt;/p&gt;
+              &lt;span class=&quot;viz-badge&quot;&gt;Understand&lt;/span&gt;
+            &lt;/div&gt;
             &lt;h2 id=&quot;understand-title&quot; data-understand-title&gt;&lt;/h2&gt;
             &lt;span class=&quot;text-small understand-definition-label&quot;&gt;Definition&lt;/span&gt;
             &lt;p class=&quot;understand-statement&quot; data-understand-statement&gt;&lt;/p&gt;
           &lt;/header&gt;
-          &lt;dl class=&quot;understand-fields&quot; data-understand-fields&gt;&lt;/dl&gt;
+          &lt;div class=&quot;understand-body&quot;&gt;
+            &lt;div class=&quot;understand-layout&quot;&gt;
+              &lt;article class=&quot;card understand-story&quot;&gt;
+                &lt;span class=&quot;viz-badge&quot; data-understand-flow&gt;&lt;/span&gt;
+                &lt;div class=&quot;understand-story-lead&quot;&gt;
+                  &lt;span class=&quot;text-small understand-lead-label&quot; data-understand-lead-label&gt;&lt;/span&gt;
+                  &lt;h3 data-understand-lead&gt;&lt;/h3&gt;
+                &lt;/div&gt;
+                &lt;p class=&quot;understand-support&quot; data-understand-support&gt;&lt;/p&gt;
+                &lt;dl class=&quot;understand-foundations&quot; data-understand-foundations&gt;&lt;/dl&gt;
+              &lt;/article&gt;
+              &lt;dl class=&quot;understand-context&quot; data-understand-context aria-label=&quot;Concept context&quot;&gt;&lt;/dl&gt;
+            &lt;/div&gt;
+            &lt;section class=&quot;understand-more&quot; data-understand-more hidden aria-labelledby=&quot;understand-more-title&quot;&gt;
+              &lt;header class=&quot;understand-more-header&quot;&gt;
+                &lt;h3 id=&quot;understand-more-title&quot;&gt;Complete anatomy&lt;/h3&gt;
+                &lt;p class=&quot;text-small text-muted&quot; data-understand-more-summary&gt;&lt;/p&gt;
+              &lt;/header&gt;
+              &lt;dl class=&quot;understand-fields&quot; data-understand-fields&gt;&lt;/dl&gt;
+            &lt;/section&gt;
+          &lt;/div&gt;
         &lt;/section&gt;
       &lt;/div&gt;
     &lt;/div&gt;
@@ -1388,19 +1542,29 @@ html&gt;body{padding:0}&lt;/style&gt;
     const backButton = root.querySelector(&quot;[data-orbit-back]&quot;);
     const pathElement = root.querySelector(&quot;[data-orbit-path]&quot;);
     const understandView = root.querySelector(&quot;[data-understand-view]&quot;);
+    const understandEyebrow = root.querySelector(&quot;[data-understand-eyebrow]&quot;);
     const understandTitle = root.querySelector(&quot;[data-understand-title]&quot;);
     const understandStatement = root.querySelector(&quot;[data-understand-statement]&quot;);
+    const understandFlow = root.querySelector(&quot;[data-understand-flow]&quot;);
+    const understandLeadLabel = root.querySelector(&quot;[data-understand-lead-label]&quot;);
+    const understandLead = root.querySelector(&quot;[data-understand-lead]&quot;);
+    const understandSupport = root.querySelector(&quot;[data-understand-support]&quot;);
+    const understandFoundations = root.querySelector(&quot;[data-understand-foundations]&quot;);
+    const understandContext = root.querySelector(&quot;[data-understand-context]&quot;);
+    const understandMore = root.querySelector(&quot;[data-understand-more]&quot;);
+    const understandMoreSummary = root.querySelector(&quot;[data-understand-more-summary]&quot;);
     const understandFields = root.querySelector(&quot;[data-understand-fields]&quot;);
     const svgNamespace = &quot;http://www.w3.org/2000/svg&quot;;
-    const maximumOntologyLevel = 5;
+    const terminalOntologyLevel = 4;
     const history = [&quot;reality&quot;];
     let selectedId = &quot;reality&quot;;
     let mode = &quot;map&quot;;
 
     const currentId = () =&gt; history[history.length - 1];
     const currentNode = () =&gt; ontology[currentId()];
+    const ontologyLevel = (node) =&gt; node.canonicalPath.length - 1;
     const nodeColor = (node) =&gt; dimensionColors[node.canonicalPath[1]] ?? &quot;var(--viz-series-1)&quot;;
-    const canExploreNode = (node) =&gt; Boolean(node.children?.length) &amp;&amp; node.canonicalPath.length &lt; maximumOntologyLevel;
+    const canExploreNode = (node) =&gt; node.id !== &quot;reality&quot;;
 
     const validateOntology = () =&gt; {
       Object.entries(ontology).forEach(([id, node]) =&gt; {
@@ -1408,7 +1572,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (!node.label?.trim()) throw new Error(`Missing concept label: ${id}`);
         if (!node.summary?.trim()) throw new Error(`Missing concept definition: ${node.label}`);
         if (!Array.isArray(node.canonicalPath) || node.canonicalPath.length === 0) throw new Error(`Missing canonical path: ${node.label}`);
-        if (node.canonicalPath.length &gt; maximumOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
+        if (ontologyLevel(node) &gt; terminalOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
         const children = node.children ?? [];
         if (new Set(children).size !== children.length) throw new Error(`Duplicate child reference: ${node.label}`);
         children.forEach((childId) =&gt; {
@@ -1699,20 +1863,84 @@ html&gt;body{padding:0}&lt;/style&gt;
       };
     };
 
+    const understandFlowForNode = (node) =&gt; {
+      const role = roleForNode(node);
+      const flows = {
+        &quot;Root concept&quot;: &quot;Frame → Describe → Connect&quot;,
+        &quot;Dimension&quot;: &quot;Lens → Classification → Context&quot;,
+        &quot;Named law&quot;: &quot;Conditions → Mechanism → Prediction&quot;,
+        &quot;Relationship type&quot;: &quot;Participants → Connection → Consequence&quot;,
+        &quot;Process type&quot;: &quot;Input → Change → Outcome&quot;,
+        &quot;Resource type&quot;: &quot;Capacity → Allocation → Outcome&quot;,
+        &quot;Perspective lens&quot;: &quot;Lens → Emphasis → Interpretation&quot;,
+        &quot;Scale level&quot;: &quot;Level → Pattern → Boundary&quot;,
+        &quot;Time value&quot;: &quot;Reference → Sequence → Change&quot;,
+      };
+      return flows[role] ?? &quot;Meaning → Context → Application&quot;;
+    };
+
+    const createAnatomyField = ([label, value], className = &quot;&quot;) =&gt; {
+      const field = document.createElement(&quot;div&quot;);
+      field.className = className;
+      const term = document.createElement(&quot;dt&quot;);
+      term.className = &quot;text-small&quot;;
+      term.textContent = label;
+      const description = document.createElement(&quot;dd&quot;);
+      description.textContent = value;
+      field.append(term, description);
+      return field;
+    };
+
     const renderUnderstand = (node) =&gt; {
+      const role = roleForNode(node);
+      const entries = Object.entries(buildConceptAnatomy(node));
+      const usedLabels = new Set();
+      const take = (labels) =&gt; {
+        const entry = entries.find(([label]) =&gt; labels.includes(label) &amp;&amp; !usedLabels.has(label));
+        if (entry) usedLabels.add(entry[0]);
+        return entry;
+      };
+      const takeAny = () =&gt; {
+        const entry = entries.find(([label]) =&gt; !usedLabels.has(label));
+        if (entry) usedLabels.add(entry[0]);
+        return entry;
+      };
+
+      const lead = take([&quot;Governing question&quot;, &quot;Problem&quot;, &quot;Prediction&quot;, &quot;First principles&quot;]) ?? takeAny();
+      const support = take([&quot;Purpose&quot;, &quot;Mechanism&quot;, &quot;First principles&quot;, &quot;Mental model&quot;, &quot;Prediction&quot;]) ?? takeAny();
+      const foundations = [
+        take([&quot;First principles&quot;, &quot;Variables&quot;, &quot;Mechanism&quot;, &quot;Prediction&quot;]),
+        take([&quot;Mental model&quot;, &quot;Prediction&quot;, &quot;Variables&quot;, &quot;Assumptions&quot;]),
+      ].filter(Boolean);
+      const contextEntries = [
+        take([&quot;Scope&quot;]),
+        take([&quot;How to use it&quot;, &quot;Applications&quot;, &quot;Application&quot;]),
+        take([&quot;Common confusion&quot;, &quot;Limitations&quot;, &quot;Related laws&quot;]),
+      ].filter(Boolean);
+      while (contextEntries.length &lt; 3) {
+        const fallback = takeAny();
+        if (!fallback) break;
+        contextEntries.push(fallback);
+      }
+      const remaining = entries.filter(([label]) =&gt; !usedLabels.has(label));
+
+      understandEyebrow.textContent = `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
-      understandFields.replaceChildren();
-      const anatomy = buildConceptAnatomy(node);
-      Object.entries(anatomy).forEach(([label, value]) =&gt; {
-        const field = document.createElement(&quot;div&quot;);
-        const term = document.createElement(&quot;dt&quot;);
-        term.textContent = label;
-        const description = document.createElement(&quot;dd&quot;);
-        description.textContent = value;
-        field.append(term, description);
-        understandFields.appendChild(field);
-      });
+      understandFlow.textContent = understandFlowForNode(node);
+      understandLeadLabel.textContent = lead[0];
+      understandLead.textContent = lead[1];
+      understandSupport.textContent = support[1];
+
+      understandFoundations.replaceChildren(...foundations.map((entry) =&gt; createAnatomyField(entry)));
+      understandFoundations.hidden = foundations.length === 0;
+
+      understandContext.replaceChildren(...contextEntries.map((entry) =&gt; createAnatomyField(entry, &quot;card understand-context-card&quot;)));
+      understandContext.setAttribute(&quot;aria-label&quot;, `${node.label} context`);
+
+      understandFields.replaceChildren(...remaining.map((entry) =&gt; createAnatomyField(entry)));
+      understandMore.hidden = remaining.length === 0;
+      understandMoreSummary.textContent = remaining.length === 1 ? &quot;1 supporting field&quot; : `${remaining.length} supporting fields`;
     };
 
     const setSelectedNode = (nodeId) =&gt; {
@@ -1735,10 +1963,14 @@ html&gt;body{padding:0}&lt;/style&gt;
       const isCurrent = nodeId === currentId();
       actionGroup.hidden = false;
       understandButton.hidden = false;
-      understandButton.classList.toggle(&quot;btn-primary&quot;, !canExplore || isCurrent);
+      understandButton.classList.toggle(&quot;btn-primary&quot;, !canExplore);
       understandButton.setAttribute(&quot;aria-label&quot;, `Understand ${node.label}`);
-      exploreButton.hidden = !canExplore || isCurrent;
-      exploreButton.setAttribute(&quot;aria-label&quot;, `Explore ${node.label}`);
+      exploreButton.hidden = !canExplore;
+      exploreButton.disabled = canExplore &amp;&amp; isCurrent;
+      exploreButton.dataset.exploring = String(canExplore &amp;&amp; isCurrent);
+      exploreButton.textContent = isCurrent ? &quot;Exploring&quot; : &quot;Explore selected&quot;;
+      exploreButton.setAttribute(&quot;aria-pressed&quot;, String(canExplore &amp;&amp; isCurrent));
+      exploreButton.setAttribute(&quot;aria-label&quot;, isCurrent ? `Currently exploring ${node.label}` : `Explore ${node.label}`);
     };
 
     const renderOrbit = () =&gt; {
@@ -1841,7 +2073,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     });
 
     root.dataset.canonicalDimensions = canonicalDimensions.join(&quot;,&quot;);
-    root.dataset.maximumOntologyLevel = String(maximumOntologyLevel);
+    root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
     validateOntology();
     renderOrbit();
   })();
