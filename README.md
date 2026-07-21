@@ -1,12 +1,25 @@
 # Reality Orbit
 
-Reality Orbit is an expandable knowledge map. Reality begins at the centre with eight useful navigation shortcuts; exploring a node moves it to the centre and reveals exactly one level of immediate children.
+Reality Orbit is an expandable spatial destination map. Reality begins at the centre with its five canonical dimensions. **Understand** teaches every selected concept through Concept Anatomy, while **Explore selected** separately travels into concepts that contain curated children.
+
+Selecting a node updates the permanent detail strip with its name, type, and explanation. Canonical paths, parents, typed relationships, and child IDs remain internal application context for traversal, validation, and a future grounded chat integration; they are not displayed as teaching content. Floating explanation cards are deliberately excluded because they can cover an unrelated destination and falsely imply that the explanation belongs to it.
 
 The app distinguishes its simple visual navigation from the canonical ontology:
 
-- Canonical dimensions: Domain, Category, Time, Scale, and Perspective.
-- Navigation shortcuts: Domain, Knowledge, Category, Scale, Time, Resources, Processes, and Relationships.
-- Knowledge, Resource, Process, and Relationship are category paths, not additional top-level dimensions.
+- Reality's immediate children are Domain, Category, Time, Scale, and Perspective.
+- Category contains Entity, Relationship, Process, Resource, Environment, and Knowledge.
+- Knowledge, Resource, Process, and Relationship are never presented as top-level siblings of Category.
+- Knowledge contains seven first-class artifact types: Law, Principle, Razor, Framework, Model, Theorem, and Pattern.
+- Every canonical dimension exposes a third level, and the Knowledge → Law path continues through named-law instances.
+- The ontology stops at level five: Reality → Dimension → Value/type → Subtype → Instance.
+- Every concept receives a baseline, role-aware Concept Anatomy covering purpose, governing question, first principles, mental model, scope, use, and common confusion.
+- Relationship, process, resource, and domain concepts receive reasoning appropriate to their actual role rather than the former generic ontology-node fallback.
+- Authored anatomy overrides the baseline when a concept needs a specialised teaching structure. Amdahl's Law provides the first law-specific anatomy; Ownership is the reference terminal relationship anatomy.
+- Startup and production checks reject missing labels, definitions, paths, children, roles, and Concept Anatomy fields before incomplete knowledge can be presented.
+
+The visual language has explicit meaning: size represents navigation prominence, position is a stable map location, colour identifies the canonical dimension, rings show selection, connections carry typed relationships, brightness shows availability or focus, and the diamond shape identifies an instance.
+
+On mobile, the same map remains spatial rather than becoming a separate product experience. The current destination replaces the full visible breadcrumb, the actions become full-width touch targets, long node labels remain readable, and the same permanent detail strip carries the selection explanation.
 
 ## Product boundary
 

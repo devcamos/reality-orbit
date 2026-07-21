@@ -819,16 +819,18 @@ html&gt;body{padding:0}&lt;/style&gt;
     color: var(--foreground);
   }
 
-  #reality-orbit-prototype .orbit-shell {
-    border: 1px solid color-mix(in srgb, var(--border) 84%, transparent);
-    background: color-mix(in srgb, var(--background) 94%, transparent);
+  #reality-orbit-prototype .orbit-workspace {
+    position: relative;
+  }
+
+  #reality-orbit-prototype .orbit-canvas {
+    min-width: 0;
   }
 
   #reality-orbit-prototype .orbit-toolbar {
     display: flex;
     min-height: 3.25rem;
     align-items: center;
-    justify-content: space-between;
     gap: 0.75rem;
     padding: 0.65rem 0.8rem;
     border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
@@ -837,7 +839,9 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-path {
     display: flex;
     min-width: 0;
+    flex: 1 1 auto;
     align-items: center;
+    justify-content: center;
     gap: 0.35rem;
     color: var(--muted-foreground);
     overflow: hidden;
@@ -853,16 +857,26 @@ html&gt;body{padding:0}&lt;/style&gt;
     text-overflow: ellipsis;
   }
 
+  #reality-orbit-prototype .orbit-toolbar .orbit-actions,
+  #reality-orbit-prototype .orbit-toolbar .orbit-back {
+    flex: 0 0 auto;
+  }
+
+  #reality-orbit-prototype .orbit-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
   #reality-orbit-prototype .orbit-stage {
     position: relative;
     width: 100%;
-    height: clamp(430px, 68vw, 620px);
+    height: clamp(520px, 75vw, 660px);
     overflow: hidden;
     background:
-      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--viz-series-1) 14%, transparent) 0, transparent 24%),
-      radial-gradient(circle at 22% 18%, color-mix(in srgb, var(--foreground) 9%, transparent) 0 1px, transparent 2px),
-      radial-gradient(circle at 78% 36%, color-mix(in srgb, var(--foreground) 8%, transparent) 0 1px, transparent 2px),
-      radial-gradient(circle at 35% 78%, color-mix(in srgb, var(--foreground) 7%, transparent) 0 1px, transparent 2px);
+      radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 16%, transparent) 0, transparent 27%),
+      radial-gradient(circle at 21% 18%, color-mix(in srgb, var(--foreground) 9%, transparent) 0 1px, transparent 2px),
+      radial-gradient(circle at 79% 34%, color-mix(in srgb, var(--foreground) 8%, transparent) 0 1px, transparent 2px),
+      radial-gradient(circle at 36% 79%, color-mix(in srgb, var(--foreground) 7%, transparent) 0 1px, transparent 2px);
     background-size: auto, 79px 83px, 113px 97px, 137px 121px;
   }
 
@@ -878,18 +892,22 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-connection {
     vector-effect: non-scaling-stroke;
     fill: none;
-    stroke: color-mix(in srgb, var(--border) 72%, transparent);
+    stroke: color-mix(in srgb, var(--border) 68%, transparent);
     stroke-width: 1;
   }
 
+  #reality-orbit-prototype .orbit-ring {
+    opacity: 0.34;
+  }
+
   #reality-orbit-prototype .orbit-connection {
-    opacity: 0.3;
+    opacity: 0.13;
     transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
   }
 
   #reality-orbit-prototype .orbit-connection[data-active=&quot;true&quot;] {
-    opacity: 0.92;
-    stroke: var(--viz-series-1);
+    opacity: 0.9;
+    stroke: var(--connection-color, var(--viz-series-1));
     stroke-width: 2;
   }
 
@@ -898,34 +916,82 @@ html&gt;body{padding:0}&lt;/style&gt;
     z-index: 2;
     left: var(--orbit-x);
     top: var(--orbit-y);
-    max-width: min(11rem, 30vw);
+    display: grid;
+    width: min(9.5rem, 28vw);
+    justify-items: center;
+    gap: 0.35rem;
     transform: translate(-50%, -50%);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
   }
 
-  #reality-orbit-prototype .orbit-node[data-expandable=&quot;false&quot;]::after {
-    content: &quot; +&quot;;
-    color: var(--muted-foreground);
+  #reality-orbit-prototype .orbit-node.btn-ghost:not(:disabled):hover {
+    background: transparent;
+  }
+
+  #reality-orbit-prototype .destination-marker {
+    display: grid;
+    width: var(--destination-size, 3.15rem);
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--node-color, var(--viz-series-1)) 60%, var(--border));
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 25%, transparent), transparent 68%);
+    box-shadow: 0 0 0 0.32rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 9%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-prominence=&quot;high&quot;] .destination-marker {
+    --destination-size: 4rem;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-node-kind=&quot;instance&quot;] .destination-marker {
+    border-radius: 18%;
+    transform: rotate(45deg);
+  }
+
+  #reality-orbit-prototype .destination-glyph {
+    width: 0.55rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--node-color, var(--viz-series-1));
+  }
+
+  #reality-orbit-prototype .orbit-node[data-node-kind=&quot;instance&quot;] .destination-glyph {
+    border-radius: 10%;
+    transform: rotate(-45deg);
+  }
+
+  #reality-orbit-prototype .destination-label {
+    display: block;
+    max-width: 100%;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-marker {
+    box-shadow:
+      0 0 0 0.34rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 17%, transparent),
+      0 0 1.2rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 38%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-available=&quot;false&quot;] {
+    opacity: 0.68;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] {
+    opacity: 1;
   }
 
   #reality-orbit-prototype .orbit-core {
-    display: inline-flex;
-    max-width: min(13rem, 38vw);
-    gap: 0.4rem;
-    align-items: center;
+    --destination-size: 4.7rem;
+    width: min(12rem, 38vw);
   }
 
-  #reality-orbit-prototype .orbit-core-mark {
-    color: var(--viz-series-1);
+  #reality-orbit-prototype .orbit-core .destination-marker {
+    --destination-size: 4.7rem;
   }
 
   #reality-orbit-prototype .orbit-detail {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.8rem;
     min-height: 4.4rem;
     padding: 0.75rem 0.8rem;
     border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
@@ -936,99 +1002,189 @@ html&gt;body{padding:0}&lt;/style&gt;
     margin: 0;
   }
 
-  #reality-orbit-prototype .orbit-status strong,
-  #reality-orbit-prototype .orbit-status span {
-    display: block;
+  #reality-orbit-prototype .orbit-status-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
   }
 
-  #reality-orbit-prototype .orbit-status span {
+  #reality-orbit-prototype .orbit-summary {
+    display: block;
     margin-top: 0.15rem;
     color: var(--muted-foreground);
   }
 
+  #reality-orbit-prototype .understand-fields div {
+    padding-top: 0.65rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-fields dt {
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .understand-fields dd {
+    margin: 0.2rem 0 0;
+  }
+
+  #reality-orbit-prototype .understand-view {
+    padding: 1.2rem;
+  }
+
+  #reality-orbit-prototype .understand-header p,
+  #reality-orbit-prototype .understand-header h2 {
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .understand-header h2 {
+    margin-top: 0.2rem;
+  }
+
+  #reality-orbit-prototype .understand-statement {
+    margin-top: 0.75rem;
+    max-width: 46rem;
+  }
+
+  #reality-orbit-prototype .understand-definition-label {
+    display: block;
+    margin-top: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .understand-definition-label + .understand-statement {
+    margin-top: 0.2rem;
+  }
+
+  #reality-orbit-prototype .understand-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem 1.4rem;
+    margin: 1.2rem 0 0;
+  }
+
+  #reality-orbit-prototype .orbit-actions[hidden],
   #reality-orbit-prototype .orbit-action[hidden],
-  #reality-orbit-prototype .orbit-back[hidden] {
+  #reality-orbit-prototype .orbit-back[hidden],
+  #reality-orbit-prototype .orbit-stage[hidden],
+  #reality-orbit-prototype .orbit-detail[hidden],
+  #reality-orbit-prototype .understand-view[hidden] {
     display: none;
   }
 
-  #reality-orbit-prototype .orbit-toast {
-    position: absolute;
-    z-index: 4;
-    right: 0.8rem;
-    bottom: 0.8rem;
-    max-width: min(23rem, calc(100% - 1.6rem));
-    padding: 0.55rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: var(--background);
-    box-shadow: 0 0.75rem 2rem color-mix(in srgb, var(--foreground) 12%, transparent);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(0.35rem);
-    transition: opacity 160ms ease, transform 160ms ease;
-  }
-
-  #reality-orbit-prototype .orbit-toast[data-visible=&quot;true&quot;] {
-    opacity: 1;
-    transform: translateY(0);
+  @media (max-width: 520px) {
+    #reality-orbit-prototype .understand-fields {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 480px) {
     #reality-orbit-prototype .orbit-stage {
-      height: 540px;
+      height: 500px;
     }
 
     #reality-orbit-prototype .orbit-toolbar {
-      padding-inline: 0.6rem;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding: 0.55rem 0.6rem;
+    }
+
+    #reality-orbit-prototype .orbit-path &gt; span {
+      display: none;
+    }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-back {
+      min-height: 2.75rem;
+    }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-actions {
+      order: 3;
+      width: 100%;
+      flex-basis: 100%;
+    }
+
+    #reality-orbit-prototype .orbit-actions .orbit-action {
+      min-height: 2.75rem;
+      flex: 1 1 0;
     }
 
     #reality-orbit-prototype .orbit-node {
-      max-width: 36vw;
-      padding-inline: 0.5rem;
+      width: min(8rem, 36vw);
+      gap: 0.25rem;
+      padding-inline: 0.1rem;
+    }
+
+    #reality-orbit-prototype .orbit-node[data-prominence=&quot;high&quot;] .destination-marker {
+      --destination-size: 3.35rem;
+    }
+
+    #reality-orbit-prototype .destination-marker {
+      --destination-size: 2.75rem;
     }
 
     #reality-orbit-prototype .orbit-detail {
-      grid-template-columns: 1fr;
+      padding-inline: 0.65rem;
     }
 
-    #reality-orbit-prototype .orbit-action {
-      width: 100%;
+    #reality-orbit-prototype .understand-view {
+      padding: 1rem 0.8rem;
+    }
+
+    #reality-orbit-prototype .understand-fields {
+      gap: 0.7rem;
+      margin-top: 1rem;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #reality-orbit-prototype .orbit-connection,
-    #reality-orbit-prototype .orbit-toast {
+    #reality-orbit-prototype .orbit-connection {
       transition: none;
     }
   }
 &lt;/style&gt;
 
-&lt;section id=&quot;reality-orbit-prototype&quot; aria-label=&quot;Expandable Reality ontology orbit&quot;&gt;
+&lt;section id=&quot;reality-orbit-prototype&quot; aria-label=&quot;Reality ontology destination map&quot;&gt;
   &lt;div class=&quot;orbit-shell&quot;&gt;
-    &lt;div class=&quot;orbit-toolbar&quot;&gt;
-      &lt;button class=&quot;btn btn-ghost orbit-back&quot; type=&quot;button&quot; data-orbit-back hidden aria-label=&quot;Return to the previous orbit&quot;&gt;← Back&lt;/button&gt;
-      &lt;div class=&quot;orbit-path text-small&quot; data-orbit-path aria-label=&quot;Current ontology path&quot;&gt;&lt;/div&gt;
-      &lt;span class=&quot;text-small&quot;&gt;One level at a time&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;orbit-stage&quot;&gt;
-      &lt;svg class=&quot;orbit-map&quot; viewBox=&quot;0 0 100 100&quot; role=&quot;img&quot; aria-labelledby=&quot;reality-orbit-title reality-orbit-desc&quot; preserveAspectRatio=&quot;none&quot;&gt;
-        &lt;title id=&quot;reality-orbit-title&quot;&gt;Expandable Reality ontology orbit&lt;/title&gt;
-        &lt;desc id=&quot;reality-orbit-desc&quot;&gt;Select a concept, then explore it to move that concept to the centre and reveal one level of immediate children.&lt;/desc&gt;
-        &lt;ellipse class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; rx=&quot;42&quot; ry=&quot;20&quot;&gt;&lt;/ellipse&gt;
-        &lt;ellipse class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; rx=&quot;20&quot; ry=&quot;42&quot;&gt;&lt;/ellipse&gt;
-        &lt;ellipse class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; rx=&quot;36&quot; ry=&quot;31&quot; transform=&quot;rotate(32 50 50)&quot;&gt;&lt;/ellipse&gt;
-        &lt;g data-orbit-connections&gt;&lt;/g&gt;
-      &lt;/svg&gt;
-      &lt;div data-orbit-nodes&gt;&lt;/div&gt;
-      &lt;div class=&quot;orbit-toast text-small&quot; data-orbit-toast role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class=&quot;orbit-detail&quot;&gt;
-      &lt;p class=&quot;orbit-status text-small&quot; aria-live=&quot;polite&quot;&gt;
-        &lt;strong data-selected-label&gt;Reality&lt;/strong&gt;
-        &lt;span data-selected-summary&gt;Eight useful shortcuts into a canonical model of Domain, Category, Time, Scale, and Perspective.&lt;/span&gt;
-      &lt;/p&gt;
-      &lt;button class=&quot;btn btn-primary orbit-action&quot; type=&quot;button&quot; data-orbit-action hidden&gt;&lt;/button&gt;
+    &lt;div class=&quot;orbit-workspace&quot;&gt;
+      &lt;div class=&quot;orbit-canvas&quot;&gt;
+        &lt;div class=&quot;orbit-toolbar&quot;&gt;
+          &lt;button class=&quot;btn btn-ghost orbit-back&quot; type=&quot;button&quot; data-orbit-back hidden aria-label=&quot;Return to the previous orbit&quot;&gt;← Back&lt;/button&gt;
+          &lt;div class=&quot;orbit-path text-small&quot; data-orbit-path aria-label=&quot;Current ontology path&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;orbit-actions&quot; data-orbit-actions hidden&gt;
+            &lt;button class=&quot;btn orbit-action&quot; type=&quot;button&quot; data-understand-action&gt;Understand&lt;/button&gt;
+            &lt;button class=&quot;btn btn-primary orbit-action&quot; type=&quot;button&quot; data-explore-action&gt;Explore selected&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;orbit-stage&quot;&gt;
+          &lt;svg class=&quot;orbit-map&quot; viewBox=&quot;0 0 100 100&quot; role=&quot;img&quot; aria-labelledby=&quot;reality-orbit-title reality-orbit-desc&quot; preserveAspectRatio=&quot;none&quot;&gt;
+            &lt;title id=&quot;reality-orbit-title&quot;&gt;Reality ontology destination map&lt;/title&gt;
+            &lt;desc id=&quot;reality-orbit-desc&quot;&gt;Select a concept destination to learn what it means. Understand any concept through its anatomy, or explore curated children to travel deeper.&lt;/desc&gt;
+            &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;17&quot;&gt;&lt;/circle&gt;
+            &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;31&quot;&gt;&lt;/circle&gt;
+            &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;44&quot;&gt;&lt;/circle&gt;
+            &lt;g data-orbit-connections&gt;&lt;/g&gt;
+          &lt;/svg&gt;
+          &lt;div data-orbit-nodes&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;orbit-detail&quot;&gt;
+          &lt;p class=&quot;orbit-status text-small&quot; aria-live=&quot;polite&quot;&gt;
+            &lt;span class=&quot;orbit-status-heading&quot;&gt;
+              &lt;strong data-selected-label&gt;Reality&lt;/strong&gt;
+              &lt;span class=&quot;viz-badge orbit-role&quot; data-selected-role&gt;Root concept&lt;/span&gt;
+            &lt;/span&gt;
+            &lt;span class=&quot;orbit-summary&quot; data-selected-summary&gt;The five canonical dimensions used to describe anything represented in the ontology.&lt;/span&gt;
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;section class=&quot;understand-view&quot; data-understand-view hidden aria-labelledby=&quot;understand-title&quot;&gt;
+          &lt;header class=&quot;understand-header&quot;&gt;
+            &lt;p class=&quot;text-small&quot;&gt;Understand · Concept anatomy&lt;/p&gt;
+            &lt;h2 id=&quot;understand-title&quot; data-understand-title&gt;&lt;/h2&gt;
+            &lt;span class=&quot;text-small understand-definition-label&quot;&gt;Definition&lt;/span&gt;
+            &lt;p class=&quot;understand-statement&quot; data-understand-statement&gt;&lt;/p&gt;
+          &lt;/header&gt;
+          &lt;dl class=&quot;understand-fields&quot; data-understand-fields&gt;&lt;/dl&gt;
+        &lt;/section&gt;
+      &lt;/div&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/section&gt;
@@ -1042,10 +1198,10 @@ html&gt;body{padding:0}&lt;/style&gt;
       reality: {
         id: &quot;reality&quot;,
         label: &quot;Reality&quot;,
-        summary: &quot;Eight useful shortcuts into a canonical model of Domain, Category, Time, Scale, and Perspective.&quot;,
+        summary: &quot;The five canonical dimensions used to describe anything represented in the ontology.&quot;,
         canonicalPath: [&quot;Reality&quot;],
-        children: [&quot;domain&quot;, &quot;knowledge&quot;, &quot;category&quot;, &quot;scale&quot;, &quot;time&quot;, &quot;resources&quot;, &quot;processes&quot;, &quot;relationships&quot;],
-        positions: [[50, 9], [24, 28], [76, 28], [10, 52], [90, 52], [25, 74], [75, 74], [50, 89]],
+        children: [&quot;domain&quot;, &quot;category&quot;, &quot;time&quot;, &quot;scale&quot;, &quot;perspective&quot;],
+        positions: [[50, 15], [17, 35], [82, 30], [25, 77], [73, 80]],
       },
       domain: {
         id: &quot;domain&quot;,
@@ -1059,7 +1215,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         label: &quot;Knowledge&quot;,
         summary: &quot;What is known, claimed, represented, or inferred.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;],
-        children: [&quot;law&quot;, &quot;principle&quot;, &quot;theory&quot;, &quot;model&quot;, &quot;framework&quot;, &quot;pattern&quot;, &quot;method&quot;, &quot;heuristic&quot;],
+        children: [&quot;law&quot;, &quot;principle&quot;, &quot;razor&quot;, &quot;framework&quot;, &quot;model&quot;, &quot;theorem&quot;, &quot;pattern&quot;],
       },
       category: {
         id: &quot;category&quot;,
@@ -1082,26 +1238,12 @@ html&gt;body{padding:0}&lt;/style&gt;
         canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;],
         children: [&quot;past&quot;, &quot;present&quot;, &quot;future&quot;, &quot;duration&quot;, &quot;sequence&quot;],
       },
-      resources: {
-        id: &quot;resources&quot;,
-        label: &quot;Resources&quot;,
-        summary: &quot;A navigation shortcut to finite inputs that enable or constrain activity.&quot;,
-        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;],
-        children: [&quot;resource-time&quot;, &quot;energy&quot;, &quot;capital&quot;, &quot;information&quot;, &quot;attention&quot;, &quot;compute&quot;],
-      },
-      processes: {
-        id: &quot;processes&quot;,
-        label: &quot;Processes&quot;,
-        summary: &quot;A navigation shortcut to transformations that move reality between states.&quot;,
-        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;],
-        children: [&quot;process-change&quot;, &quot;transformation&quot;, &quot;exchange&quot;, &quot;learning&quot;, &quot;production&quot;],
-      },
-      relationships: {
-        id: &quot;relationships&quot;,
-        label: &quot;Relationships&quot;,
-        summary: &quot;A navigation shortcut to connections through which entities affect one another.&quot;,
-        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;],
-        children: [&quot;ownership&quot;, &quot;dependency&quot;, &quot;communication&quot;, &quot;competition&quot;, &quot;cooperation&quot;],
+      perspective: {
+        id: &quot;perspective&quot;,
+        label: &quot;Perspective&quot;,
+        summary: &quot;The viewpoint or interpretive lens through which reality is described.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;],
+        children: [&quot;perspective-individual&quot;, &quot;perspective-scientific&quot;, &quot;perspective-economic&quot;, &quot;perspective-ethical&quot;, &quot;perspective-cultural&quot;],
       },
       physical: { id: &quot;physical&quot;, label: &quot;Physical&quot;, summary: &quot;Matter, energy, space, and the forces that govern physical systems.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Physical&quot;] },
       biological: { id: &quot;biological&quot;, label: &quot;Biological&quot;, summary: &quot;Living systems, organisms, adaptation, and ecosystems.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Biological&quot;] },
@@ -1116,18 +1258,23 @@ html&gt;body{padding:0}&lt;/style&gt;
       economic: { id: &quot;economic&quot;, label: &quot;Economic&quot;, summary: &quot;Production, allocation, exchange, incentives, and value.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Economic&quot;] },
       informational: { id: &quot;informational&quot;, label: &quot;Informational&quot;, summary: &quot;Representation, communication, computation, and the reduction of uncertainty.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Informational&quot;] },
       mathematical: { id: &quot;mathematical&quot;, label: &quot;Mathematical&quot;, summary: &quot;Quantity, structure, pattern, relation, and formal reasoning.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Mathematical&quot;] },
-      law: { id: &quot;law&quot;, label: &quot;Law&quot;, summary: &quot;A stable relationship or regularity within a defined scope.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;] },
-      principle: { id: &quot;principle&quot;, label: &quot;Principle&quot;, summary: &quot;A general rule that guides understanding or action.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Principle&quot;] },
-      theory: { id: &quot;theory&quot;, label: &quot;Theory&quot;, summary: &quot;A structured explanation supported by reasoning and evidence.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Theory&quot;] },
-      model: { id: &quot;model&quot;, label: &quot;Model&quot;, summary: &quot;A purposeful simplification used to explain, predict, or design.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Model&quot;] },
-      framework: { id: &quot;framework&quot;, label: &quot;Framework&quot;, summary: &quot;A reusable structure that guides analysis or decision-making.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Framework&quot;] },
+      law: {
+        id: &quot;law&quot;,
+        label: &quot;Law&quot;,
+        summary: &quot;A named statement of a relationship, regularity, or constraint within a defined scope; the name alone does not guarantee scientific status.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;],
+        children: [&quot;amdahls-law&quot;, &quot;brooks-law&quot;, &quot;conways-law&quot;, &quot;goodharts-law&quot;, &quot;greshams-law&quot;, &quot;littles-law&quot;, &quot;metcalfes-law&quot;, &quot;parkinsons-law&quot;],
+      },
+      principle: { id: &quot;principle&quot;, label: &quot;Principle&quot;, summary: &quot;A general rule that guides behaviour, design, or action.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Principle&quot;] },
+      razor: { id: &quot;razor&quot;, label: &quot;Razor&quot;, summary: &quot;A concise reasoning rule used to remove unlikely explanations or prefer one interpretation over another.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Razor&quot;] },
+      framework: { id: &quot;framework&quot;, label: &quot;Framework&quot;, summary: &quot;A reusable structure that organises analysis, decisions, or execution.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Framework&quot;] },
+      model: { id: &quot;model&quot;, label: &quot;Model&quot;, summary: &quot;A purposeful representation used to explain, predict, or design.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Model&quot;] },
+      theorem: { id: &quot;theorem&quot;, label: &quot;Theorem&quot;, summary: &quot;A proposition established by formal proof from stated axioms, definitions, or prior results.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Theorem&quot;] },
       pattern: { id: &quot;pattern&quot;, label: &quot;Pattern&quot;, summary: &quot;A named, reusable response to a recurring problem in context.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Pattern&quot;] },
-      method: { id: &quot;method&quot;, label: &quot;Method&quot;, summary: &quot;A defined way of performing an investigation or task.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Method&quot;] },
-      heuristic: { id: &quot;heuristic&quot;, label: &quot;Heuristic&quot;, summary: &quot;A practical rule of thumb that helps judgment without guaranteeing correctness.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Heuristic&quot;] },
       entity: { id: &quot;entity&quot;, label: &quot;Entity&quot;, summary: &quot;A distinct thing that can be identified and described; agents are a specialised entity.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Entity&quot;] },
-      relationship: { id: &quot;relationship&quot;, label: &quot;Relationship&quot;, summary: &quot;A meaningful connection between two or more entities.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;] },
-      process: { id: &quot;process&quot;, label: &quot;Process&quot;, summary: &quot;An ordered transformation or activity that changes state over time.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;] },
-      resource: { id: &quot;resource&quot;, label: &quot;Resource&quot;, summary: &quot;An input, capacity, or asset available to enable activity.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;] },
+      relationship: { id: &quot;relationship&quot;, label: &quot;Relationship&quot;, summary: &quot;A meaningful connection between two or more entities.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;], children: [&quot;ownership&quot;, &quot;dependency&quot;, &quot;communication&quot;, &quot;competition&quot;, &quot;cooperation&quot;] },
+      process: { id: &quot;process&quot;, label: &quot;Process&quot;, summary: &quot;An ordered transformation or activity that changes state over time.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;], children: [&quot;process-change&quot;, &quot;transformation&quot;, &quot;exchange&quot;, &quot;learning&quot;, &quot;production&quot;] },
+      resource: { id: &quot;resource&quot;, label: &quot;Resource&quot;, summary: &quot;An input, capacity, or asset available to enable activity.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;], children: [&quot;resource-time&quot;, &quot;energy&quot;, &quot;capital&quot;, &quot;information&quot;, &quot;attention&quot;, &quot;compute&quot;] },
       environment: { id: &quot;environment&quot;, label: &quot;Environment&quot;, summary: &quot;The surrounding conditions and context within which entities operate.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Environment&quot;] },
       individual: { id: &quot;individual&quot;, label: &quot;Individual&quot;, summary: &quot;A single person, organism, agent, or unit of analysis.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Scale&quot;, &quot;Individual&quot;] },
       group: { id: &quot;group&quot;, label: &quot;Group&quot;, summary: &quot;A small collection whose members interact or share identity.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Scale&quot;, &quot;Group&quot;] },
@@ -1139,6 +1286,11 @@ html&gt;body{padding:0}&lt;/style&gt;
       future: { id: &quot;future&quot;, label: &quot;Future&quot;, summary: &quot;Possible or expected states after the present reference point.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;, &quot;Future&quot;] },
       duration: { id: &quot;duration&quot;, label: &quot;Duration&quot;, summary: &quot;The amount of time between a beginning and an end.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;, &quot;Duration&quot;] },
       sequence: { id: &quot;sequence&quot;, label: &quot;Sequence&quot;, summary: &quot;The order in which events, states, or actions occur.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Time&quot;, &quot;Sequence&quot;] },
+      &quot;perspective-individual&quot;: { id: &quot;perspective-individual&quot;, label: &quot;Individual&quot;, summary: &quot;Reality as interpreted from one person&#x27;s situated experience and interests.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Individual&quot;] },
+      &quot;perspective-scientific&quot;: { id: &quot;perspective-scientific&quot;, label: &quot;Scientific&quot;, summary: &quot;Reality interpreted through systematic observation, evidence, and testable explanation.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Scientific&quot;] },
+      &quot;perspective-economic&quot;: { id: &quot;perspective-economic&quot;, label: &quot;Economic&quot;, summary: &quot;Reality interpreted through value, incentives, allocation, production, and exchange.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Economic&quot;] },
+      &quot;perspective-ethical&quot;: { id: &quot;perspective-ethical&quot;, label: &quot;Ethical&quot;, summary: &quot;Reality interpreted through questions of right action, responsibility, harm, and fairness.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Ethical&quot;] },
+      &quot;perspective-cultural&quot;: { id: &quot;perspective-cultural&quot;, label: &quot;Cultural&quot;, summary: &quot;Reality interpreted through shared meanings, values, practices, and inherited context.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Cultural&quot;] },
       &quot;resource-time&quot;: { id: &quot;resource-time&quot;, label: &quot;Time&quot;, summary: &quot;The finite duration available for attention, action, or change.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Time&quot;] },
       energy: { id: &quot;energy&quot;, label: &quot;Energy&quot;, summary: &quot;The capacity to perform work or produce change.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Energy&quot;] },
       capital: { id: &quot;capital&quot;, label: &quot;Capital&quot;, summary: &quot;Accumulated assets that can support future production or value creation.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Resource&quot;, &quot;Capital&quot;] },
@@ -1150,7 +1302,21 @@ html&gt;body{padding:0}&lt;/style&gt;
       exchange: { id: &quot;exchange&quot;, label: &quot;Exchange&quot;, summary: &quot;A process in which entities transfer resources, information, or value.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Exchange&quot;] },
       learning: { id: &quot;learning&quot;, label: &quot;Learning&quot;, summary: &quot;A process through which knowledge, capability, or behaviour changes through experience.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Learning&quot;] },
       production: { id: &quot;production&quot;, label: &quot;Production&quot;, summary: &quot;A process that creates goods, services, information, or other valued outputs.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Process&quot;, &quot;Production&quot;] },
-      ownership: { id: &quot;ownership&quot;, label: &quot;Ownership&quot;, summary: &quot;A relationship that assigns recognised possession, control, or rights over something.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Ownership&quot;] },
+      ownership: {
+        id: &quot;ownership&quot;,
+        label: &quot;Ownership&quot;,
+        summary: &quot;A relationship that assigns recognised possession, control, or rights over something.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Ownership&quot;],
+        anatomy: {
+          &quot;Purpose&quot;: &quot;Use Ownership to describe who or what is recognised as holding particular rights over an entity, resource, or creation.&quot;,
+          &quot;Governing question&quot;: &quot;Who holds which rights over what, under whose recognition, and under which conditions?&quot;,
+          &quot;First principles&quot;: &quot;Ownership relates a holder, an owned object, a bundle of rights, and a recognising authority or social context. Possession, access, control, and legal title can exist separately.&quot;,
+          &quot;Mental model&quot;: &quot;A labelled relationship connecting a holder to something through a bundle of recognised rights rather than a single absolute power.&quot;,
+          &quot;Scope&quot;: &quot;Property, money, accounts, data, intellectual property, organisations, and other contexts where possession, control, transfer, exclusion, or benefit is recognised.&quot;,
+          &quot;How to use it&quot;: &quot;Identify the holder, object, rights, recognising authority, time period, transfer rules, and any competing claims before describing the relationship as ownership.&quot;,
+          &quot;Common confusion&quot;: &quot;Possessing, accessing, controlling, or using something does not necessarily mean owning it; the relevant rights and recognition must be made explicit.&quot;,
+        },
+      },
       dependency: { id: &quot;dependency&quot;, label: &quot;Dependency&quot;, summary: &quot;A relationship in which one entity relies on another.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Dependency&quot;] },
       communication: { id: &quot;communication&quot;, label: &quot;Communication&quot;, summary: &quot;A relationship formed through the exchange of signals or meaning.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Communication&quot;] },
       cooperation: { id: &quot;cooperation&quot;, label: &quot;Cooperation&quot;, summary: &quot;A relationship in which parties coordinate toward compatible outcomes.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Relationship&quot;, &quot;Cooperation&quot;] },
@@ -1163,65 +1329,162 @@ html&gt;body{padding:0}&lt;/style&gt;
       culture: { id: &quot;culture&quot;, label: &quot;Culture&quot;, summary: &quot;Shared meanings, values, symbols, and practices transmitted across people.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Social&quot;, &quot;Culture&quot;] },
       &quot;social-communication&quot;: { id: &quot;social-communication&quot;, label: &quot;Communication&quot;, summary: &quot;The creation and exchange of meaning between social actors.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Social&quot;, &quot;Communication&quot;] },
       governance: { id: &quot;governance&quot;, label: &quot;Governance&quot;, summary: &quot;The processes through which collective decisions, authority, and accountability are organised.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Social&quot;, &quot;Governance&quot;] },
+      &quot;amdahls-law&quot;: {
+        id: &quot;amdahls-law&quot;,
+        label: &quot;Amdahl&#x27;s Law&quot;,
+        kind: &quot;law-instance&quot;,
+        summary: &quot;For a fixed workload, the serial portion sets the upper limit on the speedup gained from parallel execution.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Amdahl&#x27;s Law&quot;],
+        anatomy: {
+          &quot;Problem&quot;: &quot;Adding processors does not keep producing proportional performance improvements.&quot;,
+          &quot;First principles&quot;: &quot;A finite workload contains work that can run in parallel and work that must remain serial. Parallel resources cannot accelerate serial work.&quot;,
+          &quot;Variables&quot;: &quot;Parallel fraction, serial fraction, processor count, and total speedup.&quot;,
+          &quot;Mental model&quot;: &quot;Widening most lanes on a road cannot remove the delay caused by one remaining single-lane section.&quot;,
+          &quot;Mechanism&quot;: &quot;Parallel work becomes faster as processors are added, while serial work remains fixed and therefore becomes the dominant share of elapsed time.&quot;,
+          &quot;Prediction&quot;: &quot;Performance gains flatten as processor count rises, and the serial fraction determines the ceiling.&quot;,
+          &quot;Scope&quot;: &quot;Fixed-size workloads whose parallel and serial portions can be estimated.&quot;,
+          &quot;Assumptions&quot;: &quot;The workload is fixed, the parallel fraction remains stable, and coordination overhead is negligible.&quot;,
+          &quot;Evidence or derivation&quot;: &quot;The relationship follows mathematically by adding the unchanged serial time to the parallel time divided across processors.&quot;,
+          &quot;Limitations&quot;: &quot;Real systems add communication, scheduling, memory, and coordination overhead; workloads may also grow with available capacity.&quot;,
+          &quot;Applications&quot;: &quot;Parallel algorithm design, capacity planning, performance profiling, and deciding whether to optimise serial work or add processors.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Change processor count and parallel fraction, then observe the speedup curve approach a ceiling.&quot;,
+          &quot;Related laws&quot;: &quot;Gustafson&#x27;s Law offers a complementary view by allowing the workload to scale with available processors.&quot;,
+        },
+      },
+      &quot;brooks-law&quot;: { id: &quot;brooks-law&quot;, label: &quot;Brooks&#x27;s Law&quot;, kind: &quot;law-instance&quot;, summary: &quot;Adding people to a late software project can make it later because coordination and onboarding add work.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Brooks&#x27;s Law&quot;] },
+      &quot;conways-law&quot;: { id: &quot;conways-law&quot;, label: &quot;Conway&#x27;s Law&quot;, kind: &quot;law-instance&quot;, summary: &quot;The structures organisations design tend to mirror their communication structures.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Conway&#x27;s Law&quot;] },
+      &quot;goodharts-law&quot;: { id: &quot;goodharts-law&quot;, label: &quot;Goodhart&#x27;s Law&quot;, kind: &quot;law-instance&quot;, summary: &quot;When a measure becomes a target, people adapt to the target and the measure often loses its value as evidence.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Goodhart&#x27;s Law&quot;] },
+      &quot;greshams-law&quot;: { id: &quot;greshams-law&quot;, label: &quot;Gresham&#x27;s Law&quot;, kind: &quot;law-instance&quot;, summary: &quot;When two forms of money are accepted at the same nominal value, the overvalued form tends to circulate while the undervalued form is retained or exported.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Gresham&#x27;s Law&quot;] },
+      &quot;littles-law&quot;: { id: &quot;littles-law&quot;, label: &quot;Little&#x27;s Law&quot;, kind: &quot;law-instance&quot;, summary: &quot;In a stable system, average items in the system equal average arrival rate multiplied by average time in the system.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Little&#x27;s Law&quot;] },
+      &quot;metcalfes-law&quot;: { id: &quot;metcalfes-law&quot;, label: &quot;Metcalfe&#x27;s Law&quot;, kind: &quot;law-instance&quot;, summary: &quot;The potential value of a compatible communication network grows roughly with the square of its connected users under simplifying assumptions.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Metcalfe&#x27;s Law&quot;] },
+      &quot;parkinsons-law&quot;: { id: &quot;parkinsons-law&quot;, label: &quot;Parkinson&#x27;s Law&quot;, kind: &quot;law-instance&quot;, summary: &quot;Work tends to expand to fill the time made available for its completion.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;, &quot;Parkinson&#x27;s Law&quot;] },
     };
 
     const canonicalDimensions = [&quot;Domain&quot;, &quot;Category&quot;, &quot;Time&quot;, &quot;Scale&quot;, &quot;Perspective&quot;];
+    const dimensionColors = {
+      Domain: &quot;var(--viz-series-2)&quot;,
+      Category: &quot;var(--viz-series-3)&quot;,
+      Time: &quot;var(--viz-series-4)&quot;,
+      Scale: &quot;var(--viz-series-5)&quot;,
+      Perspective: &quot;var(--viz-series-6)&quot;,
+    };
+    const destinationLayouts = {
+      5: [[50, 15], [17, 35], [82, 30], [25, 77], [73, 80]],
+      6: [[46, 14], [16, 34], [80, 27], [19, 72], [50, 84], [81, 69]],
+      7: [[50, 13], [18, 25], [80, 22], [14, 55], [84, 52], [28, 82], [70, 82]],
+      8: [[48, 12], [20, 23], [80, 20], [20, 51], [80, 49], [24, 79], [50, 86], [76, 78]],
+    };
+
     const nodesLayer = root.querySelector(&quot;[data-orbit-nodes]&quot;);
     const connectionsLayer = root.querySelector(&quot;[data-orbit-connections]&quot;);
+    const mapStage = root.querySelector(&quot;[data-orbit-nodes]&quot;).parentElement;
+    const detailPanel = root.querySelector(&quot;.orbit-detail&quot;);
     const selectedLabel = root.querySelector(&quot;[data-selected-label]&quot;);
+    const selectedRole = root.querySelector(&quot;[data-selected-role]&quot;);
     const selectedSummary = root.querySelector(&quot;[data-selected-summary]&quot;);
-    const actionButton = root.querySelector(&quot;[data-orbit-action]&quot;);
+    const actionGroup = root.querySelector(&quot;[data-orbit-actions]&quot;);
+    const understandButton = root.querySelector(&quot;[data-understand-action]&quot;);
+    const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
     const backButton = root.querySelector(&quot;[data-orbit-back]&quot;);
     const pathElement = root.querySelector(&quot;[data-orbit-path]&quot;);
-    const toast = root.querySelector(&quot;[data-orbit-toast]&quot;);
+    const understandView = root.querySelector(&quot;[data-understand-view]&quot;);
+    const understandTitle = root.querySelector(&quot;[data-understand-title]&quot;);
+    const understandStatement = root.querySelector(&quot;[data-understand-statement]&quot;);
+    const understandFields = root.querySelector(&quot;[data-understand-fields]&quot;);
     const svgNamespace = &quot;http://www.w3.org/2000/svg&quot;;
+    const maximumOntologyLevel = 5;
     const history = [&quot;reality&quot;];
     let selectedId = &quot;reality&quot;;
-    let toastTimer;
+    let mode = &quot;map&quot;;
 
     const currentId = () =&gt; history[history.length - 1];
     const currentNode = () =&gt; ontology[currentId()];
+    const nodeColor = (node) =&gt; dimensionColors[node.canonicalPath[1]] ?? &quot;var(--viz-series-1)&quot;;
+    const canExploreNode = (node) =&gt; Boolean(node.children?.length) &amp;&amp; node.canonicalPath.length &lt; maximumOntologyLevel;
 
-    const positionChildren = (parent) =&gt; {
-      if (parent.positions) return parent.positions;
-      const count = parent.children.length;
-      const radiusX = count &lt;= 5 ? 38 : 41;
-      const radiusY = count &lt;= 5 ? 35 : 40;
-      return parent.children.map((_, index) =&gt; {
-        const angle = (-90 + (360 / count) * index) * (Math.PI / 180);
-        return [50 + Math.cos(angle) * radiusX, 50 + Math.sin(angle) * radiusY];
+    const validateOntology = () =&gt; {
+      Object.entries(ontology).forEach(([id, node]) =&gt; {
+        if (node.id !== id) throw new Error(`Ontology key mismatch: ${id}`);
+        if (!node.label?.trim()) throw new Error(`Missing concept label: ${id}`);
+        if (!node.summary?.trim()) throw new Error(`Missing concept definition: ${node.label}`);
+        if (!Array.isArray(node.canonicalPath) || node.canonicalPath.length === 0) throw new Error(`Missing canonical path: ${node.label}`);
+        if (node.canonicalPath.length &gt; maximumOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
+        const children = node.children ?? [];
+        if (new Set(children).size !== children.length) throw new Error(`Duplicate child reference: ${node.label}`);
+        children.forEach((childId) =&gt; {
+          const child = ontology[childId];
+          if (!child) throw new Error(`Unknown child ${childId} on ${node.label}`);
+          const expectedPath = [...node.canonicalPath, child.label];
+          if (child.canonicalPath.join(&quot;/&quot;) !== expectedPath.join(&quot;/&quot;)) {
+            throw new Error(`Canonical path mismatch: ${child.label}`);
+          }
+        });
+        const role = roleForNode(node);
+        if (role === &quot;Ontology node&quot;) throw new Error(`Unclassified concept role: ${node.label}`);
+        const anatomy = buildConceptAnatomy(node);
+        if (Object.keys(anatomy).length &lt; 7 || Object.entries(anatomy).some(([label, value]) =&gt; !label.trim() || !String(value).trim())) {
+          throw new Error(`Incomplete Concept Anatomy: ${node.label}`);
+        }
       });
     };
 
-    const expansionPrompt = (node) =&gt; `Canonical Ontology Expansion Contract\n\nYou are expanding the Canonical Reality Ontology.\n\nThis ontology is the source of truth. Do not redesign, rename, merge, remove, or reorder existing canonical nodes unless explicitly instructed.\n\nExpand: ${node.canonicalPath.join(&quot; → &quot;)}\n\nExpansion Rules\n1. Expand only the requested node.\n2. Expand exactly one level deeper.\n3. Return between 5 and 10 Pareto-essential children.\n4. Children should collectively cover the parent.\n5. Children should be mutually exclusive where practical.\n6. Prefer timeless concepts over current implementations, tools, or technologies.\n7. Give every child a name and one-line description.\n8. Preserve the existing ontology naming conventions.\n9. If multiple taxonomies exist, choose the most widely accepted and explain the rationale.\n10. Never expand grandchildren unless explicitly requested.\n\nOutput Format\nParent\n├── Child 1\n│   One-line description\n├── Child 2\n│   One-line description\n…\n\nValidation Checklist\n✓ One level only\n✓ Pareto: 5–10 children\n✓ Canonical terminology\n✓ No duplicated concepts\n✓ Covers the parent\n✓ Suitable for long-term navigation\n✓ Stable across industries and time\n\nIf the requested node exists, expand it. If it does not exist, explain why and suggest the closest valid canonical node. Never modify the canonical ontology while expanding it.`;
-
-    const showToast = (message) =&gt; {
-      window.clearTimeout(toastTimer);
-      toast.textContent = message;
-      toast.dataset.visible = &quot;true&quot;;
-      toastTimer = window.setTimeout(() =&gt; {
-        toast.dataset.visible = &quot;false&quot;;
-      }, 2600);
+    const positionChildren = (parent) =&gt; {
+      if (parent.positions) return parent.positions;
+      const count = parent.children?.length ?? 0;
+      if (count === 0) return [];
+      if (destinationLayouts[count]) return destinationLayouts[count];
+      return parent.children.map((_, index) =&gt; {
+        const angle = (-90 + (360 / count) * index) * (Math.PI / 180);
+        return [50 + Math.cos(angle) * 40, 50 + Math.sin(angle) * 39];
+      });
     };
 
-    const copyExpansionPrompt = async (node) =&gt; {
-      const prompt = expansionPrompt(node);
-      try {
-        await navigator.clipboard.writeText(prompt);
-        showToast(`Expansion brief copied for ${node.label}.`);
-      } catch (_error) {
-        const helper = document.createElement(&quot;textarea&quot;);
-        helper.value = prompt;
-        helper.setAttribute(&quot;readonly&quot;, &quot;&quot;);
-        helper.style.position = &quot;fixed&quot;;
-        helper.style.opacity = &quot;0&quot;;
-        root.appendChild(helper);
-        helper.select();
-        const copied = document.execCommand(&quot;copy&quot;);
-        helper.remove();
-        showToast(copied ? `Expansion brief copied for ${node.label}.` : `Use the canonical path: ${node.canonicalPath.join(&quot; → &quot;)}`);
-      }
+    const roleForNode = (node) =&gt; {
+      const path = node.canonicalPath;
+      if (node.id === &quot;reality&quot;) return &quot;Root concept&quot;;
+      if (node.kind === &quot;law-instance&quot;) return &quot;Named law&quot;;
+      if (path.length === 2) return &quot;Dimension&quot;;
+      if (path[1] === &quot;Domain&quot; &amp;&amp; path.length === 3) return &quot;Domain&quot;;
+      if (path[1] === &quot;Domain&quot;) return &quot;Domain concept&quot;;
+      if (path[1] === &quot;Category&quot; &amp;&amp; path.length === 3) return &quot;Category type&quot;;
+      if (path.includes(&quot;Knowledge&quot;)) return &quot;Knowledge type&quot;;
+      if (path[2] === &quot;Relationship&quot;) return &quot;Relationship type&quot;;
+      if (path[2] === &quot;Process&quot;) return &quot;Process type&quot;;
+      if (path[2] === &quot;Resource&quot;) return &quot;Resource type&quot;;
+      if (path[1] === &quot;Perspective&quot;) return &quot;Perspective lens&quot;;
+      if (path[1] === &quot;Scale&quot;) return &quot;Scale level&quot;;
+      if (path[1] === &quot;Time&quot;) return &quot;Time value&quot;;
+      return &quot;Ontology node&quot;;
     };
+
+    const relationshipForNode = (node) =&gt; {
+      if (node.id === &quot;reality&quot;) return null;
+      if (node.relationshipToParent) return node.relationshipToParent;
+      const path = node.canonicalPath;
+      if (path.length === 2) return &quot;DIMENSION_OF&quot;;
+      if (node.kind === &quot;law-instance&quot;) return &quot;INSTANCE_OF&quot;;
+      if (path.length === 3 &amp;&amp; path[1] === &quot;Domain&quot;) return &quot;SUBDOMAIN_OF&quot;;
+      if (path.length === 3 &amp;&amp; path[1] === &quot;Category&quot;) return &quot;TYPE_OF&quot;;
+      if (path.length === 3 &amp;&amp; path[1] === &quot;Time&quot;) return &quot;VALUE_OF&quot;;
+      if (path.length === 3 &amp;&amp; path[1] === &quot;Scale&quot;) return &quot;LEVEL_OF&quot;;
+      if (path.length === 3 &amp;&amp; path[1] === &quot;Perspective&quot;) return &quot;LENS_OF&quot;;
+      if (path.length === 4 &amp;&amp; path[1] === &quot;Domain&quot;) return &quot;CONCEPT_IN&quot;;
+      if (path.length === 4 &amp;&amp; path[1] === &quot;Category&quot;) return &quot;SUBTYPE_OF&quot;;
+      return &quot;CHILD_OF&quot;;
+    };
+
+    const buildChatContext = (node) =&gt; ({
+      schemaVersion: &quot;1.0&quot;,
+      id: node.id,
+      name: node.label,
+      role: roleForNode(node),
+      canonicalPath: node.canonicalPath,
+      parent: node.canonicalPath.length &gt; 1 ? node.canonicalPath.at(-2) : null,
+      relationshipToParent: relationshipForNode(node),
+      explanation: node.summary,
+      immediateChildren: (node.children ?? []).map((childId) =&gt; ontology[childId].label),
+      terminalInstance: node.kind === &quot;law-instance&quot;,
+    });
 
     const renderPath = () =&gt; {
       const path = currentNode().canonicalPath;
@@ -1241,38 +1504,259 @@ html&gt;body{padding:0}&lt;/style&gt;
       backButton.hidden = history.length === 1;
     };
 
+    const appendDestinationContent = (button, node) =&gt; {
+      const marker = document.createElement(&quot;span&quot;);
+      marker.className = &quot;destination-marker&quot;;
+      marker.setAttribute(&quot;aria-hidden&quot;, &quot;true&quot;);
+      const glyph = document.createElement(&quot;span&quot;);
+      glyph.className = &quot;destination-glyph&quot;;
+      marker.appendChild(glyph);
+      const label = document.createElement(&quot;span&quot;);
+      label.className = &quot;destination-label&quot;;
+      label.textContent = node.label;
+      button.append(marker, label);
+    };
+
+    const dimensionQuestions = {
+      Domain: &quot;What broad area of reality is being studied?&quot;,
+      Category: &quot;What kind of thing, relationship, process, resource, environment, or knowledge is this?&quot;,
+      Time: &quot;When does it occur, for how long, and in what order?&quot;,
+      Scale: &quot;At what level of size, scope, or resolution is it being examined?&quot;,
+      Perspective: &quot;From which viewpoint or interpretive lens is it being understood?&quot;,
+    };
+
+    const buildConceptAnatomy = (node) =&gt; {
+      if (node.anatomy) return node.anatomy;
+
+      const role = roleForNode(node);
+      const baseScope = `Use this concept where the following description applies: ${node.summary}`;
+
+      if (role === &quot;Root concept&quot;) {
+        return {
+          &quot;Purpose&quot;: &quot;Use Reality as the shared starting point before choosing what is being studied, what kind of thing it is, when and at what scale it is examined, and from which perspective.&quot;,
+          &quot;Governing question&quot;: &quot;Which dimensions are needed to describe the part of reality under discussion?&quot;,
+          &quot;First principles&quot;: &quot;Every useful description selects boundaries and leaves detail out; no single dimension provides a complete account.&quot;,
+          &quot;Mental model&quot;: &quot;A central reference point surrounded by complementary lenses.&quot;,
+          &quot;Scope&quot;: &quot;Reality is the organising root of this ontology, not a claim that the map exhausts everything that exists.&quot;,
+          &quot;How to use it&quot;: &quot;Begin here, select the dimension that answers your immediate question, then combine dimensions when one view is insufficient.&quot;,
+          &quot;Common confusion&quot;: &quot;Reality is not another peer topic and the map positions are not scientific coordinates.&quot;,
+        };
+      }
+
+      if (role === &quot;Dimension&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} as one of the five complementary dimensions for describing reality.`,
+          &quot;Governing question&quot;: dimensionQuestions[node.label] ?? `What does ${node.label} reveal about the subject?`,
+          &quot;First principles&quot;: &quot;A dimension isolates one aspect of a subject for reasoning; choosing it does not replace the other dimensions.&quot;,
+          &quot;Mental model&quot;: &quot;One lens in a multi-lens instrument: it brings a particular feature into focus without becoming the whole picture.&quot;,
+          &quot;Scope&quot;: `The ${node.label} dimension can be applied across every subject represented in the ontology.`,
+          &quot;How to use it&quot;: `Choose a value within ${node.label}, then combine it with the other relevant dimensions as needed.`,
+          &quot;Common confusion&quot;: &quot;A dimension classifies an aspect of a subject; it does not own or completely define that subject.&quot;,
+        };
+      }
+
+      if (role === &quot;Domain&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to set the broad subject-matter boundary for questions, evidence, and explanations.`,
+          &quot;Governing question&quot;: `What becomes visible when ${node.label.toLowerCase()} reality is the primary area of study?`,
+          &quot;First principles&quot;: &quot;A domain defines what is being studied; the same phenomenon can legitimately involve more than one domain.&quot;,
+          &quot;Mental model&quot;: &quot;A field of inquiry drawn around related phenomena, questions, and methods.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: `Choose ${node.label} when its subject matter is central, then specify the relevant Category, Time, Scale, and Perspective.`,
+          &quot;Common confusion&quot;: &quot;A domain is not a category: Domain says where inquiry is focused, while Category says what kind of thing is being described.&quot;,
+        };
+      }
+
+      if (role === &quot;Domain concept&quot;) {
+        const domain = node.canonicalPath[2];
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to describe a recognised concept within the ${domain} domain.`,
+          &quot;Governing question&quot;: `How does ${node.label.toLowerCase()} help explain the part of ${domain.toLowerCase()} reality being studied?`,
+          &quot;First principles&quot;: &quot;A domain concept gains meaning from both its definition and its relationship to the wider field; it may still connect to other domains.&quot;,
+          &quot;Mental model&quot;: `A focused region inside the broader field of ${domain}.`,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: `Apply ${node.label} within an explicit ${domain.toLowerCase()} question, then specify the relevant Category, Time, Scale, and Perspective.`,
+          &quot;Common confusion&quot;: `Being located within ${domain} does not make ${node.label} isolated from physical, psychological, economic, informational, or other domains.`,
+        };
+      }
+
+      if (role === &quot;Category type&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to state what kind of thing or knowledge object is being described.`,
+          &quot;Governing question&quot;: `Is the subject best understood as a ${node.label.toLowerCase()} for the current purpose?`,
+          &quot;First principles&quot;: &quot;Classification depends on explicit criteria and purpose; the same subject may participate in several categories without those categories becoming interchangeable.&quot;,
+          &quot;Mental model&quot;: &quot;A labelled drawer that groups things by a useful shared characteristic.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: `Apply ${node.label} after choosing the domain, then test whether its defining characteristics actually fit the subject.`,
+          &quot;Common confusion&quot;: &quot;Category identifies kind, not industry, size, time, or viewpoint.&quot;,
+        };
+      }
+
+      if (role === &quot;Knowledge type&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to identify the form and reasoning job of a knowledge artifact.`,
+          &quot;Governing question&quot;: `What kind of knowledge is ${node.label}, and what can it legitimately help someone understand or do?`,
+          &quot;First principles&quot;: &quot;Different knowledge types carry different standards of evidence and different uses; a label does not make a claim true.&quot;,
+          &quot;Mental model&quot;: &quot;A labelled tool in a reasoning toolkit, selected according to the job it must perform.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: &quot;State the claim, scope, assumptions, evidence, limitations, and intended application before relying on it.&quot;,
+          &quot;Common confusion&quot;: &quot;Laws, principles, razors, frameworks, models, theorems, and patterns are related but not interchangeable.&quot;,
+        };
+      }
+
+      if (role === &quot;Relationship type&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to describe a recurring way in which two or more entities are connected.`,
+          &quot;Governing question&quot;: `Which entities participate in ${node.label.toLowerCase()}, what defines the connection, and what follows from it?`,
+          &quot;First principles&quot;: &quot;A relationship requires participants, a basis for connection, and a context. Direction, symmetry, strength, rights, and duration may change its meaning.&quot;,
+          &quot;Mental model&quot;: &quot;A labelled edge between entities whose direction and conditions carry meaning.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: &quot;Identify the participants, direction, basis, rights or obligations, strength, duration, and context before assigning the relationship type.&quot;,
+          &quot;Common confusion&quot;: &quot;A relationship is not an entity, and observing a connection does not by itself establish causation.&quot;,
+        };
+      }
+
+      if (role === &quot;Process type&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to describe an ordered activity or transformation that changes state over time.`,
+          &quot;Governing question&quot;: `What enters ${node.label.toLowerCase()}, what changes, and what state or outcome emerges?`,
+          &quot;First principles&quot;: &quot;A process has a boundary, an ordering of activity, state before and after, and conditions that influence its outcome.&quot;,
+          &quot;Mental model&quot;: &quot;A pathway that transforms an initial state into a later state through ordered activity.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: &quot;Declare the starting state, inputs, actors, sequence, outputs, timing, and failure conditions.&quot;,
+          &quot;Common confusion&quot;: &quot;A process describes change through time; it is not the same as the entity performing it or the resource it consumes.&quot;,
+        };
+      }
+
+      if (role === &quot;Resource type&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to describe an input, capacity, or asset that can enable activity.`,
+          &quot;Governing question&quot;: `For which goal is ${node.label.toLowerCase()} useful, who can access it, and what limits its availability?`,
+          &quot;First principles&quot;: &quot;Something becomes a resource relative to a goal. Availability, ownership, renewability, substitutability, and consumption determine how it can be used.&quot;,
+          &quot;Mental model&quot;: &quot;A limited stock or capacity that can be allocated to enable an outcome.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: &quot;Specify the goal, quantity or capacity, owner or controller, access conditions, rate of use, replenishment, and competing demands.&quot;,
+          &quot;Common confusion&quot;: &quot;A resource is not inherently valuable in every context; its usefulness and scarcity depend on the intended activity.&quot;,
+        };
+      }
+
+      if (role === &quot;Named law&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to reason about the recurring relationship described by its statement.`,
+          &quot;Governing question&quot;: &quot;Under which conditions does this relationship hold, and what does it allow us to predict or decide?&quot;,
+          &quot;First principles&quot;: &quot;A named law is only meaningful within its scope and assumptions; its name alone does not guarantee universal or scientific status.&quot;,
+          &quot;Mental model&quot;: &quot;A compressed relationship between conditions, variables, and an expected outcome.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: &quot;Identify the variables, test the assumptions, compare the prediction with evidence, and check limitations before acting.&quot;,
+          &quot;Common confusion&quot;: &quot;Treating a named law as an exceptionless command rather than a scoped explanatory or predictive relationship.&quot;,
+        };
+      }
+
+      if (role === &quot;Perspective lens&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use the ${node.label} perspective to make the assumptions, interests, and evidence behind an interpretation explicit.`,
+          &quot;Governing question&quot;: `How does the ${node.label.toLowerCase()} viewpoint change what is noticed, valued, or explained?`,
+          &quot;First principles&quot;: &quot;Observation and interpretation are shaped by viewpoint, but changing perspective does not by itself change the underlying event.&quot;,
+          &quot;Mental model&quot;: &quot;A camera lens that frames and emphasises some features while leaving others outside the frame.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: `Apply the ${node.label} lens deliberately, then compare it with another perspective to expose blind spots.`,
+          &quot;Common confusion&quot;: &quot;A perspective is an interpretive lens, not proof that every interpretation is equally supported by evidence.&quot;,
+        };
+      }
+
+      if (role === &quot;Scale level&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to fix the level of size, scope, or aggregation at which the subject is examined.`,
+          &quot;Governing question&quot;: `Which behaviours are visible at the ${node.label.toLowerCase()} level, and which disappear through aggregation or lack of detail?`,
+          &quot;First principles&quot;: &quot;Behaviour can change with scale; conclusions at one level do not automatically transfer to another.&quot;,
+          &quot;Mental model&quot;: &quot;A zoom control that changes both visible detail and the patterns that can be recognised.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: &quot;State the level of analysis before comparing evidence, causes, or outcomes.&quot;,
+          &quot;Common confusion&quot;: &quot;Scale is not importance: a larger level is not automatically more valuable or more truthful.&quot;,
+        };
+      }
+
+      if (role === &quot;Time value&quot;) {
+        return {
+          &quot;Purpose&quot;: `Use ${node.label} to locate, order, or measure states and change.`,
+          &quot;Governing question&quot;: `How does ${node.label.toLowerCase()} affect the sequence, duration, or interpretation of events?`,
+          &quot;First principles&quot;: &quot;State and causation depend on ordering and duration; observations made at different times may describe different conditions.&quot;,
+          &quot;Mental model&quot;: &quot;A position or interval on a timeline used to compare change.&quot;,
+          &quot;Scope&quot;: baseScope,
+          &quot;How to use it&quot;: &quot;Declare the reference point, interval, and ordering assumptions before drawing comparisons.&quot;,
+          &quot;Common confusion&quot;: &quot;Time describes location and change; it does not by itself establish causation.&quot;,
+        };
+      }
+
+      return {
+        &quot;Purpose&quot;: `Use ${node.label} to organise and explain the aspect of reality captured by its definition.`,
+        &quot;Governing question&quot;: `What does ${node.label} help us notice, explain, predict, or decide?`,
+        &quot;First principles&quot;: &quot;A useful concept needs a clear definition, scope, distinguishing properties, and known limits.&quot;,
+        &quot;Mental model&quot;: &quot;A reusable lens that compresses detail while preserving what matters for a particular purpose.&quot;,
+        &quot;Scope&quot;: baseScope,
+        &quot;How to use it&quot;: &quot;Check that the situation matches the definition and scope before applying the concept.&quot;,
+        &quot;Common confusion&quot;: &quot;The concept is a representation used for reasoning; it is not identical to the reality it represents.&quot;,
+      };
+    };
+
+    const renderUnderstand = (node) =&gt; {
+      understandTitle.textContent = node.label;
+      understandStatement.textContent = node.summary;
+      understandFields.replaceChildren();
+      const anatomy = buildConceptAnatomy(node);
+      Object.entries(anatomy).forEach(([label, value]) =&gt; {
+        const field = document.createElement(&quot;div&quot;);
+        const term = document.createElement(&quot;dt&quot;);
+        term.textContent = label;
+        const description = document.createElement(&quot;dd&quot;);
+        description.textContent = value;
+        field.append(term, description);
+        understandFields.appendChild(field);
+      });
+    };
+
     const setSelectedNode = (nodeId) =&gt; {
       selectedId = nodeId;
       const node = ontology[nodeId];
       root.querySelectorAll(&quot;[data-node-id]&quot;).forEach((button) =&gt; {
-        button.setAttribute(&quot;aria-pressed&quot;, String(button.dataset.nodeId === nodeId));
+        const selected = button.dataset.nodeId === nodeId;
+        button.dataset.selected = String(selected);
+        button.setAttribute(&quot;aria-current&quot;, selected ? &quot;true&quot; : &quot;false&quot;);
       });
+      const context = buildChatContext(node);
       root.querySelectorAll(&quot;[data-connection-id]&quot;).forEach((line) =&gt; {
         line.dataset.active = String(line.dataset.connectionId === nodeId &amp;&amp; nodeId !== currentId());
       });
-      selectedLabel.textContent = node.label;
-      selectedSummary.textContent = node.summary;
+      selectedLabel.textContent = context.name;
+      selectedRole.textContent = context.role;
+      selectedSummary.textContent = context.explanation;
 
-      if (nodeId === currentId()) {
-        actionButton.hidden = true;
-        return;
-      }
-
-      actionButton.hidden = false;
-      actionButton.textContent = node.children?.length ? `Explore ${node.label}` : `Copy expansion brief`;
-      actionButton.setAttribute(&quot;aria-label&quot;, node.children?.length ? `Explore one level inside ${node.label}` : `Copy the canonical expansion brief for ${node.label}`);
+      const canExplore = canExploreNode(node);
+      const isCurrent = nodeId === currentId();
+      actionGroup.hidden = false;
+      understandButton.hidden = false;
+      understandButton.classList.toggle(&quot;btn-primary&quot;, !canExplore || isCurrent);
+      understandButton.setAttribute(&quot;aria-label&quot;, `Understand ${node.label}`);
+      exploreButton.hidden = !canExplore || isCurrent;
+      exploreButton.setAttribute(&quot;aria-label&quot;, `Explore ${node.label}`);
     };
 
     const renderOrbit = () =&gt; {
+      mode = &quot;map&quot;;
       const parent = currentNode();
       const positions = positionChildren(parent);
+      mapStage.hidden = false;
+      detailPanel.hidden = false;
+      understandView.hidden = true;
+      root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
       renderPath();
 
-      parent.children.forEach((childId, index) =&gt; {
+      (parent.children ?? []).forEach((childId, index) =&gt; {
         const child = ontology[childId];
         const [x, y] = positions[index];
+        const color = nodeColor(child);
         const line = document.createElementNS(svgNamespace, &quot;line&quot;);
         line.setAttribute(&quot;x1&quot;, &quot;50&quot;);
         line.setAttribute(&quot;y1&quot;, &quot;50&quot;);
@@ -1280,59 +1764,85 @@ html&gt;body{padding:0}&lt;/style&gt;
         line.setAttribute(&quot;y2&quot;, String(y));
         line.setAttribute(&quot;class&quot;, &quot;orbit-connection&quot;);
         line.dataset.connectionId = child.id;
+        line.dataset.relationship = relationshipForNode(child);
         line.dataset.active = &quot;false&quot;;
+        line.style.setProperty(&quot;--connection-color&quot;, color);
         connectionsLayer.appendChild(line);
 
         const button = document.createElement(&quot;button&quot;);
         button.type = &quot;button&quot;;
         button.className = &quot;btn btn-ghost orbit-node&quot;;
-        button.textContent = child.label;
         button.dataset.nodeId = child.id;
-        button.dataset.expandable = String(Boolean(child.children?.length));
-        button.setAttribute(&quot;aria-pressed&quot;, &quot;false&quot;);
-        button.setAttribute(&quot;title&quot;, child.summary);
+        button.dataset.nodeKind = child.kind === &quot;law-instance&quot; ? &quot;instance&quot; : &quot;container&quot;;
+        button.dataset.prominence = child.children?.length ? &quot;high&quot; : &quot;standard&quot;;
+        button.dataset.available = &quot;true&quot;;
+        button.dataset.selected = &quot;false&quot;;
+        button.setAttribute(&quot;aria-current&quot;, &quot;false&quot;);
         button.style.setProperty(&quot;--orbit-x&quot;, `${x}%`);
         button.style.setProperty(&quot;--orbit-y&quot;, `${y}%`);
-        button.addEventListener(&quot;click&quot;, () =&gt; setSelectedNode(child.id));
-        button.addEventListener(&quot;dblclick&quot;, () =&gt; child.children?.length ? expandSelectedNode(child.id) : copyExpansionPrompt(child));
+        button.style.setProperty(&quot;--node-color&quot;, color);
+        appendDestinationContent(button, child);
+        button.addEventListener(&quot;click&quot;, (event) =&gt; {
+          setSelectedNode(child.id);
+          if (event.detail &gt; 0) button.blur();
+        });
         nodesLayer.appendChild(button);
       });
 
       const centreButton = document.createElement(&quot;button&quot;);
       centreButton.type = &quot;button&quot;;
-      centreButton.className = &quot;btn btn-primary orbit-node orbit-core&quot;;
+      centreButton.className = &quot;btn btn-ghost orbit-node orbit-core&quot;;
       centreButton.dataset.nodeId = parent.id;
-      centreButton.setAttribute(&quot;aria-pressed&quot;, &quot;true&quot;);
+      centreButton.dataset.nodeKind = parent.kind === &quot;law-instance&quot; ? &quot;instance&quot; : &quot;container&quot;;
+      centreButton.dataset.prominence = &quot;high&quot;;
+      centreButton.dataset.available = &quot;true&quot;;
+      centreButton.dataset.selected = &quot;true&quot;;
+      centreButton.setAttribute(&quot;aria-current&quot;, &quot;true&quot;);
       centreButton.style.setProperty(&quot;--orbit-x&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--orbit-y&quot;, &quot;50%&quot;);
-      centreButton.innerHTML = `&lt;span class=&quot;orbit-core-mark&quot; aria-hidden=&quot;true&quot;&gt;☀&lt;/span&gt;&lt;span&gt;${parent.label}&lt;/span&gt;`;
-      centreButton.addEventListener(&quot;click&quot;, () =&gt; setSelectedNode(parent.id));
+      centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
+      appendDestinationContent(centreButton, parent);
+      centreButton.addEventListener(&quot;click&quot;, (event) =&gt; {
+        setSelectedNode(parent.id);
+        if (event.detail &gt; 0) centreButton.blur();
+      });
       nodesLayer.appendChild(centreButton);
       setSelectedNode(parent.id);
     };
 
-    function expandSelectedNode(nodeId = selectedId) {
+    function exploreSelectedNode(nodeId = selectedId) {
       const node = ontology[nodeId];
-      if (!node.children?.length) {
-        copyExpansionPrompt(node);
-        return;
-      }
+      if (!node || node.id === currentId() || !canExploreNode(node)) return;
       history.push(nodeId);
       renderOrbit();
     }
 
-    actionButton.addEventListener(&quot;click&quot;, () =&gt; {
-      const node = ontology[selectedId];
-      if (node.children?.length) expandSelectedNode(selectedId);
-      else copyExpansionPrompt(node);
-    });
+    function openUnderstand(nodeId = selectedId) {
+      const node = ontology[nodeId];
+      if (!node) return;
+      history.push(nodeId);
+      selectedId = nodeId;
+      mode = &quot;understand&quot;;
+      renderPath();
+      mapStage.hidden = true;
+      detailPanel.hidden = true;
+      understandView.hidden = false;
+      actionGroup.hidden = true;
+      renderUnderstand(node);
+    }
+
+    exploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId));
+    understandButton.addEventListener(&quot;click&quot;, () =&gt; openUnderstand(selectedId));
 
     backButton.addEventListener(&quot;click&quot;, () =&gt; {
       if (history.length &gt; 1) history.pop();
+      if (mode === &quot;understand&quot;) mode = &quot;map&quot;;
       renderOrbit();
     });
 
     root.dataset.canonicalDimensions = canonicalDimensions.join(&quot;,&quot;);
+    root.dataset.maximumOntologyLevel = String(maximumOntologyLevel);
+    validateOntology();
     renderOrbit();
   })();
 &lt;/script&gt;
