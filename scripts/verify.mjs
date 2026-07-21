@@ -1,16 +1,19 @@
 import { readFile } from "node:fs/promises";
+import { runInNewContext } from "node:vm";
 
 const requiredLabels = [
   "Reality",
   "Domain",
-  "Knowledge",
   "Category",
-  "Scale",
   "Time",
-  "Resources",
-  "Processes",
-  "Relationships",
+  "Scale",
   "Perspective",
+  "Entity",
+  "Relationship",
+  "Process",
+  "Resource",
+  "Environment",
+  "Knowledge",
 ];
 
 const [document, fragment] = await Promise.all([
@@ -19,6 +22,14 @@ const [document, fragment] = await Promise.all([
 ]);
 
 const failures = [];
+const ontologyMatch = fragment.match(/const ontology = (\{[\s\S]*?\n    \});\n\n    const canonicalDimensions/);
+let ontology = null;
+
+if (!ontologyMatch) {
+  failures.push("The canonical ontology data object could not be read for content validation.");
+} else {
+  ontology = runInNewContext(`(${ontologyMatch[1]})`, Object.create(null));
+}
 
 if (document.length === 0 || document.length > 2_000_000) {
   failures.push("index.html must be present and remain below 2 MB.");
@@ -36,32 +47,145 @@ if (!fragment.includes("setSelectedNode")) {
   failures.push("The source fragment must keep the selected-node state transition.");
 }
 
-if (!fragment.includes("expandSelectedNode")) {
-  failures.push("The source fragment must keep one-level orbit expansion.");
+if (!fragment.includes('button.setAttribute("aria-current"')) {
+  failures.push("The selected destination must expose its current state accessibly.");
 }
 
-if (!fragment.includes("Canonical Ontology Expansion Contract")) {
-  failures.push("The source fragment must keep the strict expansion brief.");
+if (!fragment.includes("exploreSelectedNode")) {
+  failures.push("The source fragment must keep selected-node exploration.");
+}
+
+if (!fragment.includes("openUnderstand") || !fragment.includes("data-understand-view")) {
+  failures.push("Every concept must open the Concept Anatomy Understand view.");
+}
+
+if (fragment.includes("Copy expansion brief") || fragment.includes("Canonical Ontology Expansion Contract")) {
+  failures.push("The viewer must not expose the former expansion-brief workflow.");
 }
 
 if (!fragment.includes("data-orbit-back")) {
   failures.push("The source fragment must keep reversible Back navigation.");
 }
 
+if (!fragment.includes("buildChatContext") || !fragment.includes("data-orbit-actions")) {
+  failures.push("The source fragment must keep structured internal chat context and visible concept actions.");
+}
+
+if (fragment.includes("data-node-guide") || fragment.includes("orbit-guide")) {
+  failures.push("Selection explanations must not float over unrelated map destinations.");
+}
+
+if (!fragment.includes("data-understand-action") || !fragment.includes("data-explore-action")) {
+  failures.push("Understand and Explore must remain separate toolbar actions.");
+}
+
+if (!fragment.includes("buildConceptAnatomy") || !fragment.includes('understandButton.setAttribute("aria-label", `Understand ${node.label}`)')) {
+  failures.push("Every selected concept must expose a role-aware Concept Anatomy action.");
+}
+
+if (!fragment.includes("understand-definition-label") || !fragment.includes(">Definition</span>")) {
+  failures.push("Concept Anatomy must explicitly identify the selected concept's definition.");
+}
+
+if (!fragment.includes('schemaVersion: "1.0"')) {
+  failures.push("The chat context object must keep an explicit schema version.");
+}
+
+if (!fragment.includes("relationshipToParent: relationshipForNode(node)")) {
+  failures.push("The selected-node context must expose its typed relationship to its parent.");
+}
+
+for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF"]) {
+  if (!fragment.includes(`return "${relationshipType}"`)) {
+    failures.push(`Missing canonical relationship type: ${relationshipType}.`);
+  }
+}
+
+for (const internalGuideField of ["data-guide-path", "data-guide-parent", "data-guide-relationship", "data-guide-children"]) {
+  if (fragment.includes(internalGuideField)) {
+    failures.push(`Internal ontology metadata must not render in the learner panel: ${internalGuideField}.`);
+  }
+}
+
+if (!fragment.includes("const maximumOntologyLevel = 5") || !fragment.includes("node.canonicalPath.length < maximumOntologyLevel") || !fragment.includes("canExploreNode(node)")) {
+  failures.push("The renderer must enforce the five-level instance boundary before exposing exploration.");
+}
+
+if (!fragment.includes("validateOntology") || !fragment.includes("Canonical path mismatch") || !fragment.includes("Duplicate child reference")) {
+  failures.push("The renderer must reject invalid paths and duplicate or missing ontology relationships.");
+}
+
+if (!fragment.includes("Incomplete Concept Anatomy") || !fragment.includes("Unclassified concept role")) {
+  failures.push("The renderer must reject missing learner content and unclassified concept roles.");
+}
+
+if (ontology) {
+  const reachable = new Set();
+  const visit = (id) => {
+    if (reachable.has(id)) return;
+    const node = ontology[id];
+    if (!node) {
+      failures.push(`Ontology references a missing child: ${id}.`);
+      return;
+    }
+    reachable.add(id);
+    for (const childId of node.children ?? []) visit(childId);
+  };
+
+  visit("reality");
+
+  for (const [id, node] of Object.entries(ontology)) {
+    if (node.id !== id) failures.push(`Ontology key and node ID differ: ${id}.`);
+    if (!node.label?.trim()) failures.push(`Ontology node is missing a label: ${id}.`);
+    if (!node.summary?.trim()) failures.push(`Ontology node is missing a definition: ${id}.`);
+    if (!Array.isArray(node.canonicalPath) || node.canonicalPath.length === 0) failures.push(`Ontology node is missing a canonical path: ${id}.`);
+    if (!reachable.has(id)) failures.push(`Ontology node is unreachable from Reality: ${id}.`);
+  }
+}
+
+if (!fragment.includes("dimensionColors") || !fragment.includes("destinationLayouts") || !fragment.includes("data-node-kind")) {
+  failures.push("The destination map must keep its semantic colour, stable-position, and node-shape contracts.");
+}
+
+for (const mobileContract of [
+  "@media (max-width: 520px)",
+  "@media (max-width: 480px)",
+  ".orbit-path > span",
+  "flex-basis: 100%",
+  "min-height: 2.75rem",
+  "data-selected-role",
+  "height: 500px",
+]) {
+  if (!fragment.includes(mobileContract)) {
+    failures.push(`Missing mobile interaction contract: ${mobileContract}.`);
+  }
+}
+
+const destinationLabelStyles = fragment.match(/\.destination-label\s*\{([\s\S]*?)\}/)?.[1] ?? "";
+if (destinationLabelStyles.includes("text-overflow: ellipsis")) {
+  failures.push("Mobile destination labels must not be truncated with ellipses.");
+}
+
+if (!fragment.includes('children: ["domain", "category", "time", "scale", "perspective"]')) {
+  failures.push("Reality must connect directly to the five canonical dimensions only.");
+}
+
 if (!fragment.includes('canonicalPath: ["Reality", "Category", "Knowledge"]')) {
-  failures.push("Knowledge must remain a shortcut into the Category dimension.");
+  failures.push("Knowledge must remain a child of the Category dimension.");
 }
 
 if (!fragment.includes('canonicalPath: ["Reality", "Category", "Resource"]')) {
-  failures.push("Resources must remain a shortcut into the Category dimension.");
+  failures.push("Resource must remain a child of the Category dimension.");
 }
 
 const canonicalExpansions = [
   '["physical", "biological", "psychological", "social", "economic", "informational", "mathematical"]',
-  '["law", "principle", "theory", "model", "framework", "pattern", "method", "heuristic"]',
+  '["law", "principle", "razor", "framework", "model", "theorem", "pattern"]',
   '["resource-time", "energy", "capital", "information", "attention", "compute"]',
   '["process-change", "transformation", "exchange", "learning", "production"]',
   '["ownership", "dependency", "communication", "competition", "cooperation"]',
+  '["perspective-individual", "perspective-scientific", "perspective-economic", "perspective-ethical", "perspective-cultural"]',
+  '["amdahls-law", "brooks-law", "conways-law", "goodharts-law", "greshams-law", "littles-law", "metcalfes-law", "parkinsons-law"]',
 ];
 
 for (const expansion of canonicalExpansions) {
@@ -70,15 +194,44 @@ for (const expansion of canonicalExpansions) {
   }
 }
 
-for (const contractRule of ["Children should collectively cover the parent", "Never expand grandchildren", "Stable across industries and time"]) {
-  if (!fragment.includes(contractRule)) {
-    failures.push(`Missing expansion-contract rule: ${contractRule}.`);
+for (const dimensionId of ["domain", "category", "time", "scale", "perspective"]) {
+  const nodePattern = new RegExp(`${dimensionId}: \\{[\\s\\S]*?children: \\[`, "m");
+  if (!nodePattern.test(fragment)) {
+    failures.push(`Canonical dimension ${dimensionId} must expose a third-level child set.`);
   }
 }
 
 for (const label of requiredLabels) {
   if (!fragment.includes(label)) {
     failures.push(`Missing required orbit label: ${label}.`);
+  }
+}
+
+for (const anatomyField of ["First principles", "Variables", "Mental model", "Mechanism", "Prediction", "Assumptions", "Limitations", "Applications", "Visual demonstration", "Related laws"]) {
+  if (!fragment.includes(`"${anatomyField}"`)) {
+    failures.push(`Amdahl's Law is missing Concept Anatomy field: ${anatomyField}.`);
+  }
+}
+
+for (const baselineAnatomyField of ["Purpose", "Governing question", "First principles", "Mental model", "Scope", "How to use it", "Common confusion"]) {
+  if (!fragment.includes(`"${baselineAnatomyField}"`)) {
+    failures.push(`Baseline Concept Anatomy is missing field: ${baselineAnatomyField}.`);
+  }
+}
+
+if (!ontology?.ownership?.anatomy || Object.keys(ontology.ownership.anatomy).length < 7) {
+  failures.push("Ownership must remain the authored reference Concept Anatomy for a terminal relationship type.");
+}
+
+for (const forbiddenLawInstance of ["galls-law", "murphys-law", "amdahl-serial-work", "amdahl-parallel-work", "amdahl-processor-count", "amdahl-speedup-ceiling", "amdahl-application"]) {
+  if (fragment.includes(forbiddenLawInstance)) {
+    failures.push(`Ontology must stop at the law instance boundary: ${forbiddenLawInstance}.`);
+  }
+}
+
+for (const retiredKnowledgeType of ['id: "theory"', 'id: "method"', 'id: "heuristic"']) {
+  if (fragment.includes(retiredKnowledgeType)) {
+    failures.push(`Knowledge map must use the agreed seven first-class artifact types: ${retiredKnowledgeType}.`);
   }
 }
 
