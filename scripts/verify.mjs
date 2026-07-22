@@ -35,6 +35,10 @@ if (document.length === 0 || document.length > 2_000_000) {
   failures.push("index.html must be present and remain below 2 MB.");
 }
 
+if (!document.includes("max-width:1440px")) {
+  failures.push("The standalone app must preserve a desktop-width frame for the map and adjacent Concept Anatomy view.");
+}
+
 if (!document.includes("Content-Security-Policy")) {
   failures.push("index.html must include its sandbox content-security policy.");
 }
@@ -55,8 +59,12 @@ if (!fragment.includes("exploreSelectedNode")) {
   failures.push("The source fragment must keep selected-node exploration.");
 }
 
-if (!fragment.includes("openUnderstand") || !fragment.includes("data-understand-view")) {
-  failures.push("Every concept must open the Concept Anatomy Understand view.");
+if (!fragment.includes("renderUnderstand(node)") || !fragment.includes("data-understand-view")) {
+  failures.push("Every selection must automatically update the Concept Anatomy view.");
+}
+
+if (!fragment.includes('      </div>\n      <aside class="understand-view"')) {
+  failures.push("The Concept Anatomy view must remain a desktop sibling of the map canvas, not content below it.");
 }
 
 if (fragment.includes("Copy expansion brief") || fragment.includes("Canonical Ontology Expansion Contract")) {
@@ -75,27 +83,60 @@ if (fragment.includes("data-node-guide") || fragment.includes("orbit-guide")) {
   failures.push("Selection explanations must not float over unrelated map destinations.");
 }
 
-if (!fragment.includes("data-understand-action") || !fragment.includes("data-explore-action")) {
-  failures.push("Understand and Explore must remain separate toolbar actions.");
+if (fragment.includes("data-understand-action") || !fragment.includes("data-explore-action")) {
+  failures.push("Concept Anatomy must update automatically; Explore is the only explicit toolbar action.");
 }
 
-if (!fragment.includes("buildConceptAnatomy") || !fragment.includes('understandButton.setAttribute("aria-label", `Understand ${node.label}`)')) {
-  failures.push("Every selected concept must expose a role-aware Concept Anatomy action.");
+if (!fragment.includes("buildConceptAnatomy") || !fragment.includes("renderUnderstand(node)")) {
+  failures.push("Every selected concept must automatically render role-aware Concept Anatomy.");
 }
 
 if (!fragment.includes("understand-definition-label") || !fragment.includes(">Definition</span>")) {
   failures.push("Concept Anatomy must explicitly identify the selected concept's definition.");
 }
 
+for (const understandLayoutContract of [
+  "data-understand-eyebrow",
+  "data-understand-title",
+  "data-understand-statement",
+  "data-understand-lead",
+  "data-understand-foundations",
+  "data-understand-context",
+  "data-understand-more",
+]) {
+  if (!fragment.includes(understandLayoutContract)) {
+    failures.push(`Missing editorial Understand layout contract: ${understandLayoutContract}.`);
+  }
+}
+
+if (fragment.includes("data-understand-flow") || fragment.includes("understandFlowForNode")) {
+  failures.push("Concept Anatomy must not show generic role flows that are not authored for the selected node.");
+}
+
+for (const selectedContentContract of [
+  "const entries = Object.entries(buildConceptAnatomy(node))",
+  "understandView.dataset.selectedNode = node.id",
+  "understandTitle.textContent = node.label",
+  "understandStatement.textContent = node.summary",
+]) {
+  if (!fragment.includes(selectedContentContract)) {
+    failures.push(`Concept Anatomy must map selected-node content: ${selectedContentContract}.`);
+  }
+}
+
 if (!fragment.includes('schemaVersion: "1.0"')) {
   failures.push("The chat context object must keep an explicit schema version.");
+}
+
+if (!fragment.includes("terminalConcept: ontologyLevel(node) === terminalOntologyLevel") || fragment.includes("terminalInstance:")) {
+  failures.push("Grounded-chat context must identify terminal concepts across all ontology branches, not only named laws.");
 }
 
 if (!fragment.includes("relationshipToParent: relationshipForNode(node)")) {
   failures.push("The selected-node context must expose its typed relationship to its parent.");
 }
 
-for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF"]) {
+for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF", "ENVIRONMENT_TYPE_OF", "SETTING_OF"]) {
   if (!fragment.includes(`return "${relationshipType}"`)) {
     failures.push(`Missing canonical relationship type: ${relationshipType}.`);
   }
@@ -107,8 +148,20 @@ for (const internalGuideField of ["data-guide-path", "data-guide-parent", "data-
   }
 }
 
-if (!fragment.includes("const maximumOntologyLevel = 5") || !fragment.includes("node.canonicalPath.length < maximumOntologyLevel") || !fragment.includes("canExploreNode(node)")) {
-  failures.push("The renderer must enforce the five-level instance boundary before exposing exploration.");
+if (!fragment.includes("const terminalOntologyLevel = 4") || !fragment.includes("ontologyLevel(node) > terminalOntologyLevel")) {
+  failures.push("The renderer must enforce the level-4 terminal boundary measured from Reality at level 0.");
+}
+
+for (const explorationContract of [
+  'const canExploreNode = (node) => node.id !== "reality"',
+  "actionGroup.hidden = !canExplore",
+  "exploreButton.hidden = !canExplore",
+  "exploreButton.disabled = canExplore && isCurrent",
+  'exploreButton.textContent = isCurrent ? "Exploring" : "Explore selected"',
+]) {
+  if (!fragment.includes(explorationContract)) {
+    failures.push(`Missing root-aware exploration contract: ${explorationContract}.`);
+  }
 }
 
 if (!fragment.includes("validateOntology") || !fragment.includes("Canonical path mismatch") || !fragment.includes("Duplicate child reference")) {
@@ -154,7 +207,7 @@ for (const mobileContract of [
   "flex-basis: 100%",
   "min-height: 2.75rem",
   "data-selected-role",
-  "height: 500px",
+  "height: clamp(430px, 118vw, 480px)",
 ]) {
   if (!fragment.includes(mobileContract)) {
     failures.push(`Missing mobile interaction contract: ${mobileContract}.`);
@@ -207,7 +260,7 @@ for (const label of requiredLabels) {
   }
 }
 
-for (const anatomyField of ["First principles", "Variables", "Mental model", "Mechanism", "Prediction", "Assumptions", "Limitations", "Applications", "Visual demonstration", "Related laws"]) {
+for (const anatomyField of ["Statement", "First principles", "Variables", "Mental model", "Mechanism", "Predictions", "Assumptions", "Limitations", "Applications", "Visual demonstration", "Related laws"]) {
   if (!fragment.includes(`"${anatomyField}"`)) {
     failures.push(`Amdahl's Law is missing Concept Anatomy field: ${anatomyField}.`);
   }

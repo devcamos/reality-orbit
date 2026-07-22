@@ -5,7 +5,12 @@
   }
 
   #reality-orbit-prototype .orbit-workspace {
-    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(22rem, 1.1fr);
+    align-items: start;
+    border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
+    border-radius: 1rem;
+    overflow: clip;
   }
 
   #reality-orbit-prototype .orbit-canvas {
@@ -52,6 +57,11 @@
     gap: 0.5rem;
   }
 
+  #reality-orbit-prototype .orbit-action[data-exploring="true"] {
+    cursor: default;
+    opacity: 0.72;
+  }
+
   #reality-orbit-prototype .orbit-stage {
     position: relative;
     width: 100%;
@@ -87,13 +97,14 @@
 
   #reality-orbit-prototype .orbit-connection {
     opacity: 0.13;
+    stroke-linecap: round;
     transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
   }
 
   #reality-orbit-prototype .orbit-connection[data-active="true"] {
-    opacity: 0.9;
+    opacity: 0.72;
     stroke: var(--connection-color, var(--viz-series-1));
-    stroke-width: 2;
+    stroke-width: 1.5;
   }
 
   #reality-orbit-prototype .orbit-node {
@@ -106,6 +117,7 @@
     justify-items: center;
     gap: 0.35rem;
     transform: translate(-50%, -50%);
+    touch-action: manipulation;
     white-space: normal;
   }
 
@@ -120,7 +132,9 @@
     place-items: center;
     border: 1px solid color-mix(in srgb, var(--node-color, var(--viz-series-1)) 60%, var(--border));
     border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 25%, transparent), transparent 68%);
+    background:
+      radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 27%, transparent), transparent 65%),
+      color-mix(in srgb, var(--background) 88%, var(--card));
     box-shadow: 0 0 0 0.32rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 9%, transparent);
   }
 
@@ -149,8 +163,15 @@
     display: block;
     max-width: 100%;
     overflow: visible;
+    line-height: 1.2;
+    text-shadow: 0 1px 0.65rem color-mix(in srgb, var(--background) 92%, transparent);
     text-overflow: clip;
     white-space: normal;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-selected="true"] .destination-label {
+    color: var(--foreground);
+    font-weight: var(--font-weight-medium);
   }
 
   #reality-orbit-prototype .orbit-node[data-selected="true"] .destination-marker {
@@ -180,6 +201,7 @@
     min-height: 4.4rem;
     padding: 0.75rem 0.8rem;
     border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    background: color-mix(in srgb, var(--card) 92%, transparent);
   }
 
   #reality-orbit-prototype .orbit-status {
@@ -200,64 +222,193 @@
     color: var(--muted-foreground);
   }
 
-  #reality-orbit-prototype .understand-fields div {
-    padding-top: 0.65rem;
-    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-  }
-
-  #reality-orbit-prototype .understand-fields dt {
-    color: var(--muted-foreground);
-  }
-
-  #reality-orbit-prototype .understand-fields dd {
-    margin: 0.2rem 0 0;
-  }
-
   #reality-orbit-prototype .understand-view {
-    padding: 1.2rem;
+    position: sticky;
+    top: 1rem;
+    min-width: 0;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    padding: 0;
+    border-left: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    background: color-mix(in srgb, var(--card) 82%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-header {
+    display: grid;
+    justify-items: center;
+    gap: 0.55rem;
+    padding: clamp(1.4rem, 5vw, 3rem) 1rem;
+    text-align: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 12%, transparent), transparent 62%);
   }
 
   #reality-orbit-prototype .understand-header p,
-  #reality-orbit-prototype .understand-header h2 {
+  #reality-orbit-prototype .understand-header h2,
+  #reality-orbit-prototype .understand-story h3,
+  #reality-orbit-prototype .understand-story p,
+  #reality-orbit-prototype .understand-more-header h3,
+  #reality-orbit-prototype .understand-more-header p {
     margin: 0;
   }
 
-  #reality-orbit-prototype .understand-header h2 {
-    margin-top: 0.2rem;
+  #reality-orbit-prototype .understand-header-meta {
+    display: flex;
+    width: min(100%, 64rem);
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
-  #reality-orbit-prototype .understand-statement {
-    margin-top: 0.75rem;
-    max-width: 46rem;
+  #reality-orbit-prototype .understand-eyebrow,
+  #reality-orbit-prototype .understand-lead-label,
+  #reality-orbit-prototype .understand-support-label,
+  #reality-orbit-prototype .understand-context-card dt,
+  #reality-orbit-prototype .understand-fields dt {
+    color: var(--muted-foreground);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
   #reality-orbit-prototype .understand-definition-label {
     display: block;
-    margin-top: 0.75rem;
     color: var(--muted-foreground);
   }
 
-  #reality-orbit-prototype .understand-definition-label + .understand-statement {
-    margin-top: 0.2rem;
+  #reality-orbit-prototype .understand-statement {
+    max-width: 52rem;
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .understand-body {
+    padding: 1rem;
+  }
+
+  #reality-orbit-prototype .understand-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(14rem, 0.8fr);
+    gap: 1rem;
+  }
+
+  #reality-orbit-prototype .understand-story {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #reality-orbit-prototype .understand-story-lead {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  #reality-orbit-prototype .understand-support-group {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  #reality-orbit-prototype .understand-support {
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .understand-foundations {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: auto 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-foundations div,
+  #reality-orbit-prototype .understand-context-card,
+  #reality-orbit-prototype .understand-fields div {
+    min-width: 0;
+  }
+
+  #reality-orbit-prototype .understand-foundations dt,
+  #reality-orbit-prototype .understand-foundations dd,
+  #reality-orbit-prototype .understand-context-card dt,
+  #reality-orbit-prototype .understand-context-card dd,
+  #reality-orbit-prototype .understand-fields dt,
+  #reality-orbit-prototype .understand-fields dd {
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .understand-foundations dd,
+  #reality-orbit-prototype .understand-context-card dd,
+  #reality-orbit-prototype .understand-fields dd {
+    margin-top: 0.35rem;
+  }
+
+  #reality-orbit-prototype .understand-context {
+    display: grid;
+    grid-auto-rows: minmax(0, 1fr);
+    gap: 0.8rem;
+  }
+
+  #reality-orbit-prototype .understand-more {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-more-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   #reality-orbit-prototype .understand-fields {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem 1.4rem;
-    margin: 1.2rem 0 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem 1.25rem;
+    margin: 1rem 0 0;
+  }
+
+  #reality-orbit-prototype .understand-fields div {
+    padding-top: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
   }
 
   #reality-orbit-prototype .orbit-actions[hidden],
-  #reality-orbit-prototype .orbit-action[hidden],
   #reality-orbit-prototype .orbit-back[hidden],
-  #reality-orbit-prototype .orbit-stage[hidden],
-  #reality-orbit-prototype .orbit-detail[hidden],
-  #reality-orbit-prototype .understand-view[hidden] {
+  #reality-orbit-prototype .understand-foundations[hidden],
+  #reality-orbit-prototype .understand-more[hidden] {
     display: none;
   }
 
+  @media (max-width: 980px) {
+    #reality-orbit-prototype .orbit-workspace {
+      grid-template-columns: 1fr;
+      overflow: visible;
+    }
+
+    #reality-orbit-prototype .understand-view {
+      position: static;
+      max-height: none;
+      border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 680px) {
+    #reality-orbit-prototype .understand-layout {
+      grid-template-columns: 1fr;
+    }
+
+    #reality-orbit-prototype .understand-context {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    #reality-orbit-prototype .understand-fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   @media (max-width: 520px) {
+    #reality-orbit-prototype .understand-context,
     #reality-orbit-prototype .understand-fields {
       grid-template-columns: 1fr;
     }
@@ -265,7 +416,7 @@
 
   @media (max-width: 480px) {
     #reality-orbit-prototype .orbit-stage {
-      height: 500px;
+      height: clamp(430px, 118vw, 480px);
     }
 
     #reality-orbit-prototype .orbit-toolbar {
@@ -312,12 +463,42 @@
     }
 
     #reality-orbit-prototype .understand-view {
-      padding: 1rem 0.8rem;
+      padding: 0;
+    }
+
+    #reality-orbit-prototype .understand-header {
+      justify-items: start;
+      padding: 1.25rem 0.8rem;
+      text-align: left;
+    }
+
+    #reality-orbit-prototype .understand-header-meta {
+      align-items: flex-start;
+    }
+
+    #reality-orbit-prototype .understand-header-meta .viz-badge {
+      display: none;
+    }
+
+    #reality-orbit-prototype .understand-body {
+      padding: 0.8rem;
+    }
+
+    #reality-orbit-prototype .understand-foundations,
+    #reality-orbit-prototype .understand-context,
+    #reality-orbit-prototype .understand-fields {
+      grid-template-columns: 1fr;
     }
 
     #reality-orbit-prototype .understand-fields {
       gap: 0.7rem;
       margin-top: 1rem;
+    }
+
+    #reality-orbit-prototype .understand-more-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.2rem;
     }
   }
 
@@ -336,14 +517,13 @@
           <button class="btn btn-ghost orbit-back" type="button" data-orbit-back hidden aria-label="Return to the previous orbit">← Back</button>
           <div class="orbit-path text-small" data-orbit-path aria-label="Current ontology path"></div>
           <div class="orbit-actions" data-orbit-actions hidden>
-            <button class="btn orbit-action" type="button" data-understand-action>Understand</button>
             <button class="btn btn-primary orbit-action" type="button" data-explore-action>Explore selected</button>
           </div>
         </div>
         <div class="orbit-stage">
           <svg class="orbit-map" viewBox="0 0 100 100" role="img" aria-labelledby="reality-orbit-title reality-orbit-desc" preserveAspectRatio="none">
             <title id="reality-orbit-title">Reality ontology destination map</title>
-            <desc id="reality-orbit-desc">Select a concept destination to learn what it means. Understand any concept through its anatomy, or explore curated children to travel deeper.</desc>
+            <desc id="reality-orbit-desc">Select a concept destination to update its Concept Anatomy alongside the map. Explore any non-root concept as a focused destination.</desc>
             <circle class="orbit-ring" cx="50" cy="50" r="17"></circle>
             <circle class="orbit-ring" cx="50" cy="50" r="31"></circle>
             <circle class="orbit-ring" cx="50" cy="50" r="44"></circle>
@@ -360,16 +540,41 @@
             <span class="orbit-summary" data-selected-summary>The five canonical dimensions used to describe anything represented in the ontology.</span>
           </p>
         </div>
-        <section class="understand-view" data-understand-view hidden aria-labelledby="understand-title">
+      </div>
+      <aside class="understand-view" data-understand-view aria-labelledby="understand-title">
           <header class="understand-header">
-            <p class="text-small">Understand · Concept anatomy</p>
+            <div class="understand-header-meta">
+              <p class="text-small understand-eyebrow" data-understand-eyebrow></p>
+              <span class="viz-badge">Concept anatomy</span>
+            </div>
             <h2 id="understand-title" data-understand-title></h2>
             <span class="text-small understand-definition-label">Definition</span>
             <p class="understand-statement" data-understand-statement></p>
           </header>
-          <dl class="understand-fields" data-understand-fields></dl>
-        </section>
-      </div>
+          <div class="understand-body">
+            <div class="understand-layout">
+              <article class="card understand-story">
+                <div class="understand-story-lead">
+                  <span class="text-small understand-lead-label" data-understand-lead-label></span>
+                  <h3 data-understand-lead></h3>
+                </div>
+                <div class="understand-support-group">
+                  <span class="text-small understand-support-label" data-understand-support-label></span>
+                  <p class="understand-support" data-understand-support></p>
+                </div>
+                <dl class="understand-foundations" data-understand-foundations></dl>
+              </article>
+              <dl class="understand-context" data-understand-context aria-label="Concept context"></dl>
+            </div>
+            <section class="understand-more" data-understand-more hidden aria-labelledby="understand-more-title">
+              <header class="understand-more-header">
+                <h3 id="understand-more-title">Complete anatomy</h3>
+                <p class="text-small text-muted" data-understand-more-summary></p>
+              </header>
+              <dl class="understand-fields" data-understand-fields></dl>
+            </section>
+          </div>
+      </aside>
     </div>
   </div>
 </section>
@@ -430,9 +635,15 @@
         canonicalPath: ["Reality", "Perspective"],
         children: ["perspective-individual", "perspective-scientific", "perspective-economic", "perspective-ethical", "perspective-cultural"],
       },
-      physical: { id: "physical", label: "Physical", summary: "Matter, energy, space, and the forces that govern physical systems.", canonicalPath: ["Reality", "Domain", "Physical"] },
-      biological: { id: "biological", label: "Biological", summary: "Living systems, organisms, adaptation, and ecosystems.", canonicalPath: ["Reality", "Domain", "Biological"] },
-      psychological: { id: "psychological", label: "Psychological", summary: "Mind, cognition, emotion, perception, and behaviour.", canonicalPath: ["Reality", "Domain", "Psychological"] },
+      physical: { id: "physical", label: "Physical", summary: "Matter, energy, space, and the forces that govern physical systems.", canonicalPath: ["Reality", "Domain", "Physical"], children: ["matter"] },
+      matter: { id: "matter", label: "Matter", summary: "Physical substance with mass and spatial extent, examined through its composition, state, and interactions.", canonicalPath: ["Reality", "Domain", "Physical", "Matter"], children: ["physical-object"] },
+      "physical-object": { id: "physical-object", label: "Physical object", summary: "A bounded material thing that can be identified, measured, located, and studied within a physical system.", canonicalPath: ["Reality", "Domain", "Physical", "Matter", "Physical object"] },
+      biological: { id: "biological", label: "Biological", summary: "Living systems, organisms, adaptation, and ecosystems.", canonicalPath: ["Reality", "Domain", "Biological"], children: ["organism"] },
+      organism: { id: "organism", label: "Organism", summary: "An individual living system that maintains itself, responds to conditions, and participates in biological processes.", canonicalPath: ["Reality", "Domain", "Biological", "Organism"], children: ["living-system"] },
+      "living-system": { id: "living-system", label: "Living system", summary: "A functioning organism or organised biological whole whose parts interact to sustain life over time.", canonicalPath: ["Reality", "Domain", "Biological", "Organism", "Living system"] },
+      psychological: { id: "psychological", label: "Psychological", summary: "Mind, cognition, emotion, perception, and behaviour.", canonicalPath: ["Reality", "Domain", "Psychological"], children: ["cognition"] },
+      cognition: { id: "cognition", label: "Cognition", summary: "The mental processes used to perceive, remember, learn, reason, and decide.", canonicalPath: ["Reality", "Domain", "Psychological", "Cognition"], children: ["decision-process"] },
+      "decision-process": { id: "decision-process", label: "Decision process", summary: "A sequence in which an agent interprets information, weighs options, and commits to an action.", canonicalPath: ["Reality", "Domain", "Psychological", "Cognition", "Decision process"] },
       social: {
         id: "social",
         label: "Social",
@@ -440,9 +651,15 @@
         canonicalPath: ["Reality", "Domain", "Social"],
         children: ["social-individuals", "social-relationships", "groups", "organisations", "institutions", "culture", "social-communication", "governance"],
       },
-      economic: { id: "economic", label: "Economic", summary: "Production, allocation, exchange, incentives, and value.", canonicalPath: ["Reality", "Domain", "Economic"] },
-      informational: { id: "informational", label: "Informational", summary: "Representation, communication, computation, and the reduction of uncertainty.", canonicalPath: ["Reality", "Domain", "Informational"] },
-      mathematical: { id: "mathematical", label: "Mathematical", summary: "Quantity, structure, pattern, relation, and formal reasoning.", canonicalPath: ["Reality", "Domain", "Mathematical"] },
+      economic: { id: "economic", label: "Economic", summary: "Production, allocation, exchange, incentives, and value.", canonicalPath: ["Reality", "Domain", "Economic"], children: ["value"] },
+      value: { id: "value", label: "Value", summary: "The importance, utility, worth, or exchangeability attributed to an outcome, good, service, or resource.", canonicalPath: ["Reality", "Domain", "Economic", "Value"], children: ["valuation"] },
+      valuation: { id: "valuation", label: "Valuation", summary: "The reasoned assessment of the worth, utility, price, or significance of an outcome, good, service, or resource using stated criteria.", canonicalPath: ["Reality", "Domain", "Economic", "Value", "Valuation"] },
+      informational: { id: "informational", label: "Informational", summary: "Representation, communication, computation, and the reduction of uncertainty.", canonicalPath: ["Reality", "Domain", "Informational"], children: ["data"] },
+      data: { id: "data", label: "Data", summary: "Recorded symbols, measurements, or observations that can be stored, communicated, and interpreted.", canonicalPath: ["Reality", "Domain", "Informational", "Data"], children: ["data-record"] },
+      "data-record": { id: "data-record", label: "Data record", summary: "A bounded, structured representation of observations, measurements, or facts that can be stored, exchanged, and interpreted in context.", canonicalPath: ["Reality", "Domain", "Informational", "Data", "Data record"] },
+      mathematical: { id: "mathematical", label: "Mathematical", summary: "Quantity, structure, pattern, relation, and formal reasoning.", canonicalPath: ["Reality", "Domain", "Mathematical"], children: ["quantity"] },
+      quantity: { id: "quantity", label: "Quantity", summary: "A measurable or countable amount that can be compared, combined, or related mathematically.", canonicalPath: ["Reality", "Domain", "Mathematical", "Quantity"], children: ["measured-quantity"] },
+      "measured-quantity": { id: "measured-quantity", label: "Measured quantity", summary: "A quantity expressed with a value, unit, method, and level of precision so that it can be compared or used in reasoning.", canonicalPath: ["Reality", "Domain", "Mathematical", "Quantity", "Measured quantity"] },
       law: {
         id: "law",
         label: "Law",
@@ -450,48 +667,183 @@
         canonicalPath: ["Reality", "Category", "Knowledge", "Law"],
         children: ["amdahls-law", "brooks-law", "conways-law", "goodharts-law", "greshams-law", "littles-law", "metcalfes-law", "parkinsons-law"],
       },
-      principle: { id: "principle", label: "Principle", summary: "A general rule that guides behaviour, design, or action.", canonicalPath: ["Reality", "Category", "Knowledge", "Principle"] },
-      razor: { id: "razor", label: "Razor", summary: "A concise reasoning rule used to remove unlikely explanations or prefer one interpretation over another.", canonicalPath: ["Reality", "Category", "Knowledge", "Razor"] },
-      framework: { id: "framework", label: "Framework", summary: "A reusable structure that organises analysis, decisions, or execution.", canonicalPath: ["Reality", "Category", "Knowledge", "Framework"] },
-      model: { id: "model", label: "Model", summary: "A purposeful representation used to explain, predict, or design.", canonicalPath: ["Reality", "Category", "Knowledge", "Model"] },
-      theorem: { id: "theorem", label: "Theorem", summary: "A proposition established by formal proof from stated axioms, definitions, or prior results.", canonicalPath: ["Reality", "Category", "Knowledge", "Theorem"] },
-      pattern: { id: "pattern", label: "Pattern", summary: "A named, reusable response to a recurring problem in context.", canonicalPath: ["Reality", "Category", "Knowledge", "Pattern"] },
-      entity: { id: "entity", label: "Entity", summary: "A distinct thing that can be identified and described; agents are a specialised entity.", canonicalPath: ["Reality", "Category", "Entity"] },
+      principle: { id: "principle", label: "Principle", summary: "A general rule that guides behaviour, design, or action.", canonicalPath: ["Reality", "Category", "Knowledge", "Principle"], children: ["least-privilege"] },
+      "least-privilege": { id: "least-privilege", label: "Least privilege", summary: "Give each identity, process, or component only the access needed for its legitimate task.", canonicalPath: ["Reality", "Category", "Knowledge", "Principle", "Least privilege"] },
+      razor: { id: "razor", label: "Razor", summary: "A concise reasoning rule used to remove unlikely explanations or prefer one interpretation over another.", canonicalPath: ["Reality", "Category", "Knowledge", "Razor"], children: ["occams-razor"] },
+      "occams-razor": { id: "occams-razor", label: "Occam's Razor", summary: "When explanations fit the same evidence, prefer the one that makes fewer unsupported assumptions.", canonicalPath: ["Reality", "Category", "Knowledge", "Razor", "Occam's Razor"] },
+      framework: { id: "framework", label: "Framework", summary: "A reusable structure that organises analysis, decisions, or execution.", canonicalPath: ["Reality", "Category", "Knowledge", "Framework"], children: ["ooda-loop"] },
+      "ooda-loop": { id: "ooda-loop", label: "OODA Loop", summary: "A decision framework that cycles through observing, orienting, deciding, and acting.", canonicalPath: ["Reality", "Category", "Knowledge", "Framework", "OODA Loop"] },
+      model: { id: "model", label: "Model", summary: "A purposeful representation used to explain, predict, or design.", canonicalPath: ["Reality", "Category", "Knowledge", "Model"], children: ["queueing-model"] },
+      "queueing-model": { id: "queueing-model", label: "Queueing model", summary: "A representation of arrivals, waiting, service capacity, and departures used to reason about congestion and delay.", canonicalPath: ["Reality", "Category", "Knowledge", "Model", "Queueing model"] },
+      theorem: { id: "theorem", label: "Theorem", summary: "A proposition established by formal proof from stated axioms, definitions, or prior results.", canonicalPath: ["Reality", "Category", "Knowledge", "Theorem"], children: ["pythagorean-theorem"] },
+      "pythagorean-theorem": { id: "pythagorean-theorem", label: "Pythagorean theorem", summary: "In a right-angled triangle, the square of the hypotenuse equals the sum of the squares of the other two sides.", canonicalPath: ["Reality", "Category", "Knowledge", "Theorem", "Pythagorean theorem"] },
+      pattern: { id: "pattern", label: "Pattern", summary: "A named, reusable response to a recurring problem in context.", canonicalPath: ["Reality", "Category", "Knowledge", "Pattern"], children: ["circuit-breaker"] },
+      "circuit-breaker": { id: "circuit-breaker", label: "Circuit breaker", summary: "A resilience pattern that temporarily stops calls to a failing dependency so the system can recover and avoid cascading failure.", canonicalPath: ["Reality", "Category", "Knowledge", "Pattern", "Circuit breaker"] },
+      entity: { id: "entity", label: "Entity", summary: "A distinct thing that can be identified and described; agents are a specialised entity.", canonicalPath: ["Reality", "Category", "Entity"], children: ["agent"] },
+      agent: { id: "agent", label: "Agent", summary: "An entity capable of acting, choosing, or producing effects within a system.", canonicalPath: ["Reality", "Category", "Entity", "Agent"], children: ["decision-maker"] },
+      "decision-maker": { id: "decision-maker", label: "Decision maker", summary: "An agent that evaluates information and options before selecting or authorising an action.", canonicalPath: ["Reality", "Category", "Entity", "Agent", "Decision maker"] },
       relationship: { id: "relationship", label: "Relationship", summary: "A meaningful connection between two or more entities.", canonicalPath: ["Reality", "Category", "Relationship"], children: ["ownership", "dependency", "communication", "competition", "cooperation"] },
       process: { id: "process", label: "Process", summary: "An ordered transformation or activity that changes state over time.", canonicalPath: ["Reality", "Category", "Process"], children: ["process-change", "transformation", "exchange", "learning", "production"] },
       resource: { id: "resource", label: "Resource", summary: "An input, capacity, or asset available to enable activity.", canonicalPath: ["Reality", "Category", "Resource"], children: ["resource-time", "energy", "capital", "information", "attention", "compute"] },
-      environment: { id: "environment", label: "Environment", summary: "The surrounding conditions and context within which entities operate.", canonicalPath: ["Reality", "Category", "Environment"] },
-      individual: { id: "individual", label: "Individual", summary: "A single person, organism, agent, or unit of analysis.", canonicalPath: ["Reality", "Scale", "Individual"] },
-      group: { id: "group", label: "Group", summary: "A small collection whose members interact or share identity.", canonicalPath: ["Reality", "Scale", "Group"] },
-      organisation: { id: "organisation", label: "Organisation", summary: "A coordinated body with roles, boundaries, and goals.", canonicalPath: ["Reality", "Scale", "Organisation"] },
-      society: { id: "society", label: "Society", summary: "A large population connected by institutions, culture, and systems.", canonicalPath: ["Reality", "Scale", "Society"] },
-      global: { id: "global", label: "Global", summary: "The whole-world scale across regions, societies, and systems.", canonicalPath: ["Reality", "Scale", "Global"] },
-      past: { id: "past", label: "Past", summary: "States and events that occurred before the present reference point.", canonicalPath: ["Reality", "Time", "Past"] },
-      present: { id: "present", label: "Present", summary: "The current reference point from which change is observed.", canonicalPath: ["Reality", "Time", "Present"] },
-      future: { id: "future", label: "Future", summary: "Possible or expected states after the present reference point.", canonicalPath: ["Reality", "Time", "Future"] },
-      duration: { id: "duration", label: "Duration", summary: "The amount of time between a beginning and an end.", canonicalPath: ["Reality", "Time", "Duration"] },
-      sequence: { id: "sequence", label: "Sequence", summary: "The order in which events, states, or actions occur.", canonicalPath: ["Reality", "Time", "Sequence"] },
-      "perspective-individual": { id: "perspective-individual", label: "Individual", summary: "Reality as interpreted from one person's situated experience and interests.", canonicalPath: ["Reality", "Perspective", "Individual"] },
-      "perspective-scientific": { id: "perspective-scientific", label: "Scientific", summary: "Reality interpreted through systematic observation, evidence, and testable explanation.", canonicalPath: ["Reality", "Perspective", "Scientific"] },
-      "perspective-economic": { id: "perspective-economic", label: "Economic", summary: "Reality interpreted through value, incentives, allocation, production, and exchange.", canonicalPath: ["Reality", "Perspective", "Economic"] },
-      "perspective-ethical": { id: "perspective-ethical", label: "Ethical", summary: "Reality interpreted through questions of right action, responsibility, harm, and fairness.", canonicalPath: ["Reality", "Perspective", "Ethical"] },
-      "perspective-cultural": { id: "perspective-cultural", label: "Cultural", summary: "Reality interpreted through shared meanings, values, practices, and inherited context.", canonicalPath: ["Reality", "Perspective", "Cultural"] },
-      "resource-time": { id: "resource-time", label: "Time", summary: "The finite duration available for attention, action, or change.", canonicalPath: ["Reality", "Category", "Resource", "Time"] },
-      energy: { id: "energy", label: "Energy", summary: "The capacity to perform work or produce change.", canonicalPath: ["Reality", "Category", "Resource", "Energy"] },
-      capital: { id: "capital", label: "Capital", summary: "Accumulated assets that can support future production or value creation.", canonicalPath: ["Reality", "Category", "Resource", "Capital"] },
-      information: { id: "information", label: "Information", summary: "Meaningful representation that reduces uncertainty and guides action.", canonicalPath: ["Reality", "Category", "Resource", "Information"] },
-      attention: { id: "attention", label: "Attention", summary: "The limited capacity to select and sustain mental focus.", canonicalPath: ["Reality", "Category", "Resource", "Attention"] },
-      compute: { id: "compute", label: "Compute", summary: "The processing capacity available to transform data or state.", canonicalPath: ["Reality", "Category", "Resource", "Compute"] },
-      "process-change": { id: "process-change", label: "Change", summary: "A process through which a state, condition, or arrangement becomes different.", canonicalPath: ["Reality", "Category", "Process", "Change"] },
-      transformation: { id: "transformation", label: "Transformation", summary: "A process that converts an entity or state into another form.", canonicalPath: ["Reality", "Category", "Process", "Transformation"] },
-      exchange: { id: "exchange", label: "Exchange", summary: "A process in which entities transfer resources, information, or value.", canonicalPath: ["Reality", "Category", "Process", "Exchange"] },
-      learning: { id: "learning", label: "Learning", summary: "A process through which knowledge, capability, or behaviour changes through experience.", canonicalPath: ["Reality", "Category", "Process", "Learning"] },
-      production: { id: "production", label: "Production", summary: "A process that creates goods, services, information, or other valued outputs.", canonicalPath: ["Reality", "Category", "Process", "Production"] },
+      environment: {
+        id: "environment",
+        label: "Environment",
+        summary: "The surrounding conditions, boundaries, and context within which entities operate and interact.",
+        canonicalPath: ["Reality", "Category", "Environment"],
+        children: ["natural-environment", "built-environment", "social-environment", "digital-environment", "institutional-environment"],
+        anatomy: {
+          "Purpose": "Use Environment to identify the surrounding conditions that enable, constrain, or influence an entity, relationship, process, or resource.",
+          "Governing question": "Which surrounding conditions matter to this subject, where is the boundary, and how can the subject change those conditions in return?",
+          "First principles": "No entity operates in isolation. Conditions outside a chosen boundary can shape behaviour, available resources, risks, and outcomes; entities can also alter the conditions around them.",
+          "Mental model": "The stage, weather, rules, and available materials around an actor: they do not fully determine the action, but they change what is possible and likely.",
+          "Boundary": "An environment is defined relative to a focal subject. What counts as surrounding context depends on the question, scale, time period, and perspective.",
+          "Conditions and variables": "Relevant conditions can include physical conditions, social norms, digital interfaces, institutions, incentives, rules, access, risks, and available resources.",
+          "Mechanism": "Environmental conditions influence decisions and outcomes by changing constraints, information, incentives, capacity, exposure, and feedback.",
+          "Feedback": "Entities and processes can reshape their environments, producing reinforcing or balancing feedback over time.",
+          "Scope": "Use Environment when surrounding context is part of the explanation, rather than treating the focal entity as if it acts independently.",
+          "How to use it": "Name the focal subject, draw the relevant boundary, identify material conditions and rules, then trace how those conditions influence and are influenced by the subject.",
+          "Common confusion": "Environment is not merely a place or the natural world. It can be natural, built, social, digital, or institutional.",
+          "Related concepts": "Entity, Relationship, Process, Resource, Domain, Time, Scale, and Perspective help describe what exists within the environment and why it matters.",
+        },
+      },
+      "natural-environment": {
+        id: "natural-environment",
+        label: "Natural environment",
+        summary: "The ecological and physical conditions not primarily designed by people, including land, water, climate, organisms, and natural processes.",
+        canonicalPath: ["Reality", "Category", "Environment", "Natural environment"],
+        children: ["ecosystem"],
+      },
+      ecosystem: {
+        id: "ecosystem",
+        label: "Ecosystem",
+        summary: "A community of organisms and their physical surroundings interacting through flows of energy, matter, and information.",
+        canonicalPath: ["Reality", "Category", "Environment", "Natural environment", "Ecosystem"],
+      },
+      "built-environment": {
+        id: "built-environment",
+        label: "Built environment",
+        summary: "Human-made spaces, infrastructure, and designed surroundings that shape movement, activity, access, and safety.",
+        canonicalPath: ["Reality", "Category", "Environment", "Built environment"],
+        children: ["workplace"],
+      },
+      workplace: {
+        id: "workplace",
+        label: "Workplace",
+        summary: "A designed setting in which people, tools, rules, and resources are organised to perform work.",
+        canonicalPath: ["Reality", "Category", "Environment", "Built environment", "Workplace"],
+      },
+      "social-environment": {
+        id: "social-environment",
+        label: "Social environment",
+        summary: "The relationships, norms, roles, networks, and shared expectations surrounding people or groups.",
+        canonicalPath: ["Reality", "Category", "Environment", "Social environment"],
+        children: ["community-setting"],
+      },
+      "community-setting": {
+        id: "community-setting",
+        label: "Community setting",
+        summary: "A local social context in which membership, norms, relationships, and shared resources influence participation and behaviour.",
+        canonicalPath: ["Reality", "Category", "Environment", "Social environment", "Community setting"],
+      },
+      "digital-environment": {
+        id: "digital-environment",
+        label: "Digital environment",
+        summary: "The software, interfaces, data, permissions, networks, and interaction rules surrounding digital activity.",
+        canonicalPath: ["Reality", "Category", "Environment", "Digital environment"],
+        children: ["online-platform"],
+      },
+      "online-platform": {
+        id: "online-platform",
+        label: "Online platform",
+        summary: "A digital environment that connects participants through shared software, rules, data, interfaces, and network effects.",
+        canonicalPath: ["Reality", "Category", "Environment", "Digital environment", "Online platform"],
+      },
+      "institutional-environment": {
+        id: "institutional-environment",
+        label: "Institutional environment",
+        summary: "The formal and informal rules, authorities, incentives, and accountability structures surrounding collective action.",
+        canonicalPath: ["Reality", "Category", "Environment", "Institutional environment"],
+        children: ["regulatory-setting"],
+      },
+      "regulatory-setting": {
+        id: "regulatory-setting",
+        label: "Regulatory setting",
+        summary: "A governed context in which laws, standards, supervisory expectations, permissions, and enforcement shape permitted action.",
+        canonicalPath: ["Reality", "Category", "Environment", "Institutional environment", "Regulatory setting"],
+      },
+      individual: { id: "individual", label: "Individual", summary: "A single person, organism, agent, or unit of analysis.", canonicalPath: ["Reality", "Scale", "Individual"], children: ["person"] },
+      person: { id: "person", label: "Person", summary: "A human individual considered as a bounded actor at the individual scale.", canonicalPath: ["Reality", "Scale", "Individual", "Person"], children: ["individual-actor"] },
+      "individual-actor": { id: "individual-actor", label: "Individual actor", summary: "One person or agent whose choices and actions are examined without aggregating them into a group.", canonicalPath: ["Reality", "Scale", "Individual", "Person", "Individual actor"] },
+      group: { id: "group", label: "Group", summary: "A small collection whose members interact or share identity.", canonicalPath: ["Reality", "Scale", "Group"], children: ["team"] },
+      team: { id: "team", label: "Team", summary: "A bounded group coordinated around a shared task, purpose, or outcome.", canonicalPath: ["Reality", "Scale", "Group", "Team"], children: ["team-interaction"] },
+      "team-interaction": { id: "team-interaction", label: "Team interaction", summary: "The communication, coordination, and feedback among members of a working group.", canonicalPath: ["Reality", "Scale", "Group", "Team", "Team interaction"] },
+      organisation: { id: "organisation", label: "Organisation", summary: "A coordinated body with roles, boundaries, and goals.", canonicalPath: ["Reality", "Scale", "Organisation"], children: ["enterprise"] },
+      enterprise: { id: "enterprise", label: "Enterprise", summary: "An organisation considered as an operating system of people, processes, resources, and governance.", canonicalPath: ["Reality", "Scale", "Organisation", "Enterprise"], children: ["organisational-system"] },
+      "organisational-system": { id: "organisational-system", label: "Organisational system", summary: "The connected structure of roles, processes, decisions, resources, and feedback that enables an organisation to operate.", canonicalPath: ["Reality", "Scale", "Organisation", "Enterprise", "Organisational system"] },
+      society: { id: "society", label: "Society", summary: "A large population connected by institutions, culture, and systems.", canonicalPath: ["Reality", "Scale", "Society"], children: ["nation"] },
+      nation: { id: "nation", label: "Nation", summary: "A large-scale political and cultural community used to examine societal institutions, norms, and collective outcomes.", canonicalPath: ["Reality", "Scale", "Society", "Nation"], children: ["national-society"] },
+      "national-society": { id: "national-society", label: "National society", summary: "A society examined through the interacting population, institutions, culture, economy, and territory of a nation.", canonicalPath: ["Reality", "Scale", "Society", "Nation", "National society"] },
+      global: { id: "global", label: "Global", summary: "The whole-world scale across regions, societies, and systems.", canonicalPath: ["Reality", "Scale", "Global"], children: ["planetary"] },
+      planetary: { id: "planetary", label: "Planetary", summary: "The scale at which systems and effects span the Earth rather than one local or national context.", canonicalPath: ["Reality", "Scale", "Global", "Planetary"], children: ["global-system"] },
+      "global-system": { id: "global-system", label: "Global system", summary: "An interconnected system whose participants, resources, or consequences operate across national and regional boundaries.", canonicalPath: ["Reality", "Scale", "Global", "Planetary", "Global system"] },
+      past: { id: "past", label: "Past", summary: "States and events that occurred before the present reference point.", canonicalPath: ["Reality", "Time", "Past"], children: ["historical-record"] },
+      "historical-record": { id: "historical-record", label: "Historical record", summary: "Evidence preserved from an earlier time that can be used to reconstruct or explain past states and events.", canonicalPath: ["Reality", "Time", "Past", "Historical record"], children: ["event-record"] },
+      "event-record": { id: "event-record", label: "Event record", summary: "A dated source, observation, or account that documents a past occurrence for later evidence, reconstruction, or explanation.", canonicalPath: ["Reality", "Time", "Past", "Historical record", "Event record"] },
+      present: { id: "present", label: "Present", summary: "The current reference point from which change is observed.", canonicalPath: ["Reality", "Time", "Present"], children: ["current-state"] },
+      "current-state": { id: "current-state", label: "Current state", summary: "The presently observed condition of a subject, system, or environment at a defined reference time.", canonicalPath: ["Reality", "Time", "Present", "Current state"], children: ["state-snapshot"] },
+      "state-snapshot": { id: "state-snapshot", label: "State snapshot", summary: "A bounded representation of the current values, conditions, and relationships relevant to a question.", canonicalPath: ["Reality", "Time", "Present", "Current state", "State snapshot"] },
+      future: { id: "future", label: "Future", summary: "Possible or expected states after the present reference point.", canonicalPath: ["Reality", "Time", "Future"], children: ["expectation"] },
+      expectation: { id: "expectation", label: "Expectation", summary: "A stated belief or estimate about a future state, event, or outcome, distinguished from a guarantee or a mathematical expected value.", canonicalPath: ["Reality", "Time", "Future", "Expectation"], children: ["expected-outcome"] },
+      "expected-outcome": { id: "expected-outcome", label: "Expected outcome", summary: "A specifically described future result that is anticipated under stated conditions, assumptions, and uncertainty.", canonicalPath: ["Reality", "Time", "Future", "Expectation", "Expected outcome"] },
+      duration: { id: "duration", label: "Duration", summary: "The amount of time between a beginning and an end.", canonicalPath: ["Reality", "Time", "Duration"], children: ["time-interval"] },
+      "time-interval": { id: "time-interval", label: "Time interval", summary: "A bounded span between two stated points in time.", canonicalPath: ["Reality", "Time", "Duration", "Time interval"], children: ["measured-duration"] },
+      "measured-duration": { id: "measured-duration", label: "Measured duration", summary: "An elapsed span recorded with a stated start, end, unit, and measurement basis so that it can be compared or used in analysis.", canonicalPath: ["Reality", "Time", "Duration", "Time interval", "Measured duration"] },
+      sequence: { id: "sequence", label: "Sequence", summary: "The order in which events, states, or actions occur.", canonicalPath: ["Reality", "Time", "Sequence"], children: ["event-order"] },
+      "event-order": { id: "event-order", label: "Event order", summary: "The stated ordering of events or actions relative to one another.", canonicalPath: ["Reality", "Time", "Sequence", "Event order"], children: ["ordered-event-sequence"] },
+      "ordered-event-sequence": { id: "ordered-event-sequence", label: "Ordered event sequence", summary: "A defined sequence that records which events occur before, after, or alongside others within a stated time frame.", canonicalPath: ["Reality", "Time", "Sequence", "Event order", "Ordered event sequence"] },
+      "perspective-individual": { id: "perspective-individual", label: "Individual", summary: "Reality as interpreted from one person's situated experience and interests.", canonicalPath: ["Reality", "Perspective", "Individual"], children: ["personal-experience"] },
+      "personal-experience": { id: "personal-experience", label: "Personal experience", summary: "The observations, memories, feelings, and interests through which one person interprets a situation.", canonicalPath: ["Reality", "Perspective", "Individual", "Personal experience"], children: ["lived-experience"] },
+      "lived-experience": { id: "lived-experience", label: "Lived experience", summary: "A person's first-hand encounter with conditions and events as they are experienced in context.", canonicalPath: ["Reality", "Perspective", "Individual", "Personal experience", "Lived experience"] },
+      "perspective-scientific": { id: "perspective-scientific", label: "Scientific", summary: "Reality interpreted through systematic observation, evidence, and testable explanation.", canonicalPath: ["Reality", "Perspective", "Scientific"], children: ["evidence"] },
+      evidence: { id: "evidence", label: "Evidence", summary: "Relevant observations, measurements, records, or results used to support or challenge a claim.", canonicalPath: ["Reality", "Perspective", "Scientific", "Evidence"], children: ["evidence-assessment"] },
+      "evidence-assessment": { id: "evidence-assessment", label: "Evidence assessment", summary: "The evaluation of evidence for relevance, quality, uncertainty, and the degree to which it supports or challenges a stated claim.", canonicalPath: ["Reality", "Perspective", "Scientific", "Evidence", "Evidence assessment"] },
+      "perspective-economic": { id: "perspective-economic", label: "Economic", summary: "Reality interpreted through value, incentives, allocation, production, and exchange.", canonicalPath: ["Reality", "Perspective", "Economic"], children: ["incentives"] },
+      incentives: { id: "incentives", label: "Incentives", summary: "Expected rewards, costs, or constraints that make some choices more attractive than others.", canonicalPath: ["Reality", "Perspective", "Economic", "Incentives"], children: ["incentive-guided-choice"] },
+      "incentive-guided-choice": { id: "incentive-guided-choice", label: "Incentive-guided choice", summary: "A choice understood through the expected rewards, costs, constraints, and trade-offs that shape which option appears more attractive.", canonicalPath: ["Reality", "Perspective", "Economic", "Incentives", "Incentive-guided choice"] },
+      "perspective-ethical": { id: "perspective-ethical", label: "Ethical", summary: "Reality interpreted through questions of right action, responsibility, harm, and fairness.", canonicalPath: ["Reality", "Perspective", "Ethical"], children: ["moral-duty"] },
+      "moral-duty": { id: "moral-duty", label: "Moral duty", summary: "An obligation or responsibility considered binding within an ethical framework.", canonicalPath: ["Reality", "Perspective", "Ethical", "Moral duty"], children: ["ethical-decision"] },
+      "ethical-decision": { id: "ethical-decision", label: "Ethical decision", summary: "A choice assessed through explicit responsibilities, harms, rights, fairness, and intended consequences.", canonicalPath: ["Reality", "Perspective", "Ethical", "Moral duty", "Ethical decision"] },
+      "perspective-cultural": { id: "perspective-cultural", label: "Cultural", summary: "Reality interpreted through shared meanings, values, practices, and inherited context.", canonicalPath: ["Reality", "Perspective", "Cultural"], children: ["shared-meaning"] },
+      "shared-meaning": { id: "shared-meaning", label: "Shared meaning", summary: "A meaning, symbol, interpretation, or expectation held in common by members of a cultural group.", canonicalPath: ["Reality", "Perspective", "Cultural", "Shared meaning"], children: ["cultural-practice"] },
+      "cultural-practice": { id: "cultural-practice", label: "Cultural practice", summary: "A repeated, socially learned way of acting that carries shared meaning within a cultural context.", canonicalPath: ["Reality", "Perspective", "Cultural", "Shared meaning", "Cultural practice"] },
+      "resource-time": { id: "resource-time", label: "Time", summary: "The finite duration available for attention, action, or change.", canonicalPath: ["Reality", "Category", "Resource", "Time"], children: ["time-budget"] },
+      "time-budget": { id: "time-budget", label: "Time budget", summary: "The deliberate allocation of finite time across activities, commitments, and priorities.", canonicalPath: ["Reality", "Category", "Resource", "Time", "Time budget"] },
+      energy: { id: "energy", label: "Energy", summary: "The capacity to perform work or produce change.", canonicalPath: ["Reality", "Category", "Resource", "Energy"], children: ["energy-supply"] },
+      "energy-supply": { id: "energy-supply", label: "Energy supply", summary: "The accessible source and quantity of energy available to support a process or system.", canonicalPath: ["Reality", "Category", "Resource", "Energy", "Energy supply"] },
+      capital: { id: "capital", label: "Capital", summary: "Accumulated assets that can support future production or value creation.", canonicalPath: ["Reality", "Category", "Resource", "Capital"], children: ["capital-asset"] },
+      "capital-asset": { id: "capital-asset", label: "Capital asset", summary: "A durable financial, physical, or intellectual asset used to support future capability or value creation.", canonicalPath: ["Reality", "Category", "Resource", "Capital", "Capital asset"] },
+      information: { id: "information", label: "Information", summary: "Meaningful representation that reduces uncertainty and guides action.", canonicalPath: ["Reality", "Category", "Resource", "Information"], children: ["information-asset"] },
+      "information-asset": { id: "information-asset", label: "Information asset", summary: "A useful body of data, knowledge, record, or content that can inform decisions or create value.", canonicalPath: ["Reality", "Category", "Resource", "Information", "Information asset"] },
+      attention: { id: "attention", label: "Attention", summary: "The limited capacity to select and sustain mental focus.", canonicalPath: ["Reality", "Category", "Resource", "Attention"], children: ["attention-allocation"] },
+      "attention-allocation": { id: "attention-allocation", label: "Attention allocation", summary: "The deliberate or constrained distribution of focus across competing signals, tasks, and decisions.", canonicalPath: ["Reality", "Category", "Resource", "Attention", "Attention allocation"] },
+      compute: { id: "compute", label: "Compute", summary: "The processing capacity available to transform data or state.", canonicalPath: ["Reality", "Category", "Resource", "Compute"], children: ["compute-capacity"] },
+      "compute-capacity": { id: "compute-capacity", label: "Compute capacity", summary: "The processing resources available to execute workloads within a required time and reliability boundary.", canonicalPath: ["Reality", "Category", "Resource", "Compute", "Compute capacity"] },
+      "process-change": { id: "process-change", label: "Change", summary: "A process through which a state, condition, or arrangement becomes different.", canonicalPath: ["Reality", "Category", "Process", "Change"], children: ["state-transition"] },
+      "state-transition": { id: "state-transition", label: "State transition", summary: "A defined movement of an entity or system from one recognised state to another.", canonicalPath: ["Reality", "Category", "Process", "Change", "State transition"] },
+      transformation: { id: "transformation", label: "Transformation", summary: "A process that converts an entity or state into another form.", canonicalPath: ["Reality", "Category", "Process", "Transformation"], children: ["transformed-output"] },
+      "transformed-output": { id: "transformed-output", label: "Transformed output", summary: "The resulting entity, state, or material form produced by a transformation process.", canonicalPath: ["Reality", "Category", "Process", "Transformation", "Transformed output"] },
+      exchange: { id: "exchange", label: "Exchange", summary: "A process in which entities transfer resources, information, or value.", canonicalPath: ["Reality", "Category", "Process", "Exchange"], children: ["transaction"] },
+      transaction: { id: "transaction", label: "Transaction", summary: "A bounded exchange in which parties transfer value, resources, information, or obligations under agreed terms.", canonicalPath: ["Reality", "Category", "Process", "Exchange", "Transaction"] },
+      learning: { id: "learning", label: "Learning", summary: "A process through which knowledge, capability, or behaviour changes through experience.", canonicalPath: ["Reality", "Category", "Process", "Learning"], children: ["learning-cycle"] },
+      "learning-cycle": { id: "learning-cycle", label: "Learning cycle", summary: "A repeated process of experience, reflection, interpretation, experimentation, and adaptation.", canonicalPath: ["Reality", "Category", "Process", "Learning", "Learning cycle"] },
+      production: { id: "production", label: "Production", summary: "A process that creates goods, services, information, or other valued outputs.", canonicalPath: ["Reality", "Category", "Process", "Production"], children: ["production-run"] },
+      "production-run": { id: "production-run", label: "Production run", summary: "A bounded execution of a production process that turns specified inputs into an output.", canonicalPath: ["Reality", "Category", "Process", "Production", "Production run"] },
       ownership: {
         id: "ownership",
         label: "Ownership",
         summary: "A relationship that assigns recognised possession, control, or rights over something.",
         canonicalPath: ["Reality", "Category", "Relationship", "Ownership"],
+        children: ["ownership-arrangement"],
         anatomy: {
           "Purpose": "Use Ownership to describe who or what is recognised as holding particular rights over an entity, resource, or creation.",
           "Governing question": "Who holds which rights over what, under whose recognition, and under which conditions?",
@@ -502,18 +854,31 @@
           "Common confusion": "Possessing, accessing, controlling, or using something does not necessarily mean owning it; the relevant rights and recognition must be made explicit.",
         },
       },
-      dependency: { id: "dependency", label: "Dependency", summary: "A relationship in which one entity relies on another.", canonicalPath: ["Reality", "Category", "Relationship", "Dependency"] },
-      communication: { id: "communication", label: "Communication", summary: "A relationship formed through the exchange of signals or meaning.", canonicalPath: ["Reality", "Category", "Relationship", "Communication"] },
-      cooperation: { id: "cooperation", label: "Cooperation", summary: "A relationship in which parties coordinate toward compatible outcomes.", canonicalPath: ["Reality", "Category", "Relationship", "Cooperation"] },
-      competition: { id: "competition", label: "Competition", summary: "A relationship in which parties pursue scarce or incompatible outcomes.", canonicalPath: ["Reality", "Category", "Relationship", "Competition"] },
-      "social-individuals": { id: "social-individuals", label: "Individuals", summary: "People acting as social agents with identities, roles, and choices.", canonicalPath: ["Reality", "Domain", "Social", "Individuals"] },
-      "social-relationships": { id: "social-relationships", label: "Relationships", summary: "Interpersonal connections through which trust, influence, and obligation form.", canonicalPath: ["Reality", "Domain", "Social", "Relationships"] },
-      groups: { id: "groups", label: "Groups", summary: "Small social collectives shaped by membership, norms, and interaction.", canonicalPath: ["Reality", "Domain", "Social", "Groups"] },
-      organisations: { id: "organisations", label: "Organisations", summary: "Coordinated social systems with roles, goals, and formal boundaries.", canonicalPath: ["Reality", "Domain", "Social", "Organisations"] },
-      institutions: { id: "institutions", label: "Institutions", summary: "Durable rules and structures that organise collective behaviour.", canonicalPath: ["Reality", "Domain", "Social", "Institutions"] },
-      culture: { id: "culture", label: "Culture", summary: "Shared meanings, values, symbols, and practices transmitted across people.", canonicalPath: ["Reality", "Domain", "Social", "Culture"] },
-      "social-communication": { id: "social-communication", label: "Communication", summary: "The creation and exchange of meaning between social actors.", canonicalPath: ["Reality", "Domain", "Social", "Communication"] },
-      governance: { id: "governance", label: "Governance", summary: "The processes through which collective decisions, authority, and accountability are organised.", canonicalPath: ["Reality", "Domain", "Social", "Governance"] },
+      "ownership-arrangement": { id: "ownership-arrangement", label: "Ownership arrangement", summary: "A specified relationship that identifies a holder, an object, a bundle of rights, recognition, and conditions of transfer or control.", canonicalPath: ["Reality", "Category", "Relationship", "Ownership", "Ownership arrangement"] },
+      dependency: { id: "dependency", label: "Dependency", summary: "A relationship in which one entity relies on another.", canonicalPath: ["Reality", "Category", "Relationship", "Dependency"], children: ["supply-dependency"] },
+      "supply-dependency": { id: "supply-dependency", label: "Supply dependency", summary: "A reliance on a specific supplier, service, input, or capability whose disruption can affect an outcome.", canonicalPath: ["Reality", "Category", "Relationship", "Dependency", "Supply dependency"] },
+      communication: { id: "communication", label: "Communication", summary: "A relationship formed through the exchange of signals or meaning.", canonicalPath: ["Reality", "Category", "Relationship", "Communication"], children: ["communication-channel"] },
+      "communication-channel": { id: "communication-channel", label: "Communication channel", summary: "A defined medium and set of rules through which participants exchange signals, messages, or meaning.", canonicalPath: ["Reality", "Category", "Relationship", "Communication", "Communication channel"] },
+      cooperation: { id: "cooperation", label: "Cooperation", summary: "A relationship in which parties coordinate toward compatible outcomes.", canonicalPath: ["Reality", "Category", "Relationship", "Cooperation"], children: ["working-agreement"] },
+      "working-agreement": { id: "working-agreement", label: "Working agreement", summary: "An explicit shared understanding of roles, commitments, coordination practices, and expected behaviour among cooperating parties.", canonicalPath: ["Reality", "Category", "Relationship", "Cooperation", "Working agreement"] },
+      competition: { id: "competition", label: "Competition", summary: "A relationship in which parties pursue scarce or incompatible outcomes.", canonicalPath: ["Reality", "Category", "Relationship", "Competition"], children: ["competitive-market"] },
+      "competitive-market": { id: "competitive-market", label: "Competitive market", summary: "A setting in which multiple parties seek customers, resources, or outcomes under shared constraints and comparison.", canonicalPath: ["Reality", "Category", "Relationship", "Competition", "Competitive market"] },
+      "social-individuals": { id: "social-individuals", label: "Individuals", summary: "People acting as social agents with identities, roles, and choices.", canonicalPath: ["Reality", "Domain", "Social", "Individuals"], children: ["social-agent"] },
+      "social-agent": { id: "social-agent", label: "Social agent", summary: "An individual whose actions, identity, roles, and relationships are interpreted within a social context.", canonicalPath: ["Reality", "Domain", "Social", "Individuals", "Social agent"] },
+      "social-relationships": { id: "social-relationships", label: "Relationships", summary: "Interpersonal connections through which trust, influence, and obligation form.", canonicalPath: ["Reality", "Domain", "Social", "Relationships"], children: ["social-tie"] },
+      "social-tie": { id: "social-tie", label: "Social tie", summary: "A recognised connection between people that carries some combination of trust, influence, obligation, affinity, or exchange.", canonicalPath: ["Reality", "Domain", "Social", "Relationships", "Social tie"] },
+      groups: { id: "groups", label: "Groups", summary: "Small social collectives shaped by membership, norms, and interaction.", canonicalPath: ["Reality", "Domain", "Social", "Groups"], children: ["social-group"] },
+      "social-group": { id: "social-group", label: "Social group", summary: "A bounded set of people whose membership, interactions, identity, or purpose shape shared behaviour.", canonicalPath: ["Reality", "Domain", "Social", "Groups", "Social group"] },
+      organisations: { id: "organisations", label: "Organisations", summary: "Coordinated social systems with roles, goals, and formal boundaries.", canonicalPath: ["Reality", "Domain", "Social", "Organisations"], children: ["operating-organisation"] },
+      "operating-organisation": { id: "operating-organisation", label: "Operating organisation", summary: "A coordinated organisation examined through its people, structures, decisions, processes, resources, and goals.", canonicalPath: ["Reality", "Domain", "Social", "Organisations", "Operating organisation"] },
+      institutions: { id: "institutions", label: "Institutions", summary: "Durable rules and structures that organise collective behaviour.", canonicalPath: ["Reality", "Domain", "Social", "Institutions"], children: ["social-institution"] },
+      "social-institution": { id: "social-institution", label: "Social institution", summary: "A durable arrangement of roles, rules, norms, and authority that shapes collective behaviour over time.", canonicalPath: ["Reality", "Domain", "Social", "Institutions", "Social institution"] },
+      culture: { id: "culture", label: "Culture", summary: "Shared meanings, values, symbols, and practices transmitted across people.", canonicalPath: ["Reality", "Domain", "Social", "Culture"], children: ["cultural-practice-social"] },
+      "cultural-practice-social": { id: "cultural-practice-social", label: "Cultural practice", summary: "A repeated way of acting, communicating, or valuing that carries shared meaning in a social group.", canonicalPath: ["Reality", "Domain", "Social", "Culture", "Cultural practice"] },
+      "social-communication": { id: "social-communication", label: "Communication", summary: "The creation and exchange of meaning between social actors.", canonicalPath: ["Reality", "Domain", "Social", "Communication"], children: ["communication-event"] },
+      "communication-event": { id: "communication-event", label: "Communication event", summary: "A bounded exchange in which social actors create, interpret, or transmit meaning through a chosen channel.", canonicalPath: ["Reality", "Domain", "Social", "Communication", "Communication event"] },
+      governance: { id: "governance", label: "Governance", summary: "The processes through which collective decisions, authority, and accountability are organised.", canonicalPath: ["Reality", "Domain", "Social", "Governance"], children: ["governance-arrangement"] },
+      "governance-arrangement": { id: "governance-arrangement", label: "Governance arrangement", summary: "A defined structure of authority, decision rights, accountability, and feedback for collective action.", canonicalPath: ["Reality", "Domain", "Social", "Governance", "Governance arrangement"] },
       "amdahls-law": {
         id: "amdahls-law",
         label: "Amdahl's Law",
@@ -522,11 +887,12 @@
         canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Amdahl's Law"],
         anatomy: {
           "Problem": "Adding processors does not keep producing proportional performance improvements.",
+          "Statement": "For a fixed workload, the serial portion sets the upper limit on the speedup gained from parallel execution.",
           "First principles": "A finite workload contains work that can run in parallel and work that must remain serial. Parallel resources cannot accelerate serial work.",
           "Variables": "Parallel fraction, serial fraction, processor count, and total speedup.",
           "Mental model": "Widening most lanes on a road cannot remove the delay caused by one remaining single-lane section.",
           "Mechanism": "Parallel work becomes faster as processors are added, while serial work remains fixed and therefore becomes the dominant share of elapsed time.",
-          "Prediction": "Performance gains flatten as processor count rises, and the serial fraction determines the ceiling.",
+          "Predictions": "Performance gains flatten as processor count rises, and the serial fraction determines the ceiling.",
           "Scope": "Fixed-size workloads whose parallel and serial portions can be estimated.",
           "Assumptions": "The workload is fixed, the parallel fraction remains stable, and coordination overhead is negligible.",
           "Evidence or derivation": "The relationship follows mathematically by adding the unchanged serial time to the parallel time divided across processors.",
@@ -536,13 +902,139 @@
           "Related laws": "Gustafson's Law offers a complementary view by allowing the workload to scale with available processors.",
         },
       },
-      "brooks-law": { id: "brooks-law", label: "Brooks's Law", kind: "law-instance", summary: "Adding people to a late software project can make it later because coordination and onboarding add work.", canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Brooks's Law"] },
-      "conways-law": { id: "conways-law", label: "Conway's Law", kind: "law-instance", summary: "The structures organisations design tend to mirror their communication structures.", canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Conway's Law"] },
-      "goodharts-law": { id: "goodharts-law", label: "Goodhart's Law", kind: "law-instance", summary: "When a measure becomes a target, people adapt to the target and the measure often loses its value as evidence.", canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Goodhart's Law"] },
-      "greshams-law": { id: "greshams-law", label: "Gresham's Law", kind: "law-instance", summary: "When two forms of money are accepted at the same nominal value, the overvalued form tends to circulate while the undervalued form is retained or exported.", canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Gresham's Law"] },
-      "littles-law": { id: "littles-law", label: "Little's Law", kind: "law-instance", summary: "In a stable system, average items in the system equal average arrival rate multiplied by average time in the system.", canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Little's Law"] },
-      "metcalfes-law": { id: "metcalfes-law", label: "Metcalfe's Law", kind: "law-instance", summary: "The potential value of a compatible communication network grows roughly with the square of its connected users under simplifying assumptions.", canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Metcalfe's Law"] },
-      "parkinsons-law": { id: "parkinsons-law", label: "Parkinson's Law", kind: "law-instance", summary: "Work tends to expand to fill the time made available for its completion.", canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Parkinson's Law"] },
+      "brooks-law": {
+        id: "brooks-law",
+        label: "Brooks's Law",
+        kind: "law-instance",
+        summary: "Adding people to a late software project can make it later because coordination and onboarding add work.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Brooks's Law"],
+        anatomy: {
+          "Statement": "Adding people to a late software project can make it later because coordination and onboarding add work.",
+          "First principles": "Work must be divided, communicated, integrated, and checked. Adding people increases coordination paths and temporarily consumes experienced-team capacity.",
+          "Variables": "Team size, remaining schedule, task independence, onboarding load, integration work, and experienced-team availability.",
+          "Mechanism": "New contributors need context, access, reviews, and coordination. Their arrival creates communication and integration work before they can reduce delivery work.",
+          "Predictions": "Late staffing produces an initial productivity dip; highly coupled work suffers more; independent, well-specified work can absorb help more safely.",
+          "Assumptions": "The project is already late, work has meaningful interdependence, and new people require onboarding from the existing team.",
+          "Limitations": "This is a management heuristic, not a fixed equation. Additional capacity can help when work is genuinely separable and onboarding is low.",
+          "Applications": "Staffing decisions, delivery recovery plans, dependency reduction, onboarding design, and explaining why parallel hiring is not an automatic schedule fix.",
+          "Visual demonstration": "Increase team size while showing communication links, onboarding demand, and the delayed point at which added capacity becomes productive.",
+          "Related laws": "Conway's Law explains the architectural effect of communication structure; Amdahl's Law explains why parallel capacity has ceilings.",
+        },
+      },
+      "conways-law": {
+        id: "conways-law",
+        label: "Conway's Law",
+        kind: "law-instance",
+        summary: "The structures organisations design tend to mirror their communication structures.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Conway's Law"],
+        anatomy: {
+          "Statement": "The structures organisations design tend to mirror their communication structures.",
+          "First principles": "System interfaces require coordination. Organisational boundaries, incentives, language, and information flow shape which coordination is easy or costly.",
+          "Variables": "Team boundaries, communication paths, decision rights, system interfaces, ownership, and deployment independence.",
+          "Mechanism": "Teams optimise around their available communication paths. Those paths influence the interfaces and coupling they create between technical components.",
+          "Predictions": "Tightly coupled teams tend to produce tightly coupled systems; changing team topology changes pressure on architectural boundaries.",
+          "Assumptions": "The organisation has enough influence over design and delivery for communication patterns to shape technical decisions.",
+          "Limitations": "It describes a tendency, not destiny. Deliberate architecture, shared platforms, and cross-team practices can counter or redirect the effect.",
+          "Applications": "Team-topology design, service ownership, architecture reviews, platform boundaries, and organisational change planning.",
+          "Visual demonstration": "Rearrange communication links between teams and observe the corresponding component interfaces and coupling on a system map.",
+          "Related laws": "Brooks's Law concerns coordination cost; Goodhart's Law helps examine whether team measures distort desired architecture.",
+        },
+      },
+      "goodharts-law": {
+        id: "goodharts-law",
+        label: "Goodhart's Law",
+        kind: "law-instance",
+        summary: "When a measure becomes a target, people adapt to the target and the measure often loses its value as evidence.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Goodhart's Law"],
+        anatomy: {
+          "Statement": "When a measure becomes a target, people adapt to the target and the measure often loses its value as evidence.",
+          "First principles": "Measures are proxies for outcomes. Incentives change behaviour, and actors can optimise the proxy without improving the underlying outcome.",
+          "Variables": "True outcome, proxy metric, target threshold, incentive strength, actor discretion, and measurement coverage.",
+          "Mechanism": "Once rewards or penalties depend on a measure, attention shifts toward improving the measured signal, including through substitution, gaming, or narrowing effort.",
+          "Predictions": "The metric improves faster than the underlying outcome; unintended behaviours emerge; performance degrades where the proxy has blind spots.",
+          "Assumptions": "Actors can influence the measure and face a meaningful incentive to do so; the measure is incomplete relative to the true objective.",
+          "Limitations": "Targets are not automatically harmful. Well-designed, multi-signal measures with qualitative review and outcome checks can remain useful.",
+          "Applications": "KPI design, service-level objectives, incentive design, performance management, risk controls, and dashboard review.",
+          "Visual demonstration": "Let a user optimise one dashboard metric while hidden outcome measures reveal where the proxy and reality diverge.",
+          "Related laws": "Parkinson's Law concerns time allocation; Conway's Law shows how organisational incentives and communication can shape systems.",
+        },
+      },
+      "greshams-law": {
+        id: "greshams-law",
+        label: "Gresham's Law",
+        kind: "law-instance",
+        summary: "When two forms of money are accepted at the same nominal value, the overvalued form tends to circulate while the undervalued form is retained or exported.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Gresham's Law"],
+        anatomy: {
+          "Statement": "When two forms of money are accepted at the same nominal value, the overvalued form tends to circulate while the undervalued form is retained or exported.",
+          "First principles": "People respond to relative value and exchange rules. A fixed official rate can differ from the market value of the underlying money.",
+          "Variables": "Official exchange rule, market valuation, intrinsic or alternative value, legal-tender acceptance, and ability to retain or export money.",
+          "Mechanism": "When two monies settle the same debt at an imposed rate, holders prefer to spend the one worth less elsewhere and keep the one worth more.",
+          "Predictions": "The undervalued money becomes scarce in circulation while the overvalued money is more commonly used for payments.",
+          "Assumptions": "The monies are accepted at a fixed nominal parity despite different market values, and people can choose which form to spend or retain.",
+          "Limitations": "It is context-dependent and does not describe every currency system, payment method, or market with flexible exchange rates.",
+          "Applications": "Monetary history, price controls, exchange-rule analysis, token or voucher design, and incentive reasoning under imposed parity.",
+          "Visual demonstration": "Set an official parity different from market values and observe which currency rational actors spend versus retain.",
+          "Related laws": "Goodhart's Law helps analyse adaptation to rules and incentives; Metcalfe's Law concerns network value rather than monetary value.",
+        },
+      },
+      "littles-law": {
+        id: "littles-law",
+        label: "Little's Law",
+        kind: "law-instance",
+        summary: "In a stable system, average items in the system equal average arrival rate multiplied by average time in the system.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Little's Law"],
+        anatomy: {
+          "Statement": "In a stable system, average items in the system equal average arrival rate multiplied by average time in the system: L = λW.",
+          "First principles": "Items enter, spend time within, and leave a system. Over a sufficiently stable period, the average inventory reflects the flow rate multiplied by the average time in flow.",
+          "Variables": "Average number of items in the system (L), average arrival rate (λ), and average time in the system (W).",
+          "Mechanism": "The relationship follows from conservation of flow across a stable observation period: more arrivals or longer time in system produce more average work in progress.",
+          "Predictions": "For a stable rate, increasing time in system raises average queue or work in progress; reducing work in progress can reduce elapsed time when flow is controlled.",
+          "Assumptions": "The averages are taken over a stable enough period, the system has defined entry and exit boundaries, and the same items are counted consistently.",
+          "Limitations": "It does not identify the cause of delay, guarantee stability, or replace queueing models for variability, prioritisation, batching, and capacity decisions.",
+          "Applications": "Service operations, delivery flow, call centres, payment processing, message queues, hospital flow, and capacity dashboards.",
+          "Visual demonstration": "Change arrival rate or time in system and watch the average number of items in the queue update according to L = λW.",
+          "Related laws": "Amdahl's Law addresses parallel speedup ceilings; Brooks's Law addresses coordination effects in project flow.",
+        },
+      },
+      "metcalfes-law": {
+        id: "metcalfes-law",
+        label: "Metcalfe's Law",
+        kind: "law-instance",
+        summary: "The potential value of a compatible communication network grows roughly with the square of its connected users under simplifying assumptions.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Metcalfe's Law"],
+        anatomy: {
+          "Statement": "The potential value of a compatible communication network grows roughly with the square of its connected users under simplifying assumptions.",
+          "First principles": "Adding a compatible participant can create possible new connections with existing participants. Pairwise connection opportunities grow faster than node count.",
+          "Variables": "Number of compatible users, possible connections, connection relevance, interoperability, participation, and network costs.",
+          "Mechanism": "With n participants, the number of possible pairwise links grows approximately as n(n − 1)/2, increasing the potential for exchange and coordination.",
+          "Predictions": "Early network growth may feel modest; later compatible growth can create disproportionately more potential interaction and utility.",
+          "Assumptions": "Participants are mutually compatible, many possible connections are valuable, and connection quality does not collapse as the network grows.",
+          "Limitations": "Potential connections are not realised value. Real networks have clustering, spam, congestion, unequal participation, quality differences, and governance costs.",
+          "Applications": "Platform strategy, interoperability choices, communication networks, ecosystem design, and assessing network-effect claims.",
+          "Visual demonstration": "Add users to a network and compare linear user growth with the faster growth in possible pairwise connections.",
+          "Related laws": "Conway's Law concerns communication structure inside organisations; Goodhart's Law cautions against using raw network size as the only success metric.",
+        },
+      },
+      "parkinsons-law": {
+        id: "parkinsons-law",
+        label: "Parkinson's Law",
+        kind: "law-instance",
+        summary: "Work tends to expand to fill the time made available for its completion.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Parkinson's Law"],
+        anatomy: {
+          "Statement": "Work tends to expand to fill the time made available for its completion.",
+          "First principles": "When scope, urgency, and completion criteria are loose, people can add refinement, delay decisions, revisit work, or create coordination activity within the available time.",
+          "Variables": "Time available, scope clarity, decision latency, incentives, review cycles, available capacity, and definition of done.",
+          "Mechanism": "A generous or undefined deadline changes behaviour: work is elaborated, deferred, revisited, or coordinated until the time boundary creates pressure to finish.",
+          "Predictions": "Comparable discretionary work takes longer under looser time boundaries; clear constraints and completion criteria reduce unnecessary expansion.",
+          "Assumptions": "The work has discretionary scope or sequencing, the time boundary is visible, and quality or risk constraints do not independently determine duration.",
+          "Limitations": "It is a heuristic, not a justification for unrealistic deadlines. Complex, safety-critical, or externally constrained work may require more time regardless of available slack.",
+          "Applications": "Planning, timeboxing, meeting design, review cadence, personal productivity, and distinguishing useful quality work from avoidable delay.",
+          "Visual demonstration": "Hold task complexity constant while varying the deadline, then show added revisions, waiting, and decision delay fill the available window.",
+          "Related laws": "Goodhart's Law cautions against turning time targets into the only measure; Brooks's Law explains why adding people is not a simple deadline remedy.",
+        },
+      },
     };
 
     const canonicalDimensions = ["Domain", "Category", "Time", "Scale", "Perspective"];
@@ -562,30 +1054,36 @@
 
     const nodesLayer = root.querySelector("[data-orbit-nodes]");
     const connectionsLayer = root.querySelector("[data-orbit-connections]");
-    const mapStage = root.querySelector("[data-orbit-nodes]").parentElement;
-    const detailPanel = root.querySelector(".orbit-detail");
     const selectedLabel = root.querySelector("[data-selected-label]");
     const selectedRole = root.querySelector("[data-selected-role]");
     const selectedSummary = root.querySelector("[data-selected-summary]");
     const actionGroup = root.querySelector("[data-orbit-actions]");
-    const understandButton = root.querySelector("[data-understand-action]");
     const exploreButton = root.querySelector("[data-explore-action]");
     const backButton = root.querySelector("[data-orbit-back]");
     const pathElement = root.querySelector("[data-orbit-path]");
     const understandView = root.querySelector("[data-understand-view]");
+    const understandEyebrow = root.querySelector("[data-understand-eyebrow]");
     const understandTitle = root.querySelector("[data-understand-title]");
     const understandStatement = root.querySelector("[data-understand-statement]");
+    const understandLeadLabel = root.querySelector("[data-understand-lead-label]");
+    const understandLead = root.querySelector("[data-understand-lead]");
+    const understandSupportLabel = root.querySelector("[data-understand-support-label]");
+    const understandSupport = root.querySelector("[data-understand-support]");
+    const understandFoundations = root.querySelector("[data-understand-foundations]");
+    const understandContext = root.querySelector("[data-understand-context]");
+    const understandMore = root.querySelector("[data-understand-more]");
+    const understandMoreSummary = root.querySelector("[data-understand-more-summary]");
     const understandFields = root.querySelector("[data-understand-fields]");
     const svgNamespace = "http://www.w3.org/2000/svg";
-    const maximumOntologyLevel = 5;
+    const terminalOntologyLevel = 4;
     const history = ["reality"];
     let selectedId = "reality";
-    let mode = "map";
 
     const currentId = () => history[history.length - 1];
     const currentNode = () => ontology[currentId()];
+    const ontologyLevel = (node) => node.canonicalPath.length - 1;
     const nodeColor = (node) => dimensionColors[node.canonicalPath[1]] ?? "var(--viz-series-1)";
-    const canExploreNode = (node) => Boolean(node.children?.length) && node.canonicalPath.length < maximumOntologyLevel;
+    const canExploreNode = (node) => node.id !== "reality";
 
     const validateOntology = () => {
       Object.entries(ontology).forEach(([id, node]) => {
@@ -593,7 +1091,7 @@
         if (!node.label?.trim()) throw new Error(`Missing concept label: ${id}`);
         if (!node.summary?.trim()) throw new Error(`Missing concept definition: ${node.label}`);
         if (!Array.isArray(node.canonicalPath) || node.canonicalPath.length === 0) throw new Error(`Missing canonical path: ${node.label}`);
-        if (node.canonicalPath.length > maximumOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
+        if (ontologyLevel(node) > terminalOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
         const children = node.children ?? [];
         if (new Set(children).size !== children.length) throw new Error(`Duplicate child reference: ${node.label}`);
         children.forEach((childId) => {
@@ -632,7 +1130,12 @@
       if (path[1] === "Domain" && path.length === 3) return "Domain";
       if (path[1] === "Domain") return "Domain concept";
       if (path[1] === "Category" && path.length === 3) return "Category type";
+      if (path[2] === "Entity" && path.length === 4) return "Entity type";
+      if (path[2] === "Entity" && path.length === 5) return "Entity instance";
+      if (path.includes("Knowledge") && path.length === 5) return "Named knowledge artifact";
       if (path.includes("Knowledge")) return "Knowledge type";
+      if (path[2] === "Environment" && path.length === 4) return "Environment type";
+      if (path[2] === "Environment" && path.length === 5) return "Environmental setting";
       if (path[2] === "Relationship") return "Relationship type";
       if (path[2] === "Process") return "Process type";
       if (path[2] === "Resource") return "Resource type";
@@ -654,6 +1157,11 @@
       if (path.length === 3 && path[1] === "Scale") return "LEVEL_OF";
       if (path.length === 3 && path[1] === "Perspective") return "LENS_OF";
       if (path.length === 4 && path[1] === "Domain") return "CONCEPT_IN";
+      if (path[2] === "Entity" && path.length === 4) return "ENTITY_TYPE_OF";
+      if (path[2] === "Entity" && path.length === 5) return "ENTITY_INSTANCE_OF";
+      if (path.includes("Knowledge") && path.length === 5) return "KNOWLEDGE_INSTANCE_OF";
+      if (path[2] === "Environment" && path.length === 4) return "ENVIRONMENT_TYPE_OF";
+      if (path[2] === "Environment" && path.length === 5) return "SETTING_OF";
       if (path.length === 4 && path[1] === "Category") return "SUBTYPE_OF";
       return "CHILD_OF";
     };
@@ -668,7 +1176,8 @@
       relationshipToParent: relationshipForNode(node),
       explanation: node.summary,
       immediateChildren: (node.children ?? []).map((childId) => ontology[childId].label),
-      terminalInstance: node.kind === "law-instance",
+      terminalConcept: ontologyLevel(node) === terminalOntologyLevel && !(node.children ?? []).length,
+      namedLaw: node.kind === "law-instance",
     });
 
     const renderPath = () => {
@@ -777,6 +1286,34 @@
         };
       }
 
+      if (role === "Environment type") {
+        return {
+          "Purpose": `Use ${node.label} to distinguish one class of surrounding conditions from the other environmental contexts that may affect a subject.`,
+          "Governing question": `Which conditions make ${node.label.toLowerCase()} the relevant environment for the subject being examined?`,
+          "First principles": "Environmental types organise context by the conditions that exert influence; a real situation can involve several environment types at once.",
+          "Mental model": "One layer of the surrounding context: it can be separated for analysis while remaining connected to other layers.",
+          "Conditions": `Look for the actors, boundaries, resources, rules, infrastructure, risks, and feedback specific to the ${node.label.toLowerCase()}.`,
+          "Scope": baseScope,
+          "How to use it": "Use this type to focus the analysis, then connect it to the other environments that also shape the outcome.",
+          "Common confusion": "An environment type is an analytical category, not a claim that the other surrounding conditions are irrelevant.",
+        };
+      }
+
+      if (role === "Environmental setting") {
+        return {
+          "Purpose": `Use ${node.label} as a teachable environmental setting for analysing how conditions shape behaviour and outcomes.`,
+          "Governing question": `What conditions inside and around this ${node.label.toLowerCase()} influence the focal subject, and what feedback might change those conditions?`,
+          "First principles": "Outcomes emerge from interactions among entities, conditions, constraints, resources, rules, and time; no single condition explains the whole result.",
+          "Mental model": "A bounded setting with actors inside it and conditions around them that shape the available moves.",
+          "Conditions and variables": "Identify boundaries, participants, resources, information, norms or rules, incentives, infrastructure, risk, and the relevant time horizon.",
+          "Mechanism": "Conditions change outcomes by enabling, constraining, informing, rewarding, exposing, or coordinating the entities and processes within the setting.",
+          "Feedback": "Actions inside the setting can reinforce, weaken, or redesign the conditions that shaped them.",
+          "Scope": baseScope,
+          "How to use it": "Define the focal subject and boundary, map the conditions and relationships, then test which changes would alter the expected outcome.",
+          "Common confusion": "A setting is not a passive backdrop. It is part of the system of causes, constraints, and feedback.",
+        };
+      }
+
       if (role === "Knowledge type") {
         return {
           "Purpose": `Use ${node.label} to identify the form and reasoning job of a knowledge artifact.`,
@@ -786,6 +1323,30 @@
           "Scope": baseScope,
           "How to use it": "State the claim, scope, assumptions, evidence, limitations, and intended application before relying on it.",
           "Common confusion": "Laws, principles, razors, frameworks, models, theorems, and patterns are related but not interchangeable.",
+        };
+      }
+
+      if (role === "Named knowledge artifact") {
+        return {
+          "Purpose": `Use ${node.label} as a named knowledge artifact whose claim, scope, and practical role can be examined directly.`,
+          "Governing question": `What does ${node.label} claim or organise, and under which conditions is it useful?`,
+          "First principles": "A named artifact is not automatically universal or correct. Its value depends on its definitions, assumptions, evidence or rationale, scope, and limitations.",
+          "Mental model": "A labelled instrument: it can be useful for a particular reasoning job, but it must be selected and applied with care.",
+          "Scope": baseScope,
+          "How to use it": "State the problem, identify the artifact's intended role, test its assumptions against the situation, and pair it with evidence and relevant constraints.",
+          "Common confusion": "Knowing an artifact's name is not the same as understanding its mechanism, scope, or limitations.",
+        };
+      }
+
+      if (role === "Entity type" || role === "Entity instance") {
+        return {
+          "Purpose": `Use ${node.label} to identify the actor or thing whose properties, actions, and relationships are relevant to the question.`,
+          "Governing question": `What makes ${node.label.toLowerCase()} a distinct entity for this analysis, and what can it affect or be affected by?`,
+          "First principles": "An entity is defined by a boundary, identity, properties, and relationships. The useful boundary depends on the purpose and scale of the analysis.",
+          "Mental model": "A named participant in a system: it has a boundary, state, capabilities, and connections to other participants.",
+          "Scope": baseScope,
+          "How to use it": "Define identity and boundary, list relevant properties and capabilities, then map the relationships, constraints, and time period that make the entity significant.",
+          "Common confusion": "An entity is not necessarily a physical object; a person, organisation, software service, account, or decision-making agent can all be treated as entities.",
         };
       }
 
@@ -884,20 +1445,71 @@
       };
     };
 
+    const createAnatomyField = ([label, value], className = "") => {
+      const field = document.createElement("div");
+      field.className = className;
+      const term = document.createElement("dt");
+      term.className = "text-small";
+      term.textContent = label;
+      const description = document.createElement("dd");
+      description.textContent = value;
+      field.append(term, description);
+      return field;
+    };
+
     const renderUnderstand = (node) => {
+      const role = roleForNode(node);
+      const entries = Object.entries(buildConceptAnatomy(node));
+      const usedLabels = new Set();
+      const take = (labels) => {
+        const entry = labels
+          .map((label) => entries.find(([entryLabel]) => entryLabel === label && !usedLabels.has(entryLabel)))
+          .find(Boolean);
+        if (entry) usedLabels.add(entry[0]);
+        return entry;
+      };
+      const takeAny = () => {
+        const entry = entries.find(([label]) => !usedLabels.has(label));
+        if (entry) usedLabels.add(entry[0]);
+        return entry;
+      };
+
+      const lead = take(["Statement", "Governing question", "Problem", "Predictions", "Prediction", "First principles"]) ?? takeAny();
+      const support = take(["Problem", "Purpose", "Mechanism", "First principles", "Mental model", "Predictions", "Prediction"]) ?? takeAny();
+      const foundations = [
+        take(["First principles", "Variables", "Mechanism", "Predictions", "Prediction"]),
+        take(["Mental model", "Predictions", "Prediction", "Variables", "Assumptions"]),
+      ].filter(Boolean);
+      const contextEntries = [
+        take(["Scope"]),
+        take(["How to use it", "Applications", "Application"]),
+        take(["Common confusion", "Limitations", "Related laws"]),
+      ].filter(Boolean);
+      while (contextEntries.length < 3) {
+        const fallback = takeAny();
+        if (!fallback) break;
+        contextEntries.push(fallback);
+      }
+      const remaining = entries.filter(([label]) => !usedLabels.has(label));
+
+      understandView.dataset.selectedNode = node.id;
+      understandEyebrow.textContent = `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
-      understandFields.replaceChildren();
-      const anatomy = buildConceptAnatomy(node);
-      Object.entries(anatomy).forEach(([label, value]) => {
-        const field = document.createElement("div");
-        const term = document.createElement("dt");
-        term.textContent = label;
-        const description = document.createElement("dd");
-        description.textContent = value;
-        field.append(term, description);
-        understandFields.appendChild(field);
-      });
+      understandLeadLabel.textContent = lead[0];
+      understandLead.textContent = lead[1];
+      understandSupportLabel.textContent = support[0];
+      understandSupport.textContent = support[1];
+
+      understandFoundations.replaceChildren(...foundations.map((entry) => createAnatomyField(entry)));
+      understandFoundations.hidden = foundations.length === 0;
+
+      understandContext.replaceChildren(...contextEntries.map((entry) => createAnatomyField(entry, "card understand-context-card")));
+      understandContext.setAttribute("aria-label", `${node.label} context`);
+
+      understandFields.replaceChildren(...remaining.map((entry) => createAnatomyField(entry)));
+      understandMore.hidden = remaining.length === 0;
+      understandMoreSummary.textContent = remaining.length === 1 ? "1 supporting field" : `${remaining.length} supporting fields`;
     };
 
     const setSelectedNode = (nodeId) => {
@@ -915,24 +1527,23 @@
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
       selectedSummary.textContent = context.explanation;
+      renderUnderstand(node);
+      understandView.scrollTo({ top: 0, behavior: "auto" });
 
       const canExplore = canExploreNode(node);
       const isCurrent = nodeId === currentId();
-      actionGroup.hidden = false;
-      understandButton.hidden = false;
-      understandButton.classList.toggle("btn-primary", !canExplore || isCurrent);
-      understandButton.setAttribute("aria-label", `Understand ${node.label}`);
-      exploreButton.hidden = !canExplore || isCurrent;
-      exploreButton.setAttribute("aria-label", `Explore ${node.label}`);
+      actionGroup.hidden = !canExplore;
+      exploreButton.hidden = !canExplore;
+      exploreButton.disabled = canExplore && isCurrent;
+      exploreButton.dataset.exploring = String(canExplore && isCurrent);
+      exploreButton.textContent = isCurrent ? "Exploring" : "Explore selected";
+      exploreButton.setAttribute("aria-pressed", String(canExplore && isCurrent));
+      exploreButton.setAttribute("aria-label", isCurrent ? `Currently exploring ${node.label}` : `Explore ${node.label}`);
     };
 
     const renderOrbit = () => {
-      mode = "map";
       const parent = currentNode();
       const positions = positionChildren(parent);
-      mapStage.hidden = false;
-      detailPanel.hidden = false;
-      understandView.hidden = true;
       root.style.setProperty("--map-color", nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
@@ -1002,31 +1613,15 @@
       renderOrbit();
     }
 
-    function openUnderstand(nodeId = selectedId) {
-      const node = ontology[nodeId];
-      if (!node) return;
-      history.push(nodeId);
-      selectedId = nodeId;
-      mode = "understand";
-      renderPath();
-      mapStage.hidden = true;
-      detailPanel.hidden = true;
-      understandView.hidden = false;
-      actionGroup.hidden = true;
-      renderUnderstand(node);
-    }
-
     exploreButton.addEventListener("click", () => exploreSelectedNode(selectedId));
-    understandButton.addEventListener("click", () => openUnderstand(selectedId));
 
     backButton.addEventListener("click", () => {
       if (history.length > 1) history.pop();
-      if (mode === "understand") mode = "map";
       renderOrbit();
     });
 
     root.dataset.canonicalDimensions = canonicalDimensions.join(",");
-    root.dataset.maximumOntologyLevel = String(maximumOntologyLevel);
+    root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
     validateOntology();
     renderOrbit();
   })();
