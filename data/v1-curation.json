@@ -1,0 +1,470 @@
+{
+  "version": "1.0.0",
+  "status": "editorially-curated",
+  "reviewedOn": "2026-07-22",
+  "admissionCriteria": [
+    "Fits the stated parent scope.",
+    "Uses a distinct, non-ambiguous learner-facing label.",
+    "Has a documented definition and Concept Anatomy.",
+    "Represents an intentional teaching continuation rather than a filler choice.",
+    "Ends at an approved level-4 teaching concept."
+  ],
+  "branches": [
+    {
+      "id": "knowledge",
+      "scope": "What is known, claimed, represented, or inferred.",
+      "decision": "Selects the core artifact vocabulary and a small set of named law instances; it does not claim exhaustive coverage.",
+      "approvedPaths": [
+        [
+          "law",
+          "amdahls-law"
+        ],
+        [
+          "law",
+          "brooks-law"
+        ],
+        [
+          "law",
+          "conways-law"
+        ],
+        [
+          "law",
+          "goodharts-law"
+        ],
+        [
+          "law",
+          "greshams-law"
+        ],
+        [
+          "law",
+          "littles-law"
+        ],
+        [
+          "law",
+          "metcalfes-law"
+        ],
+        [
+          "law",
+          "parkinsons-law"
+        ],
+        [
+          "principle",
+          "least-privilege"
+        ],
+        [
+          "razor",
+          "occams-razor"
+        ],
+        [
+          "framework",
+          "ooda-loop"
+        ],
+        [
+          "model",
+          "queueing-model"
+        ],
+        [
+          "theorem",
+          "pythagorean-theorem"
+        ],
+        [
+          "pattern",
+          "circuit-breaker"
+        ]
+      ]
+    },
+    {
+      "id": "physical",
+      "scope": "Matter, energy, space, and the forces that govern physical systems.",
+      "decision": "Uses material entities as the first physical teaching focus; energy, space, force, and motion remain out of V1 scope until curated.",
+      "approvedPaths": [
+        [
+          "matter",
+          "physical-object"
+        ]
+      ]
+    },
+    {
+      "id": "biological",
+      "scope": "Living systems, organisms, adaptation, and ecosystems.",
+      "decision": "Uses the organism as a self-maintaining living system; cellular, ecological, adaptive, and evolutionary branches remain out of V1 scope.",
+      "approvedPaths": [
+        [
+          "organism",
+          "living-system"
+        ]
+      ]
+    },
+    {
+      "id": "psychological",
+      "scope": "Mind, cognition, emotion, perception, and behaviour.",
+      "decision": "Uses cognition and decision-making as the initial psychological teaching path; it does not claim to cover emotion, perception, or behaviour.",
+      "approvedPaths": [
+        [
+          "cognition",
+          "decision-process"
+        ]
+      ]
+    },
+    {
+      "id": "social",
+      "scope": "People, collective behaviour, institutions, and shared meaning.",
+      "decision": "Covers the eight currently curated social concepts required to introduce actors, ties, groups, institutions, culture, communication, and governance.",
+      "approvedPaths": [
+        [
+          "social-individuals",
+          "social-agent"
+        ],
+        [
+          "social-relationships",
+          "social-tie"
+        ],
+        [
+          "groups",
+          "social-group"
+        ],
+        [
+          "organisations",
+          "operating-organisation"
+        ],
+        [
+          "institutions",
+          "social-institution"
+        ],
+        [
+          "culture",
+          "cultural-practice-social"
+        ],
+        [
+          "social-communication",
+          "communication-event"
+        ],
+        [
+          "governance",
+          "governance-arrangement"
+        ]
+      ]
+    },
+    {
+      "id": "economic",
+      "scope": "Production, allocation, exchange, incentives, and value.",
+      "decision": "Uses value and valuation as the economic starting path; exchange, markets, incentives, and allocation require their own future curation.",
+      "approvedPaths": [
+        [
+          "value",
+          "valuation"
+        ]
+      ]
+    },
+    {
+      "id": "informational",
+      "scope": "Representation, communication, computation, and the reduction of uncertainty.",
+      "decision": "Uses data and data records as the informational starting path; signals, messages, computation, and knowledge representation remain future branches.",
+      "approvedPaths": [
+        [
+          "data",
+          "data-record"
+        ]
+      ]
+    },
+    {
+      "id": "mathematical",
+      "scope": "Quantity, structure, pattern, relation, and formal reasoning.",
+      "decision": "Uses quantities that can be measured as the mathematical starting path; structure, proof, and formal relations remain future branches.",
+      "approvedPaths": [
+        [
+          "quantity",
+          "measured-quantity"
+        ]
+      ]
+    },
+    {
+      "id": "entity",
+      "scope": "A distinct thing that can be identified and described; agents are a specialised entity.",
+      "decision": "Uses an agent making a decision as the V1 entity focus; object, organisation, system, and account types are not yet published.",
+      "approvedPaths": [
+        [
+          "agent",
+          "decision-maker"
+        ]
+      ]
+    },
+    {
+      "id": "relationship",
+      "scope": "A meaningful connection between two or more entities.",
+      "decision": "Covers five common relationship forms: ownership, dependency, communication, competition, and cooperation.",
+      "approvedPaths": [
+        [
+          "ownership",
+          "ownership-arrangement"
+        ],
+        [
+          "dependency",
+          "supply-dependency"
+        ],
+        [
+          "communication",
+          "communication-channel"
+        ],
+        [
+          "competition",
+          "competitive-market"
+        ],
+        [
+          "cooperation",
+          "working-agreement"
+        ]
+      ]
+    },
+    {
+      "id": "process",
+      "scope": "An ordered transformation or activity that changes state over time.",
+      "decision": "Covers five common process forms: change, transformation, exchange, learning, and production.",
+      "approvedPaths": [
+        [
+          "process-change",
+          "state-transition"
+        ],
+        [
+          "transformation",
+          "transformed-output"
+        ],
+        [
+          "exchange",
+          "transaction"
+        ],
+        [
+          "learning",
+          "learning-cycle"
+        ],
+        [
+          "production",
+          "production-run"
+        ]
+      ]
+    },
+    {
+      "id": "resource",
+      "scope": "An input, capacity, or asset available to enable activity.",
+      "decision": "Covers the current V1 resource set: time, energy, capital, information, attention, and compute.",
+      "approvedPaths": [
+        [
+          "resource-time",
+          "time-budget"
+        ],
+        [
+          "energy",
+          "energy-supply"
+        ],
+        [
+          "capital",
+          "capital-asset"
+        ],
+        [
+          "information",
+          "information-asset"
+        ],
+        [
+          "attention",
+          "attention-allocation"
+        ],
+        [
+          "compute",
+          "compute-capacity"
+        ]
+      ]
+    },
+    {
+      "id": "environment",
+      "scope": "The surrounding conditions, boundaries, and context within which entities operate and interact.",
+      "decision": "Covers the five selected environmental contexts: natural, built, social, digital, and institutional.",
+      "approvedPaths": [
+        [
+          "natural-environment",
+          "ecosystem"
+        ],
+        [
+          "built-environment",
+          "workplace"
+        ],
+        [
+          "social-environment",
+          "community-setting"
+        ],
+        [
+          "digital-environment",
+          "online-platform"
+        ],
+        [
+          "institutional-environment",
+          "regulatory-setting"
+        ]
+      ]
+    },
+    {
+      "id": "individual",
+      "scope": "A single person, organism, agent, or unit of analysis.",
+      "decision": "Uses a person acting as an individual as the V1 scale focus.",
+      "approvedPaths": [
+        [
+          "person",
+          "individual-actor"
+        ]
+      ]
+    },
+    {
+      "id": "group",
+      "scope": "A small collection whose members interact or share identity.",
+      "decision": "Uses a team and its interaction as the V1 group-scale focus.",
+      "approvedPaths": [
+        [
+          "team",
+          "team-interaction"
+        ]
+      ]
+    },
+    {
+      "id": "organisation",
+      "scope": "A coordinated body with roles, boundaries, and goals.",
+      "decision": "Uses the enterprise as the V1 organisational-scale focus.",
+      "approvedPaths": [
+        [
+          "enterprise",
+          "organisational-system"
+        ]
+      ]
+    },
+    {
+      "id": "society",
+      "scope": "A large population connected by institutions, culture, and systems.",
+      "decision": "Uses national society as the V1 societal-scale focus; it is an analysis lens rather than a universal definition of society.",
+      "approvedPaths": [
+        [
+          "nation",
+          "national-society"
+        ]
+      ]
+    },
+    {
+      "id": "global",
+      "scope": "The whole-world scale across regions, societies, and systems.",
+      "decision": "Uses planetary systems as the V1 global-scale focus.",
+      "approvedPaths": [
+        [
+          "planetary",
+          "global-system"
+        ]
+      ]
+    },
+    {
+      "id": "past",
+      "scope": "States and events that occurred before the present reference point.",
+      "decision": "Uses historical records and event records as the V1 path for reasoning about past states.",
+      "approvedPaths": [
+        [
+          "historical-record",
+          "event-record"
+        ]
+      ]
+    },
+    {
+      "id": "present",
+      "scope": "The current reference point from which change is observed.",
+      "decision": "Uses a current-state snapshot as the V1 path for reasoning about the present.",
+      "approvedPaths": [
+        [
+          "current-state",
+          "state-snapshot"
+        ]
+      ]
+    },
+    {
+      "id": "future",
+      "scope": "Possible or expected states after the present reference point.",
+      "decision": "Uses expectations and expected outcomes as the V1 path for reasoning about the future; mathematical expected value is deliberately excluded from this branch.",
+      "approvedPaths": [
+        [
+          "expectation",
+          "expected-outcome"
+        ]
+      ]
+    },
+    {
+      "id": "duration",
+      "scope": "The amount of time between a beginning and an end.",
+      "decision": "Uses time intervals and measured duration as the V1 path for reasoning about elapsed time.",
+      "approvedPaths": [
+        [
+          "time-interval",
+          "measured-duration"
+        ]
+      ]
+    },
+    {
+      "id": "sequence",
+      "scope": "The order in which events, states, or actions occur.",
+      "decision": "Uses event order and an ordered event sequence as the V1 path for reasoning about sequence.",
+      "approvedPaths": [
+        [
+          "event-order",
+          "ordered-event-sequence"
+        ]
+      ]
+    },
+    {
+      "id": "perspective-individual",
+      "scope": "Reality as interpreted from one person's situated experience and interests.",
+      "decision": "Uses lived personal experience as the V1 individual-perspective focus.",
+      "approvedPaths": [
+        [
+          "personal-experience",
+          "lived-experience"
+        ]
+      ]
+    },
+    {
+      "id": "perspective-scientific",
+      "scope": "Reality interpreted through systematic observation, evidence, and testable explanation.",
+      "decision": "Uses evidence and evidence assessment as the V1 scientific-perspective focus.",
+      "approvedPaths": [
+        [
+          "evidence",
+          "evidence-assessment"
+        ]
+      ]
+    },
+    {
+      "id": "perspective-economic",
+      "scope": "Reality interpreted through value, incentives, allocation, production, and exchange.",
+      "decision": "Uses incentives and incentive-guided choice as the V1 economic-perspective focus.",
+      "approvedPaths": [
+        [
+          "incentives",
+          "incentive-guided-choice"
+        ]
+      ]
+    },
+    {
+      "id": "perspective-ethical",
+      "scope": "Reality interpreted through questions of right action, responsibility, harm, and fairness.",
+      "decision": "Uses moral duty and ethical decision-making as the V1 ethical-perspective focus.",
+      "approvedPaths": [
+        [
+          "moral-duty",
+          "ethical-decision"
+        ]
+      ]
+    },
+    {
+      "id": "perspective-cultural",
+      "scope": "Reality interpreted through shared meanings, values, practices, and inherited context.",
+      "decision": "Uses shared meaning and cultural practice as the V1 cultural-perspective focus.",
+      "approvedPaths": [
+        [
+          "shared-meaning",
+          "cultural-practice"
+        ]
+      ]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import test from "node:test";
 import { runInNewContext } from "node:vm";
 
 const fragment = await readFile(new URL("../src/reality-orbit.html", import.meta.url), "utf8");
+const v1Curation = JSON.parse(await readFile(new URL("../data/v1-curation.json", import.meta.url), "utf8"));
 
 const extractDeclaration = (startMarker, endMarker) => {
   const start = fragment.indexOf(startMarker);
@@ -19,7 +20,7 @@ assert.ok(ontologyMatch, "The canonical ontology must remain readable by the con
 const policySource = extractDeclaration("const canExploreNode", "\n\n    const validateOntology");
 const roleSource = extractDeclaration("const roleForNode", "\n\n    const relationshipForNode");
 const questionsSource = extractDeclaration("const dimensionQuestions", "\n\n    const buildConceptAnatomy");
-const anatomySource = extractDeclaration("const buildConceptAnatomy", "\n\n    const understandFlowForNode");
+const anatomySource = extractDeclaration("const buildConceptAnatomy", "\n\n    const createAnatomyField");
 
 const contract = runInNewContext(`
   const ontology = ${ontologyMatch[1]};
@@ -32,7 +33,17 @@ const contract = runInNewContext(`
 
 const nodes = Object.values(contract.ontology);
 const terminalOntologyLevel = 4;
+// Baseline captured when the level-4 completion gate was introduced.
+const initialShallowBranchCount = 53;
 const ontologyLevel = (node) => node.canonicalPath.length - 1;
+
+const terminalPathsFrom = (id, path = []) => {
+  const node = contract.ontology[id];
+  const nextPath = [...path, id];
+  return (node.children?.length ?? 0) === 0
+    ? [nextPath]
+    : node.children.flatMap((childId) => terminalPathsFrom(childId, nextPath));
+};
 
 const reachableFromReality = () => {
   const reachable = new Set();
@@ -79,6 +90,86 @@ test("Amdahl's Law is the reference level-4 instance", () => {
   );
 });
 
+test("every named law provides the complete law teaching anatomy", () => {
+  const requiredFields = [
+    "Statement",
+    "First principles",
+    "Variables",
+    "Mechanism",
+    "Predictions",
+    "Assumptions",
+    "Limitations",
+    "Applications",
+    "Visual demonstration",
+    "Related laws",
+  ];
+
+  for (const law of nodes.filter((node) => node.kind === "law-instance")) {
+    const anatomy = contract.buildConceptAnatomy(law);
+    for (const field of requiredFields) {
+      assert.ok(anatomy[field]?.trim(), `${law.label} must explain ${field}.`);
+    }
+  }
+});
+
+test("Environment is a complete category exemplar through level 4", () => {
+  const environment = contract.ontology.environment;
+  assert.equal(ontologyLevel(environment), 2);
+  assert.deepEqual(
+    Array.from(environment.children),
+    ["natural-environment", "built-environment", "social-environment", "digital-environment", "institutional-environment"],
+  );
+
+  const environmentAnatomy = contract.buildConceptAnatomy(environment);
+  for (const requiredField of ["Boundary", "Conditions and variables", "Mechanism", "Feedback", "Related concepts"]) {
+    assert.ok(environmentAnatomy[requiredField], `Environment must explain ${requiredField}`);
+  }
+
+  for (const environmentTypeId of environment.children) {
+    const environmentType = contract.ontology[environmentTypeId];
+    assert.equal(ontologyLevel(environmentType), 3, `${environmentType.label} must be level 3`);
+    assert.equal(contract.roleForNode(environmentType), "Environment type");
+    assert.equal(environmentType.children.length, 1, `${environmentType.label} must lead to one terminal concept`);
+
+    const setting = contract.ontology[environmentType.children[0]];
+    assert.equal(ontologyLevel(setting), terminalOntologyLevel, `${setting.label} must be level 4`);
+    assert.equal(contract.roleForNode(setting), "Environmental setting");
+  }
+});
+
+test("a focused concept may expose one curated next concept", () => {
+  const future = contract.ontology.future;
+  assert.deepEqual(Array.from(future.children), ["expectation"]);
+  const expectation = contract.ontology.expectation;
+  assert.equal(expectation.children?.length, 1);
+  assert.equal(contract.ontology[expectation.children[0]].children?.length ?? 0, 0);
+});
+
+test("V1 curation explicitly approves every published branch and terminal teaching path", () => {
+  assert.equal(v1Curation.status, "editorially-curated");
+  assert.ok(Array.isArray(v1Curation.admissionCriteria) && v1Curation.admissionCriteria.length >= 5);
+
+  const levelTwoNodes = nodes.filter((node) => ontologyLevel(node) === 2);
+  const reviews = new Map(v1Curation.branches.map((review) => [review.id, review]));
+  assert.equal(reviews.size, v1Curation.branches.length, "A branch must have only one V1 review record.");
+  assert.equal(reviews.size, levelTwoNodes.length, "Every published level-2 branch must have a V1 review record.");
+
+  for (const branch of levelTwoNodes) {
+    const review = reviews.get(branch.id);
+    assert.ok(review, `${branch.label} must have a V1 curation decision.`);
+    assert.ok(review.scope?.trim(), `${branch.label} must document its V1 scope.`);
+    assert.ok(review.decision?.trim(), `${branch.label} must document why its published paths are included.`);
+
+    const actualPaths = Array.from(terminalPathsFrom(branch.id), (path) => path.slice(1).join("> ")).sort();
+    const approvedPaths = Array.from(review.approvedPaths, (path) => path.join("> ")).sort();
+    assert.deepEqual(
+      approvedPaths,
+      actualPaths,
+      `${branch.label} changed without an explicit V1 curation review.`,
+    );
+  }
+});
+
 test("every ontology branch terminates at level 4", (context) => {
   const terminalNodes = nodes.filter((node) => (node.children?.length ?? 0) === 0);
   const shallowTerminals = terminalNodes.filter((node) => ontologyLevel(node) < terminalOntologyLevel);
@@ -96,6 +187,11 @@ test("every ontology branch terminates at level 4", (context) => {
     context.diagnostic(`${shallowTerminals.length} branches stop before level 4 (${summary}).`);
     context.diagnostic(paths);
   }
+
+  const resolvedBranchCount = initialShallowBranchCount - shallowTerminals.length;
+  context.diagnostic(
+    `Ontology completion: ${initialShallowBranchCount} → ${shallowTerminals.length} shallow endpoints (${resolvedBranchCount}/${initialShallowBranchCount} resolved).`,
+  );
 
   assert.equal(shallowTerminals.length, 0, "Every branch must be expanded through a level-4 terminal concept.");
   assert.equal(overdeepTerminals.length, 0, "No branch may terminate below level 4.");
@@ -125,7 +221,7 @@ test("every ontology node is reachable and has complete selection data", (contex
   context.diagnostic(`${nodes.length} ontology nodes passed the complete selection-data contract.`);
 });
 
-test("every child relationship resolves to the next canonical path level", () => {
+test("every visible child relationship is explicitly curated and advances the canonical path", () => {
   for (const node of nodes) {
     const children = node.children ?? [];
     assert.equal(new Set(children).size, children.length, `${node.label} must not repeat a child`);
@@ -141,10 +237,27 @@ test("every child relationship resolves to the next canonical path level", () =>
   }
 });
 
-test("the selection renderer maps the policy to the visible actions", () => {
-  assert.match(fragment, /understandButton\.hidden = false/);
+test("selection automatically renders Concept Anatomy and exposes only exploration controls", () => {
+  assert.doesNotMatch(fragment, /data-understand-action/);
+  assert.doesNotMatch(fragment, /function openUnderstand/);
+  assert.match(fragment, /renderUnderstand\(node\);/);
+  assert.match(fragment, /understandView\.scrollTo\(\{ top: 0, behavior: "auto" \}\);/);
+  assert.match(fragment, /actionGroup\.hidden = !canExplore/);
   assert.match(fragment, /exploreButton\.hidden = !canExplore/);
   assert.match(fragment, /exploreButton\.disabled = canExplore && isCurrent/);
   assert.match(fragment, /exploreButton\.textContent = isCurrent \? "Exploring" : "Explore selected"/);
   assert.match(fragment, /exploreButton\.setAttribute\("aria-pressed", String\(canExplore && isCurrent\)\)/);
+});
+
+test("Concept Anatomy maps every visible teaching field to the selected node", () => {
+  assert.doesNotMatch(fragment, /data-understand-flow/);
+  assert.doesNotMatch(fragment, /understandFlowForNode/);
+  assert.match(fragment, /const entries = Object\.entries\(buildConceptAnatomy\(node\)\);/);
+  assert.match(fragment, /\["Statement", "Governing question", "Problem", "Predictions", "Prediction", "First principles"\]/);
+  assert.match(fragment, /data-understand-support-label/);
+  assert.match(fragment, /understandSupportLabel\.textContent = support\[0\];/);
+  assert.match(fragment, /understandView\.dataset\.selectedNode = node\.id;/);
+  assert.match(fragment, /understandEyebrow\.textContent = `\$\{role\} · Concept anatomy`;/);
+  assert.match(fragment, /understandTitle\.textContent = node\.label;/);
+  assert.match(fragment, /understandStatement\.textContent = node\.summary;/);
 });
