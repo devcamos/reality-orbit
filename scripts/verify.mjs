@@ -207,7 +207,7 @@ for (const mobileContract of [
   "flex-basis: 100%",
   "min-height: 2.75rem",
   "data-selected-role",
-  "height: 500px",
+  "height: clamp(430px, 118vw, 480px)",
 ]) {
   if (!fragment.includes(mobileContract)) {
     failures.push(`Missing mobile interaction contract: ${mobileContract}.`);

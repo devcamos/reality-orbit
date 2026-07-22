@@ -912,13 +912,14 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .orbit-connection {
     opacity: 0.13;
+    stroke-linecap: round;
     transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
   }
 
   #reality-orbit-prototype .orbit-connection[data-active=&quot;true&quot;] {
-    opacity: 0.9;
+    opacity: 0.72;
     stroke: var(--connection-color, var(--viz-series-1));
-    stroke-width: 2;
+    stroke-width: 1.5;
   }
 
   #reality-orbit-prototype .orbit-node {
@@ -931,6 +932,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     justify-items: center;
     gap: 0.35rem;
     transform: translate(-50%, -50%);
+    touch-action: manipulation;
     white-space: normal;
   }
 
@@ -945,7 +947,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     place-items: center;
     border: 1px solid color-mix(in srgb, var(--node-color, var(--viz-series-1)) 60%, var(--border));
     border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 25%, transparent), transparent 68%);
+    background:
+      radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 27%, transparent), transparent 65%),
+      color-mix(in srgb, var(--background) 88%, var(--card));
     box-shadow: 0 0 0 0.32rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 9%, transparent);
   }
 
@@ -974,8 +978,15 @@ html&gt;body{padding:0}&lt;/style&gt;
     display: block;
     max-width: 100%;
     overflow: visible;
+    line-height: 1.2;
+    text-shadow: 0 1px 0.65rem color-mix(in srgb, var(--background) 92%, transparent);
     text-overflow: clip;
     white-space: normal;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-label {
+    color: var(--foreground);
+    font-weight: var(--font-weight-medium);
   }
 
   #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-marker {
@@ -1005,6 +1016,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     min-height: 4.4rem;
     padding: 0.75rem 0.8rem;
     border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    background: color-mix(in srgb, var(--card) 92%, transparent);
   }
 
   #reality-orbit-prototype .orbit-status {
@@ -1219,7 +1231,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   @media (max-width: 480px) {
     #reality-orbit-prototype .orbit-stage {
-      height: 500px;
+      height: clamp(430px, 118vw, 480px);
     }
 
     #reality-orbit-prototype .orbit-toolbar {
@@ -1279,6 +1291,10 @@ html&gt;body{padding:0}&lt;/style&gt;
       align-items: flex-start;
     }
 
+    #reality-orbit-prototype .understand-header-meta .viz-badge {
+      display: none;
+    }
+
     #reality-orbit-prototype .understand-body {
       padding: 0.8rem;
     }
@@ -1292,6 +1308,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .understand-fields {
       gap: 0.7rem;
       margin-top: 1rem;
+    }
+
+    #reality-orbit-prototype .understand-more-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.2rem;
     }
   }
 
