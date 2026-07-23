@@ -90,6 +90,56 @@ test("Amdahl's Law is the reference level-4 instance", () => {
   );
 });
 
+test("the requested study concepts are classified on intentional canonical paths", () => {
+  const expectedPaths = {
+    "evolutionary-psychology": ["Reality", "Domain", "Psychological", "Evolutionary psychology"],
+    "first-principles-thinking": ["Reality", "Category", "Knowledge", "Method", "First-principles thinking"],
+    "compound-effect": ["Reality", "Category", "Knowledge", "Principle", "Compound effect"],
+    "parkinsons-law": ["Reality", "Category", "Knowledge", "Law", "Parkinson's Law"],
+    "pareto-principle": ["Reality", "Category", "Knowledge", "Principle", "Pareto principle"],
+    stoicism: ["Reality", "Perspective", "Ethical", "Stoicism"],
+    "attachment-theory": ["Reality", "Category", "Knowledge", "Theory", "Attachment theory"],
+    "relationship-exchange-model": ["Reality", "Category", "Knowledge", "Model", "Relationship exchange model"],
+    "opportunity-cost": ["Reality", "Domain", "Economic", "Choice", "Opportunity cost"],
+    "second-order-thinking": ["Reality", "Category", "Knowledge", "Method", "Second-order thinking"],
+  };
+
+  for (const [id, canonicalPath] of Object.entries(expectedPaths)) {
+    const node = contract.ontology[id];
+    assert.ok(node, `Missing requested study concept: ${id}`);
+    assert.deepEqual(Array.from(node.canonicalPath), canonicalPath, `${node.label} must remain correctly classified.`);
+  }
+
+  assert.equal(contract.ontology["parkinsons-law"].kind, "law-instance", "Parkinson's Law must remain a named law.");
+  assert.match(contract.ontology["relationship-exchange-model"].summary, /limited model/i);
+});
+
+test("requested study concepts provide complete, scoped teaching anatomy", () => {
+  const conceptIds = [
+    "evolutionary-psychology",
+    "first-principles-thinking",
+    "compound-effect",
+    "parkinsons-law",
+    "pareto-principle",
+    "stoicism",
+    "attachment-theory",
+    "relationship-exchange-model",
+    "opportunity-cost",
+    "second-order-thinking",
+  ];
+  const requiredFields = ["Statement", "First principles", "Variables", "Mechanism", "Predictions", "Assumptions", "Limitations", "Applications", "Visual demonstration"];
+
+  for (const id of conceptIds) {
+    const anatomy = contract.buildConceptAnatomy(contract.ontology[id]);
+    for (const field of requiredFields) {
+      assert.ok(anatomy[field]?.trim(), `${contract.ontology[id].label} must explain ${field}.`);
+    }
+  }
+
+  assert.match(contract.ontology["relationship-exchange-model"].anatomy.Limitations, /not a market law/i);
+  assert.match(contract.ontology["pareto-principle"].anatomy.Limitations, /not a universal ratio/i);
+});
+
 test("every named law provides the complete law teaching anatomy", () => {
   const requiredFields = [
     "Statement",
@@ -247,6 +297,15 @@ test("selection automatically renders Concept Anatomy and exposes only explorati
   assert.match(fragment, /exploreButton\.disabled = canExplore && isCurrent/);
   assert.match(fragment, /exploreButton\.textContent = isCurrent \? "Exploring" : "Explore selected"/);
   assert.match(fragment, /exploreButton\.setAttribute\("aria-pressed", String\(canExplore && isCurrent\)\)/);
+});
+
+test("a mobile destination selection reveals its summary before the Concept Anatomy", () => {
+  assert.match(fragment, /const orbitDetail = root\.querySelector\("\.orbit-detail"\);/);
+  assert.match(fragment, /const setSelectedNode = \(nodeId, \{ revealMobileContent = false \} = \{\}\) =>/);
+  assert.match(fragment, /window\.matchMedia\("\(max-width: 480px\)"\)\.matches/);
+  assert.match(fragment, /orbitDetail\.scrollIntoView\(\{ behavior: reduceMotion \? "auto" : "smooth", block: "start" \}\)/);
+  assert.match(fragment, /setSelectedNode\(child\.id, \{ revealMobileContent: true \}\);/);
+  assert.match(fragment, /setSelectedNode\(parent\.id, \{ revealMobileContent: true \}\);/);
 });
 
 test("Concept Anatomy maps every visible teaching field to the selected node", () => {

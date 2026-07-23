@@ -6,7 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Reality Orbit</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:1440px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+<style>:root{color-scheme:dark;background:Canvas}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:1440px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
 <iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Reality Orbit" srcdoc="&lt;!doctype html&gt;
@@ -814,9 +814,33 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;style&gt;
+  html {
+    color-scheme: dark;
+    background: var(--background) !important;
+  }
+
+  html &gt; body {
+    background: var(--background) !important;
+  }
+
   #reality-orbit-prototype {
     width: 100%;
+    min-height: calc(100dvh - 0.625rem);
     color: var(--foreground);
+    background:
+      radial-gradient(ellipse 72% 52% at 50% 102%, color-mix(in srgb, var(--viz-series-1) 14%, transparent), transparent 68%),
+      radial-gradient(ellipse 54% 45% at 12% 10%, color-mix(in srgb, var(--viz-series-5) 8%, transparent), transparent 74%),
+      linear-gradient(145deg, color-mix(in srgb, var(--background) 96%, var(--foreground)), var(--background));
+  }
+
+  #reality-orbit-prototype .orbit-shell {
+    min-height: inherit;
+    padding: clamp(0.45rem, 1.4vw, 1.15rem);
+    background:
+      radial-gradient(circle at 16% 22%, color-mix(in srgb, var(--foreground) 19%, transparent) 0 0.05rem, transparent 0.11rem),
+      radial-gradient(circle at 74% 17%, color-mix(in srgb, var(--foreground) 14%, transparent) 0 0.04rem, transparent 0.1rem),
+      radial-gradient(circle at 83% 76%, color-mix(in srgb, var(--foreground) 12%, transparent) 0 0.04rem, transparent 0.1rem);
+    background-size: 137px 151px, 193px 181px, 229px 211px;
   }
 
   #reality-orbit-prototype .orbit-workspace {
@@ -826,6 +850,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
     border-radius: 1rem;
     overflow: clip;
+    background: color-mix(in srgb, var(--background) 91%, var(--card));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 8%, transparent), 0 1.8rem 4rem color-mix(in srgb, var(--background) 62%, transparent);
   }
 
   #reality-orbit-prototype .orbit-canvas {
@@ -839,6 +865,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     gap: 0.75rem;
     padding: 0.65rem 0.8rem;
     border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--background) 92%, transparent), color-mix(in srgb, var(--card) 78%, transparent));
   }
 
   #reality-orbit-prototype .orbit-path {
@@ -882,12 +909,36 @@ html&gt;body{padding:0}&lt;/style&gt;
     width: 100%;
     height: clamp(520px, 75vw, 660px);
     overflow: hidden;
+    isolation: isolate;
     background:
-      radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 16%, transparent) 0, transparent 27%),
-      radial-gradient(circle at 21% 18%, color-mix(in srgb, var(--foreground) 9%, transparent) 0 1px, transparent 2px),
-      radial-gradient(circle at 79% 34%, color-mix(in srgb, var(--foreground) 8%, transparent) 0 1px, transparent 2px),
-      radial-gradient(circle at 36% 79%, color-mix(in srgb, var(--foreground) 7%, transparent) 0 1px, transparent 2px);
-    background-size: auto, 79px 83px, 113px 97px, 137px 121px;
+      radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 22%, transparent) 0, transparent 28%),
+      radial-gradient(ellipse at 50% 102%, color-mix(in srgb, var(--viz-series-1) 16%, transparent) 0, transparent 56%),
+      linear-gradient(145deg, color-mix(in srgb, var(--background) 94%, var(--foreground)), var(--background));
+  }
+
+  #reality-orbit-prototype .orbit-stage::before,
+  #reality-orbit-prototype .orbit-stage::after {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    content: &quot;&quot;;
+    pointer-events: none;
+  }
+
+  #reality-orbit-prototype .orbit-stage::before {
+    background:
+      radial-gradient(circle at 13% 19%, color-mix(in srgb, var(--foreground) 28%, transparent) 0 0.05rem, transparent 0.12rem),
+      radial-gradient(circle at 76% 17%, color-mix(in srgb, var(--foreground) 18%, transparent) 0 0.04rem, transparent 0.11rem),
+      radial-gradient(circle at 87% 65%, color-mix(in srgb, var(--foreground) 17%, transparent) 0 0.04rem, transparent 0.1rem),
+      radial-gradient(circle at 29% 83%, color-mix(in srgb, var(--foreground) 16%, transparent) 0 0.04rem, transparent 0.1rem);
+    background-size: 113px 131px, 181px 173px, 227px 211px, 149px 167px;
+    opacity: 0.76;
+  }
+
+  #reality-orbit-prototype .orbit-stage::after {
+    background:
+      radial-gradient(ellipse 48% 27% at 81% 84%, color-mix(in srgb, var(--viz-series-5) 11%, transparent), transparent 72%),
+      radial-gradient(ellipse 44% 35% at 8% 52%, color-mix(in srgb, var(--viz-series-6) 8%, transparent), transparent 74%);
   }
 
   #reality-orbit-prototype .orbit-map {
@@ -895,6 +946,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     inset: 0;
     width: 100%;
     height: 100%;
+    z-index: 1;
     pointer-events: none;
   }
 
@@ -902,22 +954,22 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-connection {
     vector-effect: non-scaling-stroke;
     fill: none;
-    stroke: color-mix(in srgb, var(--border) 68%, transparent);
+    stroke: color-mix(in srgb, var(--foreground) 18%, transparent);
     stroke-width: 1;
   }
 
   #reality-orbit-prototype .orbit-ring {
-    opacity: 0.34;
+    opacity: 0.62;
   }
 
   #reality-orbit-prototype .orbit-connection {
-    opacity: 0.13;
+    opacity: 0.32;
     stroke-linecap: round;
     transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
   }
 
   #reality-orbit-prototype .orbit-connection[data-active=&quot;true&quot;] {
-    opacity: 0.72;
+    opacity: 0.82;
     stroke: var(--connection-color, var(--viz-series-1));
     stroke-width: 1.5;
   }
@@ -941,6 +993,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype .destination-marker {
+    position: relative;
     display: grid;
     width: var(--destination-size, 3.15rem);
     aspect-ratio: 1;
@@ -948,9 +1001,26 @@ html&gt;body{padding:0}&lt;/style&gt;
     border: 1px solid color-mix(in srgb, var(--node-color, var(--viz-series-1)) 60%, var(--border));
     border-radius: 50%;
     background:
-      radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 27%, transparent), transparent 65%),
-      color-mix(in srgb, var(--background) 88%, var(--card));
-    box-shadow: 0 0 0 0.32rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 9%, transparent);
+      radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 25%, transparent), transparent 64%),
+      color-mix(in srgb, var(--background) 90%, var(--card));
+    box-shadow: 0 0 0 0.32rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 8%, transparent), 0 0 1.2rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 12%, transparent);
+  }
+
+  #reality-orbit-prototype .destination-marker::before {
+    position: absolute;
+    inset: -0.35rem;
+    border: 1px solid color-mix(in srgb, var(--node-color, var(--viz-series-1)) 32%, transparent);
+    border-radius: inherit;
+    content: &quot;&quot;;
+    opacity: 0.62;
+  }
+
+  #reality-orbit-prototype .destination-marker::after {
+    position: absolute;
+    inset: 0.32rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+    border-radius: inherit;
+    content: &quot;&quot;;
   }
 
   #reality-orbit-prototype .orbit-node[data-prominence=&quot;high&quot;] .destination-marker {
@@ -991,8 +1061,8 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-marker {
     box-shadow:
-      0 0 0 0.34rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 17%, transparent),
-      0 0 1.2rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 38%, transparent);
+      0 0 0 0.42rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 16%, transparent),
+      0 0 1.8rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 31%, transparent);
   }
 
   #reality-orbit-prototype .orbit-node[data-available=&quot;false&quot;] {
@@ -1010,13 +1080,17 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .orbit-core .destination-marker {
     --destination-size: 4.7rem;
+    box-shadow:
+      0 0 0 0.6rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 9%, transparent),
+      0 0 2.5rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 22%, transparent);
   }
 
   #reality-orbit-prototype .orbit-detail {
     min-height: 4.4rem;
     padding: 0.75rem 0.8rem;
     border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-    background: color-mix(in srgb, var(--card) 92%, transparent);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--background) 88%, var(--card)), color-mix(in srgb, var(--background) 94%, transparent));
+    scroll-margin-top: 0.75rem;
   }
 
   #reality-orbit-prototype .orbit-status {
@@ -1045,7 +1119,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     overflow-y: auto;
     padding: 0;
     border-left: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-    background: color-mix(in srgb, var(--card) 82%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--background) 86%, var(--card)), color-mix(in srgb, var(--background) 94%, transparent));
   }
 
   #reality-orbit-prototype .understand-header {
@@ -1055,7 +1129,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     padding: clamp(1.4rem, 5vw, 3rem) 1rem;
     text-align: center;
     border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-    background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 12%, transparent), transparent 62%);
+    background:
+      radial-gradient(ellipse 58% 100% at 50% 0%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 16%, transparent), transparent 72%),
+      linear-gradient(180deg, color-mix(in srgb, var(--background) 84%, var(--card)), transparent);
   }
 
   #reality-orbit-prototype .understand-header p,
@@ -1420,7 +1496,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         label: &quot;Knowledge&quot;,
         summary: &quot;What is known, claimed, represented, or inferred.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;],
-        children: [&quot;law&quot;, &quot;principle&quot;, &quot;razor&quot;, &quot;framework&quot;, &quot;model&quot;, &quot;theorem&quot;, &quot;pattern&quot;],
+        children: [&quot;law&quot;, &quot;principle&quot;, &quot;razor&quot;, &quot;framework&quot;, &quot;model&quot;, &quot;theorem&quot;, &quot;pattern&quot;, &quot;theory&quot;, &quot;method&quot;],
       },
       category: {
         id: &quot;category&quot;,
@@ -1456,9 +1532,34 @@ html&gt;body{padding:0}&lt;/style&gt;
       biological: { id: &quot;biological&quot;, label: &quot;Biological&quot;, summary: &quot;Living systems, organisms, adaptation, and ecosystems.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Biological&quot;], children: [&quot;organism&quot;] },
       organism: { id: &quot;organism&quot;, label: &quot;Organism&quot;, summary: &quot;An individual living system that maintains itself, responds to conditions, and participates in biological processes.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Biological&quot;, &quot;Organism&quot;], children: [&quot;living-system&quot;] },
       &quot;living-system&quot;: { id: &quot;living-system&quot;, label: &quot;Living system&quot;, summary: &quot;A functioning organism or organised biological whole whose parts interact to sustain life over time.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Biological&quot;, &quot;Organism&quot;, &quot;Living system&quot;] },
-      psychological: { id: &quot;psychological&quot;, label: &quot;Psychological&quot;, summary: &quot;Mind, cognition, emotion, perception, and behaviour.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;], children: [&quot;cognition&quot;] },
+      psychological: { id: &quot;psychological&quot;, label: &quot;Psychological&quot;, summary: &quot;Mind, cognition, emotion, perception, and behaviour.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;], children: [&quot;cognition&quot;, &quot;evolutionary-psychology&quot;] },
       cognition: { id: &quot;cognition&quot;, label: &quot;Cognition&quot;, summary: &quot;The mental processes used to perceive, remember, learn, reason, and decide.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Cognition&quot;], children: [&quot;decision-process&quot;] },
       &quot;decision-process&quot;: { id: &quot;decision-process&quot;, label: &quot;Decision process&quot;, summary: &quot;A sequence in which an agent interprets information, weighs options, and commits to an action.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Cognition&quot;, &quot;Decision process&quot;] },
+      &quot;evolutionary-psychology&quot;: {
+        id: &quot;evolutionary-psychology&quot;,
+        label: &quot;Evolutionary psychology&quot;,
+        summary: &quot;A psychological approach that investigates how evolutionary processes may have shaped aspects of the mind and behaviour.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Evolutionary psychology&quot;],
+        children: [&quot;adaptive-explanation&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;Evolutionary psychology develops and tests hypotheses about how evolutionary processes may have shaped psychological mechanisms and behaviour.&quot;,
+          &quot;First principles&quot;: &quot;Variation, inheritance, selection, development, and environmental context can all matter when explaining why a psychological trait or behaviour exists.&quot;,
+          &quot;Variables&quot;: &quot;The proposed mechanism, evidence, developmental conditions, culture, environment, population, and the alternative explanations being compared.&quot;,
+          &quot;Mechanism&quot;: &quot;A proposed adaptation is evaluated by deriving testable predictions and comparing those predictions with evidence and competing explanations.&quot;,
+          &quot;Predictions&quot;: &quot;A useful evolutionary explanation should make discriminating predictions; it should not merely retell an observed behaviour as an adaptive story after the fact.&quot;,
+          &quot;Assumptions&quot;: &quot;The claim depends on evidence that the proposed mechanism, its history, and its current behaviour are connected in the stated way.&quot;,
+          &quot;Limitations&quot;: &quot;It is an explanatory approach, not a moral rule or a complete explanation of any person. Cultural learning, development, power, and current conditions also matter; avoid treating an evolutionary claim as destiny.&quot;,
+          &quot;Applications&quot;: &quot;Use it to compare explanations in psychological research, while checking evidence quality, scope, and alternative causal accounts.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Compare one observed behaviour with several possible explanations, then show which evidence would increase or decrease confidence in each one.&quot;,
+          &quot;Related concepts&quot;: &quot;Attachment theory, adaptation, cognition, development, culture, and evidence assessment.&quot;,
+        },
+      },
+      &quot;adaptive-explanation&quot;: {
+        id: &quot;adaptive-explanation&quot;,
+        label: &quot;Adaptive explanation&quot;,
+        summary: &quot;An explanation that proposes how a trait, mechanism, or behaviour may have contributed to survival or reproduction in an ancestral context, subject to evidence and alternatives.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Evolutionary psychology&quot;, &quot;Adaptive explanation&quot;],
+      },
       social: {
         id: &quot;social&quot;,
         label: &quot;Social&quot;,
@@ -1466,9 +1567,28 @@ html&gt;body{padding:0}&lt;/style&gt;
         canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Social&quot;],
         children: [&quot;social-individuals&quot;, &quot;social-relationships&quot;, &quot;groups&quot;, &quot;organisations&quot;, &quot;institutions&quot;, &quot;culture&quot;, &quot;social-communication&quot;, &quot;governance&quot;],
       },
-      economic: { id: &quot;economic&quot;, label: &quot;Economic&quot;, summary: &quot;Production, allocation, exchange, incentives, and value.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Economic&quot;], children: [&quot;value&quot;] },
+      economic: { id: &quot;economic&quot;, label: &quot;Economic&quot;, summary: &quot;Production, allocation, exchange, incentives, and value.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Economic&quot;], children: [&quot;value&quot;, &quot;choice&quot;] },
       value: { id: &quot;value&quot;, label: &quot;Value&quot;, summary: &quot;The importance, utility, worth, or exchangeability attributed to an outcome, good, service, or resource.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Economic&quot;, &quot;Value&quot;], children: [&quot;valuation&quot;] },
       valuation: { id: &quot;valuation&quot;, label: &quot;Valuation&quot;, summary: &quot;The reasoned assessment of the worth, utility, price, or significance of an outcome, good, service, or resource using stated criteria.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Economic&quot;, &quot;Value&quot;, &quot;Valuation&quot;] },
+      choice: { id: &quot;choice&quot;, label: &quot;Choice&quot;, summary: &quot;The selection of one available option while other relevant options are not selected.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Economic&quot;, &quot;Choice&quot;], children: [&quot;opportunity-cost&quot;] },
+      &quot;opportunity-cost&quot;: {
+        id: &quot;opportunity-cost&quot;,
+        label: &quot;Opportunity cost&quot;,
+        summary: &quot;The value of the next-best relevant alternative given up when a choice is made.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Economic&quot;, &quot;Choice&quot;, &quot;Opportunity cost&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;Opportunity cost is the value of the next-best relevant alternative foregone when a choice uses scarce resources.&quot;,
+          &quot;First principles&quot;: &quot;Time, money, attention, capacity, and opportunities are finite; choosing one use can rule out another use.&quot;,
+          &quot;Variables&quot;: &quot;The options available at the decision point, their expected value, uncertainty, constraints, time horizon, and the decision-maker&#x27;s goals.&quot;,
+          &quot;Mechanism&quot;: &quot;Selecting one option allocates limited resources to it, making the most valuable feasible alternative unavailable or delayed.&quot;,
+          &quot;Predictions&quot;: &quot;A choice can look attractive in isolation yet be poor relative to a stronger available alternative; the relevant comparison changes as options and constraints change.&quot;,
+          &quot;Assumptions&quot;: &quot;There is a meaningful choice set and a decision criterion. The cost is comparative, not necessarily a cash payment.&quot;,
+          &quot;Limitations&quot;: &quot;It is often difficult to measure value precisely, especially across people or long time horizons. Past sunk costs are not opportunity costs of the present decision.&quot;,
+          &quot;Applications&quot;: &quot;Use it in budgeting, product prioritisation, study planning, staffing, and personal decisions by naming the best alternative before committing.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Show one finite budget flowing to option A, then reveal option B—the strongest unchosen alternative—and compare the expected consequences over time.&quot;,
+          &quot;Related concepts&quot;: &quot;Scarcity, incentives, trade-offs, expected outcome, time budget, and valuation.&quot;,
+        },
+      },
       informational: { id: &quot;informational&quot;, label: &quot;Informational&quot;, summary: &quot;Representation, communication, computation, and the reduction of uncertainty.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Informational&quot;], children: [&quot;data&quot;] },
       data: { id: &quot;data&quot;, label: &quot;Data&quot;, summary: &quot;Recorded symbols, measurements, or observations that can be stored, communicated, and interpreted.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Informational&quot;, &quot;Data&quot;], children: [&quot;data-record&quot;] },
       &quot;data-record&quot;: { id: &quot;data-record&quot;, label: &quot;Data record&quot;, summary: &quot;A bounded, structured representation of observations, measurements, or facts that can be stored, exchanged, and interpreted in context.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Informational&quot;, &quot;Data&quot;, &quot;Data record&quot;] },
@@ -1482,18 +1602,128 @@ html&gt;body{padding:0}&lt;/style&gt;
         canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Law&quot;],
         children: [&quot;amdahls-law&quot;, &quot;brooks-law&quot;, &quot;conways-law&quot;, &quot;goodharts-law&quot;, &quot;greshams-law&quot;, &quot;littles-law&quot;, &quot;metcalfes-law&quot;, &quot;parkinsons-law&quot;],
       },
-      principle: { id: &quot;principle&quot;, label: &quot;Principle&quot;, summary: &quot;A general rule that guides behaviour, design, or action.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Principle&quot;], children: [&quot;least-privilege&quot;] },
+      principle: { id: &quot;principle&quot;, label: &quot;Principle&quot;, summary: &quot;A general rule that guides behaviour, design, or action.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Principle&quot;], children: [&quot;least-privilege&quot;, &quot;compound-effect&quot;, &quot;pareto-principle&quot;] },
       &quot;least-privilege&quot;: { id: &quot;least-privilege&quot;, label: &quot;Least privilege&quot;, summary: &quot;Give each identity, process, or component only the access needed for its legitimate task.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Principle&quot;, &quot;Least privilege&quot;] },
+      &quot;compound-effect&quot;: {
+        id: &quot;compound-effect&quot;,
+        label: &quot;Compound effect&quot;,
+        summary: &quot;The principle that repeated changes can accumulate over time because each result becomes part of the starting point for the next cycle.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Principle&quot;, &quot;Compound effect&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;The compound effect describes how repeated changes can accumulate over time when each period&#x27;s result becomes part of the base for the next period.&quot;,
+          &quot;First principles&quot;: &quot;A changing state can become the input to the next change. Repeated proportional change is multiplicative, not simply additive.&quot;,
+          &quot;Variables&quot;: &quot;Starting base, rate and direction of change, frequency, duration, reinvestment or carry-over, friction, limits, and risk.&quot;,
+          &quot;Mechanism&quot;: &quot;Each cycle applies change to the current state, so gains and losses can both become larger or smaller over repeated cycles.&quot;,
+          &quot;Predictions&quot;: &quot;With a stable positive rate and sufficient time, later changes contribute more than early ones; negative compounding can also magnify losses or deterioration.&quot;,
+          &quot;Assumptions&quot;: &quot;The relevant effect carries forward between cycles and the stated rate or practice remains meaningful across the time horizon.&quot;,
+          &quot;Limitations&quot;: &quot;Not every repeated action compounds. Outcomes can plateau, reverse, be capped, or be dominated by chance, unequal access, and changing conditions.&quot;,
+          &quot;Applications&quot;: &quot;Use it to reason about investment returns, reliability debt, learning practice, habits, and small operational improvements without promising guaranteed results.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Animate two identical starting states: one receives a small repeated change that carries forward, while the other remains flat; then show how the gap changes over time.&quot;,
+          &quot;Related concepts&quot;: &quot;Time, feedback, learning, capital, Pareto principle, and opportunity cost.&quot;,
+        },
+      },
+      &quot;pareto-principle&quot;: {
+        id: &quot;pareto-principle&quot;,
+        label: &quot;Pareto principle&quot;,
+        summary: &quot;A heuristic that, in some systems, a minority of inputs, causes, or contributors accounts for a disproportionate share of outcomes.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Principle&quot;, &quot;Pareto principle&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;The Pareto principle suggests that some systems have highly uneven distributions, where a minority of inputs or causes produces a disproportionate share of outcomes.&quot;,
+          &quot;First principles&quot;: &quot;Outcomes need not be evenly distributed. Differences in exposure, capacity, feedback, accumulation, and constraints can create concentration.&quot;,
+          &quot;Variables&quot;: &quot;The population, outcome being measured, observation period, distribution shape, inclusion rules, and the threshold used to identify concentration.&quot;,
+          &quot;Mechanism&quot;: &quot;A distribution is measured, ranked, and compared cumulatively to see whether a small share of contributors accounts for a large share of the result.&quot;,
+          &quot;Predictions&quot;: &quot;Where concentration is present, prioritising high-contribution causes can be more effective than treating every cause as equally important.&quot;,
+          &quot;Assumptions&quot;: &quot;The chosen metric and population are relevant, reliable, and stable enough for a prioritisation decision.&quot;,
+          &quot;Limitations&quot;: &quot;80/20 is a memorable heuristic, not a universal ratio or scientific law. The tail can still matter for fairness, resilience, safety, or long-term change.&quot;,
+          &quot;Applications&quot;: &quot;Use it to prioritise defects, customer needs, operational bottlenecks, study topics, or risks—then verify the actual distribution before acting.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Rank contributors from largest to smallest, accumulate their impact on a curve, and allow the user to see whether the top share truly dominates the selected outcome.&quot;,
+          &quot;Related concepts&quot;: &quot;Distribution, compounding, leverage, constraints, opportunity cost, and Goodhart&#x27;s Law.&quot;,
+        },
+      },
       razor: { id: &quot;razor&quot;, label: &quot;Razor&quot;, summary: &quot;A concise reasoning rule used to remove unlikely explanations or prefer one interpretation over another.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Razor&quot;], children: [&quot;occams-razor&quot;] },
       &quot;occams-razor&quot;: { id: &quot;occams-razor&quot;, label: &quot;Occam&#x27;s Razor&quot;, summary: &quot;When explanations fit the same evidence, prefer the one that makes fewer unsupported assumptions.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Razor&quot;, &quot;Occam&#x27;s Razor&quot;] },
       framework: { id: &quot;framework&quot;, label: &quot;Framework&quot;, summary: &quot;A reusable structure that organises analysis, decisions, or execution.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Framework&quot;], children: [&quot;ooda-loop&quot;] },
       &quot;ooda-loop&quot;: { id: &quot;ooda-loop&quot;, label: &quot;OODA Loop&quot;, summary: &quot;A decision framework that cycles through observing, orienting, deciding, and acting.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Framework&quot;, &quot;OODA Loop&quot;] },
-      model: { id: &quot;model&quot;, label: &quot;Model&quot;, summary: &quot;A purposeful representation used to explain, predict, or design.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Model&quot;], children: [&quot;queueing-model&quot;] },
+      model: { id: &quot;model&quot;, label: &quot;Model&quot;, summary: &quot;A purposeful representation used to explain, predict, or design.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Model&quot;], children: [&quot;queueing-model&quot;, &quot;relationship-exchange-model&quot;] },
       &quot;queueing-model&quot;: { id: &quot;queueing-model&quot;, label: &quot;Queueing model&quot;, summary: &quot;A representation of arrivals, waiting, service capacity, and departures used to reason about congestion and delay.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Model&quot;, &quot;Queueing model&quot;] },
+      &quot;relationship-exchange-model&quot;: {
+        id: &quot;relationship-exchange-model&quot;,
+        label: &quot;Relationship exchange model&quot;,
+        summary: &quot;A limited model, informed by social exchange theory, for examining perceived rewards, costs, alternatives, and reciprocity in some relationships.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Model&quot;, &quot;Relationship exchange model&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;The relationship exchange model examines how perceived rewards, costs, alternatives, and reciprocity can influence some social interactions.&quot;,
+          &quot;First principles&quot;: &quot;People can notice benefits, burdens, expectations, alternatives, and fairness in relationships; those perceptions can influence choices and behaviour.&quot;,
+          &quot;Variables&quot;: &quot;Each person&#x27;s goals, needs, power, resources, alternatives, norms, trust, care, culture, and the relationship&#x27;s history.&quot;,
+          &quot;Mechanism&quot;: &quot;Perceived rewards, costs, and fairness influence willingness to invest, reciprocate, renegotiate, maintain, or leave a relationship.&quot;,
+          &quot;Predictions&quot;: &quot;When a relationship is experienced as persistently unfair or costly relative to alternatives, satisfaction or commitment may decline; this is a conditional hypothesis, not a certainty.&quot;,
+          &quot;Assumptions&quot;: &quot;The people involved can perceive and evaluate relevant benefits, costs, or alternatives, and the model is appropriate to the specific question.&quot;,
+          &quot;Limitations&quot;: &quot;This is not a market law, a score of human worth, or a complete account of love, care, culture, power, commitment, or harm. It must not be used to justify manipulation or dehumanisation.&quot;,
+          &quot;Applications&quot;: &quot;Use it cautiously to discuss reciprocity, boundaries, perceived fairness, and relationship decisions alongside psychological, ethical, and social context.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Show two participants experiencing changing support, effort, alternatives, and perceived fairness, then ask which assumptions would make the model helpful or misleading.&quot;,
+          &quot;Related concepts&quot;: &quot;Attachment theory, incentives, cooperation, trust, opportunity cost, and ethical perspective.&quot;,
+        },
+      },
       theorem: { id: &quot;theorem&quot;, label: &quot;Theorem&quot;, summary: &quot;A proposition established by formal proof from stated axioms, definitions, or prior results.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Theorem&quot;], children: [&quot;pythagorean-theorem&quot;] },
       &quot;pythagorean-theorem&quot;: { id: &quot;pythagorean-theorem&quot;, label: &quot;Pythagorean theorem&quot;, summary: &quot;In a right-angled triangle, the square of the hypotenuse equals the sum of the squares of the other two sides.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Theorem&quot;, &quot;Pythagorean theorem&quot;] },
       pattern: { id: &quot;pattern&quot;, label: &quot;Pattern&quot;, summary: &quot;A named, reusable response to a recurring problem in context.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Pattern&quot;], children: [&quot;circuit-breaker&quot;] },
       &quot;circuit-breaker&quot;: { id: &quot;circuit-breaker&quot;, label: &quot;Circuit breaker&quot;, summary: &quot;A resilience pattern that temporarily stops calls to a failing dependency so the system can recover and avoid cascading failure.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Pattern&quot;, &quot;Circuit breaker&quot;] },
+      theory: { id: &quot;theory&quot;, label: &quot;Theory&quot;, summary: &quot;A coherent explanatory account that organises concepts, evidence, and predictions within a defined scope.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Theory&quot;], children: [&quot;attachment-theory&quot;] },
+      &quot;attachment-theory&quot;: {
+        id: &quot;attachment-theory&quot;,
+        label: &quot;Attachment theory&quot;,
+        summary: &quot;A developmental theory of close bonds, safety seeking, and relationship expectations, especially in relation to caregivers and later social development.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Theory&quot;, &quot;Attachment theory&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;Attachment theory explains how close bonds and expectations of caregiver availability can shape safety seeking, support seeking, and relationship expectations across development.&quot;,
+          &quot;First principles&quot;: &quot;Dependence, proximity seeking, protection, co-regulation, learning, and relationship history can all influence how people respond to stress and closeness.&quot;,
+          &quot;Variables&quot;: &quot;Caregiver responsiveness, separation and reunion context, development, current relationships, stress, culture, support, and the measures used.&quot;,
+          &quot;Mechanism&quot;: &quot;Repeated experiences of seeking and receiving support can help form expectations about safety and availability, influencing attention, emotion regulation, and relationship behaviour.&quot;,
+          &quot;Predictions&quot;: &quot;Under comparable conditions, different attachment expectations can be associated with different support-seeking and relationship patterns; present context can alter outcomes.&quot;,
+          &quot;Assumptions&quot;: &quot;The theory&#x27;s claims depend on careful definitions and evidence. Associations do not make any individual&#x27;s path fixed or prove a single cause.&quot;,
+          &quot;Limitations&quot;: &quot;It is not a diagnosis or a permanent personality label. It cannot explain an individual or relationship by itself, and popular attachment-style labels are often used too broadly.&quot;,
+          &quot;Applications&quot;: &quot;Use it in developmental and relationship research, reflective education, and clinical contexts led by qualified professionals.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Trace a sequence of stress, support seeking, response, expectation, and later behaviour while showing where present relationships and context can change the pathway.&quot;,
+          &quot;Related concepts&quot;: &quot;Evolutionary psychology, development, trust, social environment, relationship exchange model, and evidence assessment.&quot;,
+        },
+      },
+      method: { id: &quot;method&quot;, label: &quot;Method&quot;, summary: &quot;A defined approach for investigating, reasoning about, or carrying out a task.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Method&quot;], children: [&quot;first-principles-thinking&quot;, &quot;second-order-thinking&quot;] },
+      &quot;first-principles-thinking&quot;: {
+        id: &quot;first-principles-thinking&quot;,
+        label: &quot;First-principles thinking&quot;,
+        summary: &quot;A reasoning method that separates evidence, definitions, constraints, and assumptions before rebuilding an explanation or solution from the most fundamental supported claims.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Method&quot;, &quot;First-principles thinking&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;First-principles thinking is a method of breaking a problem into fundamental supported claims, constraints, definitions, and assumptions, then rebuilding the reasoning from there.&quot;,
+          &quot;First principles&quot;: &quot;Claims differ in strength. Facts, definitions, requirements, constraints, assumptions, and analogies must not be treated as interchangeable.&quot;,
+          &quot;Variables&quot;: &quot;The goal, scope, evidence quality, constraints, assumptions, alternatives, and criteria for a satisfactory outcome.&quot;,
+          &quot;Mechanism&quot;: &quot;Decompose the problem, identify what is directly supported, test assumptions, derive options, and validate the resulting design or explanation against reality.&quot;,
+          &quot;Predictions&quot;: &quot;It can expose hidden assumptions and inherited conventions, making trade-offs and alternatives easier to see.&quot;,
+          &quot;Assumptions&quot;: &quot;The relevant evidence and constraints can be identified well enough to support reconstruction rather than speculation.&quot;,
+          &quot;Limitations&quot;: &quot;It is not a licence to ignore expertise, precedent, evidence, or social context. A claim called a first principle may still be incomplete, contestable, or wrong for the scope.&quot;,
+          &quot;Applications&quot;: &quot;Use it in architecture, science, decision-making, learning, and problem solving when a familiar answer is not explaining the constraints well enough.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Explode a proposed solution into evidence, definitions, requirements, constraints, and assumptions; remove one assumption and show which conclusions still stand.&quot;,
+          &quot;Related concepts&quot;: &quot;Assumption, evidence assessment, constraint, mechanism, second-order thinking, and trade-off.&quot;,
+        },
+      },
+      &quot;second-order-thinking&quot;: {
+        id: &quot;second-order-thinking&quot;,
+        label: &quot;Second-order thinking&quot;,
+        summary: &quot;A reasoning method that considers the consequences of consequences, including delayed effects, responses, and feedback after an initial action.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Knowledge&quot;, &quot;Method&quot;, &quot;Second-order thinking&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;Second-order thinking examines what may happen after the immediate effect of an action: responses, side effects, delayed consequences, and feedback.&quot;,
+          &quot;First principles&quot;: &quot;Systems contain interacting actors, time delays, constraints, and feedback. An intervention can change behaviour, incentives, and later conditions.&quot;,
+          &quot;Variables&quot;: &quot;The action, immediate effect, affected actors, time horizon, incentives, dependencies, feedback loops, uncertainty, and possible countermeasures.&quot;,
+          &quot;Mechanism&quot;: &quot;Trace a sequence from action to first effect, then ask how people and systems respond, what changes next, and whether the loop reinforces or counteracts the initial result.&quot;,
+          &quot;Predictions&quot;: &quot;It can reveal unintended consequences and delayed trade-offs that first-order reasoning overlooks, without predicting the future perfectly.&quot;,
+          &quot;Assumptions&quot;: &quot;The relevant causal links and reactions are plausible enough to investigate, and alternative scenarios are considered rather than one preferred story.&quot;,
+          &quot;Limitations&quot;: &quot;It can become speculative or endless. Use a defined horizon, evidence, and decision threshold instead of treating every imaginable consequence as equally likely.&quot;,
+          &quot;Applications&quot;: &quot;Use it in policy, product design, reliability engineering, incentives, personal decisions, and systems planning.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Animate an action, its direct result, two downstream reactions, and a feedback loop; let the user compare a short-term and a longer-term view.&quot;,
+          &quot;Related concepts&quot;: &quot;Cause and effect, feedback, incentives, Goodhart&#x27;s Law, opportunity cost, and time.&quot;,
+        },
+      },
       entity: { id: &quot;entity&quot;, label: &quot;Entity&quot;, summary: &quot;A distinct thing that can be identified and described; agents are a specialised entity.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Entity&quot;], children: [&quot;agent&quot;] },
       agent: { id: &quot;agent&quot;, label: &quot;Agent&quot;, summary: &quot;An entity capable of acting, choosing, or producing effects within a system.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Entity&quot;, &quot;Agent&quot;], children: [&quot;decision-maker&quot;] },
       &quot;decision-maker&quot;: { id: &quot;decision-maker&quot;, label: &quot;Decision maker&quot;, summary: &quot;An agent that evaluates information and options before selecting or authorising an action.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Category&quot;, &quot;Entity&quot;, &quot;Agent&quot;, &quot;Decision maker&quot;] },
@@ -1625,9 +1855,34 @@ html&gt;body{padding:0}&lt;/style&gt;
       &quot;perspective-economic&quot;: { id: &quot;perspective-economic&quot;, label: &quot;Economic&quot;, summary: &quot;Reality interpreted through value, incentives, allocation, production, and exchange.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Economic&quot;], children: [&quot;incentives&quot;] },
       incentives: { id: &quot;incentives&quot;, label: &quot;Incentives&quot;, summary: &quot;Expected rewards, costs, or constraints that make some choices more attractive than others.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Economic&quot;, &quot;Incentives&quot;], children: [&quot;incentive-guided-choice&quot;] },
       &quot;incentive-guided-choice&quot;: { id: &quot;incentive-guided-choice&quot;, label: &quot;Incentive-guided choice&quot;, summary: &quot;A choice understood through the expected rewards, costs, constraints, and trade-offs that shape which option appears more attractive.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Economic&quot;, &quot;Incentives&quot;, &quot;Incentive-guided choice&quot;] },
-      &quot;perspective-ethical&quot;: { id: &quot;perspective-ethical&quot;, label: &quot;Ethical&quot;, summary: &quot;Reality interpreted through questions of right action, responsibility, harm, and fairness.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Ethical&quot;], children: [&quot;moral-duty&quot;] },
+      &quot;perspective-ethical&quot;: { id: &quot;perspective-ethical&quot;, label: &quot;Ethical&quot;, summary: &quot;Reality interpreted through questions of right action, responsibility, harm, and fairness.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Ethical&quot;], children: [&quot;moral-duty&quot;, &quot;stoicism&quot;] },
       &quot;moral-duty&quot;: { id: &quot;moral-duty&quot;, label: &quot;Moral duty&quot;, summary: &quot;An obligation or responsibility considered binding within an ethical framework.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Ethical&quot;, &quot;Moral duty&quot;], children: [&quot;ethical-decision&quot;] },
       &quot;ethical-decision&quot;: { id: &quot;ethical-decision&quot;, label: &quot;Ethical decision&quot;, summary: &quot;A choice assessed through explicit responsibilities, harms, rights, fairness, and intended consequences.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Ethical&quot;, &quot;Moral duty&quot;, &quot;Ethical decision&quot;] },
+      stoicism: {
+        id: &quot;stoicism&quot;,
+        label: &quot;Stoicism&quot;,
+        summary: &quot;A Hellenistic philosophical tradition that centres reasoned judgement, virtue, and living well within a world not fully under one&#x27;s control.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Ethical&quot;, &quot;Stoicism&quot;],
+        children: [&quot;stoic-practice&quot;],
+        anatomy: {
+          &quot;Statement&quot;: &quot;Stoicism is a philosophical tradition that treats virtue and reasoned judgement as central to living well while recognising that many external outcomes are not fully under a person&#x27;s control.&quot;,
+          &quot;First principles&quot;: &quot;Judgements, intentions, choices, roles, interdependence, and external conditions must be distinguished. A person&#x27;s response can be examined even when an outcome cannot be guaranteed.&quot;,
+          &quot;Variables&quot;: &quot;The situation, facts, role obligations, values, available actions, other people, uncertainty, emotions, and consequences.&quot;,
+          &quot;Mechanism&quot;: &quot;A Stoic practice pauses between event and judgement, tests the judgement, identifies a virtuous and practical response, then acts while accepting uncertainty about the outcome.&quot;,
+          &quot;Predictions&quot;: &quot;It can support clearer responses to uncertainty and adversity when used as disciplined reflection rather than emotional denial.&quot;,
+          &quot;Assumptions&quot;: &quot;The practice is meaningful only alongside accurate understanding of the situation, ethical reflection, and responsibility toward other people.&quot;,
+          &quot;Limitations&quot;: &quot;Stoicism is not emotional suppression, passive acceptance of injustice, or a replacement for mental-health care. Its full philosophy includes logic and views of nature as well as ethics.&quot;,
+          &quot;Applications&quot;: &quot;Use it for reflective decision-making, resilience, role-based responsibility, and separating controllable choices from uncontrollable outcomes.&quot;,
+          &quot;Visual demonstration&quot;: &quot;Place a difficult event at the centre, separate facts from interpretations and possible actions, then show how different judgements lead to different responses without changing the event itself.&quot;,
+          &quot;Related concepts&quot;: &quot;Ethical decision, perspective, responsibility, resilience, second-order thinking, and social environment.&quot;,
+        },
+      },
+      &quot;stoic-practice&quot;: {
+        id: &quot;stoic-practice&quot;,
+        label: &quot;Stoic practice&quot;,
+        summary: &quot;A practical exercise of examining judgement, choosing a responsible action, and accepting uncertainty about external outcomes.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Ethical&quot;, &quot;Stoicism&quot;, &quot;Stoic practice&quot;],
+      },
       &quot;perspective-cultural&quot;: { id: &quot;perspective-cultural&quot;, label: &quot;Cultural&quot;, summary: &quot;Reality interpreted through shared meanings, values, practices, and inherited context.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Cultural&quot;], children: [&quot;shared-meaning&quot;] },
       &quot;shared-meaning&quot;: { id: &quot;shared-meaning&quot;, label: &quot;Shared meaning&quot;, summary: &quot;A meaning, symbol, interpretation, or expectation held in common by members of a cultural group.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Cultural&quot;, &quot;Shared meaning&quot;], children: [&quot;cultural-practice&quot;] },
       &quot;cultural-practice&quot;: { id: &quot;cultural-practice&quot;, label: &quot;Cultural practice&quot;, summary: &quot;A repeated, socially learned way of acting that carries shared meaning within a cultural context.&quot;, canonicalPath: [&quot;Reality&quot;, &quot;Perspective&quot;, &quot;Cultural&quot;, &quot;Shared meaning&quot;, &quot;Cultural practice&quot;] },
@@ -1872,6 +2127,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const selectedLabel = root.querySelector(&quot;[data-selected-label]&quot;);
     const selectedRole = root.querySelector(&quot;[data-selected-role]&quot;);
     const selectedSummary = root.querySelector(&quot;[data-selected-summary]&quot;);
+    const orbitDetail = root.querySelector(&quot;.orbit-detail&quot;);
     const actionGroup = root.querySelector(&quot;[data-orbit-actions]&quot;);
     const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
     const backButton = root.querySelector(&quot;[data-orbit-back]&quot;);
@@ -1899,6 +2155,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     const ontologyLevel = (node) =&gt; node.canonicalPath.length - 1;
     const nodeColor = (node) =&gt; dimensionColors[node.canonicalPath[1]] ?? &quot;var(--viz-series-1)&quot;;
     const canExploreNode = (node) =&gt; node.id !== &quot;reality&quot;;
+    const revealMobileSelection = () =&gt; {
+      if (!window.matchMedia(&quot;(max-width: 480px)&quot;).matches) return;
+      const reduceMotion = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches;
+      requestAnimationFrame(() =&gt; orbitDetail.scrollIntoView({ behavior: reduceMotion ? &quot;auto&quot; : &quot;smooth&quot;, block: &quot;start&quot; }));
+    };
 
     const validateOntology = () =&gt; {
       Object.entries(ontology).forEach(([id, node]) =&gt; {
@@ -2327,7 +2588,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       understandMoreSummary.textContent = remaining.length === 1 ? &quot;1 supporting field&quot; : `${remaining.length} supporting fields`;
     };
 
-    const setSelectedNode = (nodeId) =&gt; {
+    const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) =&gt; {
       selectedId = nodeId;
       const node = ontology[nodeId];
       root.querySelectorAll(&quot;[data-node-id]&quot;).forEach((button) =&gt; {
@@ -2354,6 +2615,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       exploreButton.textContent = isCurrent ? &quot;Exploring&quot; : &quot;Explore selected&quot;;
       exploreButton.setAttribute(&quot;aria-pressed&quot;, String(canExplore &amp;&amp; isCurrent));
       exploreButton.setAttribute(&quot;aria-label&quot;, isCurrent ? `Currently exploring ${node.label}` : `Explore ${node.label}`);
+      if (revealMobileContent) revealMobileSelection();
     };
 
     const renderOrbit = () =&gt; {
@@ -2394,7 +2656,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.style.setProperty(&quot;--node-color&quot;, color);
         appendDestinationContent(button, child);
         button.addEventListener(&quot;click&quot;, (event) =&gt; {
-          setSelectedNode(child.id);
+          setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail &gt; 0) button.blur();
         });
         nodesLayer.appendChild(button);
@@ -2414,7 +2676,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
       appendDestinationContent(centreButton, parent);
       centreButton.addEventListener(&quot;click&quot;, (event) =&gt; {
-        setSelectedNode(parent.id);
+        setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail &gt; 0) centreButton.blur();
       });
       nodesLayer.appendChild(centreButton);

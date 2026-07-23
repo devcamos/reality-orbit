@@ -14,6 +14,16 @@ const requiredLabels = [
   "Resource",
   "Environment",
   "Knowledge",
+  "Evolutionary psychology",
+  "First-principles thinking",
+  "Compound effect",
+  "Parkinson's Law",
+  "Pareto principle",
+  "Stoicism",
+  "Attachment theory",
+  "Relationship exchange model",
+  "Opportunity cost",
+  "Second-order thinking",
 ];
 
 const [document, fragment] = await Promise.all([
@@ -43,8 +53,24 @@ if (!document.includes("Content-Security-Policy")) {
   failures.push("index.html must include its sandbox content-security policy.");
 }
 
+if (!document.includes(":root{color-scheme:dark;background:Canvas}")) {
+  failures.push("The standalone frame must keep Reality Orbit in its deliberate dark orbital theme.");
+}
+
 if (!fragment.includes('id="reality-orbit-prototype"')) {
   failures.push("The source fragment must keep its unique root ID.");
+}
+
+for (const orbitalVisualContract of [
+  "color-scheme: dark",
+  ".orbit-stage::before",
+  ".orbit-stage::after",
+  ".destination-marker::before",
+  "min-height: calc(100dvh - 0.625rem)",
+]) {
+  if (!fragment.includes(orbitalVisualContract)) {
+    failures.push(`Missing deliberate orbital visual contract: ${orbitalVisualContract}.`);
+  }
 }
 
 if (!fragment.includes("setSelectedNode")) {
@@ -233,7 +259,7 @@ if (!fragment.includes('canonicalPath: ["Reality", "Category", "Resource"]')) {
 
 const canonicalExpansions = [
   '["physical", "biological", "psychological", "social", "economic", "informational", "mathematical"]',
-  '["law", "principle", "razor", "framework", "model", "theorem", "pattern"]',
+  '["law", "principle", "razor", "framework", "model", "theorem", "pattern", "theory", "method"]',
   '["resource-time", "energy", "capital", "information", "attention", "compute"]',
   '["process-change", "transformation", "exchange", "learning", "production"]',
   '["ownership", "dependency", "communication", "competition", "cooperation"]',
@@ -282,10 +308,14 @@ for (const forbiddenLawInstance of ["galls-law", "murphys-law", "amdahl-serial-w
   }
 }
 
-for (const retiredKnowledgeType of ['id: "theory"', 'id: "method"', 'id: "heuristic"']) {
-  if (fragment.includes(retiredKnowledgeType)) {
-    failures.push(`Knowledge map must use the agreed seven first-class artifact types: ${retiredKnowledgeType}.`);
+for (const requiredKnowledgeType of ['id: "theory"', 'id: "method"']) {
+  if (!fragment.includes(requiredKnowledgeType)) {
+    failures.push(`Knowledge map must include the agreed first-class artifact type: ${requiredKnowledgeType}.`);
   }
+}
+
+if (fragment.includes('id: "heuristic"')) {
+  failures.push("Heuristic must not be promoted to a first-class knowledge type without an explicit ontology decision.");
 }
 
 for (const forbiddenApi of ["fetch(", "XMLHttpRequest", "WebSocket("]) {
