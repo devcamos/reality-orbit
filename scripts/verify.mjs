@@ -62,7 +62,8 @@ if (!fragment.includes('id="reality-orbit-prototype"')) {
 }
 
 for (const orbitalVisualContract of [
-  "color-scheme: dark",
+  ":root {\n    color-scheme: dark !important;",
+  "background: Canvas !important;",
   ".orbit-stage::before",
   ".orbit-stage::after",
   ".destination-marker::before",
