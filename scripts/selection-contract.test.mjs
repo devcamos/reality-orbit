@@ -21,14 +21,18 @@ const policySource = extractDeclaration("const canExploreNode", "\n\n    const v
 const roleSource = extractDeclaration("const roleForNode", "\n\n    const relationshipForNode");
 const questionsSource = extractDeclaration("const dimensionQuestions", "\n\n    const buildConceptAnatomy");
 const anatomySource = extractDeclaration("const buildConceptAnatomy", "\n\n    const createAnatomyField");
+const visualSource = extractDeclaration("const visualModelForNode", "\n\n    const parentForNode");
 
 const contract = runInNewContext(`
   const ontology = ${ontologyMatch[1]};
+  const terminalOntologyLevel = 4;
+  const ontologyLevel = (node) => node.canonicalPath.length - 1;
   ${policySource};
   ${roleSource};
   ${questionsSource};
   ${anatomySource};
-  ({ ontology, canExploreNode, roleForNode, buildConceptAnatomy });
+  ${visualSource};
+  ({ ontology, canExploreNode, canPlayVisualForNode, roleForNode, buildConceptAnatomy, visualModelForNode });
 `, Object.create(null));
 
 const nodes = Object.values(contract.ontology);
@@ -69,6 +73,37 @@ test("every reachable non-root selection exposes Explore selected", () => {
   for (const id of reachable) {
     if (id === "reality") continue;
     assert.equal(contract.canExploreNode(contract.ontology[id]), true, `${id} must expose Explore selected`);
+  }
+});
+
+test("only Laws and Principles expose the V1 visual representation", () => {
+  const visualNodes = nodes.filter((node) => contract.canPlayVisualForNode(node));
+  assert.ok(visualNodes.length > 0, "The V1 visual scope must contain Laws and Principles.");
+
+  for (const node of nodes) {
+    const belongsToVisualFamily = node.canonicalPath.includes("Knowledge") && ["Law", "Principle"].includes(node.canonicalPath[3]);
+    assert.equal(contract.canPlayVisualForNode(node), belongsToVisualFamily, `${node.label} must follow the visual representation scope.`);
+  }
+});
+
+test("every visualised Law or Principle has a complete visual representation model", () => {
+  for (const node of nodes.filter((candidate) => contract.canPlayVisualForNode(candidate))) {
+    const visual = contract.visualModelForNode(node);
+    assert.ok(["context", "mechanism", "focus"].includes(visual.mode), `${node.label} must select a visual mode.`);
+    assert.ok(visual.caption?.trim(), `${node.label} must have a visual caption.`);
+    assert.equal(visual.steps.length, 3, `${node.label} must have Foundation, Mechanism, and Meaning visual steps.`);
+    for (const step of visual.steps) {
+      assert.ok(step.label?.trim(), `${node.label} visual step needs a label.`);
+      assert.ok(step.value?.trim(), `${node.label} visual step needs teaching content.`);
+    }
+  }
+});
+
+test("authored visual demonstrations govern the popup captions", () => {
+  for (const node of nodes.filter((candidate) => contract.canPlayVisualForNode(candidate))) {
+    const anatomy = contract.buildConceptAnatomy(node);
+    if (!anatomy["Visual demonstration"]) continue;
+    assert.equal(contract.visualModelForNode(node).caption, anatomy["Visual demonstration"], `${node.label} must keep its authored visual teaching intent.`);
   }
 });
 

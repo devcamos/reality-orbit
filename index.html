@@ -1104,6 +1104,186 @@ html&gt;body{padding:0}&lt;/style&gt;
     display: none;
   }
 
+  #reality-orbit-prototype .orbit-detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  #reality-orbit-prototype .orbit-detail-visual,
+  #reality-orbit-prototype .orbit-detail-action {
+    flex: 1 1 11rem;
+  }
+
+  #reality-orbit-prototype .orbit-detail-visual[hidden] {
+    display: none !important;
+  }
+
+  #reality-orbit-prototype .concept-visual-dialog {
+    width: min(48rem, calc(100vw - 1rem));
+    max-height: calc(100dvh - 1rem);
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    color: var(--foreground);
+    border: 1px solid color-mix(in srgb, var(--border) 88%, var(--foreground));
+    border-radius: 1rem;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--background) 88%, var(--card)), var(--background));
+    box-shadow: 0 2rem 6rem color-mix(in srgb, var(--background) 70%, transparent);
+  }
+
+  #reality-orbit-prototype .concept-visual-dialog::backdrop {
+    background: color-mix(in srgb, var(--background) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .concept-visual-header,
+  #reality-orbit-prototype .concept-visual-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .concept-visual-header-copy {
+    min-width: 0;
+  }
+
+  #reality-orbit-prototype .concept-visual-header-copy p,
+  #reality-orbit-prototype .concept-visual-header-copy h2,
+  #reality-orbit-prototype .concept-visual-caption,
+  #reality-orbit-prototype .concept-visual-step p {
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .concept-visual-eyebrow,
+  #reality-orbit-prototype .concept-visual-step span {
+    color: var(--muted-foreground);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  #reality-orbit-prototype .concept-visual-body {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  #reality-orbit-prototype .concept-visual-scene {
+    position: relative;
+    min-height: clamp(18rem, 54vw, 25rem);
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-radius: 0.85rem;
+    background:
+      radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--visual-color, var(--viz-series-1)) 20%, transparent), transparent 28%),
+      radial-gradient(circle at 18% 16%, color-mix(in srgb, var(--foreground) 16%, transparent) 0 0.05rem, transparent 0.11rem),
+      radial-gradient(circle at 82% 78%, color-mix(in srgb, var(--foreground) 12%, transparent) 0 0.04rem, transparent 0.1rem),
+      linear-gradient(145deg, color-mix(in srgb, var(--background) 94%, var(--foreground)), var(--background));
+    background-size: auto, 131px 151px, 199px 181px, auto;
+  }
+
+  #reality-orbit-prototype .concept-visual-graph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  #reality-orbit-prototype .concept-visual-link {
+    stroke: color-mix(in srgb, var(--foreground) 21%, transparent);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link {
+    stroke-dasharray: 1 1;
+    animation: concept-visual-draw 750ms ease both;
+  }
+
+  #reality-orbit-prototype .concept-visual-node {
+    position: absolute;
+    z-index: 1;
+    left: var(--visual-x);
+    top: var(--visual-y);
+    display: grid;
+    width: min(8.5rem, 30vw);
+    justify-items: center;
+    gap: 0.3rem;
+    color: var(--foreground);
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
+
+  #reality-orbit-prototype .concept-visual-node-mark {
+    display: grid;
+    width: var(--visual-node-size, 2.75rem);
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--visual-node-color, var(--viz-series-1)) 64%, var(--border));
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--visual-node-color, var(--viz-series-1)) 26%, transparent), color-mix(in srgb, var(--background) 90%, var(--card)) 72%);
+    box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--visual-node-color, var(--viz-series-1)) 8%, transparent);
+  }
+
+  #reality-orbit-prototype .concept-visual-node[data-visual-kind=&quot;focus&quot;] {
+    --visual-node-size: 4.7rem;
+  }
+
+  #reality-orbit-prototype .concept-visual-node[data-visual-kind=&quot;focus&quot;] .concept-visual-node-mark {
+    box-shadow: 0 0 0 0.55rem color-mix(in srgb, var(--visual-node-color, var(--viz-series-1)) 12%, transparent), 0 0 2rem color-mix(in srgb, var(--visual-node-color, var(--viz-series-1)) 28%, transparent);
+  }
+
+  #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind=&quot;focus&quot;] .concept-visual-node-mark {
+    animation: concept-visual-pulse 1300ms ease-in-out both;
+  }
+
+  #reality-orbit-prototype .concept-visual-node-label {
+    max-width: 100%;
+    color: var(--muted-foreground);
+    line-height: 1.2;
+  }
+
+  #reality-orbit-prototype .concept-visual-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  #reality-orbit-prototype .concept-visual-step {
+    min-width: 0;
+    padding: 0.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  }
+
+  #reality-orbit-prototype .concept-visual-step p {
+    margin-top: 0.35rem;
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .concept-visual-caption {
+    color: var(--muted-foreground);
+  }
+
+  #reality-orbit-prototype .concept-visual-footer {
+    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-bottom: 0;
+  }
+
+  @keyframes concept-visual-draw {
+    from { stroke-dashoffset: 1; opacity: 0; }
+    to { stroke-dashoffset: 0; opacity: 1; }
+  }
+
+  @keyframes concept-visual-pulse {
+    0% { transform: scale(0.84); opacity: 0; }
+    55% { transform: scale(1.06); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
   #reality-orbit-prototype .orbit-status-heading {
     display: flex;
     align-items: center;
@@ -1301,6 +1481,10 @@ html&gt;body{padding:0}&lt;/style&gt;
       min-height: 2.75rem;
       flex: 1 1 auto;
     }
+
+    #reality-orbit-prototype .orbit-detail-visual {
+      min-height: 2.75rem;
+    }
   }
 
   @media (max-width: 680px) {
@@ -1320,6 +1504,10 @@ html&gt;body{padding:0}&lt;/style&gt;
   @media (max-width: 520px) {
     #reality-orbit-prototype .understand-context,
     #reality-orbit-prototype .understand-fields {
+      grid-template-columns: 1fr;
+    }
+
+    #reality-orbit-prototype .concept-visual-steps {
       grid-template-columns: 1fr;
     }
   }
@@ -1416,6 +1604,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .orbit-connection {
       transition: none;
     }
+
+    #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link,
+    #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind=&quot;focus&quot;] .concept-visual-node-mark {
+      animation: none;
+    }
   }
 &lt;/style&gt;
 
@@ -1449,8 +1642,11 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;/span&gt;
             &lt;span class=&quot;orbit-summary&quot; data-selected-summary&gt;The five canonical dimensions used to describe anything represented in the ontology.&lt;/span&gt;
           &lt;/p&gt;
-          &lt;div class=&quot;orbit-detail-action&quot; data-orbit-detail-action hidden&gt;
-            &lt;button class=&quot;btn btn-primary orbit-context-explore&quot; type=&quot;button&quot; data-context-explore-action&gt;Explore selected&lt;/button&gt;
+          &lt;div class=&quot;orbit-detail-actions&quot;&gt;
+            &lt;button class=&quot;btn orbit-detail-visual&quot; type=&quot;button&quot; data-open-concept-visual hidden&gt;Play visual&lt;/button&gt;
+            &lt;div class=&quot;orbit-detail-action&quot; data-orbit-detail-action hidden&gt;
+              &lt;button class=&quot;btn btn-primary orbit-context-explore&quot; type=&quot;button&quot; data-context-explore-action&gt;Explore selected&lt;/button&gt;
+            &lt;/div&gt;
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
@@ -1490,6 +1686,24 @@ html&gt;body{padding:0}&lt;/style&gt;
       &lt;/aside&gt;
     &lt;/div&gt;
   &lt;/div&gt;
+  &lt;dialog class=&quot;concept-visual-dialog&quot; data-concept-visual-dialog aria-labelledby=&quot;concept-visual-title&quot;&gt;
+    &lt;header class=&quot;concept-visual-header&quot;&gt;
+      &lt;div class=&quot;concept-visual-header-copy&quot;&gt;
+        &lt;p class=&quot;text-small concept-visual-eyebrow&quot; data-concept-visual-role&gt;&lt;/p&gt;
+        &lt;h2 id=&quot;concept-visual-title&quot; data-concept-visual-title&gt;&lt;/h2&gt;
+      &lt;/div&gt;
+      &lt;button class=&quot;btn btn-ghost&quot; type=&quot;button&quot; data-close-concept-visual aria-label=&quot;Close visual representation&quot;&gt;Close&lt;/button&gt;
+    &lt;/header&gt;
+    &lt;div class=&quot;concept-visual-body&quot;&gt;
+      &lt;div class=&quot;concept-visual-scene&quot; data-concept-visual-scene role=&quot;img&quot; aria-label=&quot;Animated visual representation of the selected concept&quot;&gt;&lt;/div&gt;
+      &lt;p class=&quot;concept-visual-caption&quot; data-concept-visual-caption&gt;&lt;/p&gt;
+      &lt;div class=&quot;concept-visual-steps&quot; data-concept-visual-steps aria-label=&quot;How to read this visual&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;footer class=&quot;concept-visual-footer&quot;&gt;
+      &lt;span class=&quot;text-small text-muted&quot; data-concept-visual-status&gt;Shows the selected concept in context.&lt;/span&gt;
+      &lt;button class=&quot;btn&quot; type=&quot;button&quot; data-replay-concept-visual&gt;Replay visual&lt;/button&gt;
+    &lt;/footer&gt;
+  &lt;/dialog&gt;
 &lt;/section&gt;
 
 &lt;script&gt;
@@ -2155,6 +2369,16 @@ html&gt;body{padding:0}&lt;/style&gt;
     const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
     const detailAction = root.querySelector(&quot;[data-orbit-detail-action]&quot;);
     const contextExploreButton = root.querySelector(&quot;[data-context-explore-action]&quot;);
+    const openConceptVisualButton = root.querySelector(&quot;[data-open-concept-visual]&quot;);
+    const conceptVisualDialog = root.querySelector(&quot;[data-concept-visual-dialog]&quot;);
+    const closeConceptVisualButton = root.querySelector(&quot;[data-close-concept-visual]&quot;);
+    const replayConceptVisualButton = root.querySelector(&quot;[data-replay-concept-visual]&quot;);
+    const conceptVisualRole = root.querySelector(&quot;[data-concept-visual-role]&quot;);
+    const conceptVisualTitle = root.querySelector(&quot;[data-concept-visual-title]&quot;);
+    const conceptVisualScene = root.querySelector(&quot;[data-concept-visual-scene]&quot;);
+    const conceptVisualCaption = root.querySelector(&quot;[data-concept-visual-caption]&quot;);
+    const conceptVisualSteps = root.querySelector(&quot;[data-concept-visual-steps]&quot;);
+    const conceptVisualStatus = root.querySelector(&quot;[data-concept-visual-status]&quot;);
     const backButton = root.querySelector(&quot;[data-orbit-back]&quot;);
     const pathElement = root.querySelector(&quot;[data-orbit-path]&quot;);
     const understandView = root.querySelector(&quot;[data-understand-view]&quot;);
@@ -2180,6 +2404,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const ontologyLevel = (node) =&gt; node.canonicalPath.length - 1;
     const nodeColor = (node) =&gt; dimensionColors[node.canonicalPath[1]] ?? &quot;var(--viz-series-1)&quot;;
     const canExploreNode = (node) =&gt; node.id !== &quot;reality&quot;;
+    const canPlayVisualForNode = (node) =&gt; node.canonicalPath.includes(&quot;Knowledge&quot;) &amp;&amp; [&quot;Law&quot;, &quot;Principle&quot;].includes(node.canonicalPath[3]);
     const revealMobileSelection = () =&gt; {
       if (!window.matchMedia(&quot;(max-width: 480px)&quot;).matches) return;
       const reduceMotion = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches;
@@ -2619,6 +2844,130 @@ html&gt;body{padding:0}&lt;/style&gt;
       understandMoreSummary.textContent = remaining.length === 1 ? &quot;1 supporting field&quot; : `${remaining.length} supporting fields`;
     };
 
+    const visualModelForNode = (node) =&gt; {
+      const anatomy = buildConceptAnatomy(node);
+      const valueFor = (...labels) =&gt; labels
+        .map((label) =&gt; anatomy[label])
+        .find((value) =&gt; String(value ?? &quot;&quot;).trim()) ?? node.summary;
+      const isNamedKnowledgeArtifact = node.canonicalPath.includes(&quot;Knowledge&quot;) &amp;&amp; ontologyLevel(node) === terminalOntologyLevel;
+
+      return {
+        mode: (node.children?.length ?? 0) &gt; 0 ? &quot;context&quot; : isNamedKnowledgeArtifact ? &quot;mechanism&quot; : &quot;focus&quot;,
+        caption: valueFor(&quot;Visual demonstration&quot;, &quot;Mental model&quot;, &quot;Mechanism&quot;, &quot;Purpose&quot;),
+        steps: [
+          { label: &quot;Foundation&quot;, value: valueFor(&quot;First principles&quot;, &quot;Purpose&quot;, &quot;Governing question&quot;) },
+          { label: &quot;Mechanism&quot;, value: valueFor(&quot;Mechanism&quot;, &quot;Mental model&quot;, &quot;How to use it&quot;) },
+          { label: &quot;Meaning&quot;, value: valueFor(&quot;Predictions&quot;, &quot;Prediction&quot;, &quot;Applications&quot;, &quot;How to use it&quot;) },
+        ],
+      };
+    };
+
+    const parentForNode = (node) =&gt; {
+      const parentPath = node.canonicalPath.slice(0, -1);
+      if (parentPath.length === 0) return null;
+      return Object.values(ontology).find((candidate) =&gt;
+        candidate.canonicalPath.length === parentPath.length
+        &amp;&amp; candidate.canonicalPath.every((segment, index) =&gt; segment === parentPath[index])) ?? null;
+    };
+
+    const appendConceptVisualLink = (graph, start, end) =&gt; {
+      const line = document.createElementNS(svgNamespace, &quot;line&quot;);
+      line.setAttribute(&quot;class&quot;, &quot;concept-visual-link&quot;);
+      line.setAttribute(&quot;x1&quot;, String(start[0]));
+      line.setAttribute(&quot;y1&quot;, String(start[1]));
+      line.setAttribute(&quot;x2&quot;, String(end[0]));
+      line.setAttribute(&quot;y2&quot;, String(end[1]));
+      graph.appendChild(line);
+    };
+
+    const createConceptVisualNode = (node, [x, y], kind) =&gt; {
+      const visualNode = document.createElement(&quot;div&quot;);
+      visualNode.className = &quot;concept-visual-node&quot;;
+      visualNode.dataset.visualKind = kind;
+      visualNode.style.setProperty(&quot;--visual-x&quot;, `${x}%`);
+      visualNode.style.setProperty(&quot;--visual-y&quot;, `${y}%`);
+      visualNode.style.setProperty(&quot;--visual-node-color&quot;, nodeColor(node));
+
+      const mark = document.createElement(&quot;span&quot;);
+      mark.className = &quot;concept-visual-node-mark&quot;;
+      mark.setAttribute(&quot;aria-hidden&quot;, &quot;true&quot;);
+      const label = document.createElement(&quot;span&quot;);
+      label.className = &quot;text-small concept-visual-node-label&quot;;
+      label.textContent = node.label;
+      visualNode.append(mark, label);
+      return visualNode;
+    };
+
+    const renderConceptVisual = (node) =&gt; {
+      const model = visualModelForNode(node);
+      const focusPosition = [50, 54];
+      const parent = parentForNode(node);
+      const children = (node.children ?? []).slice(0, 8).map((childId) =&gt; ontology[childId]);
+      const childPositions = positionChildren(node).slice(0, children.length);
+      const graph = document.createElementNS(svgNamespace, &quot;svg&quot;);
+      graph.setAttribute(&quot;class&quot;, &quot;concept-visual-graph&quot;);
+      graph.setAttribute(&quot;viewBox&quot;, &quot;0 0 100 100&quot;);
+      graph.setAttribute(&quot;preserveAspectRatio&quot;, &quot;none&quot;);
+      graph.setAttribute(&quot;aria-hidden&quot;, &quot;true&quot;);
+
+      conceptVisualRole.textContent = `${roleForNode(node)} · Visual representation`;
+      conceptVisualTitle.textContent = node.label;
+      conceptVisualCaption.textContent = model.caption;
+      conceptVisualStatus.textContent = model.mode === &quot;context&quot;
+        ? &quot;Shows the selected concept and its immediate ontology context.&quot;
+        : &quot;Shows the selected concept from its parent context.&quot;;
+      conceptVisualScene.setAttribute(&quot;aria-label&quot;, `Animated visual representation of ${node.label}`);
+      conceptVisualScene.style.setProperty(&quot;--visual-color&quot;, nodeColor(node));
+      conceptVisualScene.replaceChildren(graph);
+
+      if (parent) {
+        const parentPosition = [50, 16];
+        appendConceptVisualLink(graph, parentPosition, focusPosition);
+        conceptVisualScene.appendChild(createConceptVisualNode(parent, parentPosition, &quot;parent&quot;));
+      }
+
+      children.forEach((child, index) =&gt; {
+        const childPosition = childPositions[index];
+        appendConceptVisualLink(graph, focusPosition, childPosition);
+        conceptVisualScene.appendChild(createConceptVisualNode(child, childPosition, &quot;child&quot;));
+      });
+      conceptVisualScene.appendChild(createConceptVisualNode(node, focusPosition, &quot;focus&quot;));
+
+      conceptVisualSteps.replaceChildren(...model.steps.map((step) =&gt; {
+        const item = document.createElement(&quot;article&quot;);
+        item.className = &quot;concept-visual-step&quot;;
+        const label = document.createElement(&quot;span&quot;);
+        label.className = &quot;text-small&quot;;
+        label.textContent = step.label;
+        const value = document.createElement(&quot;p&quot;);
+        value.textContent = step.value;
+        item.append(label, value);
+        return item;
+      }));
+    };
+
+    const playConceptVisual = () =&gt; {
+      conceptVisualScene.classList.remove(&quot;is-playing&quot;);
+      void conceptVisualScene.offsetWidth;
+      conceptVisualScene.classList.add(&quot;is-playing&quot;);
+    };
+
+    const openConceptVisual = () =&gt; {
+      const node = ontology[selectedId];
+      if (!node || !canPlayVisualForNode(node)) return;
+      renderConceptVisual(node);
+      if (!conceptVisualDialog.open) {
+        if (typeof conceptVisualDialog.showModal === &quot;function&quot;) conceptVisualDialog.showModal();
+        else conceptVisualDialog.setAttribute(&quot;open&quot;, &quot;&quot;);
+      }
+      requestAnimationFrame(playConceptVisual);
+    };
+
+    const closeConceptVisual = () =&gt; {
+      if (typeof conceptVisualDialog.close === &quot;function&quot;) conceptVisualDialog.close();
+      else conceptVisualDialog.removeAttribute(&quot;open&quot;);
+    };
+
     const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) =&gt; {
       selectedId = nodeId;
       const node = ontology[nodeId];
@@ -2634,6 +2983,13 @@ html&gt;body{padding:0}&lt;/style&gt;
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
       selectedSummary.textContent = context.explanation;
+      const canPlayVisual = canPlayVisualForNode(node);
+      openConceptVisualButton.hidden = !canPlayVisual;
+      openConceptVisualButton.disabled = !canPlayVisual;
+      if (canPlayVisual) {
+        openConceptVisualButton.textContent = `Play ${node.label} visual`;
+        openConceptVisualButton.setAttribute(&quot;aria-label&quot;, `Play a visual representation of ${node.label}`);
+      }
       renderUnderstand(node);
       understandView.scrollTo({ top: 0, behavior: &quot;auto&quot; });
 
@@ -2729,6 +3085,12 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     exploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId));
     contextExploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId, { revealMap: true }));
+    openConceptVisualButton.addEventListener(&quot;click&quot;, openConceptVisual);
+    closeConceptVisualButton.addEventListener(&quot;click&quot;, closeConceptVisual);
+    replayConceptVisualButton.addEventListener(&quot;click&quot;, playConceptVisual);
+    conceptVisualDialog.addEventListener(&quot;click&quot;, (event) =&gt; {
+      if (event.target === conceptVisualDialog) closeConceptVisual();
+    });
 
     backButton.addEventListener(&quot;click&quot;, () =&gt; {
       if (history.length &gt; 1) history.pop();

@@ -90,6 +90,35 @@ if (!fragment.includes("renderUnderstand(node)") || !fragment.includes("data-und
   failures.push("Every selection must automatically update the Concept Anatomy view.");
 }
 
+for (const visualRepresentationContract of [
+  "data-open-concept-visual",
+  "data-concept-visual-dialog",
+  "visualModelForNode",
+  "renderConceptVisual",
+  "conceptVisualDialog.showModal",
+  "data-replay-concept-visual",
+]) {
+  if (!fragment.includes(visualRepresentationContract)) {
+    failures.push(`Missing playable visual representation contract: ${visualRepresentationContract}.`);
+  }
+}
+
+if (!fragment.includes("requestAnimationFrame(playConceptVisual)")) {
+  failures.push("Opening a concept visual must start its animation without requiring a second user action.");
+}
+
+for (const visualScopeContract of [
+  "const canPlayVisualForNode",
+  '["Law", "Principle"].includes(node.canonicalPath[3])',
+  "openConceptVisualButton.hidden = !canPlayVisual",
+  ".orbit-detail-visual[hidden]",
+  "display: none !important",
+]) {
+  if (!fragment.includes(visualScopeContract)) {
+    failures.push(`Missing Laws-and-Principles visual scope contract: ${visualScopeContract}.`);
+  }
+}
+
 if (!fragment.includes('      </div>\n      <aside class="understand-view"')) {
   failures.push("The Concept Anatomy view must remain a desktop sibling of the map canvas, not content below it.");
 }
