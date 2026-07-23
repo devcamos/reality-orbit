@@ -1086,6 +1086,8 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype .orbit-detail {
+    display: grid;
+    gap: 0.75rem;
     min-height: 4.4rem;
     padding: 0.75rem 0.8rem;
     border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
@@ -1096,6 +1098,10 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-status {
     min-width: 0;
     margin: 0;
+  }
+
+  #reality-orbit-prototype .orbit-detail-action {
+    display: none;
   }
 
   #reality-orbit-prototype .orbit-status-heading {
@@ -1282,6 +1288,19 @@ html&gt;body{padding:0}&lt;/style&gt;
       border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
       border-left: 0;
     }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-actions {
+      display: none !important;
+    }
+
+    #reality-orbit-prototype .orbit-detail-action:not([hidden]) {
+      display: flex;
+    }
+
+    #reality-orbit-prototype .orbit-detail-action .orbit-context-explore {
+      min-height: 2.75rem;
+      flex: 1 1 auto;
+    }
   }
 
   @media (max-width: 680px) {
@@ -1430,6 +1449,9 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;/span&gt;
             &lt;span class=&quot;orbit-summary&quot; data-selected-summary&gt;The five canonical dimensions used to describe anything represented in the ontology.&lt;/span&gt;
           &lt;/p&gt;
+          &lt;div class=&quot;orbit-detail-action&quot; data-orbit-detail-action hidden&gt;
+            &lt;button class=&quot;btn btn-primary orbit-context-explore&quot; type=&quot;button&quot; data-context-explore-action&gt;Explore selected&lt;/button&gt;
+          &lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
       &lt;aside class=&quot;understand-view&quot; data-understand-view aria-labelledby=&quot;understand-title&quot;&gt;
@@ -2128,8 +2150,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     const selectedRole = root.querySelector(&quot;[data-selected-role]&quot;);
     const selectedSummary = root.querySelector(&quot;[data-selected-summary]&quot;);
     const orbitDetail = root.querySelector(&quot;.orbit-detail&quot;);
+    const orbitStage = root.querySelector(&quot;.orbit-stage&quot;);
     const actionGroup = root.querySelector(&quot;[data-orbit-actions]&quot;);
     const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
+    const detailAction = root.querySelector(&quot;[data-orbit-detail-action]&quot;);
+    const contextExploreButton = root.querySelector(&quot;[data-context-explore-action]&quot;);
     const backButton = root.querySelector(&quot;[data-orbit-back]&quot;);
     const pathElement = root.querySelector(&quot;[data-orbit-path]&quot;);
     const understandView = root.querySelector(&quot;[data-understand-view]&quot;);
@@ -2159,6 +2184,12 @@ html&gt;body{padding:0}&lt;/style&gt;
       if (!window.matchMedia(&quot;(max-width: 480px)&quot;).matches) return;
       const reduceMotion = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches;
       requestAnimationFrame(() =&gt; orbitDetail.scrollIntoView({ behavior: reduceMotion ? &quot;auto&quot; : &quot;smooth&quot;, block: &quot;start&quot; }));
+    };
+
+    const revealOrbitMap = () =&gt; {
+      if (!window.matchMedia(&quot;(max-width: 980px)&quot;).matches) return;
+      const reduceMotion = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches;
+      requestAnimationFrame(() =&gt; orbitStage.scrollIntoView({ behavior: reduceMotion ? &quot;auto&quot; : &quot;smooth&quot;, block: &quot;start&quot; }));
     };
 
     const validateOntology = () =&gt; {
@@ -2615,6 +2646,11 @@ html&gt;body{padding:0}&lt;/style&gt;
       exploreButton.textContent = isCurrent ? &quot;Exploring&quot; : &quot;Explore selected&quot;;
       exploreButton.setAttribute(&quot;aria-pressed&quot;, String(canExplore &amp;&amp; isCurrent));
       exploreButton.setAttribute(&quot;aria-label&quot;, isCurrent ? `Currently exploring ${node.label}` : `Explore ${node.label}`);
+      const canExploreFromDetail = canExplore &amp;&amp; !isCurrent;
+      detailAction.hidden = !canExploreFromDetail;
+      contextExploreButton.hidden = !canExploreFromDetail;
+      contextExploreButton.textContent = `Explore ${node.label}`;
+      contextExploreButton.setAttribute(&quot;aria-label&quot;, `Explore ${node.label} and return to the map`);
       if (revealMobileContent) revealMobileSelection();
     };
 
@@ -2683,14 +2719,16 @@ html&gt;body{padding:0}&lt;/style&gt;
       setSelectedNode(parent.id);
     };
 
-    function exploreSelectedNode(nodeId = selectedId) {
+    function exploreSelectedNode(nodeId = selectedId, { revealMap = false } = {}) {
       const node = ontology[nodeId];
       if (!node || node.id === currentId() || !canExploreNode(node)) return;
       history.push(nodeId);
       renderOrbit();
+      if (revealMap) revealOrbitMap();
     }
 
     exploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId));
+    contextExploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId, { revealMap: true }));
 
     backButton.addEventListener(&quot;click&quot;, () =&gt; {
       if (history.length &gt; 1) history.pop();

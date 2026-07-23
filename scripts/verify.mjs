@@ -110,8 +110,8 @@ if (fragment.includes("data-node-guide") || fragment.includes("orbit-guide")) {
   failures.push("Selection explanations must not float over unrelated map destinations.");
 }
 
-if (fragment.includes("data-understand-action") || !fragment.includes("data-explore-action")) {
-  failures.push("Concept Anatomy must update automatically; Explore is the only explicit toolbar action.");
+if (fragment.includes("data-understand-action") || !fragment.includes("data-explore-action") || !fragment.includes("data-context-explore-action")) {
+  failures.push("Concept Anatomy must update automatically and selected concepts must expose contextual exploration.");
 }
 
 if (!fragment.includes("buildConceptAnatomy") || !fragment.includes("renderUnderstand(node)")) {

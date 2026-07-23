@@ -271,6 +271,8 @@
   }
 
   #reality-orbit-prototype .orbit-detail {
+    display: grid;
+    gap: 0.75rem;
     min-height: 4.4rem;
     padding: 0.75rem 0.8rem;
     border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
@@ -281,6 +283,10 @@
   #reality-orbit-prototype .orbit-status {
     min-width: 0;
     margin: 0;
+  }
+
+  #reality-orbit-prototype .orbit-detail-action {
+    display: none;
   }
 
   #reality-orbit-prototype .orbit-status-heading {
@@ -467,6 +473,19 @@
       border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
       border-left: 0;
     }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-actions {
+      display: none !important;
+    }
+
+    #reality-orbit-prototype .orbit-detail-action:not([hidden]) {
+      display: flex;
+    }
+
+    #reality-orbit-prototype .orbit-detail-action .orbit-context-explore {
+      min-height: 2.75rem;
+      flex: 1 1 auto;
+    }
   }
 
   @media (max-width: 680px) {
@@ -615,6 +634,9 @@
             </span>
             <span class="orbit-summary" data-selected-summary>The five canonical dimensions used to describe anything represented in the ontology.</span>
           </p>
+          <div class="orbit-detail-action" data-orbit-detail-action hidden>
+            <button class="btn btn-primary orbit-context-explore" type="button" data-context-explore-action>Explore selected</button>
+          </div>
         </div>
       </div>
       <aside class="understand-view" data-understand-view aria-labelledby="understand-title">
@@ -1313,8 +1335,11 @@
     const selectedRole = root.querySelector("[data-selected-role]");
     const selectedSummary = root.querySelector("[data-selected-summary]");
     const orbitDetail = root.querySelector(".orbit-detail");
+    const orbitStage = root.querySelector(".orbit-stage");
     const actionGroup = root.querySelector("[data-orbit-actions]");
     const exploreButton = root.querySelector("[data-explore-action]");
+    const detailAction = root.querySelector("[data-orbit-detail-action]");
+    const contextExploreButton = root.querySelector("[data-context-explore-action]");
     const backButton = root.querySelector("[data-orbit-back]");
     const pathElement = root.querySelector("[data-orbit-path]");
     const understandView = root.querySelector("[data-understand-view]");
@@ -1344,6 +1369,12 @@
       if (!window.matchMedia("(max-width: 480px)").matches) return;
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       requestAnimationFrame(() => orbitDetail.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }));
+    };
+
+    const revealOrbitMap = () => {
+      if (!window.matchMedia("(max-width: 980px)").matches) return;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      requestAnimationFrame(() => orbitStage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }));
     };
 
     const validateOntology = () => {
@@ -1800,6 +1831,11 @@
       exploreButton.textContent = isCurrent ? "Exploring" : "Explore selected";
       exploreButton.setAttribute("aria-pressed", String(canExplore && isCurrent));
       exploreButton.setAttribute("aria-label", isCurrent ? `Currently exploring ${node.label}` : `Explore ${node.label}`);
+      const canExploreFromDetail = canExplore && !isCurrent;
+      detailAction.hidden = !canExploreFromDetail;
+      contextExploreButton.hidden = !canExploreFromDetail;
+      contextExploreButton.textContent = `Explore ${node.label}`;
+      contextExploreButton.setAttribute("aria-label", `Explore ${node.label} and return to the map`);
       if (revealMobileContent) revealMobileSelection();
     };
 
@@ -1868,14 +1904,16 @@
       setSelectedNode(parent.id);
     };
 
-    function exploreSelectedNode(nodeId = selectedId) {
+    function exploreSelectedNode(nodeId = selectedId, { revealMap = false } = {}) {
       const node = ontology[nodeId];
       if (!node || node.id === currentId() || !canExploreNode(node)) return;
       history.push(nodeId);
       renderOrbit();
+      if (revealMap) revealOrbitMap();
     }
 
     exploreButton.addEventListener("click", () => exploreSelectedNode(selectedId));
+    contextExploreButton.addEventListener("click", () => exploreSelectedNode(selectedId, { revealMap: true }));
 
     backButton.addEventListener("click", () => {
       if (history.length > 1) history.pop();

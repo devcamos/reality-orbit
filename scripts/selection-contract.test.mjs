@@ -287,7 +287,7 @@ test("every visible child relationship is explicitly curated and advances the ca
   }
 });
 
-test("selection automatically renders Concept Anatomy and exposes only exploration controls", () => {
+test("selection automatically renders Concept Anatomy and exposes contextual exploration controls", () => {
   assert.doesNotMatch(fragment, /data-understand-action/);
   assert.doesNotMatch(fragment, /function openUnderstand/);
   assert.match(fragment, /renderUnderstand\(node\);/);
@@ -297,6 +297,10 @@ test("selection automatically renders Concept Anatomy and exposes only explorati
   assert.match(fragment, /exploreButton\.disabled = canExplore && isCurrent/);
   assert.match(fragment, /exploreButton\.textContent = isCurrent \? "Exploring" : "Explore selected"/);
   assert.match(fragment, /exploreButton\.setAttribute\("aria-pressed", String\(canExplore && isCurrent\)\)/);
+  assert.match(fragment, /data-context-explore-action/);
+  assert.match(fragment, /const canExploreFromDetail = canExplore && !isCurrent;/);
+  assert.match(fragment, /detailAction\.hidden = !canExploreFromDetail;/);
+  assert.match(fragment, /contextExploreButton\.textContent = `Explore \$\{node\.label\}`;/);
 });
 
 test("a mobile destination selection reveals its summary before the Concept Anatomy", () => {
@@ -306,6 +310,16 @@ test("a mobile destination selection reveals its summary before the Concept Anat
   assert.match(fragment, /orbitDetail\.scrollIntoView\(\{ behavior: reduceMotion \? "auto" : "smooth", block: "start" \}\)/);
   assert.match(fragment, /setSelectedNode\(child\.id, \{ revealMobileContent: true \}\);/);
   assert.match(fragment, /setSelectedNode\(parent\.id, \{ revealMobileContent: true \}\);/);
+});
+
+test("mobile contextual exploration returns the learner to the refreshed map", () => {
+  assert.match(fragment, /#reality-orbit-prototype \.orbit-toolbar \.orbit-actions \{\n      display: none !important;/);
+  assert.match(fragment, /#reality-orbit-prototype \.orbit-detail-action:not\(\[hidden\]\) \{\n      display: flex;/);
+  assert.match(fragment, /const revealOrbitMap = \(\) => \{/);
+  assert.match(fragment, /window\.matchMedia\("\(max-width: 980px\)"\)\.matches/);
+  assert.match(fragment, /orbitStage\.scrollIntoView\(\{ behavior: reduceMotion \? "auto" : "smooth", block: "start" \}\)/);
+  assert.match(fragment, /function exploreSelectedNode\(nodeId = selectedId, \{ revealMap = false \} = \{\}\)/);
+  assert.match(fragment, /contextExploreButton\.addEventListener\("click", \(\) => exploreSelectedNode\(selectedId, \{ revealMap: true \}\)\);/);
 });
 
 test("Concept Anatomy maps every visible teaching field to the selected node", () => {
