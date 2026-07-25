@@ -14,6 +14,16 @@ const requiredLabels = [
   "Resource",
   "Environment",
   "Knowledge",
+  "Evolutionary psychology",
+  "First-principles thinking",
+  "Compound effect",
+  "Parkinson's Law",
+  "Pareto principle",
+  "Stoicism",
+  "Attachment theory",
+  "Relationship exchange model",
+  "Opportunity cost",
+  "Second-order thinking",
 ];
 
 const [document, fragment] = await Promise.all([
@@ -43,8 +53,25 @@ if (!document.includes("Content-Security-Policy")) {
   failures.push("index.html must include its sandbox content-security policy.");
 }
 
+if (!document.includes(":root{color-scheme:dark;background:Canvas}")) {
+  failures.push("The standalone frame must keep Reality Orbit in its deliberate dark orbital theme.");
+}
+
 if (!fragment.includes('id="reality-orbit-prototype"')) {
   failures.push("The source fragment must keep its unique root ID.");
+}
+
+for (const orbitalVisualContract of [
+  ":root {\n    color-scheme: dark !important;",
+  "background: Canvas !important;",
+  ".orbit-stage::before",
+  ".orbit-stage::after",
+  ".destination-marker::before",
+  "min-height: calc(100dvh - 0.625rem)",
+]) {
+  if (!fragment.includes(orbitalVisualContract)) {
+    failures.push(`Missing deliberate orbital visual contract: ${orbitalVisualContract}.`);
+  }
 }
 
 if (!fragment.includes("setSelectedNode")) {
@@ -61,6 +88,35 @@ if (!fragment.includes("exploreSelectedNode")) {
 
 if (!fragment.includes("renderUnderstand(node)") || !fragment.includes("data-understand-view")) {
   failures.push("Every selection must automatically update the Concept Anatomy view.");
+}
+
+for (const visualRepresentationContract of [
+  "data-open-concept-visual",
+  "data-concept-visual-dialog",
+  "visualModelForNode",
+  "renderConceptVisual",
+  "conceptVisualDialog.showModal",
+  "data-replay-concept-visual",
+]) {
+  if (!fragment.includes(visualRepresentationContract)) {
+    failures.push(`Missing playable visual representation contract: ${visualRepresentationContract}.`);
+  }
+}
+
+if (!fragment.includes("requestAnimationFrame(playConceptVisual)")) {
+  failures.push("Opening a concept visual must start its animation without requiring a second user action.");
+}
+
+for (const visualScopeContract of [
+  "const canPlayVisualForNode",
+  '["Law", "Principle"].includes(node.canonicalPath[3])',
+  "openConceptVisualButton.hidden = !canPlayVisual",
+  ".orbit-detail-visual[hidden]",
+  "display: none !important",
+]) {
+  if (!fragment.includes(visualScopeContract)) {
+    failures.push(`Missing Laws-and-Principles visual scope contract: ${visualScopeContract}.`);
+  }
 }
 
 if (!fragment.includes('      </div>\n      <aside class="understand-view"')) {
@@ -83,8 +139,8 @@ if (fragment.includes("data-node-guide") || fragment.includes("orbit-guide")) {
   failures.push("Selection explanations must not float over unrelated map destinations.");
 }
 
-if (fragment.includes("data-understand-action") || !fragment.includes("data-explore-action")) {
-  failures.push("Concept Anatomy must update automatically; Explore is the only explicit toolbar action.");
+if (fragment.includes("data-understand-action") || !fragment.includes("data-explore-action") || !fragment.includes("data-context-explore-action")) {
+  failures.push("Concept Anatomy must update automatically and selected concepts must expose contextual exploration.");
 }
 
 if (!fragment.includes("buildConceptAnatomy") || !fragment.includes("renderUnderstand(node)")) {
@@ -233,7 +289,7 @@ if (!fragment.includes('canonicalPath: ["Reality", "Category", "Resource"]')) {
 
 const canonicalExpansions = [
   '["physical", "biological", "psychological", "social", "economic", "informational", "mathematical"]',
-  '["law", "principle", "razor", "framework", "model", "theorem", "pattern"]',
+  '["law", "principle", "razor", "framework", "model", "theorem", "pattern", "theory", "method"]',
   '["resource-time", "energy", "capital", "information", "attention", "compute"]',
   '["process-change", "transformation", "exchange", "learning", "production"]',
   '["ownership", "dependency", "communication", "competition", "cooperation"]',
@@ -282,10 +338,14 @@ for (const forbiddenLawInstance of ["galls-law", "murphys-law", "amdahl-serial-w
   }
 }
 
-for (const retiredKnowledgeType of ['id: "theory"', 'id: "method"', 'id: "heuristic"']) {
-  if (fragment.includes(retiredKnowledgeType)) {
-    failures.push(`Knowledge map must use the agreed seven first-class artifact types: ${retiredKnowledgeType}.`);
+for (const requiredKnowledgeType of ['id: "theory"', 'id: "method"']) {
+  if (!fragment.includes(requiredKnowledgeType)) {
+    failures.push(`Knowledge map must include the agreed first-class artifact type: ${requiredKnowledgeType}.`);
   }
+}
+
+if (fragment.includes('id: "heuristic"')) {
+  failures.push("Heuristic must not be promoted to a first-class knowledge type without an explicit ontology decision.");
 }
 
 for (const forbiddenApi of ["fetch(", "XMLHttpRequest", "WebSocket("]) {

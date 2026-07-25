@@ -385,6 +385,7 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 - Show only the current destination visually in the compact toolbar. The complete breadcrumb remains in the accessible DOM, while **Back** carries the visible ancestry interaction.
 - Move the responsive action group onto its own full-width toolbar row. **Explore selected**, when relevant, remains a 44 px touch target; Concept Anatomy updates automatically below the map.
 - Use the permanent detail below the map at every width as the single source of visible name, type, and explanation, avoiding duplicated information and covered destinations.
+- After a user selects a destination at mobile width, scroll to the permanent detail so the selected name, role, and definition lead directly into its Concept Anatomy. Initial rendering, Explore, and Back retain the map position for spatial orientation.
 - Reduce the mobile map to a responsive 430–480 px range while retaining safe space around the lowest destinations. This keeps the current action and selected explanation closer to the map without crowding narrow screens.
 - Allow destination labels to use their complete text. Wider mobile node labels and reduced horizontal padding prevent knowledge terms such as `Psychological`, `Informational`, and `Mathematical` from being shortened.
 - Collapse Concept Anatomy to one column with tighter outer padding, while retaining the same content order and native document flow.

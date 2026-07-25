@@ -13,7 +13,7 @@
     {
       "id": "knowledge",
       "scope": "What is known, claimed, represented, or inferred.",
-      "decision": "Selects the core artifact vocabulary and a small set of named law instances; it does not claim exhaustive coverage.",
+      "decision": "Selects the core artifact vocabulary, a small set of named law instances, and explicitly scoped examples of principles, models, theories, and methods; it does not claim exhaustive coverage.",
       "approvedPaths": [
         [
           "law",
@@ -52,6 +52,14 @@
           "least-privilege"
         ],
         [
+          "principle",
+          "compound-effect"
+        ],
+        [
+          "principle",
+          "pareto-principle"
+        ],
+        [
           "razor",
           "occams-razor"
         ],
@@ -64,12 +72,28 @@
           "queueing-model"
         ],
         [
+          "model",
+          "relationship-exchange-model"
+        ],
+        [
           "theorem",
           "pythagorean-theorem"
         ],
         [
           "pattern",
           "circuit-breaker"
+        ],
+        [
+          "theory",
+          "attachment-theory"
+        ],
+        [
+          "method",
+          "first-principles-thinking"
+        ],
+        [
+          "method",
+          "second-order-thinking"
         ]
       ]
     },
@@ -98,11 +122,15 @@
     {
       "id": "psychological",
       "scope": "Mind, cognition, emotion, perception, and behaviour.",
-      "decision": "Uses cognition and decision-making as the initial psychological teaching path; it does not claim to cover emotion, perception, or behaviour.",
+      "decision": "Uses cognition and decision-making plus an explicitly bounded evolutionary-psychology path; it does not claim to cover every psychological explanation, emotion, perception, or behaviour.",
       "approvedPaths": [
         [
           "cognition",
           "decision-process"
+        ],
+        [
+          "evolutionary-psychology",
+          "adaptive-explanation"
         ]
       ]
     },
@@ -148,11 +176,15 @@
     {
       "id": "economic",
       "scope": "Production, allocation, exchange, incentives, and value.",
-      "decision": "Uses value and valuation as the economic starting path; exchange, markets, incentives, and allocation require their own future curation.",
+      "decision": "Uses value and valuation plus choice and opportunity cost as economic starting paths; exchange, markets, incentives, and allocation require their own future curation.",
       "approvedPaths": [
         [
           "value",
           "valuation"
+        ],
+        [
+          "choice",
+          "opportunity-cost"
         ]
       ]
     },
@@ -447,11 +479,15 @@
     {
       "id": "perspective-ethical",
       "scope": "Reality interpreted through questions of right action, responsibility, harm, and fairness.",
-      "decision": "Uses moral duty and ethical decision-making as the V1 ethical-perspective focus.",
+      "decision": "Uses moral duty and ethical decision-making alongside Stoicism as a bounded philosophical perspective; it does not claim to represent all ethical traditions.",
       "approvedPaths": [
         [
           "moral-duty",
           "ethical-decision"
+        ],
+        [
+          "stoicism",
+          "stoic-practice"
         ]
       ]
     },

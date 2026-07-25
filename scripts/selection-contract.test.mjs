@@ -21,14 +21,18 @@ const policySource = extractDeclaration("const canExploreNode", "\n\n    const v
 const roleSource = extractDeclaration("const roleForNode", "\n\n    const relationshipForNode");
 const questionsSource = extractDeclaration("const dimensionQuestions", "\n\n    const buildConceptAnatomy");
 const anatomySource = extractDeclaration("const buildConceptAnatomy", "\n\n    const createAnatomyField");
+const visualSource = extractDeclaration("const visualModelForNode", "\n\n    const parentForNode");
 
 const contract = runInNewContext(`
   const ontology = ${ontologyMatch[1]};
+  const terminalOntologyLevel = 4;
+  const ontologyLevel = (node) => node.canonicalPath.length - 1;
   ${policySource};
   ${roleSource};
   ${questionsSource};
   ${anatomySource};
-  ({ ontology, canExploreNode, roleForNode, buildConceptAnatomy });
+  ${visualSource};
+  ({ ontology, canExploreNode, canPlayVisualForNode, roleForNode, buildConceptAnatomy, visualModelForNode });
 `, Object.create(null));
 
 const nodes = Object.values(contract.ontology);
@@ -72,6 +76,37 @@ test("every reachable non-root selection exposes Explore selected", () => {
   }
 });
 
+test("only Laws and Principles expose the V1 visual representation", () => {
+  const visualNodes = nodes.filter((node) => contract.canPlayVisualForNode(node));
+  assert.ok(visualNodes.length > 0, "The V1 visual scope must contain Laws and Principles.");
+
+  for (const node of nodes) {
+    const belongsToVisualFamily = node.canonicalPath.includes("Knowledge") && ["Law", "Principle"].includes(node.canonicalPath[3]);
+    assert.equal(contract.canPlayVisualForNode(node), belongsToVisualFamily, `${node.label} must follow the visual representation scope.`);
+  }
+});
+
+test("every visualised Law or Principle has a complete visual representation model", () => {
+  for (const node of nodes.filter((candidate) => contract.canPlayVisualForNode(candidate))) {
+    const visual = contract.visualModelForNode(node);
+    assert.ok(["context", "mechanism", "focus"].includes(visual.mode), `${node.label} must select a visual mode.`);
+    assert.ok(visual.caption?.trim(), `${node.label} must have a visual caption.`);
+    assert.equal(visual.steps.length, 3, `${node.label} must have Foundation, Mechanism, and Meaning visual steps.`);
+    for (const step of visual.steps) {
+      assert.ok(step.label?.trim(), `${node.label} visual step needs a label.`);
+      assert.ok(step.value?.trim(), `${node.label} visual step needs teaching content.`);
+    }
+  }
+});
+
+test("authored visual demonstrations govern the popup captions", () => {
+  for (const node of nodes.filter((candidate) => contract.canPlayVisualForNode(candidate))) {
+    const anatomy = contract.buildConceptAnatomy(node);
+    if (!anatomy["Visual demonstration"]) continue;
+    assert.equal(contract.visualModelForNode(node).caption, anatomy["Visual demonstration"], `${node.label} must keep its authored visual teaching intent.`);
+  }
+});
+
 test("level-4 terminal selections remain explorable as final focused destinations", () => {
   const terminalNodes = nodes.filter((node) => ontologyLevel(node) === terminalOntologyLevel && (node.children?.length ?? 0) === 0);
   assert.ok(terminalNodes.length > 0, "The ontology must contain level-4 terminal concepts for this contract to prove.");
@@ -88,6 +123,56 @@ test("Amdahl's Law is the reference level-4 instance", () => {
     Array.from(amdahlsLaw.canonicalPath),
     ["Reality", "Category", "Knowledge", "Law", "Amdahl's Law"],
   );
+});
+
+test("the requested study concepts are classified on intentional canonical paths", () => {
+  const expectedPaths = {
+    "evolutionary-psychology": ["Reality", "Domain", "Psychological", "Evolutionary psychology"],
+    "first-principles-thinking": ["Reality", "Category", "Knowledge", "Method", "First-principles thinking"],
+    "compound-effect": ["Reality", "Category", "Knowledge", "Principle", "Compound effect"],
+    "parkinsons-law": ["Reality", "Category", "Knowledge", "Law", "Parkinson's Law"],
+    "pareto-principle": ["Reality", "Category", "Knowledge", "Principle", "Pareto principle"],
+    stoicism: ["Reality", "Perspective", "Ethical", "Stoicism"],
+    "attachment-theory": ["Reality", "Category", "Knowledge", "Theory", "Attachment theory"],
+    "relationship-exchange-model": ["Reality", "Category", "Knowledge", "Model", "Relationship exchange model"],
+    "opportunity-cost": ["Reality", "Domain", "Economic", "Choice", "Opportunity cost"],
+    "second-order-thinking": ["Reality", "Category", "Knowledge", "Method", "Second-order thinking"],
+  };
+
+  for (const [id, canonicalPath] of Object.entries(expectedPaths)) {
+    const node = contract.ontology[id];
+    assert.ok(node, `Missing requested study concept: ${id}`);
+    assert.deepEqual(Array.from(node.canonicalPath), canonicalPath, `${node.label} must remain correctly classified.`);
+  }
+
+  assert.equal(contract.ontology["parkinsons-law"].kind, "law-instance", "Parkinson's Law must remain a named law.");
+  assert.match(contract.ontology["relationship-exchange-model"].summary, /limited model/i);
+});
+
+test("requested study concepts provide complete, scoped teaching anatomy", () => {
+  const conceptIds = [
+    "evolutionary-psychology",
+    "first-principles-thinking",
+    "compound-effect",
+    "parkinsons-law",
+    "pareto-principle",
+    "stoicism",
+    "attachment-theory",
+    "relationship-exchange-model",
+    "opportunity-cost",
+    "second-order-thinking",
+  ];
+  const requiredFields = ["Statement", "First principles", "Variables", "Mechanism", "Predictions", "Assumptions", "Limitations", "Applications", "Visual demonstration"];
+
+  for (const id of conceptIds) {
+    const anatomy = contract.buildConceptAnatomy(contract.ontology[id]);
+    for (const field of requiredFields) {
+      assert.ok(anatomy[field]?.trim(), `${contract.ontology[id].label} must explain ${field}.`);
+    }
+  }
+
+  assert.match(contract.ontology["relationship-exchange-model"].anatomy.Limitations, /not a market law/i);
+  assert.match(contract.ontology["pareto-principle"].anatomy.Limitations, /not a universal ratio/i);
 });
 
 test("every named law provides the complete law teaching anatomy", () => {
@@ -237,7 +322,7 @@ test("every visible child relationship is explicitly curated and advances the ca
   }
 });
 
-test("selection automatically renders Concept Anatomy and exposes only exploration controls", () => {
+test("selection automatically renders Concept Anatomy and exposes contextual exploration controls", () => {
   assert.doesNotMatch(fragment, /data-understand-action/);
   assert.doesNotMatch(fragment, /function openUnderstand/);
   assert.match(fragment, /renderUnderstand\(node\);/);
@@ -247,6 +332,29 @@ test("selection automatically renders Concept Anatomy and exposes only explorati
   assert.match(fragment, /exploreButton\.disabled = canExplore && isCurrent/);
   assert.match(fragment, /exploreButton\.textContent = isCurrent \? "Exploring" : "Explore selected"/);
   assert.match(fragment, /exploreButton\.setAttribute\("aria-pressed", String\(canExplore && isCurrent\)\)/);
+  assert.match(fragment, /data-context-explore-action/);
+  assert.match(fragment, /const canExploreFromDetail = canExplore && !isCurrent;/);
+  assert.match(fragment, /detailAction\.hidden = !canExploreFromDetail;/);
+  assert.match(fragment, /contextExploreButton\.textContent = `Explore \$\{node\.label\}`;/);
+});
+
+test("a mobile destination selection reveals its summary before the Concept Anatomy", () => {
+  assert.match(fragment, /const orbitDetail = root\.querySelector\("\.orbit-detail"\);/);
+  assert.match(fragment, /const setSelectedNode = \(nodeId, \{ revealMobileContent = false \} = \{\}\) =>/);
+  assert.match(fragment, /window\.matchMedia\("\(max-width: 480px\)"\)\.matches/);
+  assert.match(fragment, /orbitDetail\.scrollIntoView\(\{ behavior: reduceMotion \? "auto" : "smooth", block: "start" \}\)/);
+  assert.match(fragment, /setSelectedNode\(child\.id, \{ revealMobileContent: true \}\);/);
+  assert.match(fragment, /setSelectedNode\(parent\.id, \{ revealMobileContent: true \}\);/);
+});
+
+test("mobile contextual exploration returns the learner to the refreshed map", () => {
+  assert.match(fragment, /#reality-orbit-prototype \.orbit-toolbar \.orbit-actions \{\n      display: none !important;/);
+  assert.match(fragment, /#reality-orbit-prototype \.orbit-detail-action:not\(\[hidden\]\) \{\n      display: flex;/);
+  assert.match(fragment, /const revealOrbitMap = \(\) => \{/);
+  assert.match(fragment, /window\.matchMedia\("\(max-width: 980px\)"\)\.matches/);
+  assert.match(fragment, /orbitStage\.scrollIntoView\(\{ behavior: reduceMotion \? "auto" : "smooth", block: "start" \}\)/);
+  assert.match(fragment, /function exploreSelectedNode\(nodeId = selectedId, \{ revealMap = false \} = \{\}\)/);
+  assert.match(fragment, /contextExploreButton\.addEventListener\("click", \(\) => exploreSelectedNode\(selectedId, \{ revealMap: true \}\)\);/);
 });
 
 test("Concept Anatomy maps every visible teaching field to the selected node", () => {
