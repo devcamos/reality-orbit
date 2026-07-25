@@ -1038,6 +1038,41 @@ html&gt;body{padding:0}&lt;/style&gt;
       linear-gradient(90deg, rgba(2, 6, 13, 0.08), transparent 18%, transparent 82%, rgba(2, 6, 13, 0.18));
   }
 
+  #reality-orbit-prototype .orbit-starfield {
+    position: absolute;
+    z-index: 0;
+    inset: -8%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  #reality-orbit-prototype .orbit-starfield::before,
+  #reality-orbit-prototype .orbit-starfield::after {
+    position: absolute;
+    inset: 0;
+    content: &quot;&quot;;
+    will-change: transform, opacity;
+  }
+
+  #reality-orbit-prototype .orbit-starfield::before {
+    background-image:
+      radial-gradient(circle, rgba(224, 238, 244, 0.76) 0 0.55px, transparent 0.95px),
+      radial-gradient(circle, rgba(128, 178, 199, 0.58) 0 0.65px, transparent 1.05px),
+      radial-gradient(circle, rgba(213, 177, 134, 0.48) 0 0.5px, transparent 0.9px);
+    background-position: 13px 19px, 47px 61px, 89px 31px;
+    background-size: 67px 73px, 113px 127px, 179px 163px;
+    animation: starfield-drift-far 96s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype .orbit-starfield::after {
+    background-image:
+      radial-gradient(circle, rgba(236, 246, 249, 0.72) 0 0.9px, transparent 1.35px),
+      radial-gradient(circle, rgba(154, 197, 214, 0.54) 0 0.75px, transparent 1.2px);
+    background-position: 73px 41px, 19px 97px;
+    background-size: 211px 193px, 157px 181px;
+    animation: starfield-drift-near 58s ease-in-out infinite alternate;
+  }
+
   #reality-orbit-prototype .orbit-map {
     position: absolute;
     inset: 0;
@@ -1756,6 +1791,18 @@ html&gt;body{padding:0}&lt;/style&gt;
     to { transform: translate3d(0.45%, 0.3%, 0) scale(1.025); }
   }
 
+  @keyframes starfield-drift-far {
+    0% { opacity: 0.36; transform: translate3d(-0.8%, -0.45%, 0) scale(1.01); }
+    52% { opacity: 0.58; }
+    100% { opacity: 0.44; transform: translate3d(0.85%, 0.55%, 0) scale(1.022); }
+  }
+
+  @keyframes starfield-drift-near {
+    0% { opacity: 0.3; transform: translate3d(0.65%, -0.5%, 0) scale(1.018); }
+    46% { opacity: 0.5; }
+    100% { opacity: 0.36; transform: translate3d(-0.7%, 0.45%, 0) scale(1.032); }
+  }
+
   @keyframes orbit-node-arrive {
     from { opacity: 0; transform: translate(-50%, -47%) scale(0.94); }
     to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
@@ -1931,6 +1978,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
 
     #reality-orbit-prototype .orbit-stage::before,
+    #reality-orbit-prototype .orbit-starfield::before,
+    #reality-orbit-prototype .orbit-starfield::after,
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .destination-marker,
     #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker::before,
@@ -1954,6 +2003,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           &lt;/div&gt;
         &lt;/div&gt;
         &lt;div class=&quot;orbit-stage&quot;&gt;
+          &lt;div class=&quot;orbit-starfield&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
           &lt;svg class=&quot;orbit-map&quot; viewBox=&quot;0 0 100 100&quot; role=&quot;img&quot; aria-labelledby=&quot;reality-orbit-title reality-orbit-desc&quot; preserveAspectRatio=&quot;none&quot;&gt;
             &lt;title id=&quot;reality-orbit-title&quot;&gt;Reality ontology destination map&lt;/title&gt;
             &lt;desc id=&quot;reality-orbit-desc&quot;&gt;Select a concept destination to update its Concept Anatomy alongside the map. Explore any non-root concept as a focused destination.&lt;/desc&gt;
@@ -3539,6 +3589,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     renderOrbit();
   })();
 &lt;/script&gt;
+
 
 
 
