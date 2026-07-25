@@ -21,7 +21,7 @@ The app distinguishes its simple visual navigation from the canonical ontology:
 - Authored anatomy overrides the baseline when a concept needs a specialised teaching structure. Amdahl's Law provides the first law-specific anatomy; Environment provides the first context-system anatomy with boundaries, variables, mechanisms, feedback, and related concepts.
 - Startup and production checks reject missing labels, definitions, paths, children, roles, and Concept Anatomy fields before incomplete knowledge can be presented.
 
-The visual language has explicit meaning: size represents navigation prominence, position is a stable map location, colour identifies the canonical dimension, rings show selection, connections carry typed relationships, brightness shows availability or focus, and the diamond shape identifies an instance.
+The visual language has explicit meaning: size represents navigation prominence, position is a stable map location, colour identifies the canonical dimension, rings show selection, connections carry typed relationships, brightness shows availability or focus, and the diamond shape identifies an instance. The five root dimensions also use restrained semantic materials—rock, facets, rings, nested scales, and refraction—while Reality alone receives the stable warm-sun treatment. The original deep-space background creates a quiet-observatory setting but carries no ontology meaning.
 
 On mobile, the same map remains spatial rather than becoming a separate product experience. The current destination replaces the full visible breadcrumb, the actions become full-width touch targets, long node labels remain readable, and the same permanent detail strip carries the selection explanation.
 
@@ -32,6 +32,7 @@ This prototype is independent from Law Explorer. Law Explorer remains a law-only
 ## Files
 
 - `index.html` — standalone production document served by Vercel, with a desktop-width frame for the map and adjacent Concept Anatomy view.
+- `assets/observatory-deep-space.webp` — compact original background asset used by the standalone and source views.
 - `src/reality-orbit.html` — readable visualization source fragment.
 - `RUNBOOK.md` — architecture, interaction, testing, and release runbook.
 - `scripts/verify.mjs` — dependency-free production validation.
