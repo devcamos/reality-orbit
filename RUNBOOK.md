@@ -17,7 +17,8 @@ This is a separate visualization prototype. It must not be added to Law Explorer
 ## Source files
 
 - Editable visualization fragment: `reality-orbit.html` in the thread visualization directory.
-- Standalone test app: `index.html` in this directory.
+- React/Vite application entry: `index.html` and `src/` in this directory.
+- Generated ontology compatibility frame: `legacy-index.html` in this directory.
 - Reusable process and decisions: this runbook.
 
 ## Canonical ontology model
@@ -80,9 +81,11 @@ The map uses cinematic light sparingly: warm light anchors Reality, blue ambient
 
 The adjacent Concept Anatomy surface is the knowledge instrument rather than decorative “mission control.” Its dark glass, restrained borders, sticky definition, and generous spacing keep the selected concept readable while preserving a visual connection to the map.
 
-## JavaScript architecture
+## Application architecture
 
-The visualization is intentionally dependency-free.
+Vite owns local development and the optimised production build. React and TypeScript own the application shell, loading state, failure recovery, and the lifecycle of the embedded observatory. The mature ontology renderer remains dependency-free inside `src/reality-orbit.html` and is synchronised into `legacy-index.html`.
+
+`src/lib/orbit-document.ts` is an intentional compatibility boundary: it extracts the proven observatory document and resolves its bundled background asset before React presents it. This avoids changing the framework, ontology model, navigation engine, and visual renderer in one risky rewrite. Future features can migrate across that boundary component by component while the browser journeys continue to protect learner behaviour.
 
 ### Data contract
 
@@ -455,14 +458,15 @@ Test at:
 
 ## Local preview
 
-From the visualization plugin directory, render the fragment as a standalone document:
+Synchronise the visualization fragment, validate the typed shell, and start the local application:
 
 ```bash
-python3 scripts/render.py /absolute/path/to/reality-orbit.html /absolute/path/to/reality-orbit-prototype/index.html
 npm run frame:desktop
+npm run check
+npm run start
 ```
 
-Serve the prototype directory with any local static server, then open `index.html`. The standalone shell deliberately supports a 1440 px desktop frame so the map and adjacent Concept Anatomy view can appear together; the fragment itself collapses to one column below 980 px.
+Open `http://127.0.0.1:4175/`. The React shell fills the viewport, while the observatory preserves its 1440 px desktop composition and collapses to one column below 980 px.
 
 ## Production release
 

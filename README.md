@@ -31,7 +31,10 @@ This prototype is independent from Law Explorer. Law Explorer remains a law-only
 
 ## Files
 
-- `index.html` — standalone production document served by Vercel, with a desktop-width frame for the map and adjacent Concept Anatomy view.
+- `index.html` — Vite application entry for the production React shell.
+- `src/App.tsx` — typed application composition and compatibility-frame boundary.
+- `src/components/` — reusable lifecycle, loading, and error-recovery components.
+- `legacy-index.html` — generated compatibility frame for the proven ontology engine during its incremental migration.
 - `assets/observatory-deep-space.webp` — compact original background asset used by the standalone and source views.
 - `src/reality-orbit.html` — readable visualization source fragment.
 - `RUNBOOK.md` — architecture, interaction, testing, and release runbook.
@@ -57,13 +60,13 @@ Run the complete production gate—including the static safeguards and unit test
 npm run check
 ```
 
-Rebuild the committed standalone application and reject source/output drift with:
+Rebuild the committed compatibility frame and reject source/output drift with:
 
 ```bash
 npm run check:generated
 ```
 
-Create the static deployment snapshot in `public/` with:
+Create the optimised Vite deployment in `dist/` with:
 
 ```bash
 npm run build
@@ -84,7 +87,7 @@ npm run test:e2e
 
 Playwright starts the local preview automatically. CI runs the same journeys in Chromium with one worker, reduced motion, retries, traces, screenshots, videos, an HTML report, an accessibility-tree snapshot, and an automated accessibility scan.
 
-Open `index.html` directly or serve this directory with a local static server.
+Start the typed React/Vite application locally with:
 
 ```bash
 npm run start
@@ -92,7 +95,7 @@ npm run start
 
 The local preview is then available at `http://127.0.0.1:4175/`.
 
-When rebuilding `index.html` from the visualization fragment, run `npm run frame:desktop` after rendering. This preserves the desktop-width standalone shell required for the adjacent map and Concept Anatomy layout.
+When updating the visualization fragment, run `npm run frame:desktop` to rebuild `legacy-index.html`. The React shell reads that generated frame through an explicit compatibility adapter, preserving the existing ontology behaviour while allowing application lifecycle, delivery, and future interface work to migrate incrementally.
 
 ## Release workflow
 

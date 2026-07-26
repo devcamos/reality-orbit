@@ -1,0 +1,105 @@
+:root {
+  color-scheme: dark;
+  font-family: "Avenir Next", "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+  background: #02060d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background: #02060d;
+}
+
+button {
+  font: inherit;
+}
+
+.app-shell,
+.orbit-frame-shell {
+  min-height: 100dvh;
+}
+
+.orbit-frame-shell {
+  position: relative;
+  background: #02060d;
+}
+
+.orbit-frame {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+  border: 0;
+  background: #02060d;
+}
+
+.orbit-frame-status {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+  color: #afbdc6;
+  background: #02060d;
+  letter-spacing: 0.02em;
+}
+
+.orbit-frame-status--error {
+  justify-items: center;
+  color: #e7eef1;
+}
+
+.orbit-frame-status button,
+.app-fallback button {
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  color: #f3f7f8;
+  border: 1px solid rgb(155 189 207 / 34%);
+  border-radius: 999px;
+  background: rgb(22 52 69 / 78%);
+  cursor: pointer;
+}
+
+.app-fallback {
+  display: grid;
+  min-height: 100dvh;
+  max-width: 42rem;
+  place-content: center;
+  justify-items: start;
+  gap: 0.8rem;
+  margin: auto;
+  padding: 2rem;
+  color: #e7eef1;
+}
+
+.app-fallback h1,
+.app-fallback p {
+  margin: 0;
+}
+
+.app-fallback__eyebrow {
+  color: #91a4b0;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}

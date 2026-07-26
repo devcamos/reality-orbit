@@ -61,7 +61,7 @@ jobs:
         run: npm run build
 
       - name: Reject stale generated output
-        run: git diff --exit-code -- index.html
+        run: git diff --exit-code -- legacy-index.html
 
   server-smoke:
     name: Server and asset smoke

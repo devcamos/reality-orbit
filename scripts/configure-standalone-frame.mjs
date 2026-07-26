@@ -1,12 +1,18 @@
 import { readFile, writeFile } from "node:fs/promises";
 
-const documentUrl = new URL("../index.html", import.meta.url);
+const documentUrl = new URL("../legacy-index.html", import.meta.url);
 const fragmentUrl = new URL("../src/reality-orbit.html", import.meta.url);
 const defaultFrameWidth = "max-width:736px";
 const desktopFrameWidth = "max-width:1440px";
 const unboundedFrameWidth = "iframe{display:block;width:100%;height:";
 const defaultFrameTheme = ":root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}";
 const orbitFrameTheme = ":root{color-scheme:dark;background:Canvas}";
+const unsafeOuterScriptPolicy = "script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'";
+const hardenedOuterScriptPolicy = "script-src 'none'";
+const unsafeOuterStylePolicy = "style-src 'unsafe-inline'";
+const hardenedOuterStylePolicy = "style-src 'none'";
+const unsafeEmbeddedScriptPolicy = "script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27;";
+const hardenedEmbeddedScriptPolicy = "script-src &#x27;unsafe-inline&#x27;";
 const [document, fragment] = await Promise.all([
   readFile(documentUrl, "utf8"),
   readFile(fragmentUrl, "utf8"),
@@ -40,6 +46,9 @@ const configuredDocument = syncedDocument
   .replace(defaultFrameWidth, desktopFrameWidth)
   .replace(unboundedFrameWidth, `iframe{display:block;width:100%;${desktopFrameWidth};height:`)
   .replace(defaultFrameTheme, orbitFrameTheme)
+  .replace(unsafeOuterScriptPolicy, hardenedOuterScriptPolicy)
+  .replace(unsafeOuterStylePolicy, hardenedOuterStylePolicy)
+  .replace(unsafeEmbeddedScriptPolicy, hardenedEmbeddedScriptPolicy)
   .replace("img-src blob:", "img-src 'self' blob:")
   .replace("img-src blob:", "img-src &#x27;self&#x27; blob:");
 
