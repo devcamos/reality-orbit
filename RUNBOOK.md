@@ -59,6 +59,18 @@ They remain fully explorable, but only after the user enters Category. This keep
 - **Path and Back:** expose the canonical location and allow reversible traversal.
 - **Typed relationship:** each connection retains a machine-readable relationship so type and instance edges do not blur together; this structural value is not shown in the learner panel.
 
+### First-contact experience
+
+The React shell presents a short observatory introduction before it loads the map for the first time in a browser session. It answers what Reality Orbit is, teaches the three-part interaction—choose a lens, follow an orbit, build understanding—and offers one clear **Enter the observatory** action. It is a threshold, not a marketing carousel: there are no competing calls to action, account prompts, or decorative steps.
+
+After entry, session storage prevents the introduction from interrupting refreshes during the same browser session. If storage is unavailable, entry still works. The screen shares the map's deep-space material language, stays usable at 320 px, and removes its slow ambient motion when reduced motion is requested.
+
+### Reflective hover guidance
+
+Hovering or keyboard-focusing a node reveals one quiet **Consider** prompt. The prompt comes from the concept's authored Governing question where available; otherwise it asks a restrained question about placing a container at the centre or applying a terminal concept. This makes hover teach the learner what the node can reveal instead of adding ornamental animation.
+
+The prompt is a shared accessible tooltip associated with each node through `aria-describedby`. Pointer exit and keyboard blur remove it, selection remains unchanged, and touch users continue to receive the permanent selected-concept detail. The internal `Dimension` role remains available to accessibility and ontology logic, but it is not repeated as visible metadata beneath every root destination or beside a selected root lens.
+
 The design parent is the abstract **spatial destination map** interaction pattern. Reality Orbit inherits full-canvas exploration, stable destinations, selection, travel, return, and contextual information. It does not copy Destiny artwork, assets, logos, icons, typography, names, or screen layouts.
 
 Visual semantics are fixed:
@@ -446,6 +458,12 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 ## Test procedure
 
 ### Functional checks
+
+Before testing the map:
+
+- Confirm a new browser session opens on **Begin with Reality**, with one **Enter the observatory** action and three concise orientation cues.
+- Enter the observatory, refresh, and confirm the introduction does not interrupt the same session again.
+- Hover Domain and keyboard-focus Perspective; confirm each reveals its own **Consider** question without changing selection. Confirm the visible `Dimension` badges are absent.
 
 1. Confirm six buttons render at root: five canonical dimensions plus Reality.
 2. Select every node once.

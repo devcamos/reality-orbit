@@ -9,6 +9,8 @@ const node = (page, id) => app(page).locator(`[data-node-id="${id}"]`);
 
 const openOrbit = async (page) => {
   await page.goto("/");
+  const enter = page.locator("[data-enter-observatory]");
+  if (await enter.isVisible()) await enter.click();
   await expect(app(page).locator("#reality-orbit-prototype")).toBeVisible();
 };
 
@@ -16,6 +18,27 @@ const explore = async (page, id) => {
   await node(page, id).click();
   await app(page).locator("[data-explore-action]").click();
 };
+
+test("introduces the observatory before revealing the ontology map", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.locator("[data-observatory-introduction]")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Begin with Reality." })).toBeVisible();
+  await expect(page.getByRole("list", { name: "How to explore" }).getByRole("listitem")).toHaveCount(3);
+  await expect(page.locator('iframe[title="Reality Orbit"]')).toHaveCount(0);
+
+  await page.addScriptTag({ path: axePath });
+  const results = await page.evaluate(async () => window.axe.run(document, { resultTypes: ["violations"] }));
+  const seriousViolations = results.violations.filter(({ impact }) => ["serious", "critical"].includes(impact));
+  expect(seriousViolations).toEqual([]);
+
+  await page.locator("[data-enter-observatory]").click();
+  await expect(app(page).locator("#reality-orbit-prototype")).toBeVisible();
+
+  await page.reload();
+  await expect(page.locator("[data-observatory-introduction]")).toHaveCount(0);
+  await expect(app(page).locator("#reality-orbit-prototype")).toBeVisible();
+});
 
 test("loads the canonical Reality orbit without browser errors", async ({ page }) => {
   const errors = [];
@@ -41,7 +64,8 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
   await node(page, "scale").click();
   await expect(node(page, "scale")).toHaveAttribute("aria-current", "true");
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Scale");
-  await expect(app(page).locator(".orbit-role[data-selected-role]")).toHaveText("Dimension");
+  await expect(app(page).locator(".orbit-role[data-selected-role]")).toBeHidden();
+  await expect(app(page).locator(".destination-meta")).toHaveCount(0);
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
   await expect(app(page).locator("[data-explore-action]")).toBeVisible();
 
@@ -66,6 +90,22 @@ test("keyboard activation selects a dimension and exposes its action", async ({ 
   await expect(node(page, "perspective")).toHaveAttribute("aria-current", "true");
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Perspective");
   await expect(app(page).locator("[data-explore-action]")).toBeVisible();
+});
+
+test("hover and keyboard focus reveal a concept-specific thought", async ({ page }) => {
+  await openOrbit(page);
+
+  await node(page, "domain").hover();
+  await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-thought-text]")).toHaveText(
+    "What broad area of reality is being studied?",
+  );
+
+  await node(page, "perspective").focus();
+  await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-thought-text]")).toHaveText(
+    "From which viewpoint or interpretive lens is it being understood?",
+  );
 });
 
 test("mobile selection reveals the summary and uses the contextual explore control", async ({ page }) => {

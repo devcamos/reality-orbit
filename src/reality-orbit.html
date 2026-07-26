@@ -420,25 +420,11 @@
     display: block;
   }
 
-  #reality-orbit-prototype .destination-meta {
-    display: none;
-  }
-
   #reality-orbit-prototype .orbit-node[data-ontology-level="1"] .destination-name {
     color: #eef4f6;
     font-size: clamp(1rem, 0.92rem + 0.28vw, 1.16rem);
     font-weight: 600;
     letter-spacing: -0.018em;
-  }
-
-  #reality-orbit-prototype .orbit-node[data-ontology-level="1"] .destination-meta {
-    display: block;
-    color: color-mix(in srgb, var(--node-color, #88a9b5) 62%, #b9c6cc);
-    font-size: 0.59rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    line-height: 1.25;
-    text-transform: uppercase;
   }
 
   #reality-orbit-prototype .orbit-node[data-selected="true"] .destination-label {
@@ -476,6 +462,55 @@
     box-shadow:
       0 0 0 0.6rem color-mix(in srgb, var(--node-color, #c99d69) 8%, transparent),
       0 0 2.5rem color-mix(in srgb, var(--node-color, #c99d69) 22%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-thought {
+    position: absolute;
+    z-index: 8;
+    top: clamp(0.75rem, 2vw, 1.2rem);
+    left: clamp(0.75rem, 2vw, 1.2rem);
+    display: grid;
+    width: min(24rem, calc(100% - 2rem));
+    gap: 0.22rem;
+    margin: 0;
+    padding: 0.72rem 0.9rem 0.78rem;
+    color: #d8e4e8;
+    text-align: left;
+    border: 1px solid rgba(153, 188, 204, 0.18);
+    border-radius: 0.85rem;
+    background: linear-gradient(145deg, rgba(8, 22, 34, 0.88), rgba(3, 12, 21, 0.82));
+    box-shadow: 0 1rem 2.8rem rgba(0, 4, 9, 0.34);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.35rem);
+    transition: opacity 160ms ease, transform 180ms ease;
+    backdrop-filter: blur(16px);
+  }
+
+  #reality-orbit-prototype .orbit-thought[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-thought[data-visible="true"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #reality-orbit-prototype .orbit-thought-label {
+    color: #7f9aa6;
+    font-size: 0.6rem;
+    font-weight: 650;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+  }
+
+  #reality-orbit-prototype .orbit-thought-text {
+    font-family: var(--space-display);
+    font-size: clamp(0.78rem, 0.73rem + 0.18vw, 0.9rem);
+    font-weight: 520;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    text-wrap: balance;
   }
 
   #reality-orbit-prototype .orbit-detail {
@@ -1097,7 +1132,8 @@
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
-    #reality-orbit-prototype .orbit-connection {
+    #reality-orbit-prototype .orbit-connection,
+    #reality-orbit-prototype .orbit-thought {
       transition: none;
     }
 
@@ -1137,6 +1173,10 @@
             <g data-orbit-connections></g>
           </svg>
           <div data-orbit-nodes></div>
+          <p class="orbit-thought" id="orbit-thought" role="tooltip" data-orbit-thought data-visible="false" hidden>
+            <span class="orbit-thought-label">Consider</span>
+            <span class="orbit-thought-text" data-orbit-thought-text></span>
+          </p>
         </div>
         <div class="orbit-detail">
           <p class="orbit-status text-small" aria-live="polite">
@@ -2251,6 +2291,8 @@
     const selectedSummary = root.querySelector("[data-selected-summary]");
     const orbitDetail = root.querySelector(".orbit-detail");
     const orbitStage = root.querySelector(".orbit-stage");
+    const orbitThought = root.querySelector("[data-orbit-thought]");
+    const orbitThoughtText = root.querySelector("[data-orbit-thought-text]");
     const actionGroup = root.querySelector("[data-orbit-actions]");
     const exploreButton = root.querySelector("[data-explore-action]");
     const detailAction = root.querySelector("[data-orbit-detail-action]");
@@ -2465,12 +2507,6 @@
       name.className = "destination-name";
       name.textContent = node.label;
       label.appendChild(name);
-      if (ontologyLevel(node) === 1) {
-        const meta = document.createElement("span");
-        meta.className = "destination-meta";
-        meta.textContent = "Dimension";
-        label.appendChild(meta);
-      }
       button.append(marker, label);
     };
 
@@ -2756,6 +2792,38 @@
       };
     };
 
+    const thoughtForNode = (node) => {
+      const governingQuestion = buildConceptAnatomy(node)["Governing question"];
+      if (governingQuestion) return governingQuestion;
+      if ((node.children?.length ?? 0) > 0) {
+        return `What becomes visible when ${node.label} moves to the centre?`;
+      }
+      return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
+    };
+
+    const showOrbitThought = (node) => {
+      orbitThoughtText.textContent = thoughtForNode(node);
+      orbitThought.hidden = false;
+      requestAnimationFrame(() => {
+        orbitThought.dataset.visible = "true";
+      });
+    };
+
+    const hideOrbitThought = () => {
+      orbitThought.dataset.visible = "false";
+      orbitThought.hidden = true;
+    };
+
+    const bindOrbitThought = (button, node) => {
+      button.setAttribute("aria-describedby", "orbit-thought");
+      button.addEventListener("pointerenter", () => showOrbitThought(node));
+      button.addEventListener("pointerleave", () => {
+        if (document.activeElement !== button) hideOrbitThought();
+      });
+      button.addEventListener("focus", () => showOrbitThought(node));
+      button.addEventListener("blur", hideOrbitThought);
+    };
+
     const createAnatomyField = ([label, value], className = "") => {
       const field = document.createElement("div");
       field.className = className;
@@ -2805,7 +2873,7 @@
 
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-");
-      understandEyebrow.textContent = `${role} · Concept anatomy`;
+      understandEyebrow.textContent = role === "Dimension" ? "A lens on reality" : `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
       understandLeadLabel.textContent = lead[0];
@@ -2962,6 +3030,7 @@
       });
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
+      selectedRole.hidden = context.role === "Dimension";
       selectedSummary.textContent = context.explanation;
       const canPlayVisual = canPlayVisualForNode(node);
       openConceptVisualButton.hidden = !canPlayVisual;
@@ -2993,6 +3062,7 @@
     const renderOrbit = () => {
       const parent = currentNode();
       const positions = positionChildren(parent);
+      hideOrbitThought();
       root.style.setProperty("--map-color", nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
@@ -3028,6 +3098,7 @@
         button.style.setProperty("--orbit-y", `${y}%`);
         button.style.setProperty("--node-color", color);
         appendDestinationContent(button, child);
+        bindOrbitThought(button, child);
         button.addEventListener("click", (event) => {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail > 0) button.blur();
@@ -3049,6 +3120,7 @@
       centreButton.style.setProperty("--orbit-y", "50%");
       centreButton.style.setProperty("--node-color", nodeColor(parent));
       appendDestinationContent(centreButton, parent);
+      bindOrbitThought(centreButton, parent);
       centreButton.addEventListener("click", (event) => {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail > 0) centreButton.blur();

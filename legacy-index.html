@@ -1297,25 +1297,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     display: block;
   }
 
-  #reality-orbit-prototype .destination-meta {
-    display: none;
-  }
-
   #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-name {
     color: #eef4f6;
     font-size: clamp(1rem, 0.92rem + 0.28vw, 1.16rem);
     font-weight: 600;
     letter-spacing: -0.018em;
-  }
-
-  #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-meta {
-    display: block;
-    color: color-mix(in srgb, var(--node-color, #88a9b5) 62%, #b9c6cc);
-    font-size: 0.59rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    line-height: 1.25;
-    text-transform: uppercase;
   }
 
   #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-label {
@@ -1353,6 +1339,55 @@ html&gt;body{padding:0}&lt;/style&gt;
     box-shadow:
       0 0 0 0.6rem color-mix(in srgb, var(--node-color, #c99d69) 8%, transparent),
       0 0 2.5rem color-mix(in srgb, var(--node-color, #c99d69) 22%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-thought {
+    position: absolute;
+    z-index: 8;
+    top: clamp(0.75rem, 2vw, 1.2rem);
+    left: clamp(0.75rem, 2vw, 1.2rem);
+    display: grid;
+    width: min(24rem, calc(100% - 2rem));
+    gap: 0.22rem;
+    margin: 0;
+    padding: 0.72rem 0.9rem 0.78rem;
+    color: #d8e4e8;
+    text-align: left;
+    border: 1px solid rgba(153, 188, 204, 0.18);
+    border-radius: 0.85rem;
+    background: linear-gradient(145deg, rgba(8, 22, 34, 0.88), rgba(3, 12, 21, 0.82));
+    box-shadow: 0 1rem 2.8rem rgba(0, 4, 9, 0.34);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.35rem);
+    transition: opacity 160ms ease, transform 180ms ease;
+    backdrop-filter: blur(16px);
+  }
+
+  #reality-orbit-prototype .orbit-thought[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-thought[data-visible=&quot;true&quot;] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #reality-orbit-prototype .orbit-thought-label {
+    color: #7f9aa6;
+    font-size: 0.6rem;
+    font-weight: 650;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+  }
+
+  #reality-orbit-prototype .orbit-thought-text {
+    font-family: var(--space-display);
+    font-size: clamp(0.78rem, 0.73rem + 0.18vw, 0.9rem);
+    font-weight: 520;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    text-wrap: balance;
   }
 
   #reality-orbit-prototype .orbit-detail {
@@ -1974,7 +2009,8 @@ html&gt;body{padding:0}&lt;/style&gt;
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
-    #reality-orbit-prototype .orbit-connection {
+    #reality-orbit-prototype .orbit-connection,
+    #reality-orbit-prototype .orbit-thought {
       transition: none;
     }
 
@@ -2014,6 +2050,10 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;g data-orbit-connections&gt;&lt;/g&gt;
           &lt;/svg&gt;
           &lt;div data-orbit-nodes&gt;&lt;/div&gt;
+          &lt;p class=&quot;orbit-thought&quot; id=&quot;orbit-thought&quot; role=&quot;tooltip&quot; data-orbit-thought data-visible=&quot;false&quot; hidden&gt;
+            &lt;span class=&quot;orbit-thought-label&quot;&gt;Consider&lt;/span&gt;
+            &lt;span class=&quot;orbit-thought-text&quot; data-orbit-thought-text&gt;&lt;/span&gt;
+          &lt;/p&gt;
         &lt;/div&gt;
         &lt;div class=&quot;orbit-detail&quot;&gt;
           &lt;p class=&quot;orbit-status text-small&quot; aria-live=&quot;polite&quot;&gt;
@@ -3128,6 +3168,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     const selectedSummary = root.querySelector(&quot;[data-selected-summary]&quot;);
     const orbitDetail = root.querySelector(&quot;.orbit-detail&quot;);
     const orbitStage = root.querySelector(&quot;.orbit-stage&quot;);
+    const orbitThought = root.querySelector(&quot;[data-orbit-thought]&quot;);
+    const orbitThoughtText = root.querySelector(&quot;[data-orbit-thought-text]&quot;);
     const actionGroup = root.querySelector(&quot;[data-orbit-actions]&quot;);
     const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
     const detailAction = root.querySelector(&quot;[data-orbit-detail-action]&quot;);
@@ -3342,12 +3384,6 @@ html&gt;body{padding:0}&lt;/style&gt;
       name.className = &quot;destination-name&quot;;
       name.textContent = node.label;
       label.appendChild(name);
-      if (ontologyLevel(node) === 1) {
-        const meta = document.createElement(&quot;span&quot;);
-        meta.className = &quot;destination-meta&quot;;
-        meta.textContent = &quot;Dimension&quot;;
-        label.appendChild(meta);
-      }
       button.append(marker, label);
     };
 
@@ -3633,6 +3669,38 @@ html&gt;body{padding:0}&lt;/style&gt;
       };
     };
 
+    const thoughtForNode = (node) =&gt; {
+      const governingQuestion = buildConceptAnatomy(node)[&quot;Governing question&quot;];
+      if (governingQuestion) return governingQuestion;
+      if ((node.children?.length ?? 0) &gt; 0) {
+        return `What becomes visible when ${node.label} moves to the centre?`;
+      }
+      return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
+    };
+
+    const showOrbitThought = (node) =&gt; {
+      orbitThoughtText.textContent = thoughtForNode(node);
+      orbitThought.hidden = false;
+      requestAnimationFrame(() =&gt; {
+        orbitThought.dataset.visible = &quot;true&quot;;
+      });
+    };
+
+    const hideOrbitThought = () =&gt; {
+      orbitThought.dataset.visible = &quot;false&quot;;
+      orbitThought.hidden = true;
+    };
+
+    const bindOrbitThought = (button, node) =&gt; {
+      button.setAttribute(&quot;aria-describedby&quot;, &quot;orbit-thought&quot;);
+      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitThought(node));
+      button.addEventListener(&quot;pointerleave&quot;, () =&gt; {
+        if (document.activeElement !== button) hideOrbitThought();
+      });
+      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitThought(node));
+      button.addEventListener(&quot;blur&quot;, hideOrbitThought);
+    };
+
     const createAnatomyField = ([label, value], className = &quot;&quot;) =&gt; {
       const field = document.createElement(&quot;div&quot;);
       field.className = className;
@@ -3682,7 +3750,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
-      understandEyebrow.textContent = `${role} · Concept anatomy`;
+      understandEyebrow.textContent = role === &quot;Dimension&quot; ? &quot;A lens on reality&quot; : `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
       understandLeadLabel.textContent = lead[0];
@@ -3839,6 +3907,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       });
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
+      selectedRole.hidden = context.role === &quot;Dimension&quot;;
       selectedSummary.textContent = context.explanation;
       const canPlayVisual = canPlayVisualForNode(node);
       openConceptVisualButton.hidden = !canPlayVisual;
@@ -3870,6 +3939,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const renderOrbit = () =&gt; {
       const parent = currentNode();
       const positions = positionChildren(parent);
+      hideOrbitThought();
       root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
@@ -3905,6 +3975,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.style.setProperty(&quot;--orbit-y&quot;, `${y}%`);
         button.style.setProperty(&quot;--node-color&quot;, color);
         appendDestinationContent(button, child);
+        bindOrbitThought(button, child);
         button.addEventListener(&quot;click&quot;, (event) =&gt; {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail &gt; 0) button.blur();
@@ -3926,6 +3997,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       centreButton.style.setProperty(&quot;--orbit-y&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
       appendDestinationContent(centreButton, parent);
+      bindOrbitThought(centreButton, parent);
       centreButton.addEventListener(&quot;click&quot;, (event) =&gt; {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail &gt; 0) centreButton.blur();

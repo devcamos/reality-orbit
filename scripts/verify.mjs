@@ -36,11 +36,22 @@ const requiredLabels = [
   "Second-order thinking",
 ];
 
-const [applicationDocument, document, fragment, observatoryBackground] = await Promise.all([
+const [
+  applicationDocument,
+  document,
+  fragment,
+  observatoryBackground,
+  applicationSource,
+  introductionSource,
+  applicationStyles,
+] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../legacy-index.html", import.meta.url), "utf8"),
   readFile(new URL("../src/reality-orbit.html", import.meta.url), "utf8"),
   readFile(new URL("../assets/observatory-deep-space.webp", import.meta.url)),
+  readFile(new URL("../src/App.tsx", import.meta.url), "utf8"),
+  readFile(new URL("../src/components/ObservatoryIntroduction.tsx", import.meta.url), "utf8"),
+  readFile(new URL("../src/styles/app.css", import.meta.url), "utf8"),
 ]);
 
 const failures = [];
@@ -123,13 +134,43 @@ for (const orbitalVisualContract of [
   ".orbit-stage::after",
   ".destination-marker::before",
   "--space-display:",
-  'meta.textContent = "Dimension"',
   'understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-")',
   '.understand-view[data-selected-role="dimension"] .understand-context-card',
   "min-height: calc(100dvh - 0.625rem)",
 ]) {
   if (!fragment.includes(orbitalVisualContract)) {
     failures.push(`Missing deliberate orbital visual contract: ${orbitalVisualContract}.`);
+  }
+}
+
+for (const firstContactContract of [
+  [applicationSource, "reality-orbit-entered"],
+  [applicationSource, "<ObservatoryIntroduction"],
+  [introductionSource, "data-observatory-introduction"],
+  [introductionSource, "data-enter-observatory"],
+  [introductionSource, "Begin with Reality."],
+  [applicationStyles, ".observatory-intro__enter:focus-visible"],
+  [applicationStyles, "@media (prefers-reduced-motion: reduce)"],
+]) {
+  if (!firstContactContract[0].includes(firstContactContract[1])) {
+    failures.push(`Missing observatory introduction contract: ${firstContactContract[1]}.`);
+  }
+}
+
+if (fragment.includes("destination-meta") || fragment.includes('meta.textContent = "Dimension"')) {
+  failures.push("The implied Dimension role must not be repeated beneath root destinations.");
+}
+
+for (const reflectiveHoverContract of [
+  "data-orbit-thought",
+  "thoughtForNode",
+  "bindOrbitThought",
+  'button.setAttribute("aria-describedby", "orbit-thought")',
+  'understandEyebrow.textContent = role === "Dimension" ? "A lens on reality"',
+  'selectedRole.hidden = context.role === "Dimension"',
+]) {
+  if (!fragment.includes(reflectiveHoverContract)) {
+    failures.push(`Missing reflective node-hover contract: ${reflectiveHoverContract}.`);
   }
 }
 

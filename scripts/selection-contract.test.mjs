@@ -494,7 +494,7 @@ test("Concept Anatomy maps every visible teaching field to the selected node", (
   assert.match(fragment, /data-understand-support-label/);
   assert.match(fragment, /understandSupportLabel\.textContent = support\[0\];/);
   assert.match(fragment, /understandView\.dataset\.selectedNode = node\.id;/);
-  assert.match(fragment, /understandEyebrow\.textContent = `\$\{role\} · Concept anatomy`;/);
+  assert.match(fragment, /understandEyebrow\.textContent = role === "Dimension" \? "A lens on reality" : `\$\{role\} · Concept anatomy`;/);
   assert.match(fragment, /understandTitle\.textContent = node\.label;/);
   assert.match(fragment, /understandStatement\.textContent = node\.summary;/);
 });

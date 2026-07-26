@@ -31,6 +31,225 @@ button {
   min-height: 100dvh;
 }
 
+.observatory-intro {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100dvh;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(2rem, 6vw, 6rem);
+  color: #edf3f5;
+  background:
+    radial-gradient(circle at 70% 44%, rgb(44 91 107 / 18%), transparent 26%),
+    linear-gradient(116deg, rgb(2 7 14 / 96%) 12%, rgb(2 8 16 / 84%) 50%, rgb(2 7 14 / 72%)),
+    var(--intro-background) center / cover no-repeat,
+    #02060d;
+}
+
+.observatory-intro::before,
+.observatory-intro::after {
+  position: absolute;
+  z-index: -1;
+  inset: -12%;
+  content: "";
+  pointer-events: none;
+}
+
+.observatory-intro::before {
+  opacity: 0.56;
+  background-image:
+    radial-gradient(circle at 8% 24%, rgb(223 239 246 / 82%) 0 0.7px, transparent 1px),
+    radial-gradient(circle at 78% 18%, rgb(173 207 219 / 68%) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 28% 72%, rgb(223 239 246 / 70%) 0 0.7px, transparent 1px),
+    radial-gradient(circle at 64% 82%, rgb(155 190 206 / 60%) 0 0.7px, transparent 1.1px);
+  background-position: 0 0, 7rem 3rem, 3rem 6rem, 10rem 10rem;
+  background-size: 8rem 8rem, 12rem 12rem, 10rem 10rem, 15rem 15rem;
+  animation: intro-star-drift 54s linear infinite alternate;
+}
+
+.observatory-intro::after {
+  background: radial-gradient(ellipse at center, transparent 46%, rgb(1 4 9 / 58%) 84%);
+}
+
+.observatory-intro__content {
+  z-index: 2;
+  width: min(100%, 47rem);
+  padding: clamp(1.35rem, 3.5vw, 2.5rem);
+  border: 1px solid rgb(165 196 211 / 14%);
+  border-radius: 1.5rem;
+  background: linear-gradient(145deg, rgb(7 17 28 / 77%), rgb(3 10 18 / 62%));
+  box-shadow:
+    inset 0 1px 0 rgb(232 245 250 / 7%),
+    0 2.5rem 7rem rgb(0 3 8 / 42%);
+  backdrop-filter: blur(22px) saturate(106%);
+}
+
+.observatory-intro__eyebrow {
+  margin: 0 0 0.8rem;
+  color: #9ab5c0;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.observatory-intro h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-family: "Avenir Next", "SF Pro Display", "Segoe UI Variable Display", sans-serif;
+  font-size: clamp(2.8rem, 7vw, 5.8rem);
+  font-weight: 520;
+  letter-spacing: -0.065em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.observatory-intro__lead {
+  max-width: 58ch;
+  margin: 1.4rem 0 0;
+  color: #b8c6cc;
+  font-size: clamp(1rem, 1.4vw, 1.14rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.observatory-intro__guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: clamp(1.6rem, 4vw, 2.4rem) 0 0;
+  padding: 1.2rem 0 0;
+  border-top: 1px solid rgb(151 184 200 / 14%);
+  list-style: none;
+}
+
+.observatory-intro__guide li {
+  display: grid;
+  align-content: start;
+  gap: 0.32rem;
+}
+
+.observatory-intro__guide span {
+  color: #78919d;
+  font-size: 0.66rem;
+  letter-spacing: 0.13em;
+}
+
+.observatory-intro__guide strong {
+  color: #e5edef;
+  font-size: 0.92rem;
+  font-weight: 580;
+}
+
+.observatory-intro__guide small {
+  color: #8fa0a8;
+  font-size: 0.76rem;
+  line-height: 1.48;
+}
+
+.observatory-intro__enter {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 1.7rem;
+  padding: 0.76rem 1.2rem;
+  color: #f5f9fa;
+  border: 1px solid rgb(164 199 213 / 30%);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgb(32 76 91 / 88%), rgb(18 48 62 / 92%));
+  box-shadow:
+    inset 0 1px 0 rgb(237 249 252 / 12%),
+    0 0.8rem 2.2rem rgb(0 7 13 / 28%);
+  font-weight: 620;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.observatory-intro__enter:hover {
+  border-color: rgb(181 218 229 / 48%);
+  background: linear-gradient(135deg, rgb(39 91 105 / 92%), rgb(22 59 73 / 96%));
+  box-shadow:
+    inset 0 1px 0 rgb(237 249 252 / 16%),
+    0 1rem 2.8rem rgb(0 7 13 / 36%);
+  transform: translateY(-1px);
+}
+
+.observatory-intro__enter:focus-visible {
+  outline: 2px solid #b2d1dc;
+  outline-offset: 4px;
+}
+
+.observatory-intro__note {
+  margin: 0.9rem 0 0;
+  color: #6f858f;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+.observatory-intro__sky {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: min(82%, calc(100% - 6rem));
+  width: clamp(19rem, 38vw, 42rem);
+  aspect-ratio: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.observatory-intro__orbit {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  border: 1px solid rgb(139 178 191 / 13%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+}
+
+.observatory-intro__orbit--outer {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.observatory-intro__orbit--inner {
+  width: 62%;
+  aspect-ratio: 1;
+}
+
+.observatory-intro__reality {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: clamp(5.5rem, 10vw, 9rem);
+  aspect-ratio: 1;
+  border: 1px solid rgb(245 215 169 / 30%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 37% 31%, #fff4d7 0 4%, #e0b36f 13%, #8e5931 42%, #2a1512 74%);
+  box-shadow:
+    0 0 1.4rem rgb(218 171 103 / 38%),
+    0 0 5rem rgb(186 126 71 / 18%),
+    0 0 9rem rgb(106 169 185 / 9%);
+  transform: translate(-50%, -50%);
+  animation: intro-reality-breathe 8s ease-in-out infinite;
+}
+
+@keyframes intro-star-drift {
+  from { transform: translate3d(-0.5%, -0.3%, 0); }
+  to { transform: translate3d(1.1%, 0.8%, 0); }
+}
+
+@keyframes intro-reality-breathe {
+  0%,
+  100% { filter: brightness(0.92); transform: translate(-50%, -50%) scale(0.99); }
+  50% { filter: brightness(1.06); transform: translate(-50%, -50%) scale(1.015); }
+}
+
 .orbit-frame-shell {
   position: relative;
   background: #02060d;
@@ -96,10 +315,60 @@ button {
   text-transform: uppercase;
 }
 
+@media (max-width: 780px) {
+  .observatory-intro {
+    align-items: end;
+    padding: 1rem;
+  }
+
+  .observatory-intro__content {
+    width: 100%;
+    padding: 1.3rem;
+  }
+
+  .observatory-intro h1 {
+    font-size: clamp(2.7rem, 15vw, 4.5rem);
+  }
+
+  .observatory-intro__guide {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .observatory-intro__guide li {
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .observatory-intro__guide strong,
+  .observatory-intro__guide small {
+    grid-column: 2;
+  }
+
+  .observatory-intro__guide strong {
+    grid-row: 1;
+  }
+
+  .observatory-intro__sky {
+    top: 23%;
+    left: 72%;
+    width: min(28rem, 90vw);
+    opacity: 0.72;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     scroll-behavior: auto !important;
+  }
+
+  .observatory-intro::before,
+  .observatory-intro__reality {
+    animation: none;
+  }
+
+  .observatory-intro__enter {
+    transition: none;
   }
 }
