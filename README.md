@@ -63,6 +63,12 @@ Rebuild the committed standalone application and reject source/output drift with
 npm run check:generated
 ```
 
+Create the static deployment snapshot in `public/` with:
+
+```bash
+npm run build
+```
+
 Exercise the same local server, document, headers, asset delivery, and failure responses used by browser testing with:
 
 ```bash
