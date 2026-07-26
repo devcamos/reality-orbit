@@ -1390,6 +1390,97 @@ html&gt;body{padding:0}&lt;/style&gt;
     text-wrap: balance;
   }
 
+  #reality-orbit-prototype .orbit-hover-reticle {
+    --reticle-size: 5.2rem;
+    position: absolute;
+    z-index: 4;
+    top: var(--reticle-y, 50%);
+    left: var(--reticle-x, 50%);
+    width: var(--reticle-size);
+    aspect-ratio: 1;
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 22%, transparent));
+    transform: translate(-50%, -50%) scale(0.88);
+    transition:
+      top 340ms cubic-bezier(0.22, 0.68, 0, 1),
+      left 340ms cubic-bezier(0.22, 0.68, 0, 1),
+      width 220ms ease,
+      opacity 130ms ease,
+      transform 220ms cubic-bezier(0.22, 0.68, 0, 1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;] {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell,
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell {
+    inset: 0;
+    background:
+      conic-gradient(
+        from 12deg,
+        rgba(225, 235, 238, 0.22),
+        rgba(235, 242, 244, 0.86) 13%,
+        rgba(85, 106, 116, 0.56) 25%,
+        rgba(218, 230, 234, 0.8) 39%,
+        rgba(68, 87, 97, 0.42) 52%,
+        rgba(232, 239, 241, 0.84) 69%,
+        rgba(90, 110, 119, 0.5) 84%,
+        rgba(225, 235, 238, 0.22)
+      );
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 241, 244, 0.3),
+      0 0 0 1px rgba(7, 15, 22, 0.88);
+    -webkit-mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+    mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell::before {
+    position: absolute;
+    inset: 12%;
+    border: 1px solid rgba(186, 210, 219, 0.34);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0.55rem rgba(147, 184, 198, 0.12),
+      0 0 0.45rem rgba(2, 7, 12, 0.72);
+    content: &quot;&quot;;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    inset: 23%;
+    border: 2px solid color-mix(in srgb, var(--reticle-color, #9fb6c0) 74%, #dbe8ec);
+    border-right-color: transparent;
+    border-bottom-color: rgba(103, 132, 143, 0.24);
+    box-shadow: 0 0 0.48rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 24%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;] .orbit-hover-reticle-shell {
+    animation: hover-reticle-shell-drift 7s linear infinite;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;] .orbit-hover-reticle-orbit {
+    animation: hover-reticle-orbit-drift 2.8s linear infinite;
+  }
+
+  @keyframes hover-reticle-shell-drift {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes hover-reticle-orbit-drift {
+    to { transform: rotate(-360deg); }
+  }
+
   #reality-orbit-prototype .orbit-detail {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -2006,11 +2097,18 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
   }
 
+  @media (hover: none) and (pointer: coarse) {
+    #reality-orbit-prototype .orbit-hover-reticle {
+      display: none !important;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .orbit-connection,
-    #reality-orbit-prototype .orbit-thought {
+    #reality-orbit-prototype .orbit-thought,
+    #reality-orbit-prototype .orbit-hover-reticle {
       transition: none;
     }
 
@@ -2020,6 +2118,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .destination-marker,
     #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker::before,
+    #reality-orbit-prototype .orbit-hover-reticle-shell,
+    #reality-orbit-prototype .orbit-hover-reticle-orbit,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind=&quot;focus&quot;] .concept-visual-node-mark {
       animation: none;
@@ -2050,6 +2150,10 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;g data-orbit-connections&gt;&lt;/g&gt;
           &lt;/svg&gt;
           &lt;div data-orbit-nodes&gt;&lt;/div&gt;
+          &lt;div class=&quot;orbit-hover-reticle&quot; data-orbit-hover-reticle data-visible=&quot;false&quot; hidden aria-hidden=&quot;true&quot;&gt;
+            &lt;span class=&quot;orbit-hover-reticle-shell&quot;&gt;&lt;/span&gt;
+            &lt;span class=&quot;orbit-hover-reticle-orbit&quot;&gt;&lt;/span&gt;
+          &lt;/div&gt;
           &lt;p class=&quot;orbit-thought&quot; id=&quot;orbit-thought&quot; role=&quot;tooltip&quot; data-orbit-thought data-visible=&quot;false&quot; hidden&gt;
             &lt;span class=&quot;orbit-thought-label&quot;&gt;Consider&lt;/span&gt;
             &lt;span class=&quot;orbit-thought-text&quot; data-orbit-thought-text&gt;&lt;/span&gt;
@@ -3170,6 +3274,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const orbitStage = root.querySelector(&quot;.orbit-stage&quot;);
     const orbitThought = root.querySelector(&quot;[data-orbit-thought]&quot;);
     const orbitThoughtText = root.querySelector(&quot;[data-orbit-thought-text]&quot;);
+    const orbitHoverReticle = root.querySelector(&quot;[data-orbit-hover-reticle]&quot;);
     const actionGroup = root.querySelector(&quot;[data-orbit-actions]&quot;);
     const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
     const detailAction = root.querySelector(&quot;[data-orbit-detail-action]&quot;);
@@ -3678,27 +3783,53 @@ html&gt;body{padding:0}&lt;/style&gt;
       return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
     };
 
-    const showOrbitThought = (node) =&gt; {
+    let orbitHoverExitTimer = null;
+
+    const positionOrbitHoverReticle = (button, node) =&gt; {
+      const marker = button.querySelector(&quot;.destination-marker&quot;);
+      const stageBounds = orbitStage.getBoundingClientRect();
+      const markerBounds = marker.getBoundingClientRect();
+      const size = Math.max(markerBounds.width, markerBounds.height) + 22;
+      orbitHoverReticle.style.setProperty(&quot;--reticle-x&quot;, `${markerBounds.left - stageBounds.left + markerBounds.width / 2}px`);
+      orbitHoverReticle.style.setProperty(&quot;--reticle-y&quot;, `${markerBounds.top - stageBounds.top + markerBounds.height / 2}px`);
+      orbitHoverReticle.style.setProperty(&quot;--reticle-size&quot;, `${size}px`);
+      orbitHoverReticle.style.setProperty(&quot;--reticle-color&quot;, nodeColor(node));
+    };
+
+    const showOrbitHover = (button, node) =&gt; {
+      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
       orbitThoughtText.textContent = thoughtForNode(node);
       orbitThought.hidden = false;
+      positionOrbitHoverReticle(button, node);
+      orbitHoverReticle.hidden = false;
       requestAnimationFrame(() =&gt; {
         orbitThought.dataset.visible = &quot;true&quot;;
+        orbitHoverReticle.dataset.visible = &quot;true&quot;;
       });
     };
 
-    const hideOrbitThought = () =&gt; {
+    const resetOrbitHover = () =&gt; {
+      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
+      orbitHoverExitTimer = null;
       orbitThought.dataset.visible = &quot;false&quot;;
+      orbitHoverReticle.dataset.visible = &quot;false&quot;;
       orbitThought.hidden = true;
+      orbitHoverReticle.hidden = true;
     };
 
-    const bindOrbitThought = (button, node) =&gt; {
+    const hideOrbitHover = () =&gt; {
+      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
+      orbitHoverExitTimer = window.setTimeout(resetOrbitHover, 90);
+    };
+
+    const bindOrbitHover = (button, node) =&gt; {
       button.setAttribute(&quot;aria-describedby&quot;, &quot;orbit-thought&quot;);
-      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitThought(node));
+      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitHover(button, node));
       button.addEventListener(&quot;pointerleave&quot;, () =&gt; {
-        if (document.activeElement !== button) hideOrbitThought();
+        if (document.activeElement !== button) hideOrbitHover();
       });
-      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitThought(node));
-      button.addEventListener(&quot;blur&quot;, hideOrbitThought);
+      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitHover(button, node));
+      button.addEventListener(&quot;blur&quot;, hideOrbitHover);
     };
 
     const createAnatomyField = ([label, value], className = &quot;&quot;) =&gt; {
@@ -3939,7 +4070,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const renderOrbit = () =&gt; {
       const parent = currentNode();
       const positions = positionChildren(parent);
-      hideOrbitThought();
+      resetOrbitHover();
       root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
@@ -3975,7 +4106,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.style.setProperty(&quot;--orbit-y&quot;, `${y}%`);
         button.style.setProperty(&quot;--node-color&quot;, color);
         appendDestinationContent(button, child);
-        bindOrbitThought(button, child);
+        bindOrbitHover(button, child);
         button.addEventListener(&quot;click&quot;, (event) =&gt; {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail &gt; 0) button.blur();
@@ -3997,7 +4128,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       centreButton.style.setProperty(&quot;--orbit-y&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
       appendDestinationContent(centreButton, parent);
-      bindOrbitThought(centreButton, parent);
+      bindOrbitHover(centreButton, parent);
       centreButton.addEventListener(&quot;click&quot;, (event) =&gt; {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail &gt; 0) centreButton.blur();

@@ -93,19 +93,34 @@ test("keyboard activation selects a dimension and exposes its action", async ({ 
 });
 
 test("hover and keyboard focus reveal a concept-specific thought", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await openOrbit(page);
 
   await node(page, "domain").hover();
   await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeVisible();
   await expect(app(page).locator("[data-orbit-thought-text]")).toHaveText(
     "What broad area of reality is being studied?",
   );
+  const domainPosition = await app(page).locator("[data-orbit-hover-reticle]").evaluate((reticle) => ({
+    x: reticle.style.getPropertyValue("--reticle-x"),
+    y: reticle.style.getPropertyValue("--reticle-y"),
+  }));
 
   await node(page, "perspective").focus();
   await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeVisible();
   await expect(app(page).locator("[data-orbit-thought-text]")).toHaveText(
     "From which viewpoint or interpretive lens is it being understood?",
   );
+  const perspectiveState = await app(page).locator("[data-orbit-hover-reticle]").evaluate((reticle) => ({
+    x: reticle.style.getPropertyValue("--reticle-x"),
+    y: reticle.style.getPropertyValue("--reticle-y"),
+    orbitAnimation: getComputedStyle(reticle.querySelector(".orbit-hover-reticle-orbit")).animationName,
+  }));
+
+  expect(perspectiveState).not.toMatchObject(domainPosition);
+  expect(perspectiveState.orbitAnimation).toBe("hover-reticle-orbit-drift");
 });
 
 test("mobile selection reveals the summary and uses the contextual explore control", async ({ page }) => {
@@ -125,6 +140,7 @@ test("mobile selection reveals the summary and uses the contextual explore contr
 test("reduced-motion mode removes ambient and navigational animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await openOrbit(page);
+  await node(page, "time").focus();
 
   const animationState = await app(page).locator("#reality-orbit-prototype").evaluate((root) => {
     const starfield = root.querySelector(".orbit-starfield");
@@ -135,6 +151,8 @@ test("reduced-motion mode removes ambient and navigational animation", async ({ 
       nearStars: getComputedStyle(starfield, "::after").animationName,
       farStars: getComputedStyle(starfield, "::before").animationName,
       timeRing: getComputedStyle(timeMarker, "::before").animationName,
+      hoverReticle: getComputedStyle(root.querySelector(".orbit-hover-reticle-orbit")).animationName,
+      hoverTransition: getComputedStyle(root.querySelector(".orbit-hover-reticle")).transitionDuration,
     };
   });
 
@@ -143,6 +161,8 @@ test("reduced-motion mode removes ambient and navigational animation", async ({ 
     nearStars: "none",
     farStars: "none",
     timeRing: "none",
+    hoverReticle: "none",
+    hoverTransition: "0s",
   });
 });
 

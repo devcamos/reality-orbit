@@ -67,9 +67,9 @@ After entry, session storage prevents the introduction from interrupting refresh
 
 ### Reflective hover guidance
 
-Hovering or keyboard-focusing a node reveals one quiet **Consider** prompt. The prompt comes from the concept's authored Governing question where available; otherwise it asks a restrained question about placing a container at the centre or applying a terminal concept. This makes hover teach the learner what the node can reveal instead of adding ornamental animation.
+Hovering or keyboard-focusing a node moves an original orbital reticle onto its planet and reveals one quiet **Consider** prompt. The segmented disk glides between destinations and its two rings turn slowly while active, providing spatial feedback without copying a third-party asset. The prompt comes from the concept's authored Governing question where available; otherwise it asks a restrained question about placing a container at the centre or applying a terminal concept. This makes hover teach the learner what the node can reveal instead of adding ornamental animation.
 
-The prompt is a shared accessible tooltip associated with each node through `aria-describedby`. Pointer exit and keyboard blur remove it, selection remains unchanged, and touch users continue to receive the permanent selected-concept detail. The internal `Dimension` role remains available to accessibility and ontology logic, but it is not repeated as visible metadata beneath every root destination or beside a selected root lens.
+The prompt is a shared accessible tooltip associated with each node through `aria-describedby`. Pointer exit and keyboard blur remove both layers, selection remains unchanged, and touch users continue to receive the permanent selected-concept detail. The reticle is hidden for coarse touch pointers; its travel and ring rotation stop when reduced motion is requested. The internal `Dimension` role remains available to accessibility and ontology logic, but it is not repeated as visible metadata beneath every root destination or beside a selected root lens.
 
 The design parent is the abstract **spatial destination map** interaction pattern. Reality Orbit inherits full-canvas exploration, stable destinations, selection, travel, return, and contextual information. It does not copy Destiny artwork, assets, logos, icons, typography, names, or screen layouts.
 

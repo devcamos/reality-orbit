@@ -513,6 +513,97 @@
     text-wrap: balance;
   }
 
+  #reality-orbit-prototype .orbit-hover-reticle {
+    --reticle-size: 5.2rem;
+    position: absolute;
+    z-index: 4;
+    top: var(--reticle-y, 50%);
+    left: var(--reticle-x, 50%);
+    width: var(--reticle-size);
+    aspect-ratio: 1;
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 22%, transparent));
+    transform: translate(-50%, -50%) scale(0.88);
+    transition:
+      top 340ms cubic-bezier(0.22, 0.68, 0, 1),
+      left 340ms cubic-bezier(0.22, 0.68, 0, 1),
+      width 220ms ease,
+      opacity 130ms ease,
+      transform 220ms cubic-bezier(0.22, 0.68, 0, 1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible="true"] {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell,
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell {
+    inset: 0;
+    background:
+      conic-gradient(
+        from 12deg,
+        rgba(225, 235, 238, 0.22),
+        rgba(235, 242, 244, 0.86) 13%,
+        rgba(85, 106, 116, 0.56) 25%,
+        rgba(218, 230, 234, 0.8) 39%,
+        rgba(68, 87, 97, 0.42) 52%,
+        rgba(232, 239, 241, 0.84) 69%,
+        rgba(90, 110, 119, 0.5) 84%,
+        rgba(225, 235, 238, 0.22)
+      );
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 241, 244, 0.3),
+      0 0 0 1px rgba(7, 15, 22, 0.88);
+    -webkit-mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+    mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell::before {
+    position: absolute;
+    inset: 12%;
+    border: 1px solid rgba(186, 210, 219, 0.34);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0.55rem rgba(147, 184, 198, 0.12),
+      0 0 0.45rem rgba(2, 7, 12, 0.72);
+    content: "";
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    inset: 23%;
+    border: 2px solid color-mix(in srgb, var(--reticle-color, #9fb6c0) 74%, #dbe8ec);
+    border-right-color: transparent;
+    border-bottom-color: rgba(103, 132, 143, 0.24);
+    box-shadow: 0 0 0.48rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 24%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible="true"] .orbit-hover-reticle-shell {
+    animation: hover-reticle-shell-drift 7s linear infinite;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible="true"] .orbit-hover-reticle-orbit {
+    animation: hover-reticle-orbit-drift 2.8s linear infinite;
+  }
+
+  @keyframes hover-reticle-shell-drift {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes hover-reticle-orbit-drift {
+    to { transform: rotate(-360deg); }
+  }
+
   #reality-orbit-prototype .orbit-detail {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -1129,11 +1220,18 @@
     }
   }
 
+  @media (hover: none) and (pointer: coarse) {
+    #reality-orbit-prototype .orbit-hover-reticle {
+      display: none !important;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .orbit-connection,
-    #reality-orbit-prototype .orbit-thought {
+    #reality-orbit-prototype .orbit-thought,
+    #reality-orbit-prototype .orbit-hover-reticle {
       transition: none;
     }
 
@@ -1143,6 +1241,8 @@
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .destination-marker,
     #reality-orbit-prototype .orbit-node[data-visual-archetype="time"] .destination-marker::before,
+    #reality-orbit-prototype .orbit-hover-reticle-shell,
+    #reality-orbit-prototype .orbit-hover-reticle-orbit,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind="focus"] .concept-visual-node-mark {
       animation: none;
@@ -1173,6 +1273,10 @@
             <g data-orbit-connections></g>
           </svg>
           <div data-orbit-nodes></div>
+          <div class="orbit-hover-reticle" data-orbit-hover-reticle data-visible="false" hidden aria-hidden="true">
+            <span class="orbit-hover-reticle-shell"></span>
+            <span class="orbit-hover-reticle-orbit"></span>
+          </div>
           <p class="orbit-thought" id="orbit-thought" role="tooltip" data-orbit-thought data-visible="false" hidden>
             <span class="orbit-thought-label">Consider</span>
             <span class="orbit-thought-text" data-orbit-thought-text></span>
@@ -2293,6 +2397,7 @@
     const orbitStage = root.querySelector(".orbit-stage");
     const orbitThought = root.querySelector("[data-orbit-thought]");
     const orbitThoughtText = root.querySelector("[data-orbit-thought-text]");
+    const orbitHoverReticle = root.querySelector("[data-orbit-hover-reticle]");
     const actionGroup = root.querySelector("[data-orbit-actions]");
     const exploreButton = root.querySelector("[data-explore-action]");
     const detailAction = root.querySelector("[data-orbit-detail-action]");
@@ -2801,27 +2906,53 @@
       return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
     };
 
-    const showOrbitThought = (node) => {
+    let orbitHoverExitTimer = null;
+
+    const positionOrbitHoverReticle = (button, node) => {
+      const marker = button.querySelector(".destination-marker");
+      const stageBounds = orbitStage.getBoundingClientRect();
+      const markerBounds = marker.getBoundingClientRect();
+      const size = Math.max(markerBounds.width, markerBounds.height) + 22;
+      orbitHoverReticle.style.setProperty("--reticle-x", `${markerBounds.left - stageBounds.left + markerBounds.width / 2}px`);
+      orbitHoverReticle.style.setProperty("--reticle-y", `${markerBounds.top - stageBounds.top + markerBounds.height / 2}px`);
+      orbitHoverReticle.style.setProperty("--reticle-size", `${size}px`);
+      orbitHoverReticle.style.setProperty("--reticle-color", nodeColor(node));
+    };
+
+    const showOrbitHover = (button, node) => {
+      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
       orbitThoughtText.textContent = thoughtForNode(node);
       orbitThought.hidden = false;
+      positionOrbitHoverReticle(button, node);
+      orbitHoverReticle.hidden = false;
       requestAnimationFrame(() => {
         orbitThought.dataset.visible = "true";
+        orbitHoverReticle.dataset.visible = "true";
       });
     };
 
-    const hideOrbitThought = () => {
+    const resetOrbitHover = () => {
+      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
+      orbitHoverExitTimer = null;
       orbitThought.dataset.visible = "false";
+      orbitHoverReticle.dataset.visible = "false";
       orbitThought.hidden = true;
+      orbitHoverReticle.hidden = true;
     };
 
-    const bindOrbitThought = (button, node) => {
+    const hideOrbitHover = () => {
+      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
+      orbitHoverExitTimer = window.setTimeout(resetOrbitHover, 90);
+    };
+
+    const bindOrbitHover = (button, node) => {
       button.setAttribute("aria-describedby", "orbit-thought");
-      button.addEventListener("pointerenter", () => showOrbitThought(node));
+      button.addEventListener("pointerenter", () => showOrbitHover(button, node));
       button.addEventListener("pointerleave", () => {
-        if (document.activeElement !== button) hideOrbitThought();
+        if (document.activeElement !== button) hideOrbitHover();
       });
-      button.addEventListener("focus", () => showOrbitThought(node));
-      button.addEventListener("blur", hideOrbitThought);
+      button.addEventListener("focus", () => showOrbitHover(button, node));
+      button.addEventListener("blur", hideOrbitHover);
     };
 
     const createAnatomyField = ([label, value], className = "") => {
@@ -3062,7 +3193,7 @@
     const renderOrbit = () => {
       const parent = currentNode();
       const positions = positionChildren(parent);
-      hideOrbitThought();
+      resetOrbitHover();
       root.style.setProperty("--map-color", nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
@@ -3098,7 +3229,7 @@
         button.style.setProperty("--orbit-y", `${y}%`);
         button.style.setProperty("--node-color", color);
         appendDestinationContent(button, child);
-        bindOrbitThought(button, child);
+        bindOrbitHover(button, child);
         button.addEventListener("click", (event) => {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail > 0) button.blur();
@@ -3120,7 +3251,7 @@
       centreButton.style.setProperty("--orbit-y", "50%");
       centreButton.style.setProperty("--node-color", nodeColor(parent));
       appendDestinationContent(centreButton, parent);
-      bindOrbitThought(centreButton, parent);
+      bindOrbitHover(centreButton, parent);
       centreButton.addEventListener("click", (event) => {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail > 0) centreButton.blur();

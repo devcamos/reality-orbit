@@ -163,8 +163,12 @@ if (fragment.includes("destination-meta") || fragment.includes('meta.textContent
 
 for (const reflectiveHoverContract of [
   "data-orbit-thought",
+  "data-orbit-hover-reticle",
   "thoughtForNode",
-  "bindOrbitThought",
+  "positionOrbitHoverReticle",
+  "bindOrbitHover",
+  "@keyframes hover-reticle-shell-drift",
+  "@keyframes hover-reticle-orbit-drift",
   'button.setAttribute("aria-describedby", "orbit-thought")',
   'understandEyebrow.textContent = role === "Dimension" ? "A lens on reality"',
   'selectedRole.hidden = context.role === "Dimension"',
