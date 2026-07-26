@@ -209,6 +209,50 @@ test("requested study concepts provide complete, scoped teaching anatomy", () =>
   assert.match(contract.ontology["pareto-principle"].anatomy.Limitations, /not a universal ratio/i);
 });
 
+test("Character is a distinct Individual Differences concept rather than a Personality subtype", () => {
+  const individualDifferences = contract.ontology["individual-differences"];
+  assert.deepEqual(
+    Array.from(individualDifferences.canonicalPath),
+    ["Reality", "Domain", "Psychological", "Individual differences"],
+  );
+  assert.deepEqual(
+    Array.from(individualDifferences.children),
+    ["personality", "temperament", "character", "personal-values", "abilities"],
+  );
+
+  for (const id of individualDifferences.children) {
+    const sibling = contract.ontology[id];
+    assert.equal(ontologyLevel(sibling), terminalOntologyLevel, `${sibling.label} must respect the level-4 boundary.`);
+    assert.equal(sibling.children?.length ?? 0, 0, `${sibling.label} must not force an uncurated child level.`);
+    assert.equal(sibling.relationshipToParent, "ASPECT_OF", `${sibling.label} must remain a peer aspect of Individual differences.`);
+  }
+
+  const character = contract.ontology.character;
+  assert.deepEqual(
+    Array.from(character.canonicalPath),
+    ["Reality", "Domain", "Psychological", "Individual differences", "Character"],
+  );
+  assert.equal(contract.ontology.personality.children?.includes("character") ?? false, false);
+
+  const requiredCharacterFields = [
+    "Statement",
+    "First principles",
+    "Components",
+    "Mechanism",
+    "Development",
+    "Evidence",
+    "Scope",
+    "Limitations",
+    "Applications",
+    "Common confusion",
+  ];
+  const characterAnatomy = contract.buildConceptAnatomy(character);
+  for (const field of requiredCharacterFields) {
+    assert.ok(characterAnatomy[field]?.trim(), `Character must explain ${field}.`);
+  }
+  assert.match(characterAnatomy["Common confusion"], /not simply a subtype of Personality/i);
+});
+
 test("every named law provides the complete law teaching anatomy", () => {
   const requiredFields = [
     "Statement",

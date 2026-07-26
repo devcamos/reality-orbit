@@ -221,6 +221,20 @@ Environment
 
 The branch demonstrates the completion standard: a category explains its boundary, conditions, variables, mechanism, feedback, limits, and related concepts; its environment types classify the context; its level-4 settings make the classification teachable.
 
+Individual differences is the theory-neutral Psychological home for five peer concepts:
+
+```text
+Psychological
+└── Individual differences
+    ├── Personality
+    ├── Temperament
+    ├── Character
+    ├── Values
+    └── Abilities
+```
+
+The separation protects meaning. Personality describes relatively stable patterns of thought, feeling, and behaviour. Temperament concerns early-emerging reactivity and regulation. Character concerns moral and self-regulatory qualities expressed through repeated choices and conduct. Values organise priorities, while Abilities describe capacities for learning or performance. Character is therefore not nested beneath Personality, which would make one theoretical model appear canonical for the whole ontology.
+
 For example, `Reality → Category → Relationship → Ownership → Ownership arrangement` reaches a terminal teaching concept. The final concept binds the holder, object, bundle of rights, recognition, and conditions that make an ownership relationship concrete enough to teach without pretending it represents a particular real-world case.
 
 The renderer counts Reality as level 0 and enforces level 4 as the terminal boundary. A level-4 node may be focused as the final exploration destination, but it cannot introduce level 5; malformed future data that exceeds the boundary is rejected before render.
