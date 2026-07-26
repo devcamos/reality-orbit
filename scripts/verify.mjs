@@ -62,6 +62,10 @@ if (!document.includes("Content-Security-Policy")) {
   failures.push("legacy-index.html must include its sandbox content-security policy.");
 }
 
+if (document.includes("unsafe-eval") || !document.includes("script-src 'none'")) {
+  failures.push("The compatibility frame must not permit eval and its outer document must not execute scripts.");
+}
+
 if (!document.includes(":root{color-scheme:dark;background:Canvas}")) {
   failures.push("The standalone frame must keep Reality Orbit in its deliberate dark orbital theme.");
 }

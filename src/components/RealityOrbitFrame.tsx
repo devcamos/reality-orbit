@@ -20,9 +20,9 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
   return (
     <section className="orbit-frame-shell" aria-label="Reality Orbit observatory">
       {frameStatus === "loading" && (
-        <div className="orbit-frame-status" role="status">
+        <output className="orbit-frame-status" aria-live="polite">
           Aligning the observatory…
-        </div>
+        </output>
       )}
       {frameStatus === "error" && (
         <div className="orbit-frame-status orbit-frame-status--error" role="alert">
