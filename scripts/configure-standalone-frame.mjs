@@ -33,7 +33,9 @@ if (sourceStart === -1 || sourceEndStart === -1) {
 }
 
 const sourceEnd = sourceEndStart + sourceEndMarker.length;
-const syncedDocument = `${document.slice(0, sourceStart)}${escapeForSrcdoc(fragment)}${document.slice(sourceEnd)}`;
+const embeddedFragment = escapeForSrcdoc(fragment.trimEnd());
+const documentSuffix = document.slice(sourceEnd).replace(/^\n+/, "\n");
+const syncedDocument = `${document.slice(0, sourceStart)}${embeddedFragment}${documentSuffix}`;
 const configuredDocument = syncedDocument
   .replace(defaultFrameWidth, desktopFrameWidth)
   .replace(unboundedFrameWidth, `iframe{display:block;width:100%;${desktopFrameWidth};height:`)

@@ -6,11 +6,43 @@ on:
     branches:
       - main
 
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
 jobs:
-  verify:
+  contract:
+    name: Contract · Node ${{ matrix.node-version }}
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 20
+          - 22
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate production and ontology contracts
+        run: npm run check
+
+  generated-build:
+    name: Generated build
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -19,7 +51,51 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
+          cache: npm
           node-version: 20
 
-      - name: Validate production files
-        run: npm run check
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Rebuild the standalone application
+        run: npm run build
+
+      - name: Reject stale generated output
+        run: git diff --exit-code -- index.html
+
+  server-smoke:
+    name: Server and asset smoke
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 20
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Exercise the local production server
+        run: npm run test:smoke
+
+  dependency-audit:
+    name: Dependency audit
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: 20
+
+      - name: Audit locked dependencies
+        run: npm audit --audit-level=high

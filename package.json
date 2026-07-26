@@ -4,9 +4,12 @@
   "private": true,
   "description": "An interactive orbit map for exploring dimensions of reality.",
   "scripts": {
+    "build": "npm run frame:desktop",
     "check": "node scripts/verify.mjs && node --test scripts/*.test.mjs",
+    "check:generated": "npm run build && git diff --exit-code -- index.html",
     "frame:desktop": "node scripts/configure-standalone-frame.mjs",
     "test": "node --test scripts/*.test.mjs",
+    "test:smoke": "node --test scripts/server-smoke.mjs",
     "start": "node scripts/serve.mjs"
   },
   "engines": {

@@ -57,6 +57,18 @@ Run the complete production gate—including the static safeguards and unit test
 npm run check
 ```
 
+Rebuild the committed standalone application and reject source/output drift with:
+
+```bash
+npm run check:generated
+```
+
+Exercise the same local server, document, headers, asset delivery, and failure responses used by browser testing with:
+
+```bash
+npm run test:smoke
+```
+
 Open `index.html` directly or serve this directory with a local static server.
 
 ```bash
