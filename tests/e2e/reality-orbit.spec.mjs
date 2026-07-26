@@ -24,6 +24,9 @@ test("introduces the observatory before revealing the ontology map", async ({ pa
 
   await expect(page.locator("[data-observatory-introduction]")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Begin with Reality." })).toBeVisible();
+  await expect(page.getByRole("list", { name: "Five lenses on Reality" }).getByRole("listitem")).toHaveCount(5);
+  await expect(page.getByRole("button", { name: "Explore Reality" })).toBeVisible();
+  await page.getByText("See how it works", { exact: true }).click();
   await expect(page.getByRole("list", { name: "How to explore" }).getByRole("listitem")).toHaveCount(3);
   await expect(page.locator('iframe[title="Reality Orbit"]')).toHaveCount(0);
 

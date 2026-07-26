@@ -148,7 +148,9 @@ for (const firstContactContract of [
   [applicationSource, "<ObservatoryIntroduction"],
   [introductionSource, "data-observatory-introduction"],
   [introductionSource, "data-enter-observatory"],
-  [introductionSource, "Begin with Reality."],
+  [introductionSource, "Begin with Reality"],
+  [introductionSource, "Five lenses on Reality"],
+  [introductionSource, "Explore Reality"],
   [applicationStyles, ".observatory-intro__enter:focus-visible"],
   [applicationStyles, "@media (prefers-reduced-motion: reduce)"],
 ]) {
