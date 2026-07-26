@@ -318,6 +318,12 @@ if (!fragment.includes("relationshipToParent: relationshipForNode(node)")) {
   failures.push("The selected-node context must expose its typed relationship to its parent.");
 }
 
+for (const removedVisualConnection of ["orbit-connection", "data-orbit-connections", "data-connection-id"]) {
+  if (fragment.includes(removedVisualConnection)) {
+    failures.push(`The destination map must not render redundant centre-to-node spokes: ${removedVisualConnection}.`);
+  }
+}
+
 for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF", "ENVIRONMENT_TYPE_OF", "SETTING_OF", "QUALITY_OF"]) {
   if (!fragment.includes(`return "${relationshipType}"`)) {
     failures.push(`Missing canonical relationship type: ${relationshipType}.`);

@@ -50,14 +50,13 @@ They remain fully explorable, but only after the user enters Category. This keep
 - **Centre:** Reality is the root reference point; the currently explored concept becomes the centre at deeper levels.
 - **Root map:** Domain, Category, Time, Scale, and Perspective.
 - **Field rings:** communicate shared context without claiming scientific coordinates.
-- **Centre-to-node connections:** show that each dimension is a lens on Reality.
-- **Active connection:** only the selected node and its relationship to Reality receive emphasis.
-- **Selection explanation:** name, knowledge role, and definition stay in the permanent detail strip below the map; floating cards never cover destinations.
+- **Relationship cue:** orbit position, stable hierarchy, hover feedback, the orbital cursor, and the canonical path communicate parent-child context without centre-to-node spokes.
+- **Selection explanation:** name, knowledge role, and definition stay in the permanent detail strip below the map; the translucent preview moves opposite the highlighted destination.
 - **Expansion:** exploring any selected non-root node moves it to the centre. Containers reveal one level of immediate children; terminal concepts become focused endpoints with no invented child level.
 - **Selection and Concept Anatomy:** selecting any concept, including the current centre, automatically updates its adjacent Concept Anatomy view. The learner never needs a separate Understand action.
 - **Explore action:** every selected concept except Reality exposes **Explore selected**. Explore changes the map centre; selection changes the adjacent teaching content. Once focused, the visible active state reads **Exploring** rather than offering a redundant second traversal.
 - **Path and Back:** expose the canonical location and allow reversible traversal.
-- **Typed relationship:** each connection retains a machine-readable relationship so type and instance edges do not blur together; this structural value is not shown in the learner panel.
+- **Typed relationship:** every node retains a machine-readable relationship to its parent so type and instance edges do not blur together; this structural value is not drawn on the map or shown in the learner panel.
 
 ### First-contact experience
 
@@ -81,7 +80,7 @@ Visual semantics are fixed:
 - Material reinforces the five root dimensions: Domain is rocky, Category is faceted, Time carries a slow ring, Scale uses nested circles, and Perspective refracts a restrained spectrum.
 - Reality alone uses a warm, breathing solar treatment. At deeper levels, the focused concept retains its dimension colour without pretending to be the ontological root.
 - The ring communicates selection.
-- A connection carries a typed relationship.
+- Typed parent relationships remain structural data rather than visual spokes.
 - Brightness means availability or current focus.
 - A diamond identifies an instance; containers remain circular.
 
@@ -130,7 +129,7 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 
 1. Read the current centre node from the ontology map.
 2. Read only its immediate `children`.
-3. Create one SVG connection and native button for every child.
+3. Create one native button for every child at its stable orbit position.
 4. Create the current node as the centre button.
 5. Select a child to read its learner-facing definition.
 6. Explore a curated child to push it into the history and rerender it as the centre.
@@ -138,15 +137,14 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 
 ### State transition
 
-`setSelectedNode(id)` performs five updates from one source of truth:
+`setSelectedNode(id)` performs four updates from one source of truth:
 
 1. Sets `aria-current` and `data-selected` on the selected destination.
-2. Sets `data-active` on the matching SVG connection.
-3. Updates the live selected label and summary.
-4. Always renders the selected concept's Concept Anatomy; every non-root selection also offers **Explore selected**, including terminal concepts that form the final focused endpoint.
-5. Keeps internal grounded-chat context separate while showing only the selected concept's name, type, and explanation in the permanent detail strip.
+2. Updates the live selected label and summary.
+3. Always renders the selected concept's Concept Anatomy; every non-root selection also offers **Explore selected**, including terminal concepts that form the final focused endpoint.
+4. Keeps internal grounded-chat context separate while showing only the selected concept's name, type, and explanation in the permanent detail strip.
 
-`history` stores the reversible centre path. Do not create separate view state for buttons, connections, text, and navigation; derive them from `selectedId`, the current history entry, and the ontology map.
+`history` stores the reversible centre path. Do not create separate view state for buttons, text, and navigation; derive them from `selectedId`, the current history entry, and the ontology map.
 
 ## Ask Chat context boundary
 
@@ -431,7 +429,7 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 - Use percentage coordinates so the topology survives resizing.
 - Preserve the user-provided spatial order.
 - Keep the current explored concept fixed at the centre.
-- Use an SVG `viewBox="0 0 100 100"` so connections share the same coordinate system as the HTML buttons.
+- Use an SVG `viewBox="0 0 100 100"` for stable concentric field rings behind the HTML buttons.
 - At narrow widths, increase vertical space and allow the selected explanation to stack.
 - Do not use viewport-height layouts, fixed positioning, or horizontal scrolling.
 
@@ -463,12 +461,12 @@ Before testing the map:
 
 - Confirm a new browser session opens on **Begin with Reality**, with one **Enter the observatory** action and three concise orientation cues.
 - Enter the observatory, refresh, and confirm the introduction does not interrupt the same session again.
-- Hover Domain and keyboard-focus Perspective; confirm each reveals its own **Consider** question without changing selection. Confirm the visible `Dimension` badges are absent.
+- Hover Domain and keyboard-focus Perspective; confirm each reveals its own pre-selection dossier without changing selection. Confirm the visible `Dimension` badges and centre-to-node spokes are absent.
 
 1. Confirm six buttons render at root: five canonical dimensions plus Reality.
 2. Select every node once.
 3. Confirm exactly one destination is current after each selection.
-4. Confirm exactly one centre-to-node connection is active for an orbiting node.
+4. Confirm no centre-to-node spokes render at root or deeper levels.
 5. Explore Category and confirm it becomes the centre with six canonical category types.
 6. Explore Resource and confirm it becomes the centre with six immediate children.
 7. Use Back twice and confirm the Reality orbit is restored.
@@ -502,7 +500,7 @@ Test at:
 - No JavaScript errors or warnings.
 - Every button works with keyboard activation.
 - The first render is meaningful before any interaction.
-- Light and dark themes retain visible rings, labels, focus, and active connections.
+- Light and dark themes retain visible rings, labels, focus, and selection feedback without relying on connecting spokes.
 
 ## Local preview
 
@@ -573,7 +571,7 @@ When applying the orbit screen to another knowledge set:
 - Category → Knowledge → Law exposed eight named-law instances.
 - Amdahl's Law updated its Concept Anatomy while remaining terminal at level 4.
 - Psychological areas expose their curated level-4 vocabularies, while Character alone exposes terminal level-5 qualities including Courage.
-- Every selection updated `aria-current`, the active SVG connection, the eligible Explore action, the live permanent detail, and Concept Anatomy from one selected ID.
+- Every selection updated `aria-current`, the eligible Explore action, the live permanent detail, and Concept Anatomy from one selected ID.
 - At 736 px, 390 px, and 320 px no floating selection content covered or visually attached itself to an unrelated destination.
 - At 390 px and 320 px the action moved to its own 44 px-high row, the visible path condensed to the current destination, and full destination labels remained readable.
 - The complete Amdahl's Law Concept Anatomy flowed in one column at 320 px without horizontal overflow.

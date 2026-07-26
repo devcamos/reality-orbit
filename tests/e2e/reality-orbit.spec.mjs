@@ -53,6 +53,7 @@ test("loads the canonical Reality orbit without browser errors", async ({ page }
   for (const dimension of ["domain", "category", "time", "scale", "perspective"]) {
     await expect(node(page, dimension)).toBeVisible();
   }
+  await expect(app(page).locator(".orbit-connection")).toHaveCount(0);
   await expect(app(page).locator("[data-orbit-path]")).toHaveText("Choose a dimension");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Reality");
   expect(errors).toEqual([]);

@@ -1083,28 +1083,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     pointer-events: none;
   }
 
-  #reality-orbit-prototype .orbit-ring,
-  #reality-orbit-prototype .orbit-connection {
+  #reality-orbit-prototype .orbit-ring {
     vector-effect: non-scaling-stroke;
     fill: none;
     stroke: rgba(164, 197, 218, 0.17);
     stroke-width: 1;
-  }
-
-  #reality-orbit-prototype .orbit-ring {
     opacity: 0.44;
-  }
-
-  #reality-orbit-prototype .orbit-connection {
-    opacity: 0.32;
-    stroke-linecap: round;
-    transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
-  }
-
-  #reality-orbit-prototype .orbit-connection[data-active=&quot;true&quot;] {
-    opacity: 0.82;
-    stroke: var(--connection-color, var(--viz-series-1));
-    stroke-width: 1.5;
   }
 
   #reality-orbit-prototype .orbit-node {
@@ -2240,7 +2224,6 @@ html&gt;body{padding:0}&lt;/style&gt;
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
-    #reality-orbit-prototype .orbit-connection,
     #reality-orbit-prototype .orbit-preview,
     #reality-orbit-prototype .orbit-hover-reticle {
       transition: none;
@@ -2285,7 +2268,6 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;17&quot;&gt;&lt;/circle&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;31&quot;&gt;&lt;/circle&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;44&quot;&gt;&lt;/circle&gt;
-            &lt;g data-orbit-connections&gt;&lt;/g&gt;
           &lt;/svg&gt;
           &lt;div data-orbit-nodes&gt;&lt;/div&gt;
           &lt;article class=&quot;orbit-preview&quot; id=&quot;orbit-preview&quot; role=&quot;tooltip&quot; data-orbit-preview data-visible=&quot;false&quot; hidden&gt;
@@ -3414,7 +3396,6 @@ html&gt;body{padding:0}&lt;/style&gt;
     };
 
     const nodesLayer = root.querySelector(&quot;[data-orbit-nodes]&quot;);
-    const connectionsLayer = root.querySelector(&quot;[data-orbit-connections]&quot;);
     const selectedLabel = root.querySelector(&quot;[data-selected-label]&quot;);
     const selectedRole = root.querySelector(&quot;[data-selected-role]&quot;);
     const selectedSummary = root.querySelector(&quot;[data-selected-summary]&quot;);
@@ -4206,9 +4187,6 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.setAttribute(&quot;aria-current&quot;, selected ? &quot;true&quot; : &quot;false&quot;);
       });
       const context = buildChatContext(node);
-      root.querySelectorAll(&quot;[data-connection-id]&quot;).forEach((line) =&gt; {
-        line.dataset.active = String(line.dataset.connectionId === nodeId &amp;&amp; nodeId !== currentId());
-      });
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
       selectedRole.hidden = context.role === &quot;Dimension&quot;;
@@ -4246,24 +4224,12 @@ html&gt;body{padding:0}&lt;/style&gt;
       resetOrbitPreview();
       root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
       nodesLayer.replaceChildren();
-      connectionsLayer.replaceChildren();
       renderPath();
 
       (parent.children ?? []).forEach((childId, index) =&gt; {
         const child = ontology[childId];
         const [x, y] = positions[index];
         const color = nodeColor(child);
-        const line = document.createElementNS(svgNamespace, &quot;line&quot;);
-        line.setAttribute(&quot;x1&quot;, &quot;50&quot;);
-        line.setAttribute(&quot;y1&quot;, &quot;50&quot;);
-        line.setAttribute(&quot;x2&quot;, String(x));
-        line.setAttribute(&quot;y2&quot;, String(y));
-        line.setAttribute(&quot;class&quot;, &quot;orbit-connection&quot;);
-        line.dataset.connectionId = child.id;
-        line.dataset.relationship = relationshipForNode(child);
-        line.dataset.active = &quot;false&quot;;
-        line.style.setProperty(&quot;--connection-color&quot;, color);
-        connectionsLayer.appendChild(line);
 
         const button = document.createElement(&quot;button&quot;);
         button.type = &quot;button&quot;;

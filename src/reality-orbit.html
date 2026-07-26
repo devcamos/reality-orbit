@@ -206,28 +206,12 @@
     pointer-events: none;
   }
 
-  #reality-orbit-prototype .orbit-ring,
-  #reality-orbit-prototype .orbit-connection {
+  #reality-orbit-prototype .orbit-ring {
     vector-effect: non-scaling-stroke;
     fill: none;
     stroke: rgba(164, 197, 218, 0.17);
     stroke-width: 1;
-  }
-
-  #reality-orbit-prototype .orbit-ring {
     opacity: 0.44;
-  }
-
-  #reality-orbit-prototype .orbit-connection {
-    opacity: 0.32;
-    stroke-linecap: round;
-    transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
-  }
-
-  #reality-orbit-prototype .orbit-connection[data-active="true"] {
-    opacity: 0.82;
-    stroke: var(--connection-color, var(--viz-series-1));
-    stroke-width: 1.5;
   }
 
   #reality-orbit-prototype .orbit-node {
@@ -1363,7 +1347,6 @@
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
-    #reality-orbit-prototype .orbit-connection,
     #reality-orbit-prototype .orbit-preview,
     #reality-orbit-prototype .orbit-hover-reticle {
       transition: none;
@@ -1408,7 +1391,6 @@
             <circle class="orbit-ring" cx="50" cy="50" r="17"></circle>
             <circle class="orbit-ring" cx="50" cy="50" r="31"></circle>
             <circle class="orbit-ring" cx="50" cy="50" r="44"></circle>
-            <g data-orbit-connections></g>
           </svg>
           <div data-orbit-nodes></div>
           <article class="orbit-preview" id="orbit-preview" role="tooltip" data-orbit-preview data-visible="false" hidden>
@@ -2537,7 +2519,6 @@
     };
 
     const nodesLayer = root.querySelector("[data-orbit-nodes]");
-    const connectionsLayer = root.querySelector("[data-orbit-connections]");
     const selectedLabel = root.querySelector("[data-selected-label]");
     const selectedRole = root.querySelector("[data-selected-role]");
     const selectedSummary = root.querySelector("[data-selected-summary]");
@@ -3329,9 +3310,6 @@
         button.setAttribute("aria-current", selected ? "true" : "false");
       });
       const context = buildChatContext(node);
-      root.querySelectorAll("[data-connection-id]").forEach((line) => {
-        line.dataset.active = String(line.dataset.connectionId === nodeId && nodeId !== currentId());
-      });
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
       selectedRole.hidden = context.role === "Dimension";
@@ -3369,24 +3347,12 @@
       resetOrbitPreview();
       root.style.setProperty("--map-color", nodeColor(parent));
       nodesLayer.replaceChildren();
-      connectionsLayer.replaceChildren();
       renderPath();
 
       (parent.children ?? []).forEach((childId, index) => {
         const child = ontology[childId];
         const [x, y] = positions[index];
         const color = nodeColor(child);
-        const line = document.createElementNS(svgNamespace, "line");
-        line.setAttribute("x1", "50");
-        line.setAttribute("y1", "50");
-        line.setAttribute("x2", String(x));
-        line.setAttribute("y2", String(y));
-        line.setAttribute("class", "orbit-connection");
-        line.dataset.connectionId = child.id;
-        line.dataset.relationship = relationshipForNode(child);
-        line.dataset.active = "false";
-        line.style.setProperty("--connection-color", color);
-        connectionsLayer.appendChild(line);
 
         const button = document.createElement("button");
         button.type = "button";
