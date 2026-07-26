@@ -13,7 +13,18 @@ export default defineConfig({
     timeout: 5_000,
   },
   reporter: process.env.CI
-    ? [["line"], ["html", { open: "never" }]]
+    ? [
+        ["line"],
+        ["github"],
+        ["html", { open: "never" }],
+        ["playwright-ctrf-json-reporter", {
+          annotations: true,
+          appName: "Reality Orbit",
+          outputDir: "ctrf",
+          outputFile: "playwright-report.json",
+          testType: "e2e",
+        }],
+      ]
     : [["list"], ["html", { open: "never" }]],
   outputDir: "test-results",
   use: {
