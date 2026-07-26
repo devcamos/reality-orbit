@@ -7,7 +7,7 @@
     "Uses a distinct, non-ambiguous learner-facing label.",
     "Has a documented definition and Concept Anatomy.",
     "Represents an intentional teaching continuation rather than a filler choice.",
-    "Ends at an approved level-4 teaching concept."
+    "Ends at an explicitly approved teaching concept no deeper than level 4."
   ],
   "branches": [
     {
@@ -121,12 +121,24 @@
     },
     {
       "id": "psychological",
-      "scope": "Mind, cognition, emotion, perception, and behaviour.",
-      "decision": "Adds Individual differences as the broad, theory-neutral home for Personality, Temperament, Character, Values, and Abilities. Character is intentionally a peer of Personality rather than its subtype because moral and self-regulatory qualities are not equivalent to descriptive personality tendencies. Cognition and the explicitly bounded evolutionary-psychology path remain unchanged.",
+      "scope": "Mind, cognition, emotion, perception, motivation, behaviour, development, and individual variation.",
+      "decision": "Publishes Cognition, Emotion, Motivation, Behaviour, Development, and Individual differences as broad areas of psychological inquiry. Emotion, Motivation, Behaviour, and Development are intentional level-3 terminals until meaningful one-level expansions are separately curated; no filler descendants are forced. The existing Evolutionary psychology path is preserved and explicitly identified as a cross-cutting explanatory approach rather than a mutually exclusive process family.",
       "approvedPaths": [
         [
           "cognition",
           "decision-process"
+        ],
+        [
+          "emotion"
+        ],
+        [
+          "motivation"
+        ],
+        [
+          "behaviour"
+        ],
+        [
+          "development"
         ],
         [
           "evolutionary-psychology",

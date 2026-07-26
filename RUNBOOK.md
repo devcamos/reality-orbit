@@ -184,14 +184,15 @@ Knowledge
 
 A razor is therefore not stored as a synonym for a heuristic. A heuristic is the broader family of practical judgment shortcuts; a named razor is a first-class reasoning artifact with its own instances, such as Occam's Razor or Hanlon's Razor.
 
-## Five-level depth contract
+## Maximum depth contract
 
-The published map now supports both forms of depth agreed for the prototype:
+The published map supports intentional terminal concepts at different depths:
 
 ```text
 Reality
-└── Canonical dimension
-    └── Third-level value or type
+└── Domain
+    └── Psychological
+        └── Emotion                 ← approved level-3 terminal
 
 Reality
 └── Category
@@ -206,7 +207,7 @@ Reality
             └── Terminal environmental setting
 ```
 
-The level-4 terminal is a specific teachable concept, not necessarily a literal real-world individual. A named law, ecosystem, workplace, community setting, online platform, or regulatory setting can each be a valid terminal concept when it is the smallest approved unit of teaching. Concept Anatomy is a teaching projection, not another ontology level.
+Level 4 is the deepest permitted ontology level, not a target every branch must reach. A broad area such as Emotion may remain an approved level-3 terminal until a meaningful one-level expansion is curated. A named law, ecosystem, workplace, community setting, online platform, or regulatory setting can be a valid level-4 terminal when it is the smallest approved unit of teaching. Concept Anatomy is a teaching projection, not another ontology level.
 
 Environment was the first completed non-Knowledge category branch and remains the reference context-system branch:
 
@@ -219,7 +220,7 @@ Environment
 └── Institutional environment → Regulatory setting
 ```
 
-The branch demonstrates the completion standard: a category explains its boundary, conditions, variables, mechanism, feedback, limits, and related concepts; its environment types classify the context; its level-4 settings make the classification teachable.
+The branch demonstrates one deep completion pattern: a category explains its boundary, conditions, variables, mechanism, feedback, limits, and related concepts; its environment types classify the context; its level-4 settings make the classification teachable.
 
 Individual differences is the theory-neutral Psychological home for five peer concepts:
 
@@ -237,7 +238,7 @@ The separation protects meaning. Personality describes relatively stable pattern
 
 For example, `Reality → Category → Relationship → Ownership → Ownership arrangement` reaches a terminal teaching concept. The final concept binds the holder, object, bundle of rights, recognition, and conditions that make an ownership relationship concrete enough to teach without pretending it represents a particular real-world case.
 
-The renderer counts Reality as level 0 and enforces level 4 as the terminal boundary. A level-4 node may be focused as the final exploration destination, but it cannot introduce level 5; malformed future data that exceeds the boundary is rejected before render.
+The renderer counts Reality as level 0 and enforces level 4 as the maximum boundary. Any childless node can be focused as an intentional exploration endpoint. A level-4 node cannot introduce level 5; malformed future data that exceeds the boundary is rejected before render.
 
 Before the first render, `validateOntology()` also rejects key/ID drift, missing or duplicate child references, excessive depth, and child paths that do not extend their parent's canonical path by exactly one level.
 
@@ -301,25 +302,15 @@ Both runtime and production checks traverse from Reality and reject unreachable 
 - Every selectable node has an ID, label, definition, canonical path, classified role, and at least seven non-empty Concept Anatomy fields.
 - Every child reference exists, is unique within its parent, and extends the canonical path by exactly one level.
 - The visible Concept Anatomy, Explore, and active Exploring states remain wired to the shared selection policy.
-- Every branch terminates at ontology level 4, where Reality is level 0 and a named law such as Amdahl's Law is level 4.
+- Every terminal path is recorded in editorial curation, may stop before level 4, and never exceeds level 4.
 
 Run `npm test` while authoring. `npm run check` includes these unit tests and remains the complete release gate.
 
-### Completion guardrail for a branch
+### Intentional terminal guardrail
 
-The map renders children from the selected node's `children` array. A future branch with no child IDs before level 4 would be a content defect: its Concept Anatomy would still render, but the map would have no further destination to show.
+The map renders children from the selected node's `children` array. A childless node at levels 0–3 is valid only when its terminal path is explicitly listed in `data/v1-curation.json`; an accidental deletion or unreviewed early stop changes the derived terminal paths and fails the release gate.
 
-The earlier validator only rejected paths deeper than the boundary. The level-4 branch test now closes the shallow-endpoint gap: it currently passes for all published nodes and will block release if a future change adds a branch that stops early.
-
-### Completion baseline
-
-The first depth audit found **53 shallow endpoints**. The completion test reports progress on every run using this fixed baseline:
-
-```text
-Ontology completion: 53 → 0 shallow endpoints (53/53 resolved)
-```
-
-This is a historical completion measure, not a reason to weaken the rule. Any future shallow endpoint makes the test fail immediately and changes the live output away from zero.
+This separates an intentional endpoint from incomplete authoring. Emotion, Motivation, Behaviour, and Development are complete level-3 concepts with distinct Concept Anatomy and approved paths. They can be expanded later, exactly one level at a time, when meaningful children are ready. The validator still rejects level-5 content and any child attached to a level-4 node.
 
 ### Curated navigation, not forced breadth
 
@@ -329,7 +320,7 @@ For example, `Reality → Time → Future` currently leads only to **Expected va
 
 Depth and breadth are separate contracts:
 
-- **Depth:** every published path reaches a level-4 terminal teaching concept.
+- **Depth:** every published path ends at an explicitly approved teaching concept at or before level 4.
 - **Breadth:** a branch may offer one or many children; every visible child must be an intentional, valid canonical relationship.
 
 The unit suite protects this by verifying every visible child reference, its canonical path, and a one-child Future branch. It never creates content to satisfy a quota.
@@ -371,8 +362,9 @@ Expansion Rules
 8. Preserve the existing ontology naming conventions.
 9. If multiple taxonomies exist, choose the most widely accepted and explain the rationale.
 10. Never expand grandchildren unless explicitly requested.
-11. Do not expand a level-4 terminal teaching concept. State that it is terminal and propose no child nodes.
-12. Update `data/v1-curation.json` with the branch scope, decision, and exact approved terminal paths before publishing.
+11. Level 4 is a maximum, not a target. A node at levels 0–3 may remain terminal when no meaningful child has been approved.
+12. Do not expand a level-4 terminal teaching concept. State that it is terminal and propose no child nodes.
+13. Update `data/v1-curation.json` with the branch scope, decision, and exact approved terminal paths before publishing.
 
 Output Format
 Parent

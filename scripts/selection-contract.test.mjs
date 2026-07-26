@@ -20,6 +20,8 @@ assert.ok(ontologyMatch, "The canonical ontology must remain readable by the con
 
 const policySource = extractDeclaration("const canExploreNode", "\n\n    const validateOntology");
 const roleSource = extractDeclaration("const roleForNode", "\n\n    const relationshipForNode");
+const relationshipSource = extractDeclaration("const relationshipForNode", "\n\n    const buildChatContext");
+const chatContextSource = extractDeclaration("const buildChatContext", "\n\n    const renderPath");
 const questionsSource = extractDeclaration("const dimensionQuestions", "\n\n    const buildConceptAnatomy");
 const anatomySource = extractDeclaration("const buildConceptAnatomy", "\n\n    const createAnatomyField");
 const visualSource = extractDeclaration("const visualModelForNode", "\n\n    const parentForNode");
@@ -30,16 +32,16 @@ const contract = runInNewContext(`
   const ontologyLevel = (node) => node.canonicalPath.length - 1;
   ${policySource};
   ${roleSource};
+  ${relationshipSource};
+  ${chatContextSource};
   ${questionsSource};
   ${anatomySource};
   ${visualSource};
-  ({ ontology, canExploreNode, canPlayVisualForNode, roleForNode, buildConceptAnatomy, visualModelForNode });
+  ({ ontology, canExploreNode, canPlayVisualForNode, roleForNode, buildChatContext, buildConceptAnatomy, visualModelForNode });
 `, Object.create(null));
 
 const nodes = Object.values(contract.ontology);
 const terminalOntologyLevel = 4;
-// Baseline captured when the level-4 completion gate was introduced.
-const initialShallowBranchCount = 53;
 const ontologyLevel = (node) => node.canonicalPath.length - 1;
 
 const terminalPathsFrom = (id, path = []) => {
@@ -63,7 +65,7 @@ const reachableFromReality = () => {
   return reachable;
 };
 
-test("expansion guidance preserves curated breadth and the level-4 terminal boundary", () => {
+test("expansion guidance preserves curated breadth and treats level 4 as a maximum", () => {
   const heading = "## Canonical Ontology Expansion Contract";
   const start = runbook.indexOf(heading);
   const end = runbook.indexOf("\n## ", start + heading.length);
@@ -74,6 +76,7 @@ test("expansion guidance preserves curated breadth and the level-4 terminal boun
   assert.match(expansionContract, /there is no target count/i, "Expansion guidance must not impose a child-count quota.");
   assert.doesNotMatch(expansionContract, /5[–-]10 children/i, "Expansion guidance must not restore the former 5–10-child quota.");
   assert.match(expansionContract, /levels 0–3/i, "Expansion guidance must limit proposals to nodes below the terminal level.");
+  assert.match(expansionContract, /level 4 is a maximum, not a target/i, "Expansion guidance must not force every branch to level 4.");
   assert.match(expansionContract, /Do not expand a level-4 terminal teaching concept/i, "Expansion guidance must prevent level-5 proposals.");
   assert.match(expansionContract, /data\/v1-curation\.json/, "Expansion guidance must retain the editorial publication gate.");
 });
@@ -253,6 +256,27 @@ test("Character is a distinct Individual Differences concept rather than a Perso
   assert.match(characterAnatomy["Common confusion"], /not simply a subtype of Personality/i);
 });
 
+test("Psychological coverage is broad while intentional level-3 terminals remain valid", () => {
+  const psychological = contract.ontology.psychological;
+  assert.deepEqual(
+    Array.from(psychological.children),
+    ["cognition", "emotion", "motivation", "behaviour", "development", "evolutionary-psychology", "individual-differences"],
+  );
+
+  for (const id of ["emotion", "motivation", "behaviour", "development"]) {
+    const area = contract.ontology[id];
+    assert.equal(ontologyLevel(area), 3, `${area.label} must remain at level 3.`);
+    assert.equal(area.children?.length ?? 0, 0, `${area.label} must not receive filler descendants.`);
+    assert.equal(contract.buildChatContext(area).terminalConcept, true, `${area.label} must be recognised as an intentional terminal.`);
+    assert.ok(Object.keys(contract.buildConceptAnatomy(area)).length >= 7, `${area.label} must remain independently teachable.`);
+  }
+
+  assert.match(
+    contract.buildConceptAnatomy(psychological)["Common confusion"],
+    /cross-cutting explanatory approach/i,
+  );
+});
+
 test("every named law provides the complete law teaching anatomy", () => {
   const requiredFields = [
     "Statement",
@@ -333,31 +357,19 @@ test("V1 curation explicitly approves every published branch and terminal teachi
   }
 });
 
-test("every ontology branch terminates at level 4", (context) => {
+test("every ontology branch respects the level-4 maximum without forced depth", (context) => {
   const terminalNodes = nodes.filter((node) => (node.children?.length ?? 0) === 0);
-  const shallowTerminals = terminalNodes.filter((node) => ontologyLevel(node) < terminalOntologyLevel);
-  const overdeepTerminals = terminalNodes.filter((node) => ontologyLevel(node) > terminalOntologyLevel);
+  const intentionalEarlyTerminals = terminalNodes.filter((node) => ontologyLevel(node) < terminalOntologyLevel);
+  const overdeepNodes = nodes.filter((node) => ontologyLevel(node) > terminalOntologyLevel);
   const levelFourContainers = nodes.filter((node) => ontologyLevel(node) === terminalOntologyLevel && (node.children?.length ?? 0) > 0);
-
-  if (shallowTerminals.length > 0) {
-    const countsByDimension = Object.create(null);
-    for (const node of shallowTerminals) {
-      const dimension = node.canonicalPath[1];
-      countsByDimension[dimension] = (countsByDimension[dimension] ?? 0) + 1;
-    }
-    const summary = Object.entries(countsByDimension).map(([dimension, count]) => `${dimension}: ${count}`).join(", ");
-    const paths = shallowTerminals.map((node) => `L${ontologyLevel(node)} ${node.canonicalPath.join(" > ")}`).join("\n");
-    context.diagnostic(`${shallowTerminals.length} branches stop before level 4 (${summary}).`);
-    context.diagnostic(paths);
-  }
-
-  const resolvedBranchCount = initialShallowBranchCount - shallowTerminals.length;
-  context.diagnostic(
-    `Ontology completion: ${initialShallowBranchCount} → ${shallowTerminals.length} shallow endpoints (${resolvedBranchCount}/${initialShallowBranchCount} resolved).`,
+  const countsByLevel = Object.fromEntries(
+    [0, 1, 2, 3, 4].map((level) => [level, terminalNodes.filter((node) => ontologyLevel(node) === level).length]),
   );
 
-  assert.equal(shallowTerminals.length, 0, "Every branch must be expanded through a level-4 terminal concept.");
-  assert.equal(overdeepTerminals.length, 0, "No branch may terminate below level 4.");
+  context.diagnostic(`Approved terminal concepts by level: ${JSON.stringify(countsByLevel)}.`);
+
+  assert.ok(intentionalEarlyTerminals.length > 0, "The contract must prove that an approved branch may stop before level 4.");
+  assert.equal(overdeepNodes.length, 0, "No ontology node may exceed level 4.");
   assert.equal(levelFourContainers.length, 0, "Level 4 is the terminal boundary and must not contain child nodes.");
 });
 
