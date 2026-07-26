@@ -9,6 +9,8 @@ const defaultFrameTheme = ":root{color-scheme:light dark;background:light-dark(r
 const orbitFrameTheme = ":root{color-scheme:dark;background:Canvas}";
 const unsafeOuterScriptPolicy = "script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'";
 const hardenedOuterScriptPolicy = "script-src 'none'";
+const unsafeOuterStylePolicy = "style-src 'unsafe-inline'";
+const hardenedOuterStylePolicy = "style-src 'none'";
 const unsafeEmbeddedScriptPolicy = "script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27;";
 const hardenedEmbeddedScriptPolicy = "script-src &#x27;unsafe-inline&#x27;";
 const [document, fragment] = await Promise.all([
@@ -45,6 +47,7 @@ const configuredDocument = syncedDocument
   .replace(unboundedFrameWidth, `iframe{display:block;width:100%;${desktopFrameWidth};height:`)
   .replace(defaultFrameTheme, orbitFrameTheme)
   .replace(unsafeOuterScriptPolicy, hardenedOuterScriptPolicy)
+  .replace(unsafeOuterStylePolicy, hardenedOuterStylePolicy)
   .replace(unsafeEmbeddedScriptPolicy, hardenedEmbeddedScriptPolicy)
   .replace("img-src blob:", "img-src 'self' blob:")
   .replace("img-src blob:", "img-src &#x27;self&#x27; blob:");

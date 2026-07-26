@@ -62,8 +62,12 @@ if (!document.includes("Content-Security-Policy")) {
   failures.push("legacy-index.html must include its sandbox content-security policy.");
 }
 
-if (document.includes("unsafe-eval") || !document.includes("script-src 'none'")) {
-  failures.push("The compatibility frame must not permit eval and its outer document must not execute scripts.");
+if (
+  document.includes("unsafe-eval")
+  || !document.includes("script-src 'none'")
+  || !document.includes("style-src 'none'")
+) {
+  failures.push("The compatibility frame must not permit eval and its outer document must not execute scripts or styles.");
 }
 
 if (!document.includes(":root{color-scheme:dark;background:Canvas}")) {
