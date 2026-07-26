@@ -1296,6 +1296,7 @@
         label: "Emotion",
         summary: "Coordinated experiential, physiological, expressive, and action-oriented responses to events that matter to an individual.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Emotion"],
+        children: ["joy", "sadness", "fear", "anger", "disgust", "surprise"],
         anatomy: {
           "Purpose": "Use Emotion to explain how significant events organise feeling, bodily response, expression, attention, and readiness to act.",
           "Governing question": "What event or appraisal elicited the emotional response, and how did its components unfold in context?",
@@ -1306,11 +1307,48 @@
           "Common confusion": "An emotion is not identical to an action or a moral judgment; feeling anger does not determine aggression, and an observer cannot infer the full experience from expression alone.",
         },
       },
+      joy: {
+        id: "joy",
+        label: "Joy",
+        summary: "A positive emotional family associated with pleasure, fulfilment, connection, or valued progress.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Joy"],
+      },
+      sadness: {
+        id: "sadness",
+        label: "Sadness",
+        summary: "An emotional family associated with loss, disappointment, separation, or diminished possibility.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Sadness"],
+      },
+      fear: {
+        id: "fear",
+        label: "Fear",
+        summary: "An emotional family that responds to perceived threat, danger, uncertainty, or vulnerability.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Fear"],
+      },
+      anger: {
+        id: "anger",
+        label: "Anger",
+        summary: "An emotional family associated with perceived obstruction, injustice, violation, or unwanted harm.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Anger"],
+      },
+      disgust: {
+        id: "disgust",
+        label: "Disgust",
+        summary: "An emotional family involving aversion and withdrawal from something appraised as contaminating, offensive, or unacceptable.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Disgust"],
+      },
+      surprise: {
+        id: "surprise",
+        label: "Surprise",
+        summary: "A brief emotional family that redirects attention when events depart from expectation.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Surprise"],
+      },
       motivation: {
         id: "motivation",
         label: "Motivation",
         summary: "Processes that energise, direct, and sustain action toward desired outcomes or away from unwanted ones.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Motivation"],
+        children: ["biological-regulation", "threat-avoidance", "incentive-motivation", "achievement-motivation", "affiliation-motivation", "autonomy-motivation", "meaning-motivation"],
         anatomy: {
           "Purpose": "Use Motivation to explain why action begins, takes a particular direction, persists, changes, or stops.",
           "Governing question": "What need, goal, expectation, incentive, or value is directing and sustaining action in this context?",
@@ -1321,11 +1359,54 @@
           "Common confusion": "Motivation cannot be read directly from one outcome. Low performance may reflect limited ability, opportunity, clarity, health, or resources rather than weak desire.",
         },
       },
+      "biological-regulation": {
+        id: "biological-regulation",
+        label: "Biological regulation",
+        summary: "Motivation directed toward maintaining or restoring bodily conditions needed for survival and functioning.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Biological regulation"],
+      },
+      "threat-avoidance": {
+        id: "threat-avoidance",
+        label: "Threat avoidance",
+        summary: "Motivation directed toward preventing, escaping, or reducing anticipated harm.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Threat avoidance"],
+      },
+      "incentive-motivation": {
+        id: "incentive-motivation",
+        label: "Incentive motivation",
+        summary: "Motivation directed by the anticipated rewards, costs, or consequences of an action.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Incentive motivation"],
+      },
+      "achievement-motivation": {
+        id: "achievement-motivation",
+        label: "Achievement motivation",
+        summary: "Motivation directed toward mastery, competence, improvement, or meeting a standard of excellence.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Achievement motivation"],
+      },
+      "affiliation-motivation": {
+        id: "affiliation-motivation",
+        label: "Affiliation motivation",
+        summary: "Motivation directed toward belonging, connection, acceptance, and sustaining relationships.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Affiliation motivation"],
+      },
+      "autonomy-motivation": {
+        id: "autonomy-motivation",
+        label: "Autonomy motivation",
+        summary: "Motivation directed toward agency, self-direction, and acting with a sense of willing choice.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Autonomy motivation"],
+      },
+      "meaning-motivation": {
+        id: "meaning-motivation",
+        label: "Meaning motivation",
+        summary: "Motivation directed toward coherence, purpose, significance, or contribution beyond an immediate outcome.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Meaning motivation"],
+      },
       behaviour: {
         id: "behaviour",
         label: "Behaviour",
         summary: "Observable actions and responses of an individual or organism within a defined context.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour"],
+        children: ["reflexive-behaviour", "instinctive-behaviour", "conditioned-behaviour", "habitual-behaviour", "goal-directed-behaviour"],
         anatomy: {
           "Purpose": "Use Behaviour to describe what an individual or organism does before inferring the mental or environmental processes that may explain it.",
           "Governing question": "What action or response occurred, under which conditions, with what frequency, sequence, duration, and consequence?",
@@ -1336,11 +1417,42 @@
           "Common confusion": "Description and explanation are different tasks: naming what happened does not prove why it happened or what kind of person performed it.",
         },
       },
+      "reflexive-behaviour": {
+        id: "reflexive-behaviour",
+        label: "Reflexive behaviour",
+        summary: "A rapid, automatic response elicited by a specific stimulus through a relatively fixed response pathway.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Reflexive behaviour"],
+      },
+      "instinctive-behaviour": {
+        id: "instinctive-behaviour",
+        label: "Instinctive behaviour",
+        summary: "An inherited, species-typical pattern that can emerge without being learned through individual experience.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Instinctive behaviour"],
+      },
+      "conditioned-behaviour": {
+        id: "conditioned-behaviour",
+        label: "Conditioned behaviour",
+        summary: "A response whose likelihood or form has changed through learned associations or consequences.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Conditioned behaviour"],
+      },
+      "habitual-behaviour": {
+        id: "habitual-behaviour",
+        label: "Habitual behaviour",
+        summary: "A learned response that is repeatedly cued and performed with limited deliberate evaluation.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Habitual behaviour"],
+      },
+      "goal-directed-behaviour": {
+        id: "goal-directed-behaviour",
+        label: "Goal-directed behaviour",
+        summary: "Action selected in relation to an expected outcome and its current value.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Goal-directed behaviour"],
+      },
       development: {
         id: "development",
         label: "Development",
         summary: "Systematic continuity and change in psychological functions and behaviour across the life course.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Development"],
+        children: ["cognitive-development", "emotional-development", "social-development", "personality-development", "identity-development", "moral-development"],
         anatomy: {
           "Purpose": "Use Development to explain how psychological capacities, patterns, and relationships emerge, stabilise, and change over time.",
           "Governing question": "What changed or remained stable, through which processes, during which developmental period and context?",
@@ -1350,6 +1462,42 @@
           "How to use it": "Specify the function, developmental period, comparison point, context, and evidence over time; distinguish age-related observation from a demonstrated developmental mechanism.",
           "Common confusion": "Development is not always linear improvement, and an age difference between groups does not by itself prove how or why change occurred.",
         },
+      },
+      "cognitive-development": {
+        id: "cognitive-development",
+        label: "Cognitive development",
+        summary: "Continuity and change in perception, attention, memory, language, reasoning, learning, and decision-making across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Cognitive development"],
+      },
+      "emotional-development": {
+        id: "emotional-development",
+        label: "Emotional development",
+        summary: "Continuity and change in emotional experience, expression, understanding, and regulation across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Emotional development"],
+      },
+      "social-development": {
+        id: "social-development",
+        label: "Social development",
+        summary: "Continuity and change in relationships, social understanding, interaction, and participation across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Social development"],
+      },
+      "personality-development": {
+        id: "personality-development",
+        label: "Personality development",
+        summary: "Continuity and change in characteristic patterns of thought, feeling, and behaviour across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Personality development"],
+      },
+      "identity-development": {
+        id: "identity-development",
+        label: "Identity development",
+        summary: "The formation and revision of a person's sense of self, commitments, roles, and belonging across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Identity development"],
+      },
+      "moral-development": {
+        id: "moral-development",
+        label: "Moral development",
+        summary: "Continuity and change in moral understanding, judgment, emotion, responsibility, and conduct across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Moral development"],
       },
       "evolutionary-psychology": {
         id: "evolutionary-psychology",
@@ -1430,6 +1578,8 @@
         summary: "Moral and self-regulatory qualities expressed through repeated choices, commitments, and conduct.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character"],
         relationshipToParent: "ASPECT_OF",
+        expansionPolicy: "curated-level-five",
+        children: ["practical-wisdom", "courage", "integrity", "compassion", "justice", "humility", "self-control", "responsibility"],
         anatomy: {
           "Statement": "Character concerns the moral and self-regulatory qualities that shape what a person repeatedly chooses, practises, and does.",
           "First principles": "Character is expressed in conduct over time; intentions, situational pressures, habits, reflection, and accountability all affect what repeated choices reveal.",
@@ -1443,6 +1593,62 @@
           "Common confusion": "Character is not simply a subtype of Personality. Personality describes characteristic tendencies; Character evaluates moral and self-regulatory qualities expressed in choice and conduct.",
           "Related concepts": "Personality, Temperament, Values, virtue, habit, agency, moral development, self-regulation, and social norms.",
         },
+      },
+      "practical-wisdom": {
+        id: "practical-wisdom",
+        label: "Practical wisdom",
+        summary: "The character quality of judging what matters in context and choosing fitting means toward worthwhile ends.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Practical wisdom"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      courage: {
+        id: "courage",
+        label: "Courage",
+        summary: "The character quality of acting for a worthwhile purpose despite fear, uncertainty, difficulty, or risk.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Courage"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      integrity: {
+        id: "integrity",
+        label: "Integrity",
+        summary: "The character quality of aligning conduct with stated principles and maintaining honesty and consistency under pressure.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Integrity"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      compassion: {
+        id: "compassion",
+        label: "Compassion",
+        summary: "The character quality of recognising suffering and being disposed to respond with appropriate care or help.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Compassion"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      justice: {
+        id: "justice",
+        label: "Justice",
+        summary: "The character quality of giving people fair consideration and acting with regard for rights, duties, and equitable treatment.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Justice"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      humility: {
+        id: "humility",
+        label: "Humility",
+        summary: "The character quality of holding an accurate, non-inflated view of oneself while remaining open to correction and others' contributions.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Humility"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      "self-control": {
+        id: "self-control",
+        label: "Self-control",
+        summary: "The character quality of regulating impulses, attention, emotion, and action in service of considered commitments.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Self-control"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      responsibility: {
+        id: "responsibility",
+        label: "Responsibility",
+        summary: "The character quality of owning one's duties, choices, and their foreseeable consequences.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Responsibility"],
+        relationshipToParent: "QUALITY_OF",
       },
       "personal-values": {
         id: "personal-values",
@@ -2075,7 +2281,9 @@
     const understandMoreSummary = root.querySelector("[data-understand-more-summary]");
     const understandFields = root.querySelector("[data-understand-fields]");
     const svgNamespace = "http://www.w3.org/2000/svg";
-    const terminalOntologyLevel = 4;
+    const defaultOntologyLevel = 4;
+    const terminalOntologyLevel = 5;
+    const curatedLevelFivePolicy = "curated-level-five";
     const history = ["reality"];
     let selectedId = "reality";
 
@@ -2117,10 +2325,22 @@
         if (!Array.isArray(node.canonicalPath) || node.canonicalPath.length === 0) throw new Error(`Missing canonical path: ${node.label}`);
         if (ontologyLevel(node) > terminalOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
         const children = node.children ?? [];
+        if (node.expansionPolicy && (ontologyLevel(node) !== defaultOntologyLevel || node.expansionPolicy !== curatedLevelFivePolicy)) {
+          throw new Error(`Invalid level-5 expansion policy: ${node.label}`);
+        }
+        if (ontologyLevel(node) === defaultOntologyLevel && children.length > 0 && node.expansionPolicy !== curatedLevelFivePolicy) {
+          throw new Error(`Unapproved level-5 expansion: ${node.label}`);
+        }
+        if (ontologyLevel(node) === terminalOntologyLevel && children.length > 0) {
+          throw new Error(`Level-5 concept must be terminal: ${node.label}`);
+        }
         if (new Set(children).size !== children.length) throw new Error(`Duplicate child reference: ${node.label}`);
         children.forEach((childId) => {
           const child = ontology[childId];
           if (!child) throw new Error(`Unknown child ${childId} on ${node.label}`);
+          if (ontologyLevel(child) === terminalOntologyLevel && node.expansionPolicy !== curatedLevelFivePolicy) {
+            throw new Error(`Level-5 concept has unapproved parent: ${child.label}`);
+          }
           const expectedPath = [...node.canonicalPath, child.label];
           if (child.canonicalPath.join("/") !== expectedPath.join("/")) {
             throw new Error(`Canonical path mismatch: ${child.label}`);
@@ -2152,6 +2372,7 @@
       if (node.kind === "law-instance") return "Named law";
       if (path.length === 2) return "Dimension";
       if (path[1] === "Domain" && path.length === 3) return "Domain";
+      if (path[1] === "Domain" && path[2] === "Psychological" && path[3] === "Individual differences" && path[4] === "Character" && path.length === 6) return "Character quality";
       if (path[1] === "Domain") return "Domain concept";
       if (path[1] === "Category" && path.length === 3) return "Category type";
       if (path[2] === "Entity" && path.length === 4) return "Entity type";
@@ -2171,8 +2392,9 @@
 
     const relationshipForNode = (node) => {
       if (node.id === "reality") return null;
-      if (node.relationshipToParent) return node.relationshipToParent;
       const path = node.canonicalPath;
+      if (path[1] === "Domain" && path[2] === "Psychological" && path[3] === "Individual differences" && path[4] === "Character" && path.length === 6) return "QUALITY_OF";
+      if (node.relationshipToParent) return node.relationshipToParent;
       if (path.length === 2) return "DIMENSION_OF";
       if (node.kind === "law-instance") return "INSTANCE_OF";
       if (path.length === 3 && path[1] === "Domain") return "SUBDOMAIN_OF";
@@ -2607,7 +2829,7 @@
       const valueFor = (...labels) => labels
         .map((label) => anatomy[label])
         .find((value) => String(value ?? "").trim()) ?? node.summary;
-      const isNamedKnowledgeArtifact = node.canonicalPath.includes("Knowledge") && ontologyLevel(node) === terminalOntologyLevel;
+      const isNamedKnowledgeArtifact = roleForNode(node) === "Named knowledge artifact";
 
       return {
         mode: (node.children?.length ?? 0) > 0 ? "context" : isNamedKnowledgeArtifact ? "mechanism" : "focus",
@@ -2883,6 +3105,7 @@
 
     root.dataset.canonicalDimensions = canonicalDimensions.join(",");
     root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
+    root.dataset.defaultOntologyLevel = String(defaultOntologyLevel);
     root.dataset.cameraState = "idle";
     validateOntology();
     renderOrbit();

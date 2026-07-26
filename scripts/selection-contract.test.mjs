@@ -28,7 +28,9 @@ const visualSource = extractDeclaration("const visualModelForNode", "\n\n    con
 
 const contract = runInNewContext(`
   const ontology = ${ontologyMatch[1]};
-  const terminalOntologyLevel = 4;
+  const defaultOntologyLevel = 4;
+  const terminalOntologyLevel = 5;
+  const curatedLevelFivePolicy = "curated-level-five";
   const ontologyLevel = (node) => node.canonicalPath.length - 1;
   ${policySource};
   ${roleSource};
@@ -41,7 +43,9 @@ const contract = runInNewContext(`
 `, Object.create(null));
 
 const nodes = Object.values(contract.ontology);
-const terminalOntologyLevel = 4;
+const defaultOntologyLevel = 4;
+const terminalOntologyLevel = 5;
+const curatedLevelFivePolicy = "curated-level-five";
 const ontologyLevel = (node) => node.canonicalPath.length - 1;
 
 const terminalPathsFrom = (id, path = []) => {
@@ -65,7 +69,7 @@ const reachableFromReality = () => {
   return reachable;
 };
 
-test("expansion guidance preserves curated breadth and treats level 4 as a maximum", () => {
+test("expansion guidance preserves curated breadth and permits only explicit terminal level-5 exceptions", () => {
   const heading = "## Canonical Ontology Expansion Contract";
   const start = runbook.indexOf(heading);
   const end = runbook.indexOf("\n## ", start + heading.length);
@@ -75,9 +79,9 @@ test("expansion guidance preserves curated breadth and treats level 4 as a maxim
   const expansionContract = runbook.slice(start, end);
   assert.match(expansionContract, /there is no target count/i, "Expansion guidance must not impose a child-count quota.");
   assert.doesNotMatch(expansionContract, /5[–-]10 children/i, "Expansion guidance must not restore the former 5–10-child quota.");
-  assert.match(expansionContract, /levels 0–3/i, "Expansion guidance must limit proposals to nodes below the terminal level.");
-  assert.match(expansionContract, /level 4 is a maximum, not a target/i, "Expansion guidance must not force every branch to level 4.");
-  assert.match(expansionContract, /Do not expand a level-4 terminal teaching concept/i, "Expansion guidance must prevent level-5 proposals.");
+  assert.match(expansionContract, /level 4 is the default maximum, not a target/i, "Expansion guidance must not force every branch to level 4.");
+  assert.match(expansionContract, /Level 5 is allowed only when that exact level-4 parent has received an explicit/i, "Expansion guidance must require explicit approval for level 5.");
+  assert.match(expansionContract, /Never expand a level-5 node/i, "Expansion guidance must keep level 5 terminal.");
   assert.match(expansionContract, /data\/v1-curation\.json/, "Expansion guidance must retain the editorial publication gate.");
 });
 
@@ -145,7 +149,7 @@ test("authored visual demonstrations govern the popup captions", () => {
 });
 
 test("level-4 terminal selections remain explorable as final focused destinations", () => {
-  const terminalNodes = nodes.filter((node) => ontologyLevel(node) === terminalOntologyLevel && (node.children?.length ?? 0) === 0);
+  const terminalNodes = nodes.filter((node) => ontologyLevel(node) === defaultOntologyLevel && (node.children?.length ?? 0) === 0);
   assert.ok(terminalNodes.length > 0, "The ontology must contain level-4 terminal concepts for this contract to prove.");
   for (const node of terminalNodes) {
     assert.equal(contract.canExploreNode(node), true, `${node.label} must remain explorable at the terminal level`);
@@ -155,7 +159,7 @@ test("level-4 terminal selections remain explorable as final focused destination
 test("Amdahl's Law is the reference level-4 instance", () => {
   const amdahlsLaw = contract.ontology["amdahls-law"];
   assert.ok(amdahlsLaw, "Amdahl's Law must remain present in the ontology.");
-  assert.equal(ontologyLevel(amdahlsLaw), terminalOntologyLevel);
+  assert.equal(ontologyLevel(amdahlsLaw), defaultOntologyLevel);
   assert.deepEqual(
     Array.from(amdahlsLaw.canonicalPath),
     ["Reality", "Category", "Knowledge", "Law", "Amdahl's Law"],
@@ -225,8 +229,7 @@ test("Character is a distinct Individual Differences concept rather than a Perso
 
   for (const id of individualDifferences.children) {
     const sibling = contract.ontology[id];
-    assert.equal(ontologyLevel(sibling), terminalOntologyLevel, `${sibling.label} must respect the level-4 boundary.`);
-    assert.equal(sibling.children?.length ?? 0, 0, `${sibling.label} must not force an uncurated child level.`);
+    assert.equal(ontologyLevel(sibling), defaultOntologyLevel, `${sibling.label} must remain a level-4 peer.`);
     assert.equal(sibling.relationshipToParent, "ASPECT_OF", `${sibling.label} must remain a peer aspect of Individual differences.`);
   }
 
@@ -236,6 +239,24 @@ test("Character is a distinct Individual Differences concept rather than a Perso
     ["Reality", "Domain", "Psychological", "Individual differences", "Character"],
   );
   assert.equal(contract.ontology.personality.children?.includes("character") ?? false, false);
+  assert.equal(character.expansionPolicy, curatedLevelFivePolicy);
+  assert.deepEqual(
+    Array.from(character.children),
+    ["practical-wisdom", "courage", "integrity", "compassion", "justice", "humility", "self-control", "responsibility"],
+  );
+
+  for (const id of ["personality", "temperament", "personal-values", "abilities"]) {
+    assert.equal(contract.ontology[id].children?.length ?? 0, 0, `${contract.ontology[id].label} must remain terminal at level 4.`);
+    assert.equal(contract.ontology[id].expansionPolicy, undefined, `${contract.ontology[id].label} must not inherit Character's exception.`);
+  }
+
+  for (const id of character.children) {
+    const quality = contract.ontology[id];
+    assert.equal(ontologyLevel(quality), terminalOntologyLevel, `${quality.label} must be a level-5 Character quality.`);
+    assert.equal(quality.children?.length ?? 0, 0, `${quality.label} must remain terminal.`);
+    assert.equal(contract.roleForNode(quality), "Character quality");
+    assert.equal(contract.buildChatContext(quality).relationshipToParent, "QUALITY_OF");
+  }
 
   const requiredCharacterFields = [
     "Statement",
@@ -256,19 +277,32 @@ test("Character is a distinct Individual Differences concept rather than a Perso
   assert.match(characterAnatomy["Common confusion"], /not simply a subtype of Personality/i);
 });
 
-test("Psychological coverage is broad while intentional level-3 terminals remain valid", () => {
+test("Psychological coverage exposes the approved level-4 teaching vocabularies", () => {
   const psychological = contract.ontology.psychological;
   assert.deepEqual(
     Array.from(psychological.children),
     ["cognition", "emotion", "motivation", "behaviour", "development", "evolutionary-psychology", "individual-differences"],
   );
 
-  for (const id of ["emotion", "motivation", "behaviour", "development"]) {
+  const expectedChildren = {
+    emotion: ["joy", "sadness", "fear", "anger", "disgust", "surprise"],
+    motivation: ["biological-regulation", "threat-avoidance", "incentive-motivation", "achievement-motivation", "affiliation-motivation", "autonomy-motivation", "meaning-motivation"],
+    behaviour: ["reflexive-behaviour", "instinctive-behaviour", "conditioned-behaviour", "habitual-behaviour", "goal-directed-behaviour"],
+    development: ["cognitive-development", "emotional-development", "social-development", "personality-development", "identity-development", "moral-development"],
+  };
+
+  for (const [id, childIds] of Object.entries(expectedChildren)) {
     const area = contract.ontology[id];
     assert.equal(ontologyLevel(area), 3, `${area.label} must remain at level 3.`);
-    assert.equal(area.children?.length ?? 0, 0, `${area.label} must not receive filler descendants.`);
-    assert.equal(contract.buildChatContext(area).terminalConcept, true, `${area.label} must be recognised as an intentional terminal.`);
+    assert.deepEqual(Array.from(area.children), childIds, `${area.label} must expose only its approved teaching concepts.`);
+    assert.equal(contract.buildChatContext(area).terminalConcept, false, `${area.label} must expose its curated continuation.`);
     assert.ok(Object.keys(contract.buildConceptAnatomy(area)).length >= 7, `${area.label} must remain independently teachable.`);
+    for (const childId of childIds) {
+      const child = contract.ontology[childId];
+      assert.equal(ontologyLevel(child), defaultOntologyLevel, `${child.label} must be level 4.`);
+      assert.equal(child.children?.length ?? 0, 0, `${child.label} must remain terminal.`);
+      assert.equal(contract.roleForNode(child), "Domain concept");
+    }
   }
 
   assert.match(
@@ -319,7 +353,7 @@ test("Environment is a complete category exemplar through level 4", () => {
     assert.equal(environmentType.children.length, 1, `${environmentType.label} must lead to one terminal concept`);
 
     const setting = contract.ontology[environmentType.children[0]];
-    assert.equal(ontologyLevel(setting), terminalOntologyLevel, `${setting.label} must be level 4`);
+    assert.equal(ontologyLevel(setting), defaultOntologyLevel, `${setting.label} must be level 4`);
     assert.equal(contract.roleForNode(setting), "Environmental setting");
   }
 });
@@ -357,20 +391,25 @@ test("V1 curation explicitly approves every published branch and terminal teachi
   }
 });
 
-test("every ontology branch respects the level-4 maximum without forced depth", (context) => {
+test("every ontology branch respects the default level-4 boundary and explicit terminal level-5 policy", (context) => {
   const terminalNodes = nodes.filter((node) => (node.children?.length ?? 0) === 0);
-  const intentionalEarlyTerminals = terminalNodes.filter((node) => ontologyLevel(node) < terminalOntologyLevel);
   const overdeepNodes = nodes.filter((node) => ontologyLevel(node) > terminalOntologyLevel);
-  const levelFourContainers = nodes.filter((node) => ontologyLevel(node) === terminalOntologyLevel && (node.children?.length ?? 0) > 0);
+  const levelFourContainers = nodes.filter((node) => ontologyLevel(node) === defaultOntologyLevel && (node.children?.length ?? 0) > 0);
+  const levelFiveNodes = nodes.filter((node) => ontologyLevel(node) === terminalOntologyLevel);
   const countsByLevel = Object.fromEntries(
-    [0, 1, 2, 3, 4].map((level) => [level, terminalNodes.filter((node) => ontologyLevel(node) === level).length]),
+    [0, 1, 2, 3, 4, 5].map((level) => [level, terminalNodes.filter((node) => ontologyLevel(node) === level).length]),
   );
 
   context.diagnostic(`Approved terminal concepts by level: ${JSON.stringify(countsByLevel)}.`);
 
-  assert.ok(intentionalEarlyTerminals.length > 0, "The contract must prove that an approved branch may stop before level 4.");
-  assert.equal(overdeepNodes.length, 0, "No ontology node may exceed level 4.");
-  assert.equal(levelFourContainers.length, 0, "Level 4 is the terminal boundary and must not contain child nodes.");
+  assert.equal(overdeepNodes.length, 0, "No ontology node may exceed terminal level 5.");
+  assert.deepEqual(levelFourContainers.map((node) => node.id), ["character"], "Character must be the sole level-4 container.");
+  assert.equal(levelFourContainers[0].expansionPolicy, curatedLevelFivePolicy);
+  assert.ok(levelFiveNodes.length > 0, "The approved Character exception must expose level-5 concepts.");
+  for (const node of levelFiveNodes) {
+    assert.equal(node.children?.length ?? 0, 0, `${node.label} must be terminal at level 5.`);
+    assert.equal(node.canonicalPath[4], "Character", `${node.label} must sit beneath the approved Character container.`);
+  }
 });
 
 test("every ontology node is reachable and has complete selection data", (context) => {
@@ -382,7 +421,7 @@ test("every ontology node is reachable and has complete selection data", (contex
     assert.ok(node.label?.trim(), `${id} must have a label`);
     assert.ok(node.summary?.trim(), `${node.label} must have a definition`);
     assert.ok(Array.isArray(node.canonicalPath) && node.canonicalPath.length > 0, `${node.label} must have a canonical path`);
-    assert.ok(ontologyLevel(node) <= terminalOntologyLevel, `${node.label} must remain within the level-4 boundary`);
+    assert.ok(ontologyLevel(node) <= terminalOntologyLevel, `${node.label} must remain within the selective level-5 boundary`);
     assert.notEqual(contract.roleForNode(node), "Ontology node", `${node.label} must have a learner-facing role`);
 
     const anatomy = contract.buildConceptAnatomy(node);

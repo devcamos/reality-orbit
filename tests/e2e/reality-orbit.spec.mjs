@@ -136,7 +136,7 @@ test("the observatory exposes a stable accessible structure without serious viol
   expect(seriousViolations).toEqual([]);
 });
 
-test("Character is discoverable as a peer within Individual differences", async ({ page }) => {
+test("Character exposes the approved terminal level-5 qualities", async ({ page }) => {
   await openOrbit(page);
 
   await explore(page, "domain");
@@ -148,10 +148,19 @@ test("Character is discoverable as a peer within Individual differences", async 
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Character");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Character");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Individual differences");
+  await expect(node(page, "courage")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(8);
+
+  await explore(page, "courage");
+
+  await expect(node(page, "courage")).toHaveClass(/orbit-core/);
+  await expect(app(page).locator("[data-selected-label]")).toHaveText("Courage");
+  await expect(app(page).locator("[data-selected-role]")).toHaveText("Character quality");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Character");
   await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
 });
 
-test("an intentionally terminal level-3 concept does not force a filler child", async ({ page }) => {
+test("Emotion exposes its curated level-4 families without deeper filler", async ({ page }) => {
   await openOrbit(page);
 
   await explore(page, "domain");
@@ -162,6 +171,13 @@ test("an intentionally terminal level-3 concept does not force a filler child", 
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Emotion");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Emotion");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Psychological");
+  await expect(node(page, "joy")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(6);
+
+  await explore(page, "joy");
+
+  await expect(node(page, "joy")).toHaveClass(/orbit-core/);
+  await expect(app(page).locator("[data-selected-label]")).toHaveText("Joy");
   await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
 });
 

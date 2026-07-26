@@ -261,7 +261,7 @@ if (!fragment.includes("relationshipToParent: relationshipForNode(node)")) {
   failures.push("The selected-node context must expose its typed relationship to its parent.");
 }
 
-for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF", "ENVIRONMENT_TYPE_OF", "SETTING_OF"]) {
+for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF", "ENVIRONMENT_TYPE_OF", "SETTING_OF", "QUALITY_OF"]) {
   if (!fragment.includes(`return "${relationshipType}"`)) {
     failures.push(`Missing canonical relationship type: ${relationshipType}.`);
   }
@@ -273,8 +273,15 @@ for (const internalGuideField of ["data-guide-path", "data-guide-parent", "data-
   }
 }
 
-if (!fragment.includes("const terminalOntologyLevel = 4") || !fragment.includes("ontologyLevel(node) > terminalOntologyLevel")) {
-  failures.push("The renderer must enforce the level-4 terminal boundary measured from Reality at level 0.");
+if (
+  !fragment.includes("const defaultOntologyLevel = 4")
+  || !fragment.includes("const terminalOntologyLevel = 5")
+  || !fragment.includes('const curatedLevelFivePolicy = "curated-level-five"')
+  || !fragment.includes("ontologyLevel(node) > terminalOntologyLevel")
+  || !fragment.includes("Unapproved level-5 expansion")
+  || !fragment.includes("Level-5 concept must be terminal")
+) {
+  failures.push("The renderer must enforce level 4 by default and allow only explicitly curated terminal level-5 exceptions.");
 }
 
 for (const explorationContract of [

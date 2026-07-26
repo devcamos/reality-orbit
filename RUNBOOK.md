@@ -192,7 +192,15 @@ The published map supports intentional terminal concepts at different depths:
 Reality
 └── Domain
     └── Psychological
-        └── Emotion                 ← approved level-3 terminal
+        └── Emotion
+            └── Joy                 ← ordinary level-4 terminal
+
+Reality
+└── Domain
+    └── Psychological
+        └── Individual differences
+            └── Character            ← explicitly approved level-4 container
+                └── Courage          ← exceptional level-5 terminal
 
 Reality
 └── Category
@@ -207,7 +215,9 @@ Reality
             └── Terminal environmental setting
 ```
 
-Level 4 is the deepest permitted ontology level, not a target every branch must reach. A broad area such as Emotion may remain an approved level-3 terminal until a meaningful one-level expansion is curated. A named law, ecosystem, workplace, community setting, online platform, or regulatory setting can be a valid level-4 terminal when it is the smallest approved unit of teaching. Concept Anatomy is a teaching projection, not another ontology level.
+Level 4 is the default maximum, not a target every branch must reach. A node may remain terminal before level 4 until a meaningful one-level expansion is curated. A named law, emotion family, ecosystem, workplace, community setting, online platform, or regulatory setting can be a valid level-4 terminal when it is the smallest approved unit of teaching.
+
+Level 5 is an explicit exception, never an automatic continuation. Only a level-4 node marked with `expansionPolicy: "curated-level-five"` may have level-5 children, and every such child must be terminal. Character is the first and currently only approved container because direct access to Courage and other foundational qualities materially improves learning. Personality, Temperament, Values, Abilities, and every other unmarked level-4 concept remain terminal. Concept Anatomy is a teaching projection, not another ontology level.
 
 Environment was the first completed non-Knowledge category branch and remains the reference context-system branch:
 
@@ -230,17 +240,25 @@ Psychological
     ├── Personality
     ├── Temperament
     ├── Character
+    │   ├── Practical wisdom
+    │   ├── Courage
+    │   ├── Integrity
+    │   ├── Compassion
+    │   ├── Justice
+    │   ├── Humility
+    │   ├── Self-control
+    │   └── Responsibility
     ├── Values
     └── Abilities
 ```
 
-The separation protects meaning. Personality describes relatively stable patterns of thought, feeling, and behaviour. Temperament concerns early-emerging reactivity and regulation. Character concerns moral and self-regulatory qualities expressed through repeated choices and conduct. Values organise priorities, while Abilities describe capacities for learning or performance. Character is therefore not nested beneath Personality, which would make one theoretical model appear canonical for the whole ontology.
+The separation protects meaning. Personality describes relatively stable patterns of thought, feeling, and behaviour. Temperament concerns early-emerging reactivity and regulation. Character concerns moral and self-regulatory qualities expressed through repeated choices and conduct. Values organise priorities, while Abilities describe capacities for learning or performance. Character is therefore not nested beneath Personality, which would make one theoretical model appear canonical for the whole ontology. Its eight published qualities are a Pareto teaching set, not an exhaustive virtue theory.
 
 For example, `Reality → Category → Relationship → Ownership → Ownership arrangement` reaches a terminal teaching concept. The final concept binds the holder, object, bundle of rights, recognition, and conditions that make an ownership relationship concrete enough to teach without pretending it represents a particular real-world case.
 
-The renderer counts Reality as level 0 and enforces level 4 as the maximum boundary. Any childless node can be focused as an intentional exploration endpoint. A level-4 node cannot introduce level 5; malformed future data that exceeds the boundary is rejected before render.
+The renderer counts Reality as level 0, treats level 4 as the normal boundary, and enforces level 5 as the absolute terminal boundary. Any childless node can be focused as an intentional exploration endpoint. An unmarked level-4 node cannot introduce level 5, and a level-5 node can never introduce children. Malformed future data that bypasses either rule is rejected before render.
 
-Before the first render, `validateOntology()` also rejects key/ID drift, missing or duplicate child references, excessive depth, and child paths that do not extend their parent's canonical path by exactly one level.
+Before the first render, `validateOntology()` also rejects key/ID drift, missing or duplicate child references, invalid expansion policies, excessive depth, and child paths that do not extend their parent's canonical path by exactly one level.
 
 Every concept receives this baseline anatomy:
 
@@ -255,7 +273,7 @@ How to use it
 Common confusion
 ```
 
-The baseline language varies by concept role: root, dimension, domain, domain concept, category type, entity type, entity instance, environment type, environmental setting, relationship type, process type, resource type, knowledge type, named knowledge artifact, named law, perspective, scale, or time. Authored `anatomy` content replaces the baseline when the subject requires a more specific structure. Amdahl's Law uses a law-specific anatomy containing variables, mechanism, prediction, assumptions, derivation, limitations, applications, visual demonstration, and related laws. Ownership is the authored reference for a relationship type; Ownership arrangement is its terminal teaching concept.
+The baseline language varies by concept role: root, dimension, domain, domain concept, Character quality, category type, entity type, entity instance, environment type, environmental setting, relationship type, process type, resource type, knowledge type, named knowledge artifact, named law, perspective, scale, or time. Authored `anatomy` content replaces the baseline when the subject requires a more specific structure. Amdahl's Law uses a law-specific anatomy containing variables, mechanism, prediction, assumptions, derivation, limitations, applications, visual demonstration, and related laws. Ownership is the authored reference for a relationship type; Ownership arrangement is its terminal teaching concept.
 
 The Concept Anatomy presentation derives one responsive story from that anatomy:
 
@@ -302,7 +320,7 @@ Both runtime and production checks traverse from Reality and reject unreachable 
 - Every selectable node has an ID, label, definition, canonical path, classified role, and at least seven non-empty Concept Anatomy fields.
 - Every child reference exists, is unique within its parent, and extends the canonical path by exactly one level.
 - The visible Concept Anatomy, Explore, and active Exploring states remain wired to the shared selection policy.
-- Every terminal path is recorded in editorial curation, may stop before level 4, and never exceeds level 4.
+- Every terminal path is recorded in editorial curation, may stop before level 4, and reaches level 5 only through an explicitly approved level-4 container.
 
 Run `npm test` while authoring. `npm run check` includes these unit tests and remains the complete release gate.
 
@@ -310,7 +328,7 @@ Run `npm test` while authoring. `npm run check` includes these unit tests and re
 
 The map renders children from the selected node's `children` array. A childless node at levels 0–3 is valid only when its terminal path is explicitly listed in `data/v1-curation.json`; an accidental deletion or unreviewed early stop changes the derived terminal paths and fails the release gate.
 
-This separates an intentional endpoint from incomplete authoring. Emotion, Motivation, Behaviour, and Development are complete level-3 concepts with distinct Concept Anatomy and approved paths. They can be expanded later, exactly one level at a time, when meaningful children are ready. The validator still rejects level-5 content and any child attached to a level-4 node.
+This separates an intentional endpoint from incomplete authoring. Emotion, Motivation, Behaviour, and Development now expose curated level-4 teaching concepts; their former level-3 endpoints were changed only after those children were reviewed. The contract still permits earlier endpoints when future branches are not ready. The validator rejects all unapproved level-5 content and every child attached to a level-5 node.
 
 ### Curated navigation, not forced breadth
 
@@ -320,7 +338,7 @@ For example, `Reality → Time → Future` currently leads only to **Expected va
 
 Depth and breadth are separate contracts:
 
-- **Depth:** every published path ends at an explicitly approved teaching concept at or before level 4.
+- **Depth:** every published path ends at an explicitly approved teaching concept at or before level 4, except for terminal level-5 concepts beneath a specifically approved level-4 container.
 - **Breadth:** a branch may offer one or many children; every visible child must be an intentional, valid canonical relationship.
 
 The unit suite protects this by verifying every visible child reference, its canonical path, and a one-child Future branch. It never creates content to satisfy a quota.
@@ -341,7 +359,7 @@ This is an editorial integrity control, not a claim that the map is an exhaustiv
 
 ## Canonical Ontology Expansion Contract
 
-Use this request whenever a selected canonical node at levels 0–3 has not yet been curated with approved next concepts:
+Use this request whenever a selected canonical node has not yet been curated with approved next concepts:
 
 ```text
 You are expanding the Canonical Reality Ontology.
@@ -362,9 +380,10 @@ Expansion Rules
 8. Preserve the existing ontology naming conventions.
 9. If multiple taxonomies exist, choose the most widely accepted and explain the rationale.
 10. Never expand grandchildren unless explicitly requested.
-11. Level 4 is a maximum, not a target. A node at levels 0–3 may remain terminal when no meaningful child has been approved.
-12. Do not expand a level-4 terminal teaching concept. State that it is terminal and propose no child nodes.
-13. Update `data/v1-curation.json` with the branch scope, decision, and exact approved terminal paths before publishing.
+11. Level 4 is the default maximum, not a target. A node at levels 0–3 may remain terminal when no meaningful child has been approved.
+12. Do not expand an ordinary level-4 terminal teaching concept. Level 5 is allowed only when that exact level-4 parent has received an explicit `curated-level-five` policy because the deeper concepts materially improve navigation.
+13. Expand an approved level-4 container exactly one level to terminal level-5 children. Never expand a level-5 node.
+14. Update `data/v1-curation.json` with the branch scope, decision, expansion exception, and exact approved terminal paths before publishing.
 
 Output Format
 Parent
@@ -382,12 +401,15 @@ Validation Checklist
 ✓ Covers the parent
 ✓ Suitable for long-term navigation
 ✓ Stable across industries and time
-✓ Level-4 terminal boundary respected
+✓ Default level-4 boundary respected
+✓ Any level-5 exception is explicit, necessary, and terminal
 
-If the requested node exists at levels 0–3, expand it. If it is a level-4
-terminal, explain that it cannot be expanded further. If it does not exist,
-explain why and suggest the closest valid canonical node. Never modify the
-canonical ontology while expanding it.
+If the requested node exists at levels 0–3, expand it. If it is an ordinary
+level-4 terminal, explain that it cannot be expanded further. If it is an
+explicitly approved level-4 container, expand exactly one level. If it is level
+5, state that it is terminal. If it does not exist, explain why and suggest the
+closest valid canonical node. Never modify the canonical ontology while
+expanding it.
 ```
 
 Review and approve the returned concepts in Notion first. Only then add them to the application ontology. This preserves the boundary between research and published knowledge.
@@ -442,10 +464,12 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 15. Select Reality, Domain, and Razor and confirm each automatically renders the baseline Concept Anatomy fields alongside the map.
 16. Explore Category → Knowledge → Law, select Amdahl's Law, and confirm its authored law anatomy updates automatically.
 17. Confirm the Amdahl breadcrumb stops at level 4—five path entries including Reality—while its Concept Anatomy renders as content.
-18. Explore Category → Relationship → Ownership → Ownership arrangement and confirm Ownership is labelled **Relationship type**, its authored Concept Anatomy remains visible, and Ownership arrangement is the final teaching concept.
-19. At mobile width, confirm the Explore action occupies its own full-width row when relevant and Back remains at least 44 px high.
-20. At mobile width, confirm only the current destination is visually shown in the toolbar while the complete path remains accessible.
-21. Confirm the mobile Concept Anatomy follows the map, updates on selection, and shows no floating overlay.
+18. Explore Domain → Psychological → Individual differences → Character and confirm its eight approved qualities render.
+19. Explore Courage and confirm it is labelled **Character quality**, its breadcrumb reaches level 5, and it exposes no child destinations.
+20. Explore Category → Relationship → Ownership → Ownership arrangement and confirm Ownership is labelled **Relationship type**, its authored Concept Anatomy remains visible, and Ownership arrangement is the final teaching concept.
+21. At mobile width, confirm the Explore action occupies its own full-width row when relevant and Back remains at least 44 px high.
+22. At mobile width, confirm only the current destination is visually shown in the toolbar while the complete path remains accessible.
+23. Confirm the mobile Concept Anatomy follows the map, updates on selection, and shows no floating overlay.
 
 ### Responsive checks
 
@@ -529,7 +553,8 @@ When applying the orbit screen to another knowledge set:
 - Reality, containers, and terminal concepts updated Concept Anatomy without creating additional ontology levels.
 - Reality and Category produced the expected internal versioned chat-context objects, including typed parent relationships, without exposing structural metadata in the learner panel.
 - Category → Knowledge → Law exposed eight named-law instances.
-- Amdahl's Law updated its Concept Anatomy while remaining the fifth and terminal ontology level.
+- Amdahl's Law updated its Concept Anatomy while remaining terminal at level 4.
+- Psychological areas expose their curated level-4 vocabularies, while Character alone exposes terminal level-5 qualities including Courage.
 - Every selection updated `aria-current`, the active SVG connection, the eligible Explore action, the live permanent detail, and Concept Anatomy from one selected ID.
 - At 736 px, 390 px, and 320 px no floating selection content covered or visually attached itself to an unrelated destination.
 - At 390 px and 320 px the action moved to its own 44 px-high row, the visible path condensed to the current destination, and full destination labels remained readable.
@@ -543,6 +568,6 @@ When applying the orbit screen to another knowledge set:
 - **Reason:** React now owns application lifecycle, loading, recovery, composition, and future component migration; the compatibility boundary preserves the proven spatial interaction while Playwright protects behaviour during incremental change.
 - **Design parent:** the abstract spatial destination-map interaction pattern, implemented with original visual assets and semantic rules.
 - **Corrected root:** the five canonical dimensions replaced the earlier eight-shortcut root because mixing Category with its children represented two abstraction levels as peers.
-- **Implemented:** deterministic asymmetric placement, dimension colour identity, container/instance shapes, typed parent relationships, navigation from Reality at level 0 through level 4, and automatically synchronised Concept Anatomy views.
+- **Implemented:** deterministic asymmetric placement, dimension colour identity, container/instance shapes, typed parent relationships, navigation from Reality at level 0 through the default level-4 boundary and explicitly curated terminal level-5 exceptions, and automatically synchronised Concept Anatomy views.
 - **Deferred:** migrating the renderer across the React boundary component by component, physics simulation, dragging, persistence, route navigation, external content loading, and a dedicated graph library.
 - **Graph-library condition:** introduce a graph library only when node counts, authoring workflow, or edge routing complexity demonstrably exceed the deterministic renderer's maintainable limits.
