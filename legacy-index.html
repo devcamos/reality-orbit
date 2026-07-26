@@ -1970,6 +1970,21 @@ html&gt;body{padding:0}&lt;/style&gt;
     margin-top: 0.35rem;
   }
 
+  #reality-orbit-prototype .understand-principles {
+    display: grid;
+    gap: 0.42rem;
+    margin: 0;
+    padding-left: 1.15rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li {
+    padding-left: 0.18rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li::marker {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 72%, #d7e4e8);
+  }
+
   #reality-orbit-prototype .understand-context {
     display: grid;
     grid-auto-rows: minmax(0, 1fr);
@@ -4020,14 +4035,34 @@ html&gt;body{padding:0}&lt;/style&gt;
       }, linger + 140);
     };
 
+    const principleItemsFor = (value) =&gt; String(value)
+      .trim()
+      .split(/;\s+|(?&lt;=[.!?])\s+(?=[A-Z])/)
+      .map((principle) =&gt; principle.trim())
+      .filter(Boolean)
+      .map((principle) =&gt; `${principle.charAt(0).toUpperCase()}${principle.slice(1)}`)
+      .map((principle) =&gt; /[.!?]$/.test(principle) ? principle : `${principle}.`);
+
     const createAnatomyField = ([label, value], className = &quot;&quot;) =&gt; {
       const field = document.createElement(&quot;div&quot;);
       field.className = className;
+      field.dataset.anatomyField = label.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
       const term = document.createElement(&quot;dt&quot;);
       term.className = &quot;text-small&quot;;
       term.textContent = label;
       const description = document.createElement(&quot;dd&quot;);
-      description.textContent = value;
+      if (label === &quot;First principles&quot;) {
+        const principlesList = document.createElement(&quot;ul&quot;);
+        principlesList.className = &quot;understand-principles&quot;;
+        principlesList.replaceChildren(...principleItemsFor(value).map((principle) =&gt; {
+          const item = document.createElement(&quot;li&quot;);
+          item.textContent = principle;
+          return item;
+        }));
+        description.append(principlesList);
+      } else {
+        description.textContent = value;
+      }
       field.append(term, description);
       return field;
     };
@@ -4043,14 +4078,14 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (entry) usedLabels.add(entry[0]);
         return entry;
       };
-      const takeAny = () =&gt; {
-        const entry = entries.find(([label]) =&gt; !usedLabels.has(label));
+      const takeAny = (excludedLabels = []) =&gt; {
+        const entry = entries.find(([label]) =&gt; !usedLabels.has(label) &amp;&amp; !excludedLabels.includes(label));
         if (entry) usedLabels.add(entry[0]);
         return entry;
       };
 
-      const lead = take([&quot;Statement&quot;, &quot;Governing question&quot;, &quot;Problem&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;, &quot;First principles&quot;]) ?? takeAny();
-      const support = take([&quot;Problem&quot;, &quot;Purpose&quot;, &quot;Mechanism&quot;, &quot;First principles&quot;, &quot;Mental model&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;]) ?? takeAny();
+      const lead = take([&quot;Statement&quot;, &quot;Governing question&quot;, &quot;Problem&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;]) ?? takeAny([&quot;First principles&quot;]) ?? takeAny();
+      const support = take([&quot;Problem&quot;, &quot;Purpose&quot;, &quot;Mechanism&quot;, &quot;Mental model&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;]) ?? takeAny([&quot;First principles&quot;]) ?? takeAny();
       const foundations = [
         take([&quot;First principles&quot;, &quot;Variables&quot;, &quot;Mechanism&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;]),
         take([&quot;Mental model&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;, &quot;Variables&quot;, &quot;Assumptions&quot;]),

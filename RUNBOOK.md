@@ -308,6 +308,8 @@ Complete anatomy
 
 This is a projection of the existing Concept Anatomy, not a new schema. Baseline concepts usually fit entirely into the primary story and context rail. Richer law anatomy retains variables, predictions, assumptions, evidence, demonstrations, and related laws in the complete section.
 
+Every **First principles** field renders as a semantic bullet list. Semicolon-separated or independently punctuated claims become separate bullets; a single foundational claim remains one bullet. This presentation rule applies through the shared renderer, so authored and role-generated anatomy cannot silently fall back to paragraph formatting.
+
 ```text
 Ontology answers: Where does this concept belong?
 Concept Anatomy answers: What does it mean and how does it behave?

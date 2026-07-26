@@ -56,6 +56,10 @@ test("loads the canonical Reality orbit without browser errors", async ({ page }
   await expect(app(page).locator(".orbit-connection")).toHaveCount(0);
   await expect(app(page).locator("[data-orbit-path]")).toHaveText("Choose a dimension");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Reality");
+  const firstPrinciples = app(page).locator('[data-anatomy-field="first-principles"] .understand-principles li');
+  await expect(firstPrinciples).toHaveCount(2);
+  await expect(firstPrinciples.nth(0)).toHaveText("Every useful description selects boundaries and leaves detail out.");
+  await expect(firstPrinciples.nth(1)).toHaveText("No single dimension provides a complete account.");
   expect(errors).toEqual([]);
 });
 

@@ -1093,6 +1093,21 @@
     margin-top: 0.35rem;
   }
 
+  #reality-orbit-prototype .understand-principles {
+    display: grid;
+    gap: 0.42rem;
+    margin: 0;
+    padding-left: 1.15rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li {
+    padding-left: 0.18rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li::marker {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 72%, #d7e4e8);
+  }
+
   #reality-orbit-prototype .understand-context {
     display: grid;
     grid-auto-rows: minmax(0, 1fr);
@@ -3143,14 +3158,34 @@
       }, linger + 140);
     };
 
+    const principleItemsFor = (value) => String(value)
+      .trim()
+      .split(/;\s+|(?<=[.!?])\s+(?=[A-Z])/)
+      .map((principle) => principle.trim())
+      .filter(Boolean)
+      .map((principle) => `${principle.charAt(0).toUpperCase()}${principle.slice(1)}`)
+      .map((principle) => /[.!?]$/.test(principle) ? principle : `${principle}.`);
+
     const createAnatomyField = ([label, value], className = "") => {
       const field = document.createElement("div");
       field.className = className;
+      field.dataset.anatomyField = label.toLowerCase().replaceAll(" ", "-");
       const term = document.createElement("dt");
       term.className = "text-small";
       term.textContent = label;
       const description = document.createElement("dd");
-      description.textContent = value;
+      if (label === "First principles") {
+        const principlesList = document.createElement("ul");
+        principlesList.className = "understand-principles";
+        principlesList.replaceChildren(...principleItemsFor(value).map((principle) => {
+          const item = document.createElement("li");
+          item.textContent = principle;
+          return item;
+        }));
+        description.append(principlesList);
+      } else {
+        description.textContent = value;
+      }
       field.append(term, description);
       return field;
     };
@@ -3166,14 +3201,14 @@
         if (entry) usedLabels.add(entry[0]);
         return entry;
       };
-      const takeAny = () => {
-        const entry = entries.find(([label]) => !usedLabels.has(label));
+      const takeAny = (excludedLabels = []) => {
+        const entry = entries.find(([label]) => !usedLabels.has(label) && !excludedLabels.includes(label));
         if (entry) usedLabels.add(entry[0]);
         return entry;
       };
 
-      const lead = take(["Statement", "Governing question", "Problem", "Predictions", "Prediction", "First principles"]) ?? takeAny();
-      const support = take(["Problem", "Purpose", "Mechanism", "First principles", "Mental model", "Predictions", "Prediction"]) ?? takeAny();
+      const lead = take(["Statement", "Governing question", "Problem", "Predictions", "Prediction"]) ?? takeAny(["First principles"]) ?? takeAny();
+      const support = take(["Problem", "Purpose", "Mechanism", "Mental model", "Predictions", "Prediction"]) ?? takeAny(["First principles"]) ?? takeAny();
       const foundations = [
         take(["First principles", "Variables", "Mechanism", "Predictions", "Prediction"]),
         take(["Mental model", "Predictions", "Prediction", "Variables", "Assumptions"]),

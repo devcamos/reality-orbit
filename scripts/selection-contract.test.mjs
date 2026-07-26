@@ -490,7 +490,10 @@ test("Concept Anatomy maps every visible teaching field to the selected node", (
   assert.doesNotMatch(fragment, /data-understand-flow/);
   assert.doesNotMatch(fragment, /understandFlowForNode/);
   assert.match(fragment, /const entries = Object\.entries\(buildConceptAnatomy\(node\)\);/);
-  assert.match(fragment, /\["Statement", "Governing question", "Problem", "Predictions", "Prediction", "First principles"\]/);
+  assert.match(fragment, /\["Statement", "Governing question", "Problem", "Predictions", "Prediction"\]/);
+  assert.match(fragment, /const principleItemsFor = \(value\)/);
+  assert.match(fragment, /if \(label === "First principles"\)/);
+  assert.match(fragment, /principlesList\.className = "understand-principles"/);
   assert.match(fragment, /data-understand-support-label/);
   assert.match(fragment, /understandSupportLabel\.textContent = support\[0\];/);
   assert.match(fragment, /understandView\.dataset\.selectedNode = node\.id;/);

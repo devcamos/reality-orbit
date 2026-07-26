@@ -209,6 +209,17 @@ if (!fragment.includes("renderUnderstand(node)") || !fragment.includes("data-und
   failures.push("Every selection must automatically update the Concept Anatomy view.");
 }
 
+for (const principlesListContract of [
+  "principleItemsFor",
+  'label === "First principles"',
+  'principlesList.className = "understand-principles"',
+  'field.dataset.anatomyField = label.toLowerCase().replaceAll(" ", "-")',
+]) {
+  if (!fragment.includes(principlesListContract)) {
+    failures.push(`First principles must render as a semantic bullet list: ${principlesListContract}.`);
+  }
+}
+
 for (const visualRepresentationContract of [
   "data-open-concept-visual",
   "data-concept-visual-dialog",
