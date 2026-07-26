@@ -12,6 +12,7 @@ The app distinguishes its simple visual navigation from the canonical ontology:
 - Category contains Entity, Relationship, Process, Resource, Environment, and Knowledge.
 - Knowledge, Resource, Process, and Relationship are never presented as top-level siblings of Category.
 - Knowledge contains seven first-class artifact types: Law, Principle, Razor, Framework, Model, Theorem, and Pattern.
+- Psychological contains Individual differences, where Personality, Temperament, Character, Values, and Abilities are peer concepts. Character is not modelled as a subtype of Personality.
 - Every currently published branch reaches a level-4 terminal teaching concept. The Knowledge → Law path continues through named-law instances; the other dimensions and categories end in equally teachable concepts rather than empty navigation endpoints.
 - Navigation is curated rather than quota-driven: a concept exposes only its approved next concepts, whether that is one or many. A small branch is valid when no additional relationship is ready to teach.
 - [V1 curation data](data/v1-curation.json) explicitly records the scope, decision, and approved terminal paths for every published branch. The release tests fail if a path changes without that review being updated.

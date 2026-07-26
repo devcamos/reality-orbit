@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "status": "editorially-curated",
-  "reviewedOn": "2026-07-22",
+  "reviewedOn": "2026-07-26",
   "admissionCriteria": [
     "Fits the stated parent scope.",
     "Uses a distinct, non-ambiguous learner-facing label.",
@@ -122,7 +122,7 @@
     {
       "id": "psychological",
       "scope": "Mind, cognition, emotion, perception, and behaviour.",
-      "decision": "Uses cognition and decision-making plus an explicitly bounded evolutionary-psychology path; it does not claim to cover every psychological explanation, emotion, perception, or behaviour.",
+      "decision": "Adds Individual differences as the broad, theory-neutral home for Personality, Temperament, Character, Values, and Abilities. Character is intentionally a peer of Personality rather than its subtype because moral and self-regulatory qualities are not equivalent to descriptive personality tendencies. Cognition and the explicitly bounded evolutionary-psychology path remain unchanged.",
       "approvedPaths": [
         [
           "cognition",
@@ -131,6 +131,26 @@
         [
           "evolutionary-psychology",
           "adaptive-explanation"
+        ],
+        [
+          "individual-differences",
+          "personality"
+        ],
+        [
+          "individual-differences",
+          "temperament"
+        ],
+        [
+          "individual-differences",
+          "character"
+        ],
+        [
+          "individual-differences",
+          "personal-values"
+        ],
+        [
+          "individual-differences",
+          "abilities"
         ]
       ]
     },

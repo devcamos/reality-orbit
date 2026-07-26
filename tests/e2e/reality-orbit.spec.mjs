@@ -136,6 +136,21 @@ test("the observatory exposes a stable accessible structure without serious viol
   expect(seriousViolations).toEqual([]);
 });
 
+test("Character is discoverable as a peer within Individual differences", async ({ page }) => {
+  await openOrbit(page);
+
+  await explore(page, "domain");
+  await explore(page, "psychological");
+  await explore(page, "individual-differences");
+  await explore(page, "character");
+
+  await expect(node(page, "character")).toHaveClass(/orbit-core/);
+  await expect(app(page).locator("[data-selected-label]")).toHaveText("Character");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Character");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Individual differences");
+  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
+});
+
 test("a terminal concept remains a focused endpoint without invented children", async ({ page }) => {
   await openOrbit(page);
 
