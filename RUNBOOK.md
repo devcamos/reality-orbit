@@ -1,4 +1,4 @@
-# Reality Orbit JavaScript Visualization Runbook
+# Reality Orbit Application Runbook
 
 ## Purpose
 
@@ -16,7 +16,7 @@ This is a separate visualization prototype. It must not be added to Law Explorer
 
 ## Source files
 
-- Editable visualization fragment: `reality-orbit.html` in the thread visualization directory.
+- Editable ontology renderer and content source: `src/reality-orbit.html`.
 - React/Vite application entry: `index.html` and `src/` in this directory.
 - Generated ontology compatibility frame: `legacy-index.html` in this directory.
 - Reusable process and decisions: this runbook.
@@ -539,10 +539,10 @@ When applying the orbit screen to another knowledge set:
 
 ## Decision record
 
-- **Chosen:** a lightweight HTML, SVG, CSS, and JavaScript prototype.
-- **Reason:** it tests spatial interaction and responsive behaviour without introducing a framework or graph library.
+- **Chosen:** a strict React and TypeScript application shell built by Vite, with the mature HTML, SVG, CSS, and JavaScript ontology renderer isolated behind an explicit compatibility adapter.
+- **Reason:** React now owns application lifecycle, loading, recovery, composition, and future component migration; the compatibility boundary preserves the proven spatial interaction while Playwright protects behaviour during incremental change.
 - **Design parent:** the abstract spatial destination-map interaction pattern, implemented with original visual assets and semantic rules.
 - **Corrected root:** the five canonical dimensions replaced the earlier eight-shortcut root because mixing Category with its children represented two abstraction levels as peers.
 - **Implemented:** deterministic asymmetric placement, dimension colour identity, container/instance shapes, typed parent relationships, navigation from Reality at level 0 through level 4, and automatically synchronised Concept Anatomy views.
-- **Deferred:** physics simulation, dragging, persistence, route navigation, and external content loading.
-- **Promotion condition:** add a framework or graph library only when node counts, authoring workflow, or edge routing becomes complex enough to justify it.
+- **Deferred:** migrating the renderer across the React boundary component by component, physics simulation, dragging, persistence, route navigation, external content loading, and a dedicated graph library.
+- **Graph-library condition:** introduce a graph library only when node counts, authoring workflow, or edge routing complexity demonstrably exceed the deterministic renderer's maintainable limits.
