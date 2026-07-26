@@ -16,6 +16,10 @@ const requiredLabels = [
   "Knowledge",
   "Evolutionary psychology",
   "Individual differences",
+  "Emotion",
+  "Motivation",
+  "Behaviour",
+  "Development",
   "Personality",
   "Temperament",
   "Character",
@@ -249,8 +253,8 @@ if (!fragment.includes('schemaVersion: "1.0"')) {
   failures.push("The chat context object must keep an explicit schema version.");
 }
 
-if (!fragment.includes("terminalConcept: ontologyLevel(node) === terminalOntologyLevel") || fragment.includes("terminalInstance:")) {
-  failures.push("Grounded-chat context must identify terminal concepts across all ontology branches, not only named laws.");
+if (!fragment.includes("terminalConcept: !(node.children ?? []).length") || fragment.includes("terminalInstance:")) {
+  failures.push("Grounded-chat context must identify childless terminal concepts at every approved ontology depth.");
 }
 
 if (!fragment.includes("relationshipToParent: relationshipForNode(node)")) {

@@ -12,11 +12,11 @@ The app distinguishes its simple visual navigation from the canonical ontology:
 - Category contains Entity, Relationship, Process, Resource, Environment, and Knowledge.
 - Knowledge, Resource, Process, and Relationship are never presented as top-level siblings of Category.
 - Knowledge contains seven first-class artifact types: Law, Principle, Razor, Framework, Model, Theorem, and Pattern.
-- Psychological contains Individual differences, where Personality, Temperament, Character, Values, and Abilities are peer concepts. Character is not modelled as a subtype of Personality.
-- Every currently published branch reaches a level-4 terminal teaching concept. The Knowledge → Law path continues through named-law instances; the other dimensions and categories end in equally teachable concepts rather than empty navigation endpoints.
+- Psychological covers Cognition, Emotion, Motivation, Behaviour, Development, and Individual differences, while retaining Evolutionary psychology as an explicitly cross-cutting approach. Within Individual differences, Personality, Temperament, Character, Values, and Abilities are peer concepts; Character is not modelled as a subtype of Personality.
+- A curated concept may be terminal before level 4 when it is already meaningful and no next level has been approved. Emotion, Motivation, Behaviour, and Development deliberately stop at level 3; the Knowledge → Law path continues to named-law instances at level 4.
 - Navigation is curated rather than quota-driven: a concept exposes only its approved next concepts, whether that is one or many. A small branch is valid when no additional relationship is ready to teach.
 - [V1 curation data](data/v1-curation.json) explicitly records the scope, decision, and approved terminal paths for every published branch. The release tests fail if a path changes without that review being updated.
-- The ontology stops at level 4 when Reality is counted as level 0: Reality → Dimension → Value/type → Subtype → terminal teachable concept.
+- The ontology never exceeds level 4 when Reality is counted as level 0. Level 4 is a maximum, not a required target.
 - Every concept receives a baseline, role-aware Concept Anatomy covering purpose, governing question, first principles, mental model, scope, use, and common confusion.
 - Relationship, process, resource, and domain concepts receive reasoning appropriate to their actual role rather than the former generic ontology-node fallback.
 - Authored anatomy overrides the baseline when a concept needs a specialised teaching structure. Amdahl's Law provides the first law-specific anatomy; Environment provides the first context-system anatomy with boundaries, variables, mechanisms, feedback, and related concepts.
@@ -53,7 +53,7 @@ Run the unit tests to traverse every selection and prove the root-aware action a
 npm test
 ```
 
-Ontology levels are zero-based from Reality: Reality is level 0 and a named law such as Amdahl's Law is level 4. The test suite rejects any branch that terminates before level 4, any node beyond level 4, or any level-4 node with children.
+Ontology levels are zero-based from Reality: Reality is level 0 and a named law such as Amdahl's Law is level 4. The test suite permits editorially approved terminals at earlier levels, rejects any node beyond level 4, and rejects level-4 nodes with children.
 
 Run the complete production gate—including the static safeguards and unit tests—with:
 

@@ -151,6 +151,20 @@ test("Character is discoverable as a peer within Individual differences", async 
   await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
 });
 
+test("an intentionally terminal level-3 concept does not force a filler child", async ({ page }) => {
+  await openOrbit(page);
+
+  await explore(page, "domain");
+  await explore(page, "psychological");
+  await explore(page, "emotion");
+
+  await expect(node(page, "emotion")).toHaveClass(/orbit-core/);
+  await expect(app(page).locator("[data-selected-label]")).toHaveText("Emotion");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Emotion");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Psychological");
+  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
+});
+
 test("a terminal concept remains a focused endpoint without invented children", async ({ page }) => {
   await openOrbit(page);
 
