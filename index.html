@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Reality Orbit</title>
 <style>:root{color-scheme:dark;background:Canvas}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:1440px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
@@ -15,38 +15,88 @@
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
-&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src &#x27;self&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
 &lt;title&gt;Reality Orbit&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
-  background-color: var(--background) !important;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
 
   /* Agent-facing contract; keep in sync with SKILL.md. */
-  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
-  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
   --card: color-mix(in oklab, var(--foreground) 5%, transparent);
-  --card-foreground: var(--foreground);
-  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
-  --popover-foreground: var(--foreground);
-  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
-  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
-  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
-  --secondary-foreground: var(--foreground);
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
   --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
-  --muted-foreground: light-dark(
-    rgb(26 28 31 / 49.4%),
-    rgb(255 255 255 / 49.8%)
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
   );
-  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
-  --accent-foreground: var(--primary);
-  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
-  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
-  --input: light-dark(
-    rgb(26 28 31 / 11.8%),
-    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
   );
-  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
-  --font-size-base: 14px;
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --red: light-dark(rgb(186 38 35), rgb(250 66 62));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
   --viz-series-1: var(--primary);
   --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
   --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
@@ -70,7 +120,7 @@
   --line-height-normal: calc(var(--font-size-normal) * 1.5);
   --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
   --line-height-small: calc(var(--font-size-small) + 4px);
-  --radius: 12.5px;
+  --radius: var(--border-radius-lg, 12.5px);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -90,9 +140,6 @@
   --viz-accent-bg: var(--accent);
   --viz-font-size: var(--font-size-base);
   --viz-warning: var(--destructive);
-  --color-background-primary: var(--background);
-  --color-text-primary: var(--foreground);
-  --color-border-secondary: var(--border);
 }
 
 :root[data-theme=&quot;light&quot;] {
@@ -108,6 +155,20 @@
 }
 
 html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
   margin: 0;
   padding: 5px;
   color: var(--foreground);
@@ -121,7 +182,7 @@ html &gt; body {
 a {
   color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
   cursor: pointer;
-  font-weight: var(--viz-font-weight-medium);
+  font-weight: var(--font-weight-medium, 500);
   text-decoration: none;
   text-underline-offset: 2px;
 }
@@ -824,38 +885,70 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype {
+    --space-void: #02060d;
+    --space-navy: #07111f;
+    --space-glass: rgba(7, 16, 29, 0.82);
+    --space-line: rgba(164, 196, 218, 0.18);
+    --space-text: #f1f5f7;
+    --space-muted: #9fadb8;
+    --space-display: &quot;Avenir Next&quot;, &quot;SF Pro Display&quot;, &quot;Segoe UI Variable Display&quot;, &quot;Segoe UI&quot;, sans-serif;
+    position: relative;
+    isolation: isolate;
     width: 100%;
     min-height: calc(100dvh - 0.625rem);
-    color: var(--foreground);
+    color: var(--space-text);
     background:
-      radial-gradient(ellipse 72% 52% at 50% 102%, color-mix(in srgb, var(--viz-series-1) 14%, transparent), transparent 68%),
-      radial-gradient(ellipse 54% 45% at 12% 10%, color-mix(in srgb, var(--viz-series-5) 8%, transparent), transparent 74%),
-      linear-gradient(145deg, color-mix(in srgb, var(--background) 96%, var(--foreground)), var(--background));
+      linear-gradient(110deg, rgba(2, 6, 13, 0.28), rgba(2, 6, 13, 0.78) 74%),
+      url(&quot;/assets/observatory-deep-space.webp&quot;) center / cover no-repeat,
+      var(--space-void);
   }
 
   #reality-orbit-prototype .orbit-shell {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(23rem, 30vw, 34rem);
+    align-items: start;
+    gap: clamp(0.55rem, 1.2vw, 1rem);
     min-height: inherit;
     padding: clamp(0.45rem, 1.4vw, 1.15rem);
     background:
-      radial-gradient(circle at 16% 22%, color-mix(in srgb, var(--foreground) 19%, transparent) 0 0.05rem, transparent 0.11rem),
-      radial-gradient(circle at 74% 17%, color-mix(in srgb, var(--foreground) 14%, transparent) 0 0.04rem, transparent 0.1rem),
-      radial-gradient(circle at 83% 76%, color-mix(in srgb, var(--foreground) 12%, transparent) 0 0.04rem, transparent 0.1rem);
-    background-size: 137px 151px, 193px 181px, 229px 211px;
+      radial-gradient(ellipse 52% 42% at 42% 49%, rgba(189, 143, 90, 0.055), transparent 72%),
+      linear-gradient(180deg, rgba(2, 6, 13, 0.08), rgba(2, 6, 13, 0.34));
+  }
+
+  #reality-orbit-prototype .orbit-universe-panel {
+    min-width: 0;
   }
 
   #reality-orbit-prototype .orbit-workspace {
-    display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(22rem, 1.1fr);
-    align-items: start;
-    border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
-    border-radius: 1rem;
+    border: 1px solid var(--space-line);
+    border-radius: 1.15rem;
     overflow: clip;
-    background: color-mix(in srgb, var(--background) 91%, var(--card));
-    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 8%, transparent), 0 1.8rem 4rem color-mix(in srgb, var(--background) 62%, transparent);
+    background: rgba(3, 10, 19, 0.72);
+    box-shadow: inset 0 1px 0 rgba(224, 239, 248, 0.07), 0 1.8rem 5rem rgba(0, 3, 8, 0.52);
+    backdrop-filter: blur(18px) saturate(112%);
   }
 
   #reality-orbit-prototype .orbit-canvas {
     min-width: 0;
+    transform-origin: 50% 48%;
+    transition: opacity 320ms ease, transform 520ms cubic-bezier(0.22, 0.68, 0, 1);
+  }
+
+  #reality-orbit-prototype[data-camera-state=&quot;approaching&quot;] .orbit-canvas {
+    opacity: 0.68;
+    transform: scale(1.018) rotate(var(--camera-tilt, 0deg));
+  }
+
+  #reality-orbit-prototype[data-camera-state=&quot;arriving&quot;] .orbit-canvas {
+    opacity: 0.72;
+    transform: scale(0.986) rotate(0deg);
+    transition: none;
+  }
+
+  #reality-orbit-prototype[data-camera-state=&quot;approaching&quot;] .orbit-stage {
+    pointer-events: none;
   }
 
   #reality-orbit-prototype .orbit-toolbar {
@@ -864,8 +957,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     align-items: center;
     gap: 0.75rem;
     padding: 0.65rem 0.8rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-    background: linear-gradient(90deg, color-mix(in srgb, var(--background) 92%, transparent), color-mix(in srgb, var(--card) 78%, transparent));
+    border-bottom: 1px solid rgba(166, 198, 220, 0.14);
+    background: linear-gradient(90deg, rgba(5, 13, 24, 0.92), rgba(8, 20, 34, 0.68));
+    backdrop-filter: blur(16px);
   }
 
   #reality-orbit-prototype .orbit-path {
@@ -875,7 +969,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
-    color: var(--muted-foreground);
+    color: var(--space-muted);
+    font-family: var(--space-display);
+    font-weight: 500;
+    letter-spacing: 0.01em;
     overflow: hidden;
     white-space: nowrap;
   }
@@ -911,9 +1008,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     overflow: hidden;
     isolation: isolate;
     background:
-      radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 22%, transparent) 0, transparent 28%),
-      radial-gradient(ellipse at 50% 102%, color-mix(in srgb, var(--viz-series-1) 16%, transparent) 0, transparent 56%),
-      linear-gradient(145deg, color-mix(in srgb, var(--background) 94%, var(--foreground)), var(--background));
+      radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--map-color, #c99d69) 18%, transparent) 0, transparent 31%),
+      linear-gradient(180deg, rgba(2, 7, 14, 0.22), rgba(2, 7, 14, 0.58)),
+      url(&quot;/assets/observatory-deep-space.webp&quot;) center / cover no-repeat,
+      var(--space-void);
   }
 
   #reality-orbit-prototype .orbit-stage::before,
@@ -927,18 +1025,52 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .orbit-stage::before {
     background:
-      radial-gradient(circle at 13% 19%, color-mix(in srgb, var(--foreground) 28%, transparent) 0 0.05rem, transparent 0.12rem),
-      radial-gradient(circle at 76% 17%, color-mix(in srgb, var(--foreground) 18%, transparent) 0 0.04rem, transparent 0.11rem),
-      radial-gradient(circle at 87% 65%, color-mix(in srgb, var(--foreground) 17%, transparent) 0 0.04rem, transparent 0.1rem),
-      radial-gradient(circle at 29% 83%, color-mix(in srgb, var(--foreground) 16%, transparent) 0 0.04rem, transparent 0.1rem);
-    background-size: 113px 131px, 181px 173px, 227px 211px, 149px 167px;
-    opacity: 0.76;
+      radial-gradient(ellipse 22% 14% at 18% 72%, rgba(31, 103, 111, 0.09), transparent 72%),
+      radial-gradient(ellipse 28% 18% at 82% 23%, rgba(116, 139, 160, 0.07), transparent 75%),
+      radial-gradient(ellipse 32% 16% at 51% 92%, rgba(188, 135, 77, 0.055), transparent 76%);
+    opacity: 0.82;
+    animation: observatory-drift 28s ease-in-out infinite alternate;
   }
 
   #reality-orbit-prototype .orbit-stage::after {
     background:
-      radial-gradient(ellipse 48% 27% at 81% 84%, color-mix(in srgb, var(--viz-series-5) 11%, transparent), transparent 72%),
-      radial-gradient(ellipse 44% 35% at 8% 52%, color-mix(in srgb, var(--viz-series-6) 8%, transparent), transparent 74%);
+      radial-gradient(circle at 50% 50%, transparent 44%, rgba(0, 3, 8, 0.2) 74%, rgba(0, 3, 8, 0.64) 100%),
+      linear-gradient(90deg, rgba(2, 6, 13, 0.08), transparent 18%, transparent 82%, rgba(2, 6, 13, 0.18));
+  }
+
+  #reality-orbit-prototype .orbit-starfield {
+    position: absolute;
+    z-index: 0;
+    inset: -8%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  #reality-orbit-prototype .orbit-starfield::before,
+  #reality-orbit-prototype .orbit-starfield::after {
+    position: absolute;
+    inset: 0;
+    content: &quot;&quot;;
+    will-change: transform, opacity;
+  }
+
+  #reality-orbit-prototype .orbit-starfield::before {
+    background-image:
+      radial-gradient(circle, rgba(224, 238, 244, 0.76) 0 0.55px, transparent 0.95px),
+      radial-gradient(circle, rgba(128, 178, 199, 0.58) 0 0.65px, transparent 1.05px),
+      radial-gradient(circle, rgba(213, 177, 134, 0.48) 0 0.5px, transparent 0.9px);
+    background-position: 13px 19px, 47px 61px, 89px 31px;
+    background-size: 67px 73px, 113px 127px, 179px 163px;
+    animation: starfield-drift-far 96s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype .orbit-starfield::after {
+    background-image:
+      radial-gradient(circle, rgba(236, 246, 249, 0.72) 0 0.9px, transparent 1.35px),
+      radial-gradient(circle, rgba(154, 197, 214, 0.54) 0 0.75px, transparent 1.2px);
+    background-position: 73px 41px, 19px 97px;
+    background-size: 211px 193px, 157px 181px;
+    animation: starfield-drift-near 58s ease-in-out infinite alternate;
   }
 
   #reality-orbit-prototype .orbit-map {
@@ -954,12 +1086,12 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-connection {
     vector-effect: non-scaling-stroke;
     fill: none;
-    stroke: color-mix(in srgb, var(--foreground) 18%, transparent);
+    stroke: rgba(164, 197, 218, 0.17);
     stroke-width: 1;
   }
 
   #reality-orbit-prototype .orbit-ring {
-    opacity: 0.62;
+    opacity: 0.44;
   }
 
   #reality-orbit-prototype .orbit-connection {
@@ -986,6 +1118,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     transform: translate(-50%, -50%);
     touch-action: manipulation;
     white-space: normal;
+    animation: orbit-node-arrive 560ms cubic-bezier(0.22, 0.68, 0, 1) backwards;
+    animation-delay: calc(var(--orbit-index, 0) * 34ms);
   }
 
   #reality-orbit-prototype .orbit-node.btn-ghost:not(:disabled):hover {
@@ -998,18 +1132,21 @@ html&gt;body{padding:0}&lt;/style&gt;
     width: var(--destination-size, 3.15rem);
     aspect-ratio: 1;
     place-items: center;
-    border: 1px solid color-mix(in srgb, var(--node-color, var(--viz-series-1)) 60%, var(--border));
+    overflow: visible;
+    border: 1px solid color-mix(in srgb, var(--node-color, #88a9b5) 62%, rgba(184, 207, 220, 0.24));
     border-radius: 50%;
     background:
-      radial-gradient(circle, color-mix(in srgb, var(--node-color, var(--viz-series-1)) 25%, transparent), transparent 64%),
-      color-mix(in srgb, var(--background) 90%, var(--card));
-    box-shadow: 0 0 0 0.32rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 8%, transparent), 0 0 1.2rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 12%, transparent);
+      radial-gradient(circle at 36% 28%, rgba(239, 248, 250, 0.18), transparent 20%),
+      radial-gradient(circle, color-mix(in srgb, var(--node-color, #88a9b5) 25%, transparent), transparent 66%),
+      rgba(5, 15, 25, 0.9);
+    box-shadow: inset -0.5rem -0.55rem 1.1rem rgba(0, 3, 8, 0.46), 0 0 0 0.32rem color-mix(in srgb, var(--node-color, #88a9b5) 7%, transparent), 0 0 1.35rem color-mix(in srgb, var(--node-color, #88a9b5) 13%, transparent);
+    transition: filter 220ms ease, transform 320ms cubic-bezier(0.22, 0.68, 0, 1), box-shadow 240ms ease;
   }
 
   #reality-orbit-prototype .destination-marker::before {
     position: absolute;
     inset: -0.35rem;
-    border: 1px solid color-mix(in srgb, var(--node-color, var(--viz-series-1)) 32%, transparent);
+    border: 1px solid color-mix(in srgb, var(--node-color, #88a9b5) 30%, transparent);
     border-radius: inherit;
     content: &quot;&quot;;
     opacity: 0.62;
@@ -1018,13 +1155,110 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .destination-marker::after {
     position: absolute;
     inset: 0.32rem;
-    border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+    border: 1px solid rgba(226, 239, 244, 0.1);
     border-radius: inherit;
     content: &quot;&quot;;
   }
 
   #reality-orbit-prototype .orbit-node[data-prominence=&quot;high&quot;] .destination-marker {
     --destination-size: 4rem;
+  }
+
+  #reality-orbit-prototype .orbit-node:not([data-node-kind=&quot;instance&quot;]):hover .destination-marker {
+    filter: brightness(1.08);
+    transform: translateY(-0.12rem) scale(1.035);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-node-kind=&quot;instance&quot;]:hover .destination-marker {
+    filter: brightness(1.08);
+    transform: rotate(45deg) scale(1.035);
+  }
+
+  #reality-orbit-prototype .orbit-node:focus-visible {
+    outline: none;
+  }
+
+  #reality-orbit-prototype .orbit-node:focus-visible .destination-marker {
+    box-shadow:
+      0 0 0 0.22rem var(--space-void),
+      0 0 0 0.36rem rgba(214, 232, 240, 0.86),
+      0 0 1.8rem color-mix(in srgb, var(--node-color, #88a9b5) 34%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-node:focus-visible .destination-label {
+    color: #fff;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;sun&quot;] .destination-marker {
+    background:
+      radial-gradient(circle at 38% 31%, rgba(255, 239, 199, 0.98) 0 7%, rgba(229, 180, 112, 0.92) 20%, rgba(153, 91, 45, 0.88) 48%, rgba(52, 30, 21, 0.96) 74%),
+      #7a4a2f;
+    border-color: rgba(242, 200, 137, 0.72);
+    box-shadow:
+      inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55),
+      0 0 0 0.58rem rgba(213, 153, 80, 0.09),
+      0 0 2.8rem rgba(211, 148, 76, 0.33);
+    animation: reality-breathe 8s ease-in-out infinite;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;sun&quot;] .destination-marker::before {
+    inset: -0.72rem;
+    border-color: rgba(224, 173, 108, 0.22);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;domain&quot;] .destination-marker {
+    background:
+      radial-gradient(circle at 30% 30%, rgba(48, 28, 19, 0.52) 0 7%, transparent 8%),
+      radial-gradient(circle at 69% 61%, rgba(42, 24, 17, 0.58) 0 9%, transparent 10%),
+      radial-gradient(circle at 42% 73%, rgba(226, 174, 121, 0.13) 0 8%, transparent 9%),
+      radial-gradient(circle at 36% 25%, rgba(236, 207, 174, 0.27), transparent 22%),
+      linear-gradient(145deg, #9a6f50, #4d3428 64%, #231b1a);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;category&quot;] .destination-marker {
+    border-radius: 34%;
+    background:
+      linear-gradient(132deg, rgba(236, 255, 252, 0.32), transparent 28%),
+      conic-gradient(from 28deg, #315c60, #6e9e98, #284d57, #7aa49d, #315c60);
+    box-shadow: inset -0.6rem -0.65rem 1.25rem rgba(2, 14, 19, 0.5), 0 0 1.6rem rgba(79, 145, 142, 0.2);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker {
+    background:
+      radial-gradient(circle at 40% 30%, rgba(225, 239, 249, 0.25), transparent 19%),
+      radial-gradient(circle, #42617e, #172a42 66%, #091522);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker::before {
+    inset: 42% -0.68rem;
+    border-color: rgba(140, 184, 216, 0.48);
+    border-radius: 50%;
+    transform: rotate(-16deg);
+    animation: time-ring-drift 18s linear infinite;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;scale&quot;] .destination-marker {
+    background:
+      radial-gradient(circle, transparent 0 18%, rgba(195, 218, 190, 0.22) 19% 21%, transparent 22% 39%, rgba(141, 174, 132, 0.22) 40% 42%, transparent 43%),
+      radial-gradient(circle at 37% 29%, #809b78, #304b35 62%, #14231b);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;perspective&quot;] .destination-marker {
+    clip-path: polygon(50% 3%, 91% 26%, 86% 75%, 50% 97%, 10% 74%, 8% 27%);
+    border-radius: 28%;
+    background:
+      linear-gradient(118deg, rgba(235, 242, 255, 0.3), transparent 28%),
+      conic-gradient(from 205deg, #3d5f68, #7b6f91, #436f73, #837692, #3d5f68);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;category&quot;] .destination-glyph {
+    border-radius: 22%;
+    transform: rotate(45deg);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;perspective&quot;] .destination-glyph {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    border-radius: 0;
   }
 
   #reality-orbit-prototype .orbit-node[data-node-kind=&quot;instance&quot;] .destination-marker {
@@ -1045,24 +1279,59 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype .destination-label {
-    display: block;
+    display: grid;
     max-width: 100%;
+    justify-items: center;
+    gap: 0.12rem;
     overflow: visible;
+    font-family: var(--space-display);
     line-height: 1.2;
-    text-shadow: 0 1px 0.65rem color-mix(in srgb, var(--background) 92%, transparent);
+    color: #d8e1e6;
+    text-shadow: 0 1px 0.65rem rgba(0, 3, 8, 0.94);
     text-overflow: clip;
     white-space: normal;
   }
 
+  #reality-orbit-prototype .destination-name {
+    display: block;
+  }
+
+  #reality-orbit-prototype .destination-meta {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-name {
+    color: #eef4f6;
+    font-size: clamp(1rem, 0.92rem + 0.28vw, 1.16rem);
+    font-weight: 600;
+    letter-spacing: -0.018em;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-meta {
+    display: block;
+    color: color-mix(in srgb, var(--node-color, #88a9b5) 62%, #b9c6cc);
+    font-size: 0.59rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
   #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-label {
-    color: var(--foreground);
+    color: #fff;
     font-weight: var(--font-weight-medium);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;][data-selected=&quot;true&quot;] .destination-name {
+    text-shadow:
+      0 0 0.9rem color-mix(in srgb, var(--node-color, #88a9b5) 34%, transparent),
+      0 1px 0.65rem rgba(0, 3, 8, 0.94);
   }
 
   #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-marker {
     box-shadow:
-      0 0 0 0.42rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 16%, transparent),
-      0 0 1.8rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 31%, transparent);
+      0 0 0 0.42rem color-mix(in srgb, var(--node-color, #88a9b5) 14%, transparent),
+      0 0 1.9rem color-mix(in srgb, var(--node-color, #88a9b5) 32%, transparent);
   }
 
   #reality-orbit-prototype .orbit-node[data-available=&quot;false&quot;] {
@@ -1081,17 +1350,19 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-core .destination-marker {
     --destination-size: 4.7rem;
     box-shadow:
-      0 0 0 0.6rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 9%, transparent),
-      0 0 2.5rem color-mix(in srgb, var(--node-color, var(--viz-series-1)) 22%, transparent);
+      0 0 0 0.6rem color-mix(in srgb, var(--node-color, #c99d69) 8%, transparent),
+      0 0 2.5rem color-mix(in srgb, var(--node-color, #c99d69) 22%, transparent);
   }
 
   #reality-orbit-prototype .orbit-detail {
     display: grid;
-    gap: 0.75rem;
-    min-height: 4.4rem;
-    padding: 0.75rem 0.8rem;
-    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-    background: linear-gradient(90deg, color-mix(in srgb, var(--background) 88%, var(--card)), color-mix(in srgb, var(--background) 94%, transparent));
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    min-height: 6.4rem;
+    padding: 1rem 1.15rem;
+    border-top: 1px solid rgba(164, 196, 218, 0.14);
+    background: linear-gradient(90deg, rgba(5, 14, 25, 0.94), rgba(7, 18, 31, 0.78));
     scroll-margin-top: 0.75rem;
   }
 
@@ -1287,37 +1558,59 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-status-heading {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.6rem;
     flex-wrap: wrap;
+  }
+
+  #reality-orbit-prototype [data-selected-label] {
+    font-family: var(--space-display);
+    font-size: clamp(1.3rem, 1rem + 0.65vw, 1.7rem);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+  }
+
+  #reality-orbit-prototype .orbit-role {
+    padding: 0.28rem 0.55rem;
+    font-size: 0.72rem;
   }
 
   #reality-orbit-prototype .orbit-summary {
     display: block;
-    margin-top: 0.15rem;
-    color: var(--muted-foreground);
+    max-width: 64ch;
+    margin-top: 0.42rem;
+    color: var(--space-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
   }
 
   #reality-orbit-prototype .understand-view {
-    position: sticky;
-    top: 1rem;
+    position: static;
     min-width: 0;
-    max-height: calc(100vh - 2rem);
-    overflow-y: auto;
+    max-height: none;
+    overflow: visible;
     padding: 0;
-    border-left: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--background) 86%, var(--card)), color-mix(in srgb, var(--background) 94%, transparent));
+    border: 1px solid var(--space-line);
+    border-radius: 1.15rem;
+    background: linear-gradient(180deg, rgba(8, 19, 32, 0.86), rgba(3, 10, 19, 0.82));
+    box-shadow: inset 0 1px 0 rgba(224, 239, 248, 0.07), 0 1.8rem 5rem rgba(0, 3, 8, 0.48);
+    backdrop-filter: blur(22px) saturate(108%);
   }
 
   #reality-orbit-prototype .understand-header {
+    position: sticky;
+    z-index: 2;
+    top: 0;
     display: grid;
-    justify-items: center;
-    gap: 0.55rem;
-    padding: clamp(1.4rem, 5vw, 3rem) 1rem;
-    text-align: center;
-    border-bottom: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    justify-items: start;
+    gap: 0.35rem;
+    padding: 1.1rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(164, 196, 218, 0.14);
     background:
-      radial-gradient(ellipse 58% 100% at 50% 0%, color-mix(in srgb, var(--map-color, var(--viz-series-1)) 16%, transparent), transparent 72%),
-      linear-gradient(180deg, color-mix(in srgb, var(--background) 84%, var(--card)), transparent);
+      radial-gradient(ellipse 74% 110% at 42% 0%, color-mix(in srgb, var(--map-color, #c99d69) 14%, transparent), transparent 72%),
+      linear-gradient(180deg, rgba(8, 20, 34, 0.96), rgba(7, 17, 29, 0.91));
+    backdrop-filter: blur(20px);
   }
 
   #reality-orbit-prototype .understand-header p,
@@ -1337,24 +1630,31 @@ html&gt;body{padding:0}&lt;/style&gt;
     gap: 0.75rem;
   }
 
+  #reality-orbit-prototype [data-understand-title] {
+    font-family: var(--space-display);
+    font-size: clamp(1.55rem, 1.25rem + 0.75vw, 2.05rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+
   #reality-orbit-prototype .understand-eyebrow,
   #reality-orbit-prototype .understand-lead-label,
   #reality-orbit-prototype .understand-support-label,
   #reality-orbit-prototype .understand-context-card dt,
   #reality-orbit-prototype .understand-fields dt {
-    color: var(--muted-foreground);
+    color: var(--space-muted);
     letter-spacing: 0.16em;
     text-transform: uppercase;
   }
 
   #reality-orbit-prototype .understand-definition-label {
     display: block;
-    color: var(--muted-foreground);
+    color: var(--space-muted);
   }
 
   #reality-orbit-prototype .understand-statement {
-    max-width: 52rem;
-    color: var(--muted-foreground);
+    max-width: none;
+    color: #b9c5cc;
   }
 
   #reality-orbit-prototype .understand-body {
@@ -1363,7 +1663,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .understand-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(14rem, 0.8fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
   }
 
@@ -1372,6 +1672,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     min-width: 0;
     flex-direction: column;
     gap: 1rem;
+    border-color: rgba(164, 196, 218, 0.12);
+    background: rgba(6, 16, 28, 0.56);
+    box-shadow: inset 0 1px 0 rgba(225, 239, 246, 0.045);
   }
 
   #reality-orbit-prototype .understand-story-lead {
@@ -1385,16 +1688,16 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype .understand-support {
-    color: var(--muted-foreground);
+    color: #aebbc3;
   }
 
   #reality-orbit-prototype .understand-foundations {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
     margin: auto 0 0;
     padding-top: 1rem;
-    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-top: 1px solid rgba(164, 196, 218, 0.13);
   }
 
   #reality-orbit-prototype .understand-foundations div,
@@ -1424,10 +1727,44 @@ html&gt;body{padding:0}&lt;/style&gt;
     gap: 0.8rem;
   }
 
+  #reality-orbit-prototype .understand-view[data-selected-role=&quot;dimension&quot;] .understand-story {
+    background:
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--map-color, #c99d69) 11%, transparent), transparent 36%),
+      rgba(6, 16, 28, 0.58);
+  }
+
+  #reality-orbit-prototype .understand-view[data-selected-role=&quot;dimension&quot;] .understand-context-card {
+    position: relative;
+    padding: 1rem 1rem 1rem 1.15rem;
+    border-color: color-mix(in srgb, var(--map-color, #c99d69) 21%, transparent);
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--map-color, #c99d69) 7%, transparent), rgba(5, 14, 25, 0.62));
+  }
+
+  #reality-orbit-prototype .understand-view[data-selected-role=&quot;dimension&quot;] .understand-context-card::before {
+    position: absolute;
+    inset: 0.85rem auto 0.85rem 0;
+    width: 2px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--map-color, #c99d69) 68%, #dce7eb);
+    content: &quot;&quot;;
+    opacity: 0.72;
+  }
+
+  #reality-orbit-prototype .understand-view[data-selected-role=&quot;dimension&quot;] .understand-context-card dt {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 58%, #dce7eb);
+    font-weight: 600;
+  }
+
+  #reality-orbit-prototype .understand-view[data-selected-role=&quot;dimension&quot;] .understand-context-card dd {
+    color: #c4cfd5;
+    line-height: 1.55;
+  }
+
   #reality-orbit-prototype .understand-more {
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-top: 1px solid rgba(164, 196, 218, 0.13);
   }
 
   #reality-orbit-prototype .understand-more-header {
@@ -1439,14 +1776,52 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .understand-fields {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 1rem 1.25rem;
     margin: 1rem 0 0;
   }
 
   #reality-orbit-prototype .understand-fields div {
     padding-top: 0.75rem;
-    border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-top: 1px solid rgba(164, 196, 218, 0.13);
+  }
+
+  @keyframes observatory-drift {
+    from { transform: translate3d(-0.4%, -0.25%, 0) scale(1.01); }
+    to { transform: translate3d(0.45%, 0.3%, 0) scale(1.025); }
+  }
+
+  @keyframes starfield-drift-far {
+    0% { opacity: 0.36; transform: translate3d(-0.8%, -0.45%, 0) scale(1.01); }
+    52% { opacity: 0.58; }
+    100% { opacity: 0.44; transform: translate3d(0.85%, 0.55%, 0) scale(1.022); }
+  }
+
+  @keyframes starfield-drift-near {
+    0% { opacity: 0.3; transform: translate3d(0.65%, -0.5%, 0) scale(1.018); }
+    46% { opacity: 0.5; }
+    100% { opacity: 0.36; transform: translate3d(-0.7%, 0.45%, 0) scale(1.032); }
+  }
+
+  @keyframes orbit-node-arrive {
+    from { opacity: 0; transform: translate(-50%, -47%) scale(0.94); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+
+  @keyframes reality-breathe {
+    0%, 100% {
+      filter: brightness(0.98);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55), 0 0 0 0.58rem rgba(213, 153, 80, 0.09), 0 0 2.55rem rgba(211, 148, 76, 0.28);
+    }
+    50% {
+      filter: brightness(1.04);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.52), 0 0 0 0.68rem rgba(213, 153, 80, 0.11), 0 0 3.15rem rgba(211, 148, 76, 0.36);
+    }
+  }
+
+  @keyframes time-ring-drift {
+    from { transform: rotate(-16deg); }
+    to { transform: rotate(344deg); }
   }
 
   #reality-orbit-prototype .orbit-actions[hidden],
@@ -1457,16 +1832,17 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   @media (max-width: 980px) {
-    #reality-orbit-prototype .orbit-workspace {
+    #reality-orbit-prototype .orbit-shell {
       grid-template-columns: 1fr;
-      overflow: visible;
+    }
+
+    #reality-orbit-prototype .orbit-workspace {
+      overflow: clip;
     }
 
     #reality-orbit-prototype .understand-view {
       position: static;
       max-height: none;
-      border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-      border-left: 0;
     }
 
     #reality-orbit-prototype .orbit-toolbar .orbit-actions {
@@ -1488,16 +1864,8 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   @media (max-width: 680px) {
-    #reality-orbit-prototype .understand-layout {
-      grid-template-columns: 1fr;
-    }
-
-    #reality-orbit-prototype .understand-context {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    #reality-orbit-prototype .understand-fields {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    #reality-orbit-prototype .orbit-shell {
+      gap: 0.55rem;
     }
   }
 
@@ -1557,6 +1925,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
 
     #reality-orbit-prototype .orbit-detail {
+      grid-template-columns: 1fr;
+      min-height: 0;
       padding-inline: 0.65rem;
     }
 
@@ -1601,10 +1971,18 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   @media (prefers-reduced-motion: reduce) {
+    #reality-orbit-prototype .orbit-canvas,
+    #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .orbit-connection {
       transition: none;
     }
 
+    #reality-orbit-prototype .orbit-stage::before,
+    #reality-orbit-prototype .orbit-starfield::before,
+    #reality-orbit-prototype .orbit-starfield::after,
+    #reality-orbit-prototype .orbit-node,
+    #reality-orbit-prototype .destination-marker,
+    #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker::before,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind=&quot;focus&quot;] .concept-visual-node-mark {
       animation: none;
@@ -1614,8 +1992,9 @@ html&gt;body{padding:0}&lt;/style&gt;
 
 &lt;section id=&quot;reality-orbit-prototype&quot; aria-label=&quot;Reality ontology destination map&quot;&gt;
   &lt;div class=&quot;orbit-shell&quot;&gt;
-    &lt;div class=&quot;orbit-workspace&quot;&gt;
-      &lt;div class=&quot;orbit-canvas&quot;&gt;
+    &lt;section class=&quot;orbit-universe-panel&quot; aria-label=&quot;Universe workspace&quot;&gt;
+      &lt;div class=&quot;orbit-workspace&quot;&gt;
+        &lt;div class=&quot;orbit-canvas&quot;&gt;
         &lt;div class=&quot;orbit-toolbar&quot;&gt;
           &lt;button class=&quot;btn btn-ghost orbit-back&quot; type=&quot;button&quot; data-orbit-back hidden aria-label=&quot;Return to the previous orbit&quot;&gt;← Back&lt;/button&gt;
           &lt;div class=&quot;orbit-path text-small&quot; data-orbit-path aria-label=&quot;Current ontology path&quot;&gt;&lt;/div&gt;
@@ -1624,6 +2003,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           &lt;/div&gt;
         &lt;/div&gt;
         &lt;div class=&quot;orbit-stage&quot;&gt;
+          &lt;div class=&quot;orbit-starfield&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
           &lt;svg class=&quot;orbit-map&quot; viewBox=&quot;0 0 100 100&quot; role=&quot;img&quot; aria-labelledby=&quot;reality-orbit-title reality-orbit-desc&quot; preserveAspectRatio=&quot;none&quot;&gt;
             &lt;title id=&quot;reality-orbit-title&quot;&gt;Reality ontology destination map&lt;/title&gt;
             &lt;desc id=&quot;reality-orbit-desc&quot;&gt;Select a concept destination to update its Concept Anatomy alongside the map. Explore any non-root concept as a focused destination.&lt;/desc&gt;
@@ -1649,8 +2029,10 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/div&gt;
+        &lt;/div&gt;
       &lt;/div&gt;
-      &lt;aside class=&quot;understand-view&quot; data-understand-view aria-labelledby=&quot;understand-title&quot;&gt;
+    &lt;/section&gt;
+    &lt;aside class=&quot;understand-view&quot; data-understand-view aria-labelledby=&quot;understand-title&quot;&gt;
           &lt;header class=&quot;understand-header&quot;&gt;
             &lt;div class=&quot;understand-header-meta&quot;&gt;
               &lt;p class=&quot;text-small understand-eyebrow&quot; data-understand-eyebrow&gt;&lt;/p&gt;
@@ -1683,8 +2065,7 @@ html&gt;body{padding:0}&lt;/style&gt;
               &lt;dl class=&quot;understand-fields&quot; data-understand-fields&gt;&lt;/dl&gt;
             &lt;/section&gt;
           &lt;/div&gt;
-      &lt;/aside&gt;
-    &lt;/div&gt;
+    &lt;/aside&gt;
   &lt;/div&gt;
   &lt;dialog class=&quot;concept-visual-dialog&quot; data-concept-visual-dialog aria-labelledby=&quot;concept-visual-title&quot;&gt;
     &lt;header class=&quot;concept-visual-header&quot;&gt;
@@ -2345,11 +2726,11 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     const canonicalDimensions = [&quot;Domain&quot;, &quot;Category&quot;, &quot;Time&quot;, &quot;Scale&quot;, &quot;Perspective&quot;];
     const dimensionColors = {
-      Domain: &quot;var(--viz-series-2)&quot;,
-      Category: &quot;var(--viz-series-3)&quot;,
-      Time: &quot;var(--viz-series-4)&quot;,
-      Scale: &quot;var(--viz-series-5)&quot;,
-      Perspective: &quot;var(--viz-series-6)&quot;,
+      Domain: &quot;#b38361&quot;,
+      Category: &quot;#6f9f9a&quot;,
+      Time: &quot;#7397bb&quot;,
+      Scale: &quot;#78926f&quot;,
+      Perspective: &quot;#9182a4&quot;,
     };
     const destinationLayouts = {
       5: [[50, 15], [17, 35], [82, 30], [25, 77], [73, 80]],
@@ -2402,7 +2783,19 @@ html&gt;body{padding:0}&lt;/style&gt;
     const currentId = () =&gt; history[history.length - 1];
     const currentNode = () =&gt; ontology[currentId()];
     const ontologyLevel = (node) =&gt; node.canonicalPath.length - 1;
-    const nodeColor = (node) =&gt; dimensionColors[node.canonicalPath[1]] ?? &quot;var(--viz-series-1)&quot;;
+    const nodeColor = (node) =&gt; dimensionColors[node.canonicalPath[1]] ?? &quot;#c99d69&quot;;
+    const visualArchetypeForNode = (node) =&gt; {
+      if (node.id === &quot;reality&quot;) return &quot;sun&quot;;
+      if (node.canonicalPath.length === 2) return node.id;
+      return &quot;concept&quot;;
+    };
+    const decorateOrbitButton = (button, node, index) =&gt; {
+      button.dataset.dimension = node.canonicalPath[1] ?? &quot;Reality&quot;;
+      button.dataset.ontologyLevel = String(ontologyLevel(node));
+      button.dataset.visualArchetype = visualArchetypeForNode(node);
+      button.style.setProperty(&quot;--orbit-index&quot;, String(index));
+      button.setAttribute(&quot;aria-label&quot;, `${node.label}. ${roleForNode(node)}. Select to update Concept Anatomy.`);
+    };
     const canExploreNode = (node) =&gt; node.id !== &quot;reality&quot;;
     const canPlayVisualForNode = (node) =&gt; node.canonicalPath.includes(&quot;Knowledge&quot;) &amp;&amp; [&quot;Law&quot;, &quot;Principle&quot;].includes(node.canonicalPath[3]);
     const revealMobileSelection = () =&gt; {
@@ -2515,6 +2908,14 @@ html&gt;body{padding:0}&lt;/style&gt;
     const renderPath = () =&gt; {
       const path = currentNode().canonicalPath;
       pathElement.replaceChildren();
+      if (path.length === 1) {
+        const prompt = document.createElement(&quot;strong&quot;);
+        prompt.className = &quot;orbit-path-segment&quot;;
+        prompt.textContent = &quot;Choose a dimension&quot;;
+        pathElement.appendChild(prompt);
+        backButton.hidden = true;
+        return;
+      }
       path.forEach((segment, index) =&gt; {
         if (index &gt; 0) {
           const separator = document.createElement(&quot;span&quot;);
@@ -2539,7 +2940,16 @@ html&gt;body{padding:0}&lt;/style&gt;
       marker.appendChild(glyph);
       const label = document.createElement(&quot;span&quot;);
       label.className = &quot;destination-label&quot;;
-      label.textContent = node.label;
+      const name = document.createElement(&quot;span&quot;);
+      name.className = &quot;destination-name&quot;;
+      name.textContent = node.label;
+      label.appendChild(name);
+      if (ontologyLevel(node) === 1) {
+        const meta = document.createElement(&quot;span&quot;);
+        meta.className = &quot;destination-meta&quot;;
+        meta.textContent = &quot;Dimension&quot;;
+        label.appendChild(meta);
+      }
       button.append(marker, label);
     };
 
@@ -2549,6 +2959,54 @@ html&gt;body{padding:0}&lt;/style&gt;
       Time: &quot;When does it occur, for how long, and in what order?&quot;,
       Scale: &quot;At what level of size, scope, or resolution is it being examined?&quot;,
       Perspective: &quot;From which viewpoint or interpretive lens is it being understood?&quot;,
+    };
+
+    const dimensionAnatomies = {
+      domain: {
+        &quot;Purpose&quot;: &quot;Use Domain to establish the broad field of reality that should guide the inquiry, evidence, and explanation.&quot;,
+        &quot;Governing question&quot;: &quot;What broad area of reality is being studied?&quot;,
+        &quot;First principles&quot;: &quot;Domains separate fields of inquiry without making them isolated; one phenomenon can cross physical, biological, psychological, social, economic, informational, and mathematical boundaries.&quot;,
+        &quot;Mental model&quot;: &quot;A region of inquiry that defines which phenomena and forms of explanation are foregrounded.&quot;,
+        &quot;Scope&quot;: &quot;Use Domain when the primary subject matter or explanatory field must be established before classifying the subject more precisely.&quot;,
+        &quot;How to use it&quot;: &quot;Name the phenomenon and question, select the domain carrying the main explanatory responsibility, then record any other domains needed to understand cross-domain effects.&quot;,
+        &quot;Common confusion&quot;: &quot;Domain identifies where inquiry is focused. It does not identify what kind of thing the subject is—that is the role of Category.&quot;,
+      },
+      category: {
+        &quot;Purpose&quot;: &quot;Use Category to identify what kind of entity, relationship, process, resource, environment, or knowledge object is being described.&quot;,
+        &quot;Governing question&quot;: &quot;What kind of thing, relationship, process, resource, environment, or knowledge is this?&quot;,
+        &quot;First principles&quot;: &quot;Classification depends on explicit defining characteristics and the role a subject plays in context; a subject may participate in several categories without making them interchangeable.&quot;,
+        &quot;Mental model&quot;: &quot;A set of labelled forms that distinguishes what something is or does from the field in which it appears.&quot;,
+        &quot;Scope&quot;: &quot;Use Category across domains whenever the structural kind of the subject matters to the explanation or navigation.&quot;,
+        &quot;How to use it&quot;: &quot;State the subject and its role, compare it with the defining criteria of the candidate categories, then select the category that best matches the current analytical purpose.&quot;,
+        &quot;Common confusion&quot;: &quot;Category is not a topic label or an academic field. Domain says where the inquiry sits; Category says what kind of thing is being examined.&quot;,
+      },
+      time: {
+        &quot;Purpose&quot;: &quot;Use Time to locate states and events, establish their order, and describe how conditions persist or change.&quot;,
+        &quot;Governing question&quot;: &quot;When does it occur, for how long, and in what order?&quot;,
+        &quot;First principles&quot;: &quot;Reference points, sequence, duration, and rate of change affect what can be observed and inferred; observations at different times may describe different states.&quot;,
+        &quot;Mental model&quot;: &quot;A timeline and observation window that reveal position, order, persistence, and change.&quot;,
+        &quot;Scope&quot;: &quot;Use Time when an explanation depends on when something happened, how long it lasted, what preceded it, or how it changed.&quot;,
+        &quot;How to use it&quot;: &quot;Set the reference point and useful granularity, then identify the relevant past, present, future, duration, or sequence before comparing states or events.&quot;,
+        &quot;Common confusion&quot;: &quot;Earlier does not automatically mean causal, and a temporal snapshot should not be mistaken for a stable condition.&quot;,
+      },
+      scale: {
+        &quot;Purpose&quot;: &quot;Use Scale to define the level of analysis and reveal patterns that appear or disappear as observations are aggregated.&quot;,
+        &quot;Governing question&quot;: &quot;At what level of size, scope, or resolution is it being examined?&quot;,
+        &quot;First principles&quot;: &quot;Behaviour and evidence can change across levels; a conclusion about an individual does not automatically hold for a group, organisation, society, or global system.&quot;,
+        &quot;Mental model&quot;: &quot;A zoom control that trades local detail for wider structure and emergent patterns.&quot;,
+        &quot;Scope&quot;: &quot;Use Scale when the unit of analysis, system boundary, or degree of aggregation affects the claim being made.&quot;,
+        &quot;How to use it&quot;: &quot;Name the focal unit and boundary, select the appropriate level, then compare an adjacent scale to test whether the pattern survives aggregation or disaggregation.&quot;,
+        &quot;Common confusion&quot;: &quot;Scale is not importance and is not only physical size; it identifies the level at which evidence, causes, and outcomes are being analysed.&quot;,
+      },
+      perspective: {
+        &quot;Purpose&quot;: &quot;Use Perspective to make the viewpoint, assumptions, interests, and standards of interpretation behind an account explicit.&quot;,
+        &quot;Governing question&quot;: &quot;From which viewpoint or interpretive lens is it being understood?&quot;,
+        &quot;First principles&quot;: &quot;A viewpoint changes what is noticed, valued, and foregrounded, but it does not by itself change the underlying event or the quality of available evidence.&quot;,
+        &quot;Mental model&quot;: &quot;A prism that reveals different features of the same subject while preserving the subject as a shared reference point.&quot;,
+        &quot;Scope&quot;: &quot;Use Perspective when different observers or interpretive lenses may frame the same subject through different assumptions, priorities, or evidence.&quot;,
+        &quot;How to use it&quot;: &quot;Name the observer or lens, state its assumptions and valued evidence, then compare another perspective and identify which facts remain invariant.&quot;,
+        &quot;Common confusion&quot;: &quot;Recognising multiple perspectives does not make every interpretation equally supported or turn evidence-based claims into matters of preference.&quot;,
+      },
     };
 
     const buildConceptAnatomy = (node) =&gt; {
@@ -2570,7 +3028,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       }
 
       if (role === &quot;Dimension&quot;) {
-        return {
+        return dimensionAnatomies[node.id] ?? {
           &quot;Purpose&quot;: `Use ${node.label} as one of the five complementary dimensions for describing reality.`,
           &quot;Governing question&quot;: dimensionQuestions[node.label] ?? `What does ${node.label} reveal about the subject?`,
           &quot;First principles&quot;: &quot;A dimension isolates one aspect of a subject for reasoning; choosing it does not replace the other dimensions.&quot;,
@@ -2825,6 +3283,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       const remaining = entries.filter(([label]) =&gt; !usedLabels.has(label));
 
       understandView.dataset.selectedNode = node.id;
+      understandView.dataset.selectedRole = role.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
       understandEyebrow.textContent = `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
@@ -3043,6 +3502,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.dataset.available = &quot;true&quot;;
         button.dataset.selected = &quot;false&quot;;
         button.setAttribute(&quot;aria-current&quot;, &quot;false&quot;);
+        decorateOrbitButton(button, child, index + 1);
         button.style.setProperty(&quot;--orbit-x&quot;, `${x}%`);
         button.style.setProperty(&quot;--orbit-y&quot;, `${y}%`);
         button.style.setProperty(&quot;--node-color&quot;, color);
@@ -3063,6 +3523,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       centreButton.dataset.available = &quot;true&quot;;
       centreButton.dataset.selected = &quot;true&quot;;
       centreButton.setAttribute(&quot;aria-current&quot;, &quot;true&quot;);
+      decorateOrbitButton(centreButton, parent, 0);
       centreButton.style.setProperty(&quot;--orbit-x&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--orbit-y&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
@@ -3078,10 +3539,35 @@ html&gt;body{padding:0}&lt;/style&gt;
     function exploreSelectedNode(nodeId = selectedId, { revealMap = false } = {}) {
       const node = ontology[nodeId];
       if (!node || node.id === currentId() || !canExploreNode(node)) return;
-      history.push(nodeId);
-      renderOrbit();
-      if (revealMap) revealOrbitMap();
+      transitionOrbit(() =&gt; history.push(nodeId), { revealMap, direction: 1 });
     }
+
+    const transitionOrbit = (commitNavigation, { revealMap = false, direction = 1 } = {}) =&gt; {
+      if (root.dataset.cameraState !== &quot;idle&quot;) return;
+      const reduceMotion = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches;
+      const completeNavigation = () =&gt; {
+        commitNavigation();
+        renderOrbit();
+        if (revealMap) revealOrbitMap();
+      };
+
+      if (reduceMotion) {
+        completeNavigation();
+        return;
+      }
+
+      root.style.setProperty(&quot;--camera-tilt&quot;, `${direction * 0.32}deg`);
+      root.dataset.cameraState = &quot;approaching&quot;;
+      window.setTimeout(() =&gt; {
+        commitNavigation();
+        renderOrbit();
+        root.dataset.cameraState = &quot;arriving&quot;;
+        requestAnimationFrame(() =&gt; {
+          root.dataset.cameraState = &quot;idle&quot;;
+          if (revealMap) revealOrbitMap();
+        });
+      }, 220);
+    };
 
     exploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId));
     contextExploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId, { revealMap: true }));
@@ -3093,16 +3579,22 @@ html&gt;body{padding:0}&lt;/style&gt;
     });
 
     backButton.addEventListener(&quot;click&quot;, () =&gt; {
-      if (history.length &gt; 1) history.pop();
-      renderOrbit();
+      if (history.length &gt; 1) transitionOrbit(() =&gt; history.pop(), { direction: -1 });
     });
 
     root.dataset.canonicalDimensions = canonicalDimensions.join(&quot;,&quot;);
     root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
+    root.dataset.cameraState = &quot;idle&quot;;
     validateOntology();
     renderOrbit();
   })();
 &lt;/script&gt;
+
+
+
+
+
+
 
 &lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;

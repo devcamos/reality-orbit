@@ -26,9 +26,10 @@ const requiredLabels = [
   "Second-order thinking",
 ];
 
-const [document, fragment] = await Promise.all([
+const [document, fragment, observatoryBackground] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../src/reality-orbit.html", import.meta.url), "utf8"),
+  readFile(new URL("../assets/observatory-deep-space.webp", import.meta.url)),
 ]);
 
 const failures = [];
@@ -57,6 +58,18 @@ if (!document.includes(":root{color-scheme:dark;background:Canvas}")) {
   failures.push("The standalone frame must keep Reality Orbit in its deliberate dark orbital theme.");
 }
 
+if (
+  observatoryBackground.length > 250_000
+  || observatoryBackground.subarray(0, 4).toString("ascii") !== "RIFF"
+  || observatoryBackground.subarray(8, 12).toString("ascii") !== "WEBP"
+) {
+  failures.push("The observatory background must remain a compact WebP asset below 250 KB.");
+}
+
+if (!document.includes("img-src 'self' blob:") || !document.includes("img-src &#x27;self&#x27; blob:")) {
+  failures.push("The standalone and embedded content policies must permit the project-local observatory asset.");
+}
+
 if (!fragment.includes('id="reality-orbit-prototype"')) {
   failures.push("The source fragment must keep its unique root ID.");
 }
@@ -64,9 +77,29 @@ if (!fragment.includes('id="reality-orbit-prototype"')) {
 for (const orbitalVisualContract of [
   ":root {\n    color-scheme: dark !important;",
   "background: Canvas !important;",
+  'url("/assets/observatory-deep-space.webp")',
+  'data-visual-archetype="sun"',
+  'data-visual-archetype="time"',
+  "visualArchetypeForNode",
+  "decorateOrbitButton",
+  'button.dataset.dimension = node.canonicalPath[1] ?? "Reality"',
+  'button.setAttribute("aria-label", `${node.label}. ${roleForNode(node)}. Select to update Concept Anatomy.`)',
+  "transitionOrbit",
+  'root.dataset.cameraState = "idle"',
+  "@keyframes reality-breathe",
+  "@keyframes observatory-drift",
+  "@keyframes starfield-drift-far",
+  "@keyframes starfield-drift-near",
+  '<div class="orbit-starfield" aria-hidden="true"></div>',
+  ".orbit-starfield::before",
+  ".orbit-starfield::after",
   ".orbit-stage::before",
   ".orbit-stage::after",
   ".destination-marker::before",
+  "--space-display:",
+  'meta.textContent = "Dimension"',
+  'understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-")',
+  '.understand-view[data-selected-role="dimension"] .understand-context-card',
   "min-height: calc(100dvh - 0.625rem)",
 ]) {
   if (!fragment.includes(orbitalVisualContract)) {
@@ -119,8 +152,18 @@ for (const visualScopeContract of [
   }
 }
 
-if (!fragment.includes('      </div>\n      <aside class="understand-view"')) {
-  failures.push("The Concept Anatomy view must remain a desktop sibling of the map canvas, not content below it.");
+for (const splitWorkspaceContract of [
+  '<section class="orbit-universe-panel" aria-label="Universe workspace">',
+  '<aside class="understand-view" data-understand-view',
+  "grid-template-columns: minmax(0, 1fr) clamp(23rem, 30vw, 34rem)",
+  "#reality-orbit-prototype .understand-view {\n    position: static;",
+  "max-height: none;",
+  "overflow: visible;",
+  "border-radius: 1rem;",
+]) {
+  if (!fragment.includes(splitWorkspaceContract)) {
+    failures.push(`Missing separated Universe-and-Concept-Anatomy workspace contract: ${splitWorkspaceContract}.`);
+  }
 }
 
 if (fragment.includes("Copy expansion brief") || fragment.includes("Canonical Ontology Expansion Contract")) {

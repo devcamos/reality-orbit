@@ -4,6 +4,7 @@ import test from "node:test";
 import { runInNewContext } from "node:vm";
 
 const fragment = await readFile(new URL("../src/reality-orbit.html", import.meta.url), "utf8");
+const runbook = await readFile(new URL("../RUNBOOK.md", import.meta.url), "utf8");
 const v1Curation = JSON.parse(await readFile(new URL("../data/v1-curation.json", import.meta.url), "utf8"));
 
 const extractDeclaration = (startMarker, endMarker) => {
@@ -62,10 +63,43 @@ const reachableFromReality = () => {
   return reachable;
 };
 
+test("expansion guidance preserves curated breadth and the level-4 terminal boundary", () => {
+  const heading = "## Canonical Ontology Expansion Contract";
+  const start = runbook.indexOf(heading);
+  const end = runbook.indexOf("\n## ", start + heading.length);
+  assert.notEqual(start, -1, "The runbook must contain the canonical expansion contract.");
+  assert.notEqual(end, -1, "The canonical expansion contract must end before the next runbook section.");
+
+  const expansionContract = runbook.slice(start, end);
+  assert.match(expansionContract, /there is no target count/i, "Expansion guidance must not impose a child-count quota.");
+  assert.doesNotMatch(expansionContract, /5[–-]10 children/i, "Expansion guidance must not restore the former 5–10-child quota.");
+  assert.match(expansionContract, /levels 0–3/i, "Expansion guidance must limit proposals to nodes below the terminal level.");
+  assert.match(expansionContract, /Do not expand a level-4 terminal teaching concept/i, "Expansion guidance must prevent level-5 proposals.");
+  assert.match(expansionContract, /data\/v1-curation\.json/, "Expansion guidance must retain the editorial publication gate.");
+});
+
 test("Reality is the only selection without Explore selected", () => {
   const withoutExplore = nodes.filter((node) => !contract.canExploreNode(node)).map((node) => node.id);
   assert.deepEqual(withoutExplore, ["reality"]);
   assert.equal(contract.canExploreNode(contract.ontology.reality), false);
+});
+
+test("each canonical dimension teaches distinct contextual guidance", () => {
+  const dimensionIds = ["domain", "category", "time", "scale", "perspective"];
+  const contextFields = ["Scope", "How to use it", "Common confusion"];
+
+  for (const field of contextFields) {
+    const values = dimensionIds.map((id) => contract.buildConceptAnatomy(contract.ontology[id])[field]);
+    assert.ok(values.every((value) => value?.trim()), `Every dimension must explain ${field}.`);
+    assert.equal(new Set(values).size, dimensionIds.length, `${field} must be specific to each dimension.`);
+  }
+
+  const combinedGuidance = dimensionIds
+    .flatMap((id) => Object.values(contract.buildConceptAnatomy(contract.ontology[id])))
+    .join(" ");
+  assert.doesNotMatch(combinedGuidance, /can be applied across every subject represented/i);
+  assert.doesNotMatch(combinedGuidance, /Choose a value within/i);
+  assert.doesNotMatch(combinedGuidance, /does not own or completely define/i);
 });
 
 test("every reachable non-root selection exposes Explore selected", () => {

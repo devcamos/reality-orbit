@@ -65,10 +65,20 @@ Visual semantics are fixed:
 - Size means navigation prominence.
 - Position is stable map placement, not a scientific coordinate.
 - Colour identifies the canonical dimension.
+- Material reinforces the five root dimensions: Domain is rocky, Category is faceted, Time carries a slow ring, Scale uses nested circles, and Perspective refracts a restrained spectrum.
+- Reality alone uses a warm, breathing solar treatment. At deeper levels, the focused concept retains its dimension colour without pretending to be the ontological root.
 - The ring communicates selection.
 - A connection carries a typed relationship.
 - Brightness means availability or current focus.
 - A diamond identifies an instance; containers remain circular.
+
+### Quiet-observatory art direction
+
+The original `assets/observatory-deep-space.webp` field establishes depth without carrying ontology meaning. It stays low contrast beneath a dark readability veil so labels, focus, paths, and Concept Anatomy remain the primary information. The production gate keeps this asset below 250 KB and requires both standalone content policies to permit the local file.
+
+The map uses cinematic light sparingly: warm light anchors Reality, blue ambient light separates the surrounding field, and dimension accents remain muted. Background drift, the Reality glow, Time's ring, node arrival, and camera easing are intentionally slow and are removed when the user requests reduced motion.
+
+The adjacent Concept Anatomy surface is the knowledge instrument rather than decorative “mission control.” Its dark glass, restrained borders, sticky definition, and generous spacing keep the selected concept readable while preserving a visual connection to the map.
 
 ## JavaScript architecture
 
@@ -323,7 +333,7 @@ This is an editorial integrity control, not a claim that the map is an exhaustiv
 
 ## Canonical Ontology Expansion Contract
 
-Use this request whenever a selected node has not yet been curated:
+Use this request whenever a selected canonical node at levels 0–3 has not yet been curated with approved next concepts:
 
 ```text
 You are expanding the Canonical Reality Ontology.
@@ -344,7 +354,8 @@ Expansion Rules
 8. Preserve the existing ontology naming conventions.
 9. If multiple taxonomies exist, choose the most widely accepted and explain the rationale.
 10. Never expand grandchildren unless explicitly requested.
-11. Update `data/v1-curation.json` with the branch scope, decision, and exact approved terminal paths before publishing.
+11. Do not expand a level-4 terminal teaching concept. State that it is terminal and propose no child nodes.
+12. Update `data/v1-curation.json` with the branch scope, decision, and exact approved terminal paths before publishing.
 
 Output Format
 Parent
@@ -356,16 +367,18 @@ Parent
 
 Validation Checklist
 ✓ One level only
-✓ Pareto: 5–10 children
+✓ Pareto: smallest necessary set; no target count
 ✓ Canonical terminology
 ✓ No duplicated concepts
 ✓ Covers the parent
 ✓ Suitable for long-term navigation
 ✓ Stable across industries and time
+✓ Level-4 terminal boundary respected
 
-If the requested node exists, expand it. If it does not exist, explain why
-and suggest the closest valid canonical node. Never modify the canonical
-ontology while expanding it.
+If the requested node exists at levels 0–3, expand it. If it is a level-4
+terminal, explain that it cannot be expanded further. If it does not exist,
+explain why and suggest the closest valid canonical node. Never modify the
+canonical ontology while expanding it.
 ```
 
 Review and approve the returned concepts in Notion first. Only then add them to the application ontology. This preserves the boundary between research and published knowledge.
