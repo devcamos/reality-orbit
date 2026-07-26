@@ -105,9 +105,13 @@ test("hover and keyboard focus reveal a concept-specific thought", async ({ page
   const domainPosition = await app(page).locator("[data-orbit-hover-reticle]").evaluate((reticle) => ({
     x: reticle.style.getPropertyValue("--reticle-x"),
     y: reticle.style.getPropertyValue("--reticle-y"),
+    interactive: reticle.dataset.interactive,
+    nativeCursor: getComputedStyle(reticle.closest("#reality-orbit-prototype")).cursor,
   }));
+  expect(domainPosition.interactive).toBe("true");
+  expect(domainPosition.nativeCursor).toBe("none");
 
-  await node(page, "perspective").focus();
+  await node(page, "perspective").hover();
   await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
   await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeVisible();
   await expect(app(page).locator("[data-orbit-thought-text]")).toHaveText(
@@ -121,6 +125,9 @@ test("hover and keyboard focus reveal a concept-specific thought", async ({ page
 
   expect(perspectiveState).not.toMatchObject(domainPosition);
   expect(perspectiveState.orbitAnimation).toBe("hover-reticle-orbit-drift");
+
+  await node(page, "perspective").focus();
+  await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
 });
 
 test("mobile selection reveals the summary and uses the contextual explore control", async ({ page }) => {
@@ -140,7 +147,7 @@ test("mobile selection reveals the summary and uses the contextual explore contr
 test("reduced-motion mode removes ambient and navigational animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await openOrbit(page);
-  await node(page, "time").focus();
+  await node(page, "time").hover();
 
   const animationState = await app(page).locator("#reality-orbit-prototype").evaluate((root) => {
     const starfield = root.querySelector(".orbit-starfield");

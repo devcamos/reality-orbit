@@ -1391,11 +1391,11 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype .orbit-hover-reticle {
-    --reticle-size: 5.2rem;
-    position: absolute;
-    z-index: 4;
-    top: var(--reticle-y, 50%);
-    left: var(--reticle-x, 50%);
+    --reticle-size: 3.4rem;
+    position: fixed;
+    z-index: 50;
+    top: var(--reticle-y, -5rem);
+    left: var(--reticle-x, -5rem);
     width: var(--reticle-size);
     aspect-ratio: 1;
     opacity: 0;
@@ -1403,11 +1403,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 22%, transparent));
     transform: translate(-50%, -50%) scale(0.88);
     transition:
-      top 340ms cubic-bezier(0.22, 0.68, 0, 1),
-      left 340ms cubic-bezier(0.22, 0.68, 0, 1),
-      width 220ms ease,
+      top 45ms linear,
+      left 45ms linear,
       opacity 130ms ease,
-      transform 220ms cubic-bezier(0.22, 0.68, 0, 1);
+      transform 160ms cubic-bezier(0.22, 0.68, 0, 1);
   }
 
   #reality-orbit-prototype .orbit-hover-reticle[hidden] {
@@ -1417,6 +1416,16 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;] {
     opacity: 0.92;
     transform: translate(-50%, -50%) scale(1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;][data-interactive=&quot;true&quot;] {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-input=&quot;touch&quot;] {
+    --reticle-size: 3.8rem;
+    opacity: 0.72;
+    transition: opacity 160ms ease, transform 160ms ease;
   }
 
   #reality-orbit-prototype .orbit-hover-reticle-shell,
@@ -1479,6 +1488,15 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   @keyframes hover-reticle-orbit-drift {
     to { transform: rotate(-360deg); }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    #reality-orbit-prototype,
+    #reality-orbit-prototype button,
+    #reality-orbit-prototype a,
+    #reality-orbit-prototype summary {
+      cursor: none !important;
+    }
   }
 
   #reality-orbit-prototype .orbit-detail {
@@ -2097,12 +2115,6 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
   }
 
-  @media (hover: none) and (pointer: coarse) {
-    #reality-orbit-prototype .orbit-hover-reticle {
-      display: none !important;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
@@ -2128,6 +2140,10 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/style&gt;
 
 &lt;section id=&quot;reality-orbit-prototype&quot; aria-label=&quot;Reality ontology destination map&quot;&gt;
+  &lt;div class=&quot;orbit-hover-reticle&quot; data-orbit-hover-reticle data-visible=&quot;false&quot; data-interactive=&quot;false&quot; hidden aria-hidden=&quot;true&quot;&gt;
+    &lt;span class=&quot;orbit-hover-reticle-shell&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;orbit-hover-reticle-orbit&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
   &lt;div class=&quot;orbit-shell&quot;&gt;
     &lt;section class=&quot;orbit-universe-panel&quot; aria-label=&quot;Universe workspace&quot;&gt;
       &lt;div class=&quot;orbit-workspace&quot;&gt;
@@ -2150,10 +2166,6 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;g data-orbit-connections&gt;&lt;/g&gt;
           &lt;/svg&gt;
           &lt;div data-orbit-nodes&gt;&lt;/div&gt;
-          &lt;div class=&quot;orbit-hover-reticle&quot; data-orbit-hover-reticle data-visible=&quot;false&quot; hidden aria-hidden=&quot;true&quot;&gt;
-            &lt;span class=&quot;orbit-hover-reticle-shell&quot;&gt;&lt;/span&gt;
-            &lt;span class=&quot;orbit-hover-reticle-orbit&quot;&gt;&lt;/span&gt;
-          &lt;/div&gt;
           &lt;p class=&quot;orbit-thought&quot; id=&quot;orbit-thought&quot; role=&quot;tooltip&quot; data-orbit-thought data-visible=&quot;false&quot; hidden&gt;
             &lt;span class=&quot;orbit-thought-label&quot;&gt;Consider&lt;/span&gt;
             &lt;span class=&quot;orbit-thought-text&quot; data-orbit-thought-text&gt;&lt;/span&gt;
@@ -3783,53 +3795,61 @@ html&gt;body{padding:0}&lt;/style&gt;
       return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
     };
 
-    let orbitHoverExitTimer = null;
+    let orbitThoughtExitTimer = null;
+    let orbitalCursorHideTimer = null;
 
-    const positionOrbitHoverReticle = (button, node) =&gt; {
-      const marker = button.querySelector(&quot;.destination-marker&quot;);
-      const stageBounds = orbitStage.getBoundingClientRect();
-      const markerBounds = marker.getBoundingClientRect();
-      const size = Math.max(markerBounds.width, markerBounds.height) + 22;
-      orbitHoverReticle.style.setProperty(&quot;--reticle-x&quot;, `${markerBounds.left - stageBounds.left + markerBounds.width / 2}px`);
-      orbitHoverReticle.style.setProperty(&quot;--reticle-y&quot;, `${markerBounds.top - stageBounds.top + markerBounds.height / 2}px`);
-      orbitHoverReticle.style.setProperty(&quot;--reticle-size&quot;, `${size}px`);
-      orbitHoverReticle.style.setProperty(&quot;--reticle-color&quot;, nodeColor(node));
-    };
-
-    const showOrbitHover = (button, node) =&gt; {
-      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
+    const showOrbitThought = (node) =&gt; {
+      if (orbitThoughtExitTimer) window.clearTimeout(orbitThoughtExitTimer);
       orbitThoughtText.textContent = thoughtForNode(node);
       orbitThought.hidden = false;
-      positionOrbitHoverReticle(button, node);
-      orbitHoverReticle.hidden = false;
       requestAnimationFrame(() =&gt; {
         orbitThought.dataset.visible = &quot;true&quot;;
-        orbitHoverReticle.dataset.visible = &quot;true&quot;;
       });
     };
 
-    const resetOrbitHover = () =&gt; {
-      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
-      orbitHoverExitTimer = null;
+    const resetOrbitThought = () =&gt; {
+      if (orbitThoughtExitTimer) window.clearTimeout(orbitThoughtExitTimer);
+      orbitThoughtExitTimer = null;
       orbitThought.dataset.visible = &quot;false&quot;;
-      orbitHoverReticle.dataset.visible = &quot;false&quot;;
       orbitThought.hidden = true;
-      orbitHoverReticle.hidden = true;
     };
 
-    const hideOrbitHover = () =&gt; {
-      if (orbitHoverExitTimer) window.clearTimeout(orbitHoverExitTimer);
-      orbitHoverExitTimer = window.setTimeout(resetOrbitHover, 90);
+    const hideOrbitThought = () =&gt; {
+      if (orbitThoughtExitTimer) window.clearTimeout(orbitThoughtExitTimer);
+      orbitThoughtExitTimer = window.setTimeout(resetOrbitThought, 90);
     };
 
-    const bindOrbitHover = (button, node) =&gt; {
+    const bindOrbitThought = (button, node) =&gt; {
       button.setAttribute(&quot;aria-describedby&quot;, &quot;orbit-thought&quot;);
-      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitHover(button, node));
+      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitThought(node));
       button.addEventListener(&quot;pointerleave&quot;, () =&gt; {
-        if (document.activeElement !== button) hideOrbitHover();
+        if (document.activeElement !== button) hideOrbitThought();
       });
-      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitHover(button, node));
-      button.addEventListener(&quot;blur&quot;, hideOrbitHover);
+      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitThought(node));
+      button.addEventListener(&quot;blur&quot;, hideOrbitThought);
+    };
+
+    const showOrbitalCursor = (event) =&gt; {
+      if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
+      const target = event.target;
+      const nodeButton = target.closest?.(&quot;[data-node-id]&quot;);
+      const interactive = target.closest?.(&quot;button, a, summary, [role=&#x27;button&#x27;]&quot;);
+      const node = nodeButton ? ontology[nodeButton.dataset.nodeId] : null;
+      orbitHoverReticle.style.setProperty(&quot;--reticle-x&quot;, `${event.clientX}px`);
+      orbitHoverReticle.style.setProperty(&quot;--reticle-y&quot;, `${event.clientY}px`);
+      orbitHoverReticle.style.setProperty(&quot;--reticle-color&quot;, node ? nodeColor(node) : &quot;#9fb6c0&quot;);
+      orbitHoverReticle.dataset.input = event.pointerType === &quot;touch&quot; ? &quot;touch&quot; : &quot;mouse&quot;;
+      orbitHoverReticle.dataset.interactive = String(Boolean(interactive));
+      orbitHoverReticle.hidden = false;
+      orbitHoverReticle.dataset.visible = &quot;true&quot;;
+    };
+
+    const hideOrbitalCursor = (linger = 0) =&gt; {
+      if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
+      orbitHoverReticle.dataset.visible = &quot;false&quot;;
+      orbitalCursorHideTimer = window.setTimeout(() =&gt; {
+        orbitHoverReticle.hidden = true;
+      }, linger + 140);
     };
 
     const createAnatomyField = ([label, value], className = &quot;&quot;) =&gt; {
@@ -4070,7 +4090,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const renderOrbit = () =&gt; {
       const parent = currentNode();
       const positions = positionChildren(parent);
-      resetOrbitHover();
+      resetOrbitThought();
       root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
@@ -4106,7 +4126,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.style.setProperty(&quot;--orbit-y&quot;, `${y}%`);
         button.style.setProperty(&quot;--node-color&quot;, color);
         appendDestinationContent(button, child);
-        bindOrbitHover(button, child);
+        bindOrbitThought(button, child);
         button.addEventListener(&quot;click&quot;, (event) =&gt; {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail &gt; 0) button.blur();
@@ -4128,7 +4148,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       centreButton.style.setProperty(&quot;--orbit-y&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
       appendDestinationContent(centreButton, parent);
-      bindOrbitHover(centreButton, parent);
+      bindOrbitThought(centreButton, parent);
       centreButton.addEventListener(&quot;click&quot;, (event) =&gt; {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail &gt; 0) centreButton.blur();
@@ -4182,6 +4202,21 @@ html&gt;body{padding:0}&lt;/style&gt;
     backButton.addEventListener(&quot;click&quot;, () =&gt; {
       if (history.length &gt; 1) transitionOrbit(() =&gt; history.pop(), { direction: -1 });
     });
+
+    root.addEventListener(&quot;mousemove&quot;, showOrbitalCursor);
+    root.addEventListener(&quot;pointermove&quot;, (event) =&gt; {
+      if (event.pointerType !== &quot;mouse&quot;) showOrbitalCursor(event);
+    });
+    root.addEventListener(&quot;pointerdown&quot;, showOrbitalCursor);
+    root.addEventListener(&quot;mouseleave&quot;, () =&gt; hideOrbitalCursor());
+    root.addEventListener(&quot;pointerleave&quot;, (event) =&gt; {
+      if (event.pointerType !== &quot;touch&quot;) hideOrbitalCursor();
+    });
+    root.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+      if (event.pointerType === &quot;touch&quot;) hideOrbitalCursor(120);
+    });
+    root.addEventListener(&quot;pointercancel&quot;, () =&gt; hideOrbitalCursor());
+    window.addEventListener(&quot;blur&quot;, () =&gt; hideOrbitalCursor());
 
     root.dataset.canonicalDimensions = canonicalDimensions.join(&quot;,&quot;);
     root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
