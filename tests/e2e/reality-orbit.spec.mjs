@@ -122,6 +122,17 @@ test("hover and keyboard focus reveal a pre-selection concept preview", async ({
   await node(page, "category").hover();
   await expect(app(page).locator("[data-orbit-preview]")).toHaveAttribute("data-placement", "right");
   await expect(app(page).locator("[data-orbit-preview-title]")).toHaveText("Category");
+  const categoryPreviewGap = await app(page).locator("[data-orbit-preview]").evaluate((preview) => {
+    const destination = document.querySelector('[data-node-id="category"]');
+    const visualRight = Math.max(
+      destination.querySelector(".destination-marker").getBoundingClientRect().right,
+      destination.querySelector(".destination-label").getBoundingClientRect().right,
+    );
+    const previewRect = preview.getBoundingClientRect();
+    return previewRect.left - visualRight;
+  });
+  expect(categoryPreviewGap).toBeGreaterThan(0);
+  expect(categoryPreviewGap).toBeLessThanOrEqual(12);
 
   await node(page, "perspective").hover();
   await expect(app(page).locator("[data-orbit-preview]")).toBeVisible();
@@ -131,6 +142,17 @@ test("hover and keyboard focus reveal a pre-selection concept preview", async ({
   await expect(app(page).locator("[data-orbit-preview-question]")).toHaveText(
     "From which viewpoint or interpretive lens is it being understood?",
   );
+  const perspectivePreviewGap = await app(page).locator("[data-orbit-preview]").evaluate((preview) => {
+    const destination = document.querySelector('[data-node-id="perspective"]');
+    const visualLeft = Math.min(
+      destination.querySelector(".destination-marker").getBoundingClientRect().left,
+      destination.querySelector(".destination-label").getBoundingClientRect().left,
+    );
+    const previewRect = preview.getBoundingClientRect();
+    return visualLeft - previewRect.right;
+  });
+  expect(perspectivePreviewGap).toBeGreaterThan(0);
+  expect(perspectivePreviewGap).toBeLessThanOrEqual(12);
   const perspectiveState = await app(page).locator("[data-orbit-hover-reticle]").evaluate((reticle) => ({
     x: reticle.style.getPropertyValue("--reticle-x"),
     y: reticle.style.getPropertyValue("--reticle-y"),

@@ -452,8 +452,8 @@
     --preview-color: #9fb6c0;
     position: absolute;
     z-index: 8;
-    top: clamp(0.75rem, 2vw, 1.2rem);
-    left: clamp(0.75rem, 2vw, 1.2rem);
+    top: var(--preview-top, clamp(0.75rem, 2vw, 1.2rem));
+    left: var(--preview-left, clamp(0.75rem, 2vw, 1.2rem));
     display: grid;
     width: min(25rem, calc(100% - 2rem));
     margin: 0;
@@ -477,9 +477,7 @@
     backdrop-filter: blur(8px) saturate(106%);
   }
 
-  #reality-orbit-prototype .orbit-preview[data-placement="right"] {
-    right: clamp(0.75rem, 2vw, 1.2rem);
-    left: auto;
+  #reality-orbit-prototype .orbit-preview[data-placement="left"] {
     transform-origin: top right;
   }
 
@@ -3040,14 +3038,49 @@
     };
 
     let orbitPreviewExitTimer = null;
+    let orbitPreviewAnchor = null;
     let orbitalCursorHideTimer = null;
 
     const previewRoleForNode = (node) => roleForNode(node) === "Dimension" ? "Lens on reality" : roleForNode(node);
 
+    const positionOrbitPreview = (button) => {
+      const stageRect = orbitStage.getBoundingClientRect();
+      const visualRects = [button.querySelector(".destination-marker"), button.querySelector(".destination-label")]
+        .filter(Boolean)
+        .map((element) => element.getBoundingClientRect());
+      const buttonRect = button.getBoundingClientRect();
+      const targetRect = visualRects.length > 0
+        ? {
+            left: Math.min(...visualRects.map((rect) => rect.left)),
+            right: Math.max(...visualRects.map((rect) => rect.right)),
+            top: Math.min(...visualRects.map((rect) => rect.top)),
+            bottom: Math.max(...visualRects.map((rect) => rect.bottom)),
+          }
+        : buttonRect;
+      const targetHeight = targetRect.bottom - targetRect.top;
+      const previewRect = orbitPreview.getBoundingClientRect();
+      const edgeGap = 12;
+      const nodeGap = 10;
+      const availableRight = stageRect.right - targetRect.right - edgeGap;
+      const availableLeft = targetRect.left - stageRect.left - edgeGap;
+      const placement = availableRight >= previewRect.width + nodeGap || availableRight >= availableLeft
+        ? "right"
+        : "left";
+      const preferredLeft = placement === "right"
+        ? targetRect.right - stageRect.left + nodeGap
+        : targetRect.left - stageRect.left - previewRect.width - nodeGap;
+      const preferredTop = targetRect.top - stageRect.top + ((targetHeight - previewRect.height) / 2);
+      const maxLeft = Math.max(edgeGap, stageRect.width - previewRect.width - edgeGap);
+      const maxTop = Math.max(edgeGap, stageRect.height - previewRect.height - edgeGap);
+
+      orbitPreview.dataset.placement = placement;
+      orbitPreview.style.setProperty("--preview-left", `${Math.min(Math.max(preferredLeft, edgeGap), maxLeft)}px`);
+      orbitPreview.style.setProperty("--preview-top", `${Math.min(Math.max(preferredTop, edgeGap), maxTop)}px`);
+    };
+
     const showOrbitPreview = (node, button) => {
       if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
-      const orbitX = Number.parseFloat(button.style.getPropertyValue("--orbit-x"));
-      orbitPreview.dataset.placement = orbitX < 45 ? "right" : "left";
+      orbitPreviewAnchor = button;
       orbitPreview.style.setProperty("--preview-color", nodeColor(node));
       orbitPreviewRole.textContent = previewRoleForNode(node);
       orbitPreviewTitle.textContent = node.label;
@@ -3058,6 +3091,7 @@
         ? `${pathCount} ${pathCount === 1 ? "path" : "paths"} available`
         : "Focused concept";
       orbitPreview.hidden = false;
+      positionOrbitPreview(button);
       requestAnimationFrame(() => {
         orbitPreview.dataset.visible = "true";
       });
@@ -3066,6 +3100,7 @@
     const resetOrbitPreview = () => {
       if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
       orbitPreviewExitTimer = null;
+      orbitPreviewAnchor = null;
       orbitPreview.dataset.visible = "false";
       orbitPreview.hidden = true;
     };
@@ -3459,6 +3494,9 @@
     });
     root.addEventListener("pointercancel", () => hideOrbitalCursor());
     window.addEventListener("blur", () => hideOrbitalCursor());
+    window.addEventListener("resize", () => {
+      if (orbitPreviewAnchor && !orbitPreview.hidden) positionOrbitPreview(orbitPreviewAnchor);
+    });
 
     root.dataset.canonicalDimensions = canonicalDimensions.join(",");
     root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
