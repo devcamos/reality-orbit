@@ -2288,7 +2288,7 @@ html&gt;body{padding:0}&lt;/style&gt;
               &lt;span class=&quot;orbit-preview-mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
               &lt;div class=&quot;orbit-preview-heading&quot;&gt;
                 &lt;span class=&quot;orbit-preview-role&quot; data-orbit-preview-role&gt;&lt;/span&gt;
-                &lt;h3 class=&quot;orbit-preview-title&quot; data-orbit-preview-title&gt;&lt;/h3&gt;
+                &lt;h3 class=&quot;orbit-preview-title&quot; data-orbit-preview-title&gt;Concept preview&lt;/h3&gt;
               &lt;/div&gt;
             &lt;/header&gt;
             &lt;p class=&quot;orbit-preview-summary&quot; data-orbit-preview-summary&gt;&lt;/p&gt;
@@ -3979,9 +3979,12 @@ html&gt;body{padding:0}&lt;/style&gt;
       orbitPreviewSummary.textContent = node.summary;
       orbitPreviewQuestion.textContent = thoughtForNode(node);
       const pathCount = node.children?.length ?? 0;
-      orbitPreviewDepth.textContent = pathCount &gt; 0
-        ? `${pathCount} ${pathCount === 1 ? &quot;path&quot; : &quot;paths&quot;} available`
-        : &quot;Focused concept&quot;;
+      let pathAvailability = &quot;Focused concept&quot;;
+      if (pathCount &gt; 0) {
+        const pathLabel = pathCount === 1 ? &quot;path&quot; : &quot;paths&quot;;
+        pathAvailability = `${pathCount} ${pathLabel} available`;
+      }
+      orbitPreviewDepth.textContent = pathAvailability;
       orbitPreview.hidden = false;
       positionOrbitPreview(button);
       requestAnimationFrame(() =&gt; {

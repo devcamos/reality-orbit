@@ -175,7 +175,7 @@ for (const reflectiveHoverContract of [
   'orbitPreview.style.setProperty("--preview-top"',
   'window.addEventListener("resize"',
   'roleForNode(node) === "Dimension" ? "Lens on reality"',
-  'orbitPreviewDepth.textContent = pathCount > 0',
+  "orbitPreviewDepth.textContent = pathAvailability",
   "showOrbitalCursor",
   'root.addEventListener("mousemove", showOrbitalCursor)',
   'if (event.pointerType !== "mouse") showOrbitalCursor(event)',

@@ -2,7 +2,7 @@ import type { CSSProperties, ReactElement } from "react";
 import observatoryBackgroundUrl from "../../assets/observatory-deep-space.webp";
 
 interface ObservatoryIntroductionProps {
-  onEnter: () => void;
+  readonly onEnter: () => void;
 }
 
 export function ObservatoryIntroduction({
@@ -58,7 +58,7 @@ export function ObservatoryIntroduction({
           onClick={onEnter}
           data-enter-observatory
         >
-          Enter the observatory
+          <span>Enter the observatory</span>
           <span aria-hidden="true">→</span>
         </button>
         <p className="observatory-intro__note">

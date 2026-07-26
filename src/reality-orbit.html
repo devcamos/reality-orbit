@@ -1411,7 +1411,7 @@
               <span class="orbit-preview-mark" aria-hidden="true"></span>
               <div class="orbit-preview-heading">
                 <span class="orbit-preview-role" data-orbit-preview-role></span>
-                <h3 class="orbit-preview-title" data-orbit-preview-title></h3>
+                <h3 class="orbit-preview-title" data-orbit-preview-title>Concept preview</h3>
               </div>
             </header>
             <p class="orbit-preview-summary" data-orbit-preview-summary></p>
@@ -3102,9 +3102,12 @@
       orbitPreviewSummary.textContent = node.summary;
       orbitPreviewQuestion.textContent = thoughtForNode(node);
       const pathCount = node.children?.length ?? 0;
-      orbitPreviewDepth.textContent = pathCount > 0
-        ? `${pathCount} ${pathCount === 1 ? "path" : "paths"} available`
-        : "Focused concept";
+      let pathAvailability = "Focused concept";
+      if (pathCount > 0) {
+        const pathLabel = pathCount === 1 ? "path" : "paths";
+        pathAvailability = `${pathCount} ${pathLabel} available`;
+      }
+      orbitPreviewDepth.textContent = pathAvailability;
       orbitPreview.hidden = false;
       positionOrbitPreview(button);
       requestAnimationFrame(() => {
