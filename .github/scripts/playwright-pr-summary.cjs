@@ -52,8 +52,6 @@ const buildSummary = (report, { repository, runId }) => {
     `⏱️ ${duration} test duration`,
     "",
     `[View the workflow, HTML report, traces and screenshots](${runUrl})`,
-    "",
-    "_Compact comparison view generated from the same CTRF result as the standard report._",
   ].join("\n");
 };
 
