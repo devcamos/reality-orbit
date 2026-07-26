@@ -75,6 +75,15 @@ Exercise the same local server, document, headers, asset delivery, and failure r
 npm run test:smoke
 ```
 
+Run the browser-level Reality Orbit journeys with:
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
+Playwright starts the local preview automatically. CI runs the same journeys in Chromium with one worker, reduced motion, retries, traces, screenshots, videos, an HTML report, an accessibility-tree snapshot, and an automated accessibility scan.
+
 Open `index.html` directly or serve this directory with a local static server.
 
 ```bash
