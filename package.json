@@ -4,21 +4,33 @@
   "private": true,
   "description": "An interactive orbit map for exploring dimensions of reality.",
   "scripts": {
-    "build": "node scripts/build-static.mjs",
-    "check": "node scripts/verify.mjs && node --test scripts/*.test.mjs",
-    "check:generated": "npm run frame:desktop && git diff --exit-code -- index.html",
+    "build": "npm run frame:desktop && vite build",
+    "check": "npm run typecheck && node scripts/verify.mjs && node --test scripts/*.test.mjs",
+    "check:generated": "npm run frame:desktop && git diff --exit-code -- legacy-index.html",
+    "dev": "vite --host 127.0.0.1 --port 4175",
     "frame:desktop": "node scripts/configure-standalone-frame.mjs",
+    "preview": "vite preview --host 127.0.0.1 --port 4175",
     "test": "node --test scripts/*.test.mjs",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:smoke": "node --test scripts/server-smoke.mjs",
-    "start": "node scripts/serve.mjs"
+    "test:smoke": "npm run build && node --test scripts/server-smoke.mjs",
+    "typecheck": "tsc --noEmit",
+    "start": "npm run dev"
   },
   "engines": {
-    "node": ">=20"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
-    "@playwright/test": "^1.62.0"
+    "@playwright/test": "^1.62.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   }
 }

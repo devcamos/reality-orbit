@@ -13,6 +13,7 @@ const server = spawn(process.execPath, ["scripts/serve.mjs"], {
     ...process.env,
     REALITY_ORBIT_HOST: host,
     REALITY_ORBIT_PORT: String(port),
+    REALITY_ORBIT_SERVE_ROOT: "dist",
   },
   stdio: ["ignore", "pipe", "pipe"],
 });

@@ -26,8 +26,9 @@ const requiredLabels = [
   "Second-order thinking",
 ];
 
-const [document, fragment, observatoryBackground] = await Promise.all([
+const [applicationDocument, document, fragment, observatoryBackground] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
+  readFile(new URL("../legacy-index.html", import.meta.url), "utf8"),
   readFile(new URL("../src/reality-orbit.html", import.meta.url), "utf8"),
   readFile(new URL("../assets/observatory-deep-space.webp", import.meta.url)),
 ]);
@@ -42,8 +43,15 @@ if (!ontologyMatch) {
   ontology = runInNewContext(`(${ontologyMatch[1]})`, Object.create(null));
 }
 
+if (
+  !applicationDocument.includes('<div id="root"></div>')
+  || !applicationDocument.includes('src="/src/main.tsx"')
+) {
+  failures.push("index.html must remain the Vite application entry for the typed React shell.");
+}
+
 if (document.length === 0 || document.length > 2_000_000) {
-  failures.push("index.html must be present and remain below 2 MB.");
+  failures.push("legacy-index.html must be present and remain below 2 MB.");
 }
 
 if (!document.includes("max-width:1440px")) {
@@ -51,7 +59,7 @@ if (!document.includes("max-width:1440px")) {
 }
 
 if (!document.includes("Content-Security-Policy")) {
-  failures.push("index.html must include its sandbox content-security policy.");
+  failures.push("legacy-index.html must include its sandbox content-security policy.");
 }
 
 if (!document.includes(":root{color-scheme:dark;background:Canvas}")) {

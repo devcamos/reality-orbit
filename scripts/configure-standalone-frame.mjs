@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 
-const documentUrl = new URL("../index.html", import.meta.url);
+const documentUrl = new URL("../legacy-index.html", import.meta.url);
 const fragmentUrl = new URL("../src/reality-orbit.html", import.meta.url);
 const defaultFrameWidth = "max-width:736px";
 const desktopFrameWidth = "max-width:1440px";

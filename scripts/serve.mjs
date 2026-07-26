@@ -4,7 +4,9 @@ import { createServer } from "node:http";
 import { isAbsolute, extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const root = process.env.REALITY_ORBIT_SERVE_ROOT
+  ? resolve(process.cwd(), process.env.REALITY_ORBIT_SERVE_ROOT)
+  : resolve(fileURLToPath(new URL("../dist", import.meta.url)));
 const host = process.env.REALITY_ORBIT_HOST ?? "127.0.0.1";
 const port = Number(process.env.REALITY_ORBIT_PORT ?? 4175);
 const types = {
