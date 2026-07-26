@@ -92,16 +92,23 @@ test("keyboard activation selects a dimension and exposes its action", async ({ 
   await expect(app(page).locator("[data-explore-action]")).toBeVisible();
 });
 
-test("hover and keyboard focus reveal a concept-specific thought", async ({ page }) => {
+test("hover and keyboard focus reveal a pre-selection concept preview", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await openOrbit(page);
 
   await node(page, "domain").hover();
-  await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-preview]")).toBeVisible();
   await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeVisible();
-  await expect(app(page).locator("[data-orbit-thought-text]")).toHaveText(
+  await expect(app(page).locator("[data-orbit-preview-role]")).toHaveText("Lens on reality");
+  await expect(app(page).locator("[data-orbit-preview-title]")).toHaveText("Domain");
+  await expect(app(page).locator("[data-orbit-preview-summary]")).toHaveText(
+    "The broad area of reality being studied.",
+  );
+  await expect(app(page).locator("[data-orbit-preview-question]")).toHaveText(
     "What broad area of reality is being studied?",
   );
+  await expect(app(page).locator("[data-orbit-preview-depth]")).toHaveText("7 paths available");
+  await expect(app(page).locator("[data-selected-label]")).toHaveText("Reality");
   const domainPosition = await app(page).locator("[data-orbit-hover-reticle]").evaluate((reticle) => ({
     x: reticle.style.getPropertyValue("--reticle-x"),
     y: reticle.style.getPropertyValue("--reticle-y"),
@@ -111,10 +118,16 @@ test("hover and keyboard focus reveal a concept-specific thought", async ({ page
   expect(domainPosition.interactive).toBe("true");
   expect(domainPosition.nativeCursor).toBe("none");
 
+  await node(page, "category").hover();
+  await expect(app(page).locator("[data-orbit-preview]")).toHaveAttribute("data-placement", "right");
+  await expect(app(page).locator("[data-orbit-preview-title]")).toHaveText("Category");
+
   await node(page, "perspective").hover();
-  await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-preview]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-preview]")).toHaveAttribute("data-placement", "left");
   await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeVisible();
-  await expect(app(page).locator("[data-orbit-thought-text]")).toHaveText(
+  await expect(app(page).locator("[data-orbit-preview-title]")).toHaveText("Perspective");
+  await expect(app(page).locator("[data-orbit-preview-question]")).toHaveText(
     "From which viewpoint or interpretive lens is it being understood?",
   );
   const perspectiveState = await app(page).locator("[data-orbit-hover-reticle]").evaluate((reticle) => ({
@@ -127,7 +140,9 @@ test("hover and keyboard focus reveal a concept-specific thought", async ({ page
   expect(perspectiveState.orbitAnimation).toBe("hover-reticle-orbit-drift");
 
   await node(page, "perspective").focus();
-  await expect(app(page).locator("[data-orbit-thought]")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-preview]")).toBeVisible();
+  await expect(node(page, "perspective")).toHaveAttribute("aria-describedby", "orbit-preview");
+  await expect(app(page).locator("[data-selected-label]")).toHaveText("Reality");
 });
 
 test("mobile selection reveals the summary and uses the contextual explore control", async ({ page }) => {
@@ -216,15 +231,15 @@ test("Character exposes the approved terminal level-5 qualities", async ({ page 
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Character");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Individual differences");
   await expect(node(page, "courage")).toBeVisible();
-  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(8);
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(8);
 
   await explore(page, "courage");
 
   await expect(node(page, "courage")).toHaveClass(/orbit-core/);
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Courage");
-  await expect(app(page).locator("[data-selected-role]")).toHaveText("Character quality");
+  await expect(app(page).locator(".orbit-role[data-selected-role]")).toHaveText("Character quality");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Character");
-  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
 });
 
 test("Emotion exposes its curated level-4 families without deeper filler", async ({ page }) => {
@@ -239,13 +254,13 @@ test("Emotion exposes its curated level-4 families without deeper filler", async
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Emotion");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Psychological");
   await expect(node(page, "joy")).toBeVisible();
-  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(6);
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(6);
 
   await explore(page, "joy");
 
   await expect(node(page, "joy")).toHaveClass(/orbit-core/);
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Joy");
-  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
 });
 
 test("a terminal concept remains a focused endpoint without invented children", async ({ page }) => {
@@ -258,5 +273,5 @@ test("a terminal concept remains a focused endpoint without invented children", 
 
   await expect(node(page, "individual-actor")).toHaveClass(/orbit-core/);
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Individual actor");
-  await expect(app(page).locator("[data-orbit-nodes] [data-node-kind='destination']")).toHaveCount(0);
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
 });

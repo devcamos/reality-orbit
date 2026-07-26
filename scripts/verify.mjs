@@ -162,10 +162,17 @@ if (fragment.includes("destination-meta") || fragment.includes('meta.textContent
 }
 
 for (const reflectiveHoverContract of [
-  "data-orbit-thought",
+  "data-orbit-preview",
+  "data-orbit-preview-summary",
+  "data-orbit-preview-question",
+  "data-orbit-preview-depth",
   "data-orbit-hover-reticle",
   "thoughtForNode",
-  "bindOrbitThought",
+  "bindOrbitPreview",
+  "showOrbitPreview",
+  'orbitPreview.dataset.placement = orbitX < 45 ? "right" : "left"',
+  'roleForNode(node) === "Dimension" ? "Lens on reality"',
+  'orbitPreviewDepth.textContent = pathCount > 0',
   "showOrbitalCursor",
   'root.addEventListener("mousemove", showOrbitalCursor)',
   'if (event.pointerType !== "mouse") showOrbitalCursor(event)',
@@ -173,7 +180,8 @@ for (const reflectiveHoverContract of [
   "cursor: none !important",
   "@keyframes hover-reticle-shell-drift",
   "@keyframes hover-reticle-orbit-drift",
-  'button.setAttribute("aria-describedby", "orbit-thought")',
+  'button.setAttribute("aria-describedby", "orbit-preview")',
+  "pointer-events: none",
   'understandEyebrow.textContent = role === "Dimension" ? "A lens on reality"',
   'selectedRole.hidden = context.role === "Dimension"',
 ]) {

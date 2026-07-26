@@ -1341,53 +1341,169 @@ html&gt;body{padding:0}&lt;/style&gt;
       0 0 2.5rem color-mix(in srgb, var(--node-color, #c99d69) 22%, transparent);
   }
 
-  #reality-orbit-prototype .orbit-thought {
+  #reality-orbit-prototype .orbit-preview {
+    --preview-color: #9fb6c0;
     position: absolute;
     z-index: 8;
     top: clamp(0.75rem, 2vw, 1.2rem);
     left: clamp(0.75rem, 2vw, 1.2rem);
     display: grid;
-    width: min(24rem, calc(100% - 2rem));
-    gap: 0.22rem;
+    width: min(25rem, calc(100% - 2rem));
     margin: 0;
-    padding: 0.72rem 0.9rem 0.78rem;
+    overflow: hidden;
     color: #d8e4e8;
     text-align: left;
-    border: 1px solid rgba(153, 188, 204, 0.18);
-    border-radius: 0.85rem;
-    background: linear-gradient(145deg, rgba(8, 22, 34, 0.88), rgba(3, 12, 21, 0.82));
-    box-shadow: 0 1rem 2.8rem rgba(0, 4, 9, 0.34);
+    text-shadow: 0 1px 0.45rem rgba(0, 3, 8, 0.92);
+    border: 1px solid color-mix(in srgb, var(--preview-color) 24%, rgba(139, 170, 185, 0.12));
+    border-radius: 0.95rem;
+    background:
+      linear-gradient(145deg, rgba(9, 22, 33, 0.58), rgba(3, 10, 18, 0.42)),
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--preview-color) 12%, transparent), transparent 42%);
+    box-shadow:
+      0 1.2rem 3.2rem rgba(0, 4, 9, 0.42),
+      inset 0 1px rgba(255, 255, 255, 0.035);
     opacity: 0;
     pointer-events: none;
-    transform: translateY(0.35rem);
-    transition: opacity 160ms ease, transform 180ms ease;
-    backdrop-filter: blur(16px);
+    transform: translateY(0.45rem) scale(0.985);
+    transform-origin: top left;
+    transition: opacity 160ms ease, transform 210ms cubic-bezier(0.22, 0.68, 0, 1);
+    backdrop-filter: blur(8px) saturate(106%);
   }
 
-  #reality-orbit-prototype .orbit-thought[hidden] {
+  #reality-orbit-prototype .orbit-preview[data-placement=&quot;right&quot;] {
+    right: clamp(0.75rem, 2vw, 1.2rem);
+    left: auto;
+    transform-origin: top right;
+  }
+
+  #reality-orbit-prototype .orbit-preview::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, var(--preview-color) 24%, color-mix(in srgb, var(--preview-color) 36%, transparent) 76%, transparent);
+    content: &quot;&quot;;
+    opacity: 0.78;
+  }
+
+  #reality-orbit-prototype .orbit-preview[hidden] {
     display: none;
   }
 
-  #reality-orbit-prototype .orbit-thought[data-visible=&quot;true&quot;] {
+  #reality-orbit-prototype .orbit-preview[data-visible=&quot;true&quot;] {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
-  #reality-orbit-prototype .orbit-thought-label {
-    color: #7f9aa6;
-    font-size: 0.6rem;
-    font-weight: 650;
-    letter-spacing: 0.17em;
+  #reality-orbit-prototype .orbit-preview-header {
+    display: grid;
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.78rem;
+    padding: 0.85rem 0.95rem 0.78rem;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--preview-color) 10%, transparent), transparent 72%);
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark {
+    position: relative;
+    display: grid;
+    width: 2.35rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--preview-color) 62%, #d6e5e8);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 0.28rem color-mix(in srgb, var(--preview-color) 10%, transparent),
+      0 0 1rem color-mix(in srgb, var(--preview-color) 20%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::before,
+  #reality-orbit-prototype .orbit-preview-mark::after {
+    position: absolute;
+    border: 1px solid color-mix(in srgb, var(--preview-color) 72%, #eef7f8);
+    border-radius: 50%;
+    content: &quot;&quot;;
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::before {
+    inset: 22%;
+    border-right-color: transparent;
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::after {
+    inset: 38%;
+    background: color-mix(in srgb, var(--preview-color) 72%, rgba(238, 247, 248, 0.54));
+    border: 0;
+  }
+
+  #reality-orbit-prototype .orbit-preview-heading {
+    min-width: 0;
+  }
+
+  #reality-orbit-prototype .orbit-preview-role,
+  #reality-orbit-prototype .orbit-preview-section-label {
+    color: color-mix(in srgb, var(--preview-color) 66%, #b9cad0);
+    font-size: 0.59rem;
+    font-weight: 680;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
     text-transform: uppercase;
   }
 
-  #reality-orbit-prototype .orbit-thought-text {
+  #reality-orbit-prototype .orbit-preview-title {
+    margin: 0.12rem 0 0;
+    overflow: hidden;
+    color: #f3f7f8;
     font-family: var(--space-display);
-    font-size: clamp(0.78rem, 0.73rem + 0.18vw, 0.9rem);
-    font-weight: 520;
+    font-size: clamp(1rem, 0.94rem + 0.24vw, 1.18rem);
+    font-weight: 610;
+    letter-spacing: -0.018em;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #reality-orbit-prototype .orbit-preview-summary {
+    margin: 0;
+    padding: 0.7rem 0.95rem 0.76rem;
+    color: #c5d2d6;
+    font-size: 0.76rem;
+    line-height: 1.45;
+    border-top: 1px solid rgba(157, 187, 199, 0.12);
+    border-bottom: 1px solid rgba(157, 187, 199, 0.12);
+  }
+
+  #reality-orbit-prototype .orbit-preview-insight {
+    display: grid;
+    gap: 0.26rem;
+    padding: 0.7rem 0.95rem 0.76rem;
+  }
+
+  #reality-orbit-prototype .orbit-preview-question {
+    color: #e2eaec;
+    font-family: var(--space-display);
+    font-size: clamp(0.76rem, 0.72rem + 0.14vw, 0.86rem);
+    font-weight: 510;
     letter-spacing: -0.01em;
-    line-height: 1.4;
+    line-height: 1.38;
     text-wrap: balance;
+  }
+
+  #reality-orbit-prototype .orbit-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 2rem;
+    padding: 0.5rem 0.95rem 0.55rem;
+    color: #8399a2;
+    font-size: 0.61rem;
+    font-weight: 560;
+    letter-spacing: 0.035em;
+    background: rgba(2, 8, 14, 0.34);
+  }
+
+  #reality-orbit-prototype .orbit-preview-action {
+    color: color-mix(in srgb, var(--preview-color) 62%, #cbd8dc);
   }
 
   #reality-orbit-prototype .orbit-hover-reticle {
@@ -1496,6 +1612,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype a,
     #reality-orbit-prototype summary {
       cursor: none !important;
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    #reality-orbit-prototype .orbit-preview {
+      display: none !important;
     }
   }
 
@@ -2119,7 +2241,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .orbit-connection,
-    #reality-orbit-prototype .orbit-thought,
+    #reality-orbit-prototype .orbit-preview,
     #reality-orbit-prototype .orbit-hover-reticle {
       transition: none;
     }
@@ -2134,7 +2256,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .orbit-hover-reticle-orbit,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind=&quot;focus&quot;] .concept-visual-node-mark {
-      animation: none;
+      animation: none !important;
     }
   }
 &lt;/style&gt;
@@ -2166,10 +2288,24 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;g data-orbit-connections&gt;&lt;/g&gt;
           &lt;/svg&gt;
           &lt;div data-orbit-nodes&gt;&lt;/div&gt;
-          &lt;p class=&quot;orbit-thought&quot; id=&quot;orbit-thought&quot; role=&quot;tooltip&quot; data-orbit-thought data-visible=&quot;false&quot; hidden&gt;
-            &lt;span class=&quot;orbit-thought-label&quot;&gt;Consider&lt;/span&gt;
-            &lt;span class=&quot;orbit-thought-text&quot; data-orbit-thought-text&gt;&lt;/span&gt;
-          &lt;/p&gt;
+          &lt;article class=&quot;orbit-preview&quot; id=&quot;orbit-preview&quot; role=&quot;tooltip&quot; data-orbit-preview data-visible=&quot;false&quot; hidden&gt;
+            &lt;header class=&quot;orbit-preview-header&quot;&gt;
+              &lt;span class=&quot;orbit-preview-mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+              &lt;div class=&quot;orbit-preview-heading&quot;&gt;
+                &lt;span class=&quot;orbit-preview-role&quot; data-orbit-preview-role&gt;&lt;/span&gt;
+                &lt;h3 class=&quot;orbit-preview-title&quot; data-orbit-preview-title&gt;&lt;/h3&gt;
+              &lt;/div&gt;
+            &lt;/header&gt;
+            &lt;p class=&quot;orbit-preview-summary&quot; data-orbit-preview-summary&gt;&lt;/p&gt;
+            &lt;div class=&quot;orbit-preview-insight&quot;&gt;
+              &lt;span class=&quot;orbit-preview-section-label&quot;&gt;What it reveals&lt;/span&gt;
+              &lt;span class=&quot;orbit-preview-question&quot; data-orbit-preview-question&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;footer class=&quot;orbit-preview-footer&quot;&gt;
+              &lt;span data-orbit-preview-depth&gt;&lt;/span&gt;
+              &lt;span class=&quot;orbit-preview-action&quot;&gt;Select to inspect&lt;/span&gt;
+            &lt;/footer&gt;
+          &lt;/article&gt;
         &lt;/div&gt;
         &lt;div class=&quot;orbit-detail&quot;&gt;
           &lt;p class=&quot;orbit-status text-small&quot; aria-live=&quot;polite&quot;&gt;
@@ -3284,8 +3420,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     const selectedSummary = root.querySelector(&quot;[data-selected-summary]&quot;);
     const orbitDetail = root.querySelector(&quot;.orbit-detail&quot;);
     const orbitStage = root.querySelector(&quot;.orbit-stage&quot;);
-    const orbitThought = root.querySelector(&quot;[data-orbit-thought]&quot;);
-    const orbitThoughtText = root.querySelector(&quot;[data-orbit-thought-text]&quot;);
+    const orbitPreview = root.querySelector(&quot;[data-orbit-preview]&quot;);
+    const orbitPreviewRole = root.querySelector(&quot;[data-orbit-preview-role]&quot;);
+    const orbitPreviewTitle = root.querySelector(&quot;[data-orbit-preview-title]&quot;);
+    const orbitPreviewSummary = root.querySelector(&quot;[data-orbit-preview-summary]&quot;);
+    const orbitPreviewQuestion = root.querySelector(&quot;[data-orbit-preview-question]&quot;);
+    const orbitPreviewDepth = root.querySelector(&quot;[data-orbit-preview-depth]&quot;);
     const orbitHoverReticle = root.querySelector(&quot;[data-orbit-hover-reticle]&quot;);
     const actionGroup = root.querySelector(&quot;[data-orbit-actions]&quot;);
     const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
@@ -3795,38 +3935,50 @@ html&gt;body{padding:0}&lt;/style&gt;
       return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
     };
 
-    let orbitThoughtExitTimer = null;
+    let orbitPreviewExitTimer = null;
     let orbitalCursorHideTimer = null;
 
-    const showOrbitThought = (node) =&gt; {
-      if (orbitThoughtExitTimer) window.clearTimeout(orbitThoughtExitTimer);
-      orbitThoughtText.textContent = thoughtForNode(node);
-      orbitThought.hidden = false;
+    const previewRoleForNode = (node) =&gt; roleForNode(node) === &quot;Dimension&quot; ? &quot;Lens on reality&quot; : roleForNode(node);
+
+    const showOrbitPreview = (node, button) =&gt; {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      const orbitX = Number.parseFloat(button.style.getPropertyValue(&quot;--orbit-x&quot;));
+      orbitPreview.dataset.placement = orbitX &lt; 45 ? &quot;right&quot; : &quot;left&quot;;
+      orbitPreview.style.setProperty(&quot;--preview-color&quot;, nodeColor(node));
+      orbitPreviewRole.textContent = previewRoleForNode(node);
+      orbitPreviewTitle.textContent = node.label;
+      orbitPreviewSummary.textContent = node.summary;
+      orbitPreviewQuestion.textContent = thoughtForNode(node);
+      const pathCount = node.children?.length ?? 0;
+      orbitPreviewDepth.textContent = pathCount &gt; 0
+        ? `${pathCount} ${pathCount === 1 ? &quot;path&quot; : &quot;paths&quot;} available`
+        : &quot;Focused concept&quot;;
+      orbitPreview.hidden = false;
       requestAnimationFrame(() =&gt; {
-        orbitThought.dataset.visible = &quot;true&quot;;
+        orbitPreview.dataset.visible = &quot;true&quot;;
       });
     };
 
-    const resetOrbitThought = () =&gt; {
-      if (orbitThoughtExitTimer) window.clearTimeout(orbitThoughtExitTimer);
-      orbitThoughtExitTimer = null;
-      orbitThought.dataset.visible = &quot;false&quot;;
-      orbitThought.hidden = true;
+    const resetOrbitPreview = () =&gt; {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewExitTimer = null;
+      orbitPreview.dataset.visible = &quot;false&quot;;
+      orbitPreview.hidden = true;
     };
 
-    const hideOrbitThought = () =&gt; {
-      if (orbitThoughtExitTimer) window.clearTimeout(orbitThoughtExitTimer);
-      orbitThoughtExitTimer = window.setTimeout(resetOrbitThought, 90);
+    const hideOrbitPreview = () =&gt; {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewExitTimer = window.setTimeout(resetOrbitPreview, 90);
     };
 
-    const bindOrbitThought = (button, node) =&gt; {
-      button.setAttribute(&quot;aria-describedby&quot;, &quot;orbit-thought&quot;);
-      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitThought(node));
+    const bindOrbitPreview = (button, node) =&gt; {
+      button.setAttribute(&quot;aria-describedby&quot;, &quot;orbit-preview&quot;);
+      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitPreview(node, button));
       button.addEventListener(&quot;pointerleave&quot;, () =&gt; {
-        if (document.activeElement !== button) hideOrbitThought();
+        if (document.activeElement !== button) hideOrbitPreview();
       });
-      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitThought(node));
-      button.addEventListener(&quot;blur&quot;, hideOrbitThought);
+      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitPreview(node, button));
+      button.addEventListener(&quot;blur&quot;, hideOrbitPreview);
     };
 
     const showOrbitalCursor = (event) =&gt; {
@@ -4045,6 +4197,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     };
 
     const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) =&gt; {
+      resetOrbitPreview();
       selectedId = nodeId;
       const node = ontology[nodeId];
       root.querySelectorAll(&quot;[data-node-id]&quot;).forEach((button) =&gt; {
@@ -4090,7 +4243,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const renderOrbit = () =&gt; {
       const parent = currentNode();
       const positions = positionChildren(parent);
-      resetOrbitThought();
+      resetOrbitPreview();
       root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
       nodesLayer.replaceChildren();
       connectionsLayer.replaceChildren();
@@ -4126,7 +4279,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.style.setProperty(&quot;--orbit-y&quot;, `${y}%`);
         button.style.setProperty(&quot;--node-color&quot;, color);
         appendDestinationContent(button, child);
-        bindOrbitThought(button, child);
+        bindOrbitPreview(button, child);
         button.addEventListener(&quot;click&quot;, (event) =&gt; {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail &gt; 0) button.blur();
@@ -4148,7 +4301,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       centreButton.style.setProperty(&quot;--orbit-y&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
       appendDestinationContent(centreButton, parent);
-      bindOrbitThought(centreButton, parent);
+      bindOrbitPreview(centreButton, parent);
       centreButton.addEventListener(&quot;click&quot;, (event) =&gt; {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail &gt; 0) centreButton.blur();
