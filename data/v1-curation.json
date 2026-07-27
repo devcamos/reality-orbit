@@ -7,7 +7,7 @@
     "Uses a distinct, non-ambiguous learner-facing label.",
     "Has a documented definition and Concept Anatomy.",
     "Represents an intentional teaching continuation rather than a filler choice.",
-    "Ends at an explicitly approved teaching concept no deeper than level 4."
+    "Ends at an explicitly approved teaching concept at or before level 4, except for terminal level-5 children beneath an explicitly approved level-4 container."
   ],
   "branches": [
     {
@@ -122,23 +122,107 @@
     {
       "id": "psychological",
       "scope": "Mind, cognition, emotion, perception, motivation, behaviour, development, and individual variation.",
-      "decision": "Publishes Cognition, Emotion, Motivation, Behaviour, Development, and Individual differences as broad areas of psychological inquiry. Emotion, Motivation, Behaviour, and Development are intentional level-3 terminals until meaningful one-level expansions are separately curated; no filler descendants are forced. The existing Evolutionary psychology path is preserved and explicitly identified as a cross-cutting explanatory approach rather than a mutually exclusive process family.",
+      "decision": "Publishes theory-aware, learner-facing level-4 vocabularies for Emotion, Motivation, Behaviour, and Development without claiming that any one taxonomy is exhaustive or that overlapping psychological processes are mutually exclusive. Character is the sole approved level-4 container: it exposes a compact set of foundational moral and self-regulatory qualities as terminal level-5 concepts so Courage and its peers remain directly navigable. Personality, Temperament, Values, and Abilities remain terminal at level 4. The existing Evolutionary psychology path remains a cross-cutting explanatory approach rather than a mutually exclusive process family.",
       "approvedPaths": [
         [
           "cognition",
           "decision-process"
         ],
         [
-          "emotion"
+          "emotion",
+          "joy"
         ],
         [
-          "motivation"
+          "emotion",
+          "sadness"
         ],
         [
-          "behaviour"
+          "emotion",
+          "fear"
         ],
         [
-          "development"
+          "emotion",
+          "anger"
+        ],
+        [
+          "emotion",
+          "disgust"
+        ],
+        [
+          "emotion",
+          "surprise"
+        ],
+        [
+          "motivation",
+          "biological-regulation"
+        ],
+        [
+          "motivation",
+          "threat-avoidance"
+        ],
+        [
+          "motivation",
+          "incentive-motivation"
+        ],
+        [
+          "motivation",
+          "achievement-motivation"
+        ],
+        [
+          "motivation",
+          "affiliation-motivation"
+        ],
+        [
+          "motivation",
+          "autonomy-motivation"
+        ],
+        [
+          "motivation",
+          "meaning-motivation"
+        ],
+        [
+          "behaviour",
+          "reflexive-behaviour"
+        ],
+        [
+          "behaviour",
+          "instinctive-behaviour"
+        ],
+        [
+          "behaviour",
+          "conditioned-behaviour"
+        ],
+        [
+          "behaviour",
+          "habitual-behaviour"
+        ],
+        [
+          "behaviour",
+          "goal-directed-behaviour"
+        ],
+        [
+          "development",
+          "cognitive-development"
+        ],
+        [
+          "development",
+          "emotional-development"
+        ],
+        [
+          "development",
+          "social-development"
+        ],
+        [
+          "development",
+          "personality-development"
+        ],
+        [
+          "development",
+          "identity-development"
+        ],
+        [
+          "development",
+          "moral-development"
         ],
         [
           "evolutionary-psychology",
@@ -154,7 +238,43 @@
         ],
         [
           "individual-differences",
-          "character"
+          "character",
+          "practical-wisdom"
+        ],
+        [
+          "individual-differences",
+          "character",
+          "courage"
+        ],
+        [
+          "individual-differences",
+          "character",
+          "integrity"
+        ],
+        [
+          "individual-differences",
+          "character",
+          "compassion"
+        ],
+        [
+          "individual-differences",
+          "character",
+          "justice"
+        ],
+        [
+          "individual-differences",
+          "character",
+          "humility"
+        ],
+        [
+          "individual-differences",
+          "character",
+          "self-control"
+        ],
+        [
+          "individual-differences",
+          "character",
+          "responsibility"
         ],
         [
           "individual-differences",

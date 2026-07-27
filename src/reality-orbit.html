@@ -95,7 +95,7 @@
     gap: 0.35rem;
     color: var(--space-muted);
     font-family: var(--space-display);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.01em;
     overflow: hidden;
     white-space: nowrap;
@@ -206,28 +206,12 @@
     pointer-events: none;
   }
 
-  #reality-orbit-prototype .orbit-ring,
-  #reality-orbit-prototype .orbit-connection {
+  #reality-orbit-prototype .orbit-ring {
     vector-effect: non-scaling-stroke;
     fill: none;
     stroke: rgba(164, 197, 218, 0.17);
     stroke-width: 1;
-  }
-
-  #reality-orbit-prototype .orbit-ring {
     opacity: 0.44;
-  }
-
-  #reality-orbit-prototype .orbit-connection {
-    opacity: 0.32;
-    stroke-linecap: round;
-    transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
-  }
-
-  #reality-orbit-prototype .orbit-connection[data-active="true"] {
-    opacity: 0.82;
-    stroke: var(--connection-color, var(--viz-series-1));
-    stroke-width: 1.5;
   }
 
   #reality-orbit-prototype .orbit-node {
@@ -322,7 +306,7 @@
       inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55),
       0 0 0 0.58rem rgba(213, 153, 80, 0.09),
       0 0 2.8rem rgba(211, 148, 76, 0.33);
-    animation: reality-breathe 8s ease-in-out infinite;
+    animation: reality-breathe 3.6s ease-in-out infinite;
   }
 
   #reality-orbit-prototype .orbit-node[data-visual-archetype="sun"] .destination-marker::before {
@@ -420,25 +404,11 @@
     display: block;
   }
 
-  #reality-orbit-prototype .destination-meta {
-    display: none;
-  }
-
   #reality-orbit-prototype .orbit-node[data-ontology-level="1"] .destination-name {
     color: #eef4f6;
     font-size: clamp(1rem, 0.92rem + 0.28vw, 1.16rem);
     font-weight: 600;
     letter-spacing: -0.018em;
-  }
-
-  #reality-orbit-prototype .orbit-node[data-ontology-level="1"] .destination-meta {
-    display: block;
-    color: color-mix(in srgb, var(--node-color, #88a9b5) 62%, #b9c6cc);
-    font-size: 0.59rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    line-height: 1.25;
-    text-transform: uppercase;
   }
 
   #reality-orbit-prototype .orbit-node[data-selected="true"] .destination-label {
@@ -476,6 +446,284 @@
     box-shadow:
       0 0 0 0.6rem color-mix(in srgb, var(--node-color, #c99d69) 8%, transparent),
       0 0 2.5rem color-mix(in srgb, var(--node-color, #c99d69) 22%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-preview {
+    --preview-color: #9fb6c0;
+    position: absolute;
+    z-index: 8;
+    top: var(--preview-top, clamp(0.75rem, 2vw, 1.2rem));
+    left: var(--preview-left, clamp(0.75rem, 2vw, 1.2rem));
+    display: grid;
+    width: min(var(--preview-width, 25rem), calc(100% - 2rem));
+    margin: 0;
+    overflow: hidden;
+    color: #d8e4e8;
+    text-align: left;
+    text-shadow: 0 1px 0.45rem rgba(0, 3, 8, 0.92);
+    border: 1px solid color-mix(in srgb, var(--preview-color) 24%, rgba(139, 170, 185, 0.12));
+    border-radius: 0.95rem;
+    background:
+      linear-gradient(145deg, rgba(9, 22, 33, 0.58), rgba(3, 10, 18, 0.42)),
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--preview-color) 12%, transparent), transparent 42%);
+    box-shadow:
+      0 1.2rem 3.2rem rgba(0, 4, 9, 0.42),
+      inset 0 1px rgba(255, 255, 255, 0.035);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.45rem) scale(0.985);
+    transform-origin: top left;
+    transition: opacity 160ms ease, transform 210ms cubic-bezier(0.22, 0.68, 0, 1);
+    backdrop-filter: blur(8px) saturate(106%);
+  }
+
+  #reality-orbit-prototype .orbit-preview[data-placement="left"] {
+    transform-origin: top right;
+  }
+
+  #reality-orbit-prototype .orbit-preview::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, var(--preview-color) 24%, color-mix(in srgb, var(--preview-color) 36%, transparent) 76%, transparent);
+    content: "";
+    opacity: 0.78;
+  }
+
+  #reality-orbit-prototype .orbit-preview[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-preview[data-visible="true"] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  #reality-orbit-prototype .orbit-preview-header {
+    display: grid;
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.78rem;
+    padding: 0.85rem 0.95rem 0.78rem;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--preview-color) 10%, transparent), transparent 72%);
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark {
+    position: relative;
+    display: grid;
+    width: 2.35rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--preview-color) 62%, #d6e5e8);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 0.28rem color-mix(in srgb, var(--preview-color) 10%, transparent),
+      0 0 1rem color-mix(in srgb, var(--preview-color) 20%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::before,
+  #reality-orbit-prototype .orbit-preview-mark::after {
+    position: absolute;
+    border: 1px solid color-mix(in srgb, var(--preview-color) 72%, #eef7f8);
+    border-radius: 50%;
+    content: "";
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::before {
+    inset: 22%;
+    border-right-color: transparent;
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::after {
+    inset: 38%;
+    background: color-mix(in srgb, var(--preview-color) 72%, rgba(238, 247, 248, 0.54));
+    border: 0;
+  }
+
+  #reality-orbit-prototype .orbit-preview-heading {
+    min-width: 0;
+  }
+
+  #reality-orbit-prototype .orbit-preview-role,
+  #reality-orbit-prototype .orbit-preview-section-label {
+    color: color-mix(in srgb, var(--preview-color) 66%, #b9cad0);
+    font-size: 0.59rem;
+    font-weight: 680;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  #reality-orbit-prototype .orbit-preview-title {
+    margin: 0.12rem 0 0;
+    overflow: hidden;
+    color: #f3f7f8;
+    font-family: var(--space-display);
+    font-size: clamp(1rem, 0.94rem + 0.24vw, 1.18rem);
+    font-weight: 610;
+    letter-spacing: -0.018em;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #reality-orbit-prototype .orbit-preview-summary {
+    margin: 0;
+    padding: 0.7rem 0.95rem 0.76rem;
+    color: #c5d2d6;
+    font-size: 0.76rem;
+    line-height: 1.45;
+    border-top: 1px solid rgba(157, 187, 199, 0.12);
+    border-bottom: 1px solid rgba(157, 187, 199, 0.12);
+  }
+
+  #reality-orbit-prototype .orbit-preview-insight {
+    display: grid;
+    gap: 0.26rem;
+    padding: 0.7rem 0.95rem 0.76rem;
+  }
+
+  #reality-orbit-prototype .orbit-preview-question {
+    color: #e2eaec;
+    font-family: var(--space-display);
+    font-size: clamp(0.76rem, 0.72rem + 0.14vw, 0.86rem);
+    font-weight: 510;
+    letter-spacing: -0.01em;
+    line-height: 1.38;
+    text-wrap: balance;
+  }
+
+  #reality-orbit-prototype .orbit-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 2rem;
+    padding: 0.5rem 0.95rem 0.55rem;
+    color: #8399a2;
+    font-size: 0.61rem;
+    font-weight: 560;
+    letter-spacing: 0.035em;
+    background: rgba(2, 8, 14, 0.34);
+  }
+
+  #reality-orbit-prototype .orbit-preview-action {
+    color: color-mix(in srgb, var(--preview-color) 62%, #cbd8dc);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle {
+    --reticle-size: 3.4rem;
+    position: fixed;
+    z-index: 50;
+    top: var(--reticle-y, -5rem);
+    left: var(--reticle-x, -5rem);
+    width: var(--reticle-size);
+    aspect-ratio: 1;
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 22%, transparent));
+    transform: translate(-50%, -50%) scale(0.88);
+    transition:
+      top 45ms linear,
+      left 45ms linear,
+      opacity 130ms ease,
+      transform 160ms cubic-bezier(0.22, 0.68, 0, 1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible="true"] {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible="true"][data-interactive="true"] {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-input="touch"] {
+    --reticle-size: 3.8rem;
+    opacity: 0.72;
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell,
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell {
+    inset: 0;
+    background:
+      conic-gradient(
+        from 12deg,
+        rgba(225, 235, 238, 0.22),
+        rgba(235, 242, 244, 0.86) 13%,
+        rgba(85, 106, 116, 0.56) 25%,
+        rgba(218, 230, 234, 0.8) 39%,
+        rgba(68, 87, 97, 0.42) 52%,
+        rgba(232, 239, 241, 0.84) 69%,
+        rgba(90, 110, 119, 0.5) 84%,
+        rgba(225, 235, 238, 0.22)
+      );
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 241, 244, 0.3),
+      0 0 0 1px rgba(7, 15, 22, 0.88);
+    -webkit-mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+    mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell::before {
+    position: absolute;
+    inset: 12%;
+    border: 1px solid rgba(186, 210, 219, 0.34);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0.55rem rgba(147, 184, 198, 0.12),
+      0 0 0.45rem rgba(2, 7, 12, 0.72);
+    content: "";
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    inset: 23%;
+    border: 2px solid color-mix(in srgb, var(--reticle-color, #9fb6c0) 74%, #dbe8ec);
+    border-right-color: transparent;
+    border-bottom-color: rgba(103, 132, 143, 0.24);
+    box-shadow: 0 0 0.48rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 24%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible="true"] .orbit-hover-reticle-shell {
+    animation: hover-reticle-shell-drift 7s linear infinite;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible="true"] .orbit-hover-reticle-orbit {
+    animation: hover-reticle-orbit-drift 2.8s linear infinite;
+  }
+
+  @keyframes hover-reticle-shell-drift {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes hover-reticle-orbit-drift {
+    to { transform: rotate(-360deg); }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    #reality-orbit-prototype,
+    #reality-orbit-prototype button,
+    #reality-orbit-prototype a,
+    #reality-orbit-prototype summary {
+      cursor: none !important;
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    #reality-orbit-prototype .orbit-preview {
+      display: none !important;
+    }
   }
 
   #reality-orbit-prototype .orbit-detail {
@@ -741,8 +989,8 @@
   #reality-orbit-prototype .understand-header h2,
   #reality-orbit-prototype .understand-story h3,
   #reality-orbit-prototype .understand-story p,
-  #reality-orbit-prototype .understand-more-header h3,
-  #reality-orbit-prototype .understand-more-header p {
+  #reality-orbit-prototype .understand-more-header strong,
+  #reality-orbit-prototype .understand-more-header span {
     margin: 0;
   }
 
@@ -819,9 +1067,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
-    margin: auto 0 0;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(164, 196, 218, 0.13);
+    margin: 0;
   }
 
   #reality-orbit-prototype .understand-foundations div,
@@ -843,6 +1089,22 @@
   #reality-orbit-prototype .understand-context-card dd,
   #reality-orbit-prototype .understand-fields dd {
     margin-top: 0.35rem;
+    overflow-wrap: anywhere;
+  }
+
+  #reality-orbit-prototype .understand-principles {
+    display: grid;
+    gap: 0.42rem;
+    margin: 0;
+    padding-left: 1.15rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li {
+    padding-left: 0.18rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li::marker {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 72%, #d7e4e8);
   }
 
   #reality-orbit-prototype .understand-context {
@@ -887,22 +1149,74 @@
 
   #reality-orbit-prototype .understand-more {
     margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(164, 196, 218, 0.13);
+    overflow: hidden;
+    border: 1px solid rgba(164, 196, 218, 0.14);
+    border-radius: 0.95rem;
+    background: rgba(4, 13, 23, 0.5);
   }
 
   #reality-orbit-prototype .understand-more-header {
-    display: flex;
-    align-items: end;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    min-height: 4.25rem;
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    transition: background 180ms ease, color 180ms ease;
+  }
+
+  #reality-orbit-prototype .understand-more-header::-webkit-details-marker {
+    display: none;
+  }
+
+  #reality-orbit-prototype .understand-more-header:hover {
+    background: color-mix(in srgb, var(--map-color, #c99d69) 7%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-more-header:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 72%, #dce7eb);
+    outline-offset: -3px;
+  }
+
+  #reality-orbit-prototype .understand-more-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.2rem;
+  }
+
+  #reality-orbit-prototype .understand-more-copy strong {
+    color: #dce5e8;
+    font-family: var(--space-display);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  #reality-orbit-prototype .understand-more-chevron {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 62%, #dce7eb);
+    font-size: 1.35rem;
+    line-height: 1;
+    transition: transform 180ms ease;
+  }
+
+  #reality-orbit-prototype .understand-more[open] .understand-more-chevron {
+    transform: rotate(180deg);
+  }
+
+  #reality-orbit-prototype .understand-expanded {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(164, 196, 218, 0.13);
   }
 
   #reality-orbit-prototype .understand-fields {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem 1.25rem;
-    margin: 1rem 0 0;
+    margin: 0;
   }
 
   #reality-orbit-prototype .understand-fields div {
@@ -933,13 +1247,21 @@
   }
 
   @keyframes reality-breathe {
-    0%, 100% {
+    0%, 36%, 100% {
       filter: brightness(0.98);
       box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55), 0 0 0 0.58rem rgba(213, 153, 80, 0.09), 0 0 2.55rem rgba(211, 148, 76, 0.28);
     }
-    50% {
-      filter: brightness(1.04);
-      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.52), 0 0 0 0.68rem rgba(213, 153, 80, 0.11), 0 0 3.15rem rgba(211, 148, 76, 0.36);
+    8% {
+      filter: brightness(1.055);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.5), 0 0 0 0.68rem rgba(213, 153, 80, 0.12), 0 0 3.2rem rgba(211, 148, 76, 0.38);
+    }
+    16% {
+      filter: brightness(1);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.54), 0 0 0 0.61rem rgba(213, 153, 80, 0.1), 0 0 2.75rem rgba(211, 148, 76, 0.31);
+    }
+    24% {
+      filter: brightness(1.075);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.49), 0 0 0 0.72rem rgba(213, 153, 80, 0.13), 0 0 3.5rem rgba(211, 148, 76, 0.42);
     }
   }
 
@@ -951,6 +1273,7 @@
   #reality-orbit-prototype .orbit-actions[hidden],
   #reality-orbit-prototype .orbit-back[hidden],
   #reality-orbit-prototype .understand-foundations[hidden],
+  #reality-orbit-prototype .understand-fields[hidden],
   #reality-orbit-prototype .understand-more[hidden] {
     display: none;
   }
@@ -1010,9 +1333,21 @@
     }
 
     #reality-orbit-prototype .orbit-toolbar {
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       gap: 0.45rem;
+      min-height: 4.4rem;
       padding: 0.55rem 0.6rem;
+    }
+
+    #reality-orbit-prototype .orbit-path {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: center;
+      color: #e8eef1;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.015em;
     }
 
     #reality-orbit-prototype .orbit-path > span {
@@ -1020,6 +1355,9 @@
     }
 
     #reality-orbit-prototype .orbit-toolbar .orbit-back {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
       min-height: 2.75rem;
     }
 
@@ -1060,12 +1398,18 @@
 
     #reality-orbit-prototype .understand-header {
       justify-items: start;
-      padding: 1.25rem 0.8rem;
+      padding: 0.85rem 0.8rem;
       text-align: left;
     }
 
     #reality-orbit-prototype .understand-header-meta {
       align-items: flex-start;
+    }
+
+    #reality-orbit-prototype .understand-header [data-understand-title],
+    #reality-orbit-prototype .understand-header .understand-definition-label,
+    #reality-orbit-prototype .understand-header .understand-statement {
+      display: none;
     }
 
     #reality-orbit-prototype .understand-header-meta .viz-badge {
@@ -1088,16 +1432,15 @@
     }
 
     #reality-orbit-prototype .understand-more-header {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.2rem;
+      align-items: center;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
-    #reality-orbit-prototype .orbit-connection {
+    #reality-orbit-prototype .orbit-preview,
+    #reality-orbit-prototype .orbit-hover-reticle {
       transition: none;
     }
 
@@ -1107,14 +1450,20 @@
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .destination-marker,
     #reality-orbit-prototype .orbit-node[data-visual-archetype="time"] .destination-marker::before,
+    #reality-orbit-prototype .orbit-hover-reticle-shell,
+    #reality-orbit-prototype .orbit-hover-reticle-orbit,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind="focus"] .concept-visual-node-mark {
-      animation: none;
+      animation: none !important;
     }
   }
 </style>
 
 <section id="reality-orbit-prototype" aria-label="Reality ontology destination map">
+  <div class="orbit-hover-reticle" data-orbit-hover-reticle data-visible="false" data-interactive="false" hidden aria-hidden="true">
+    <span class="orbit-hover-reticle-shell"></span>
+    <span class="orbit-hover-reticle-orbit"></span>
+  </div>
   <div class="orbit-shell">
     <section class="orbit-universe-panel" aria-label="Universe workspace">
       <div class="orbit-workspace">
@@ -1134,9 +1483,26 @@
             <circle class="orbit-ring" cx="50" cy="50" r="17"></circle>
             <circle class="orbit-ring" cx="50" cy="50" r="31"></circle>
             <circle class="orbit-ring" cx="50" cy="50" r="44"></circle>
-            <g data-orbit-connections></g>
           </svg>
           <div data-orbit-nodes></div>
+          <article class="orbit-preview" id="orbit-preview" role="tooltip" data-orbit-preview data-visible="false" hidden>
+            <header class="orbit-preview-header">
+              <span class="orbit-preview-mark" aria-hidden="true"></span>
+              <div class="orbit-preview-heading">
+                <span class="orbit-preview-role" data-orbit-preview-role></span>
+                <h3 class="orbit-preview-title" data-orbit-preview-title>Concept preview</h3>
+              </div>
+            </header>
+            <p class="orbit-preview-summary" data-orbit-preview-summary></p>
+            <div class="orbit-preview-insight">
+              <span class="orbit-preview-section-label">What it reveals</span>
+              <span class="orbit-preview-question" data-orbit-preview-question></span>
+            </div>
+            <footer class="orbit-preview-footer">
+              <span data-orbit-preview-depth></span>
+              <span class="orbit-preview-action">Select to inspect</span>
+            </footer>
+          </article>
         </div>
         <div class="orbit-detail">
           <p class="orbit-status text-small" aria-live="polite">
@@ -1177,17 +1543,22 @@
                   <span class="text-small understand-support-label" data-understand-support-label></span>
                   <p class="understand-support" data-understand-support></p>
                 </div>
-                <dl class="understand-foundations" data-understand-foundations></dl>
               </article>
-              <dl class="understand-context" data-understand-context aria-label="Concept context"></dl>
             </div>
-            <section class="understand-more" data-understand-more hidden aria-labelledby="understand-more-title">
-              <header class="understand-more-header">
-                <h3 id="understand-more-title">Complete anatomy</h3>
-                <p class="text-small text-muted" data-understand-more-summary></p>
-              </header>
-              <dl class="understand-fields" data-understand-fields></dl>
-            </section>
+            <details class="understand-more" data-understand-more hidden>
+              <summary class="understand-more-header">
+                <span class="understand-more-copy">
+                  <strong id="understand-more-title">Open the full lens</strong>
+                  <span class="text-small text-muted" data-understand-more-summary></span>
+                </span>
+                <span class="understand-more-chevron" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="understand-expanded">
+                <dl class="understand-foundations" data-understand-foundations aria-label="First principles and mental model"></dl>
+                <dl class="understand-context" data-understand-context aria-label="Concept context"></dl>
+                <dl class="understand-fields" data-understand-fields aria-label="Supporting concept anatomy"></dl>
+              </div>
+            </details>
           </div>
     </aside>
   </div>
@@ -1296,6 +1667,7 @@
         label: "Emotion",
         summary: "Coordinated experiential, physiological, expressive, and action-oriented responses to events that matter to an individual.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Emotion"],
+        children: ["joy", "sadness", "fear", "anger", "disgust", "surprise"],
         anatomy: {
           "Purpose": "Use Emotion to explain how significant events organise feeling, bodily response, expression, attention, and readiness to act.",
           "Governing question": "What event or appraisal elicited the emotional response, and how did its components unfold in context?",
@@ -1306,11 +1678,48 @@
           "Common confusion": "An emotion is not identical to an action or a moral judgment; feeling anger does not determine aggression, and an observer cannot infer the full experience from expression alone.",
         },
       },
+      joy: {
+        id: "joy",
+        label: "Joy",
+        summary: "A positive emotional family associated with pleasure, fulfilment, connection, or valued progress.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Joy"],
+      },
+      sadness: {
+        id: "sadness",
+        label: "Sadness",
+        summary: "An emotional family associated with loss, disappointment, separation, or diminished possibility.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Sadness"],
+      },
+      fear: {
+        id: "fear",
+        label: "Fear",
+        summary: "An emotional family that responds to perceived threat, danger, uncertainty, or vulnerability.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Fear"],
+      },
+      anger: {
+        id: "anger",
+        label: "Anger",
+        summary: "An emotional family associated with perceived obstruction, injustice, violation, or unwanted harm.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Anger"],
+      },
+      disgust: {
+        id: "disgust",
+        label: "Disgust",
+        summary: "An emotional family involving aversion and withdrawal from something appraised as contaminating, offensive, or unacceptable.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Disgust"],
+      },
+      surprise: {
+        id: "surprise",
+        label: "Surprise",
+        summary: "A brief emotional family that redirects attention when events depart from expectation.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Emotion", "Surprise"],
+      },
       motivation: {
         id: "motivation",
         label: "Motivation",
         summary: "Processes that energise, direct, and sustain action toward desired outcomes or away from unwanted ones.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Motivation"],
+        children: ["biological-regulation", "threat-avoidance", "incentive-motivation", "achievement-motivation", "affiliation-motivation", "autonomy-motivation", "meaning-motivation"],
         anatomy: {
           "Purpose": "Use Motivation to explain why action begins, takes a particular direction, persists, changes, or stops.",
           "Governing question": "What need, goal, expectation, incentive, or value is directing and sustaining action in this context?",
@@ -1321,11 +1730,54 @@
           "Common confusion": "Motivation cannot be read directly from one outcome. Low performance may reflect limited ability, opportunity, clarity, health, or resources rather than weak desire.",
         },
       },
+      "biological-regulation": {
+        id: "biological-regulation",
+        label: "Biological regulation",
+        summary: "Motivation directed toward maintaining or restoring bodily conditions needed for survival and functioning.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Biological regulation"],
+      },
+      "threat-avoidance": {
+        id: "threat-avoidance",
+        label: "Threat avoidance",
+        summary: "Motivation directed toward preventing, escaping, or reducing anticipated harm.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Threat avoidance"],
+      },
+      "incentive-motivation": {
+        id: "incentive-motivation",
+        label: "Incentive motivation",
+        summary: "Motivation directed by the anticipated rewards, costs, or consequences of an action.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Incentive motivation"],
+      },
+      "achievement-motivation": {
+        id: "achievement-motivation",
+        label: "Achievement motivation",
+        summary: "Motivation directed toward mastery, competence, improvement, or meeting a standard of excellence.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Achievement motivation"],
+      },
+      "affiliation-motivation": {
+        id: "affiliation-motivation",
+        label: "Affiliation motivation",
+        summary: "Motivation directed toward belonging, connection, acceptance, and sustaining relationships.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Affiliation motivation"],
+      },
+      "autonomy-motivation": {
+        id: "autonomy-motivation",
+        label: "Autonomy motivation",
+        summary: "Motivation directed toward agency, self-direction, and acting with a sense of willing choice.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Autonomy motivation"],
+      },
+      "meaning-motivation": {
+        id: "meaning-motivation",
+        label: "Meaning motivation",
+        summary: "Motivation directed toward coherence, purpose, significance, or contribution beyond an immediate outcome.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Motivation", "Meaning motivation"],
+      },
       behaviour: {
         id: "behaviour",
         label: "Behaviour",
         summary: "Observable actions and responses of an individual or organism within a defined context.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour"],
+        children: ["reflexive-behaviour", "instinctive-behaviour", "conditioned-behaviour", "habitual-behaviour", "goal-directed-behaviour"],
         anatomy: {
           "Purpose": "Use Behaviour to describe what an individual or organism does before inferring the mental or environmental processes that may explain it.",
           "Governing question": "What action or response occurred, under which conditions, with what frequency, sequence, duration, and consequence?",
@@ -1336,11 +1788,42 @@
           "Common confusion": "Description and explanation are different tasks: naming what happened does not prove why it happened or what kind of person performed it.",
         },
       },
+      "reflexive-behaviour": {
+        id: "reflexive-behaviour",
+        label: "Reflexive behaviour",
+        summary: "A rapid, automatic response elicited by a specific stimulus through a relatively fixed response pathway.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Reflexive behaviour"],
+      },
+      "instinctive-behaviour": {
+        id: "instinctive-behaviour",
+        label: "Instinctive behaviour",
+        summary: "An inherited, species-typical pattern that can emerge without being learned through individual experience.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Instinctive behaviour"],
+      },
+      "conditioned-behaviour": {
+        id: "conditioned-behaviour",
+        label: "Conditioned behaviour",
+        summary: "A response whose likelihood or form has changed through learned associations or consequences.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Conditioned behaviour"],
+      },
+      "habitual-behaviour": {
+        id: "habitual-behaviour",
+        label: "Habitual behaviour",
+        summary: "A learned response that is repeatedly cued and performed with limited deliberate evaluation.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Habitual behaviour"],
+      },
+      "goal-directed-behaviour": {
+        id: "goal-directed-behaviour",
+        label: "Goal-directed behaviour",
+        summary: "Action selected in relation to an expected outcome and its current value.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Behaviour", "Goal-directed behaviour"],
+      },
       development: {
         id: "development",
         label: "Development",
         summary: "Systematic continuity and change in psychological functions and behaviour across the life course.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Development"],
+        children: ["cognitive-development", "emotional-development", "social-development", "personality-development", "identity-development", "moral-development"],
         anatomy: {
           "Purpose": "Use Development to explain how psychological capacities, patterns, and relationships emerge, stabilise, and change over time.",
           "Governing question": "What changed or remained stable, through which processes, during which developmental period and context?",
@@ -1350,6 +1833,42 @@
           "How to use it": "Specify the function, developmental period, comparison point, context, and evidence over time; distinguish age-related observation from a demonstrated developmental mechanism.",
           "Common confusion": "Development is not always linear improvement, and an age difference between groups does not by itself prove how or why change occurred.",
         },
+      },
+      "cognitive-development": {
+        id: "cognitive-development",
+        label: "Cognitive development",
+        summary: "Continuity and change in perception, attention, memory, language, reasoning, learning, and decision-making across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Cognitive development"],
+      },
+      "emotional-development": {
+        id: "emotional-development",
+        label: "Emotional development",
+        summary: "Continuity and change in emotional experience, expression, understanding, and regulation across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Emotional development"],
+      },
+      "social-development": {
+        id: "social-development",
+        label: "Social development",
+        summary: "Continuity and change in relationships, social understanding, interaction, and participation across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Social development"],
+      },
+      "personality-development": {
+        id: "personality-development",
+        label: "Personality development",
+        summary: "Continuity and change in characteristic patterns of thought, feeling, and behaviour across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Personality development"],
+      },
+      "identity-development": {
+        id: "identity-development",
+        label: "Identity development",
+        summary: "The formation and revision of a person's sense of self, commitments, roles, and belonging across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Identity development"],
+      },
+      "moral-development": {
+        id: "moral-development",
+        label: "Moral development",
+        summary: "Continuity and change in moral understanding, judgment, emotion, responsibility, and conduct across the life course.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Development", "Moral development"],
       },
       "evolutionary-psychology": {
         id: "evolutionary-psychology",
@@ -1430,6 +1949,8 @@
         summary: "Moral and self-regulatory qualities expressed through repeated choices, commitments, and conduct.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character"],
         relationshipToParent: "ASPECT_OF",
+        expansionPolicy: "curated-level-five",
+        children: ["practical-wisdom", "courage", "integrity", "compassion", "justice", "humility", "self-control", "responsibility"],
         anatomy: {
           "Statement": "Character concerns the moral and self-regulatory qualities that shape what a person repeatedly chooses, practises, and does.",
           "First principles": "Character is expressed in conduct over time; intentions, situational pressures, habits, reflection, and accountability all affect what repeated choices reveal.",
@@ -1443,6 +1964,62 @@
           "Common confusion": "Character is not simply a subtype of Personality. Personality describes characteristic tendencies; Character evaluates moral and self-regulatory qualities expressed in choice and conduct.",
           "Related concepts": "Personality, Temperament, Values, virtue, habit, agency, moral development, self-regulation, and social norms.",
         },
+      },
+      "practical-wisdom": {
+        id: "practical-wisdom",
+        label: "Practical wisdom",
+        summary: "The character quality of judging what matters in context and choosing fitting means toward worthwhile ends.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Practical wisdom"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      courage: {
+        id: "courage",
+        label: "Courage",
+        summary: "The character quality of acting for a worthwhile purpose despite fear, uncertainty, difficulty, or risk.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Courage"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      integrity: {
+        id: "integrity",
+        label: "Integrity",
+        summary: "The character quality of aligning conduct with stated principles and maintaining honesty and consistency under pressure.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Integrity"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      compassion: {
+        id: "compassion",
+        label: "Compassion",
+        summary: "The character quality of recognising suffering and being disposed to respond with appropriate care or help.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Compassion"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      justice: {
+        id: "justice",
+        label: "Justice",
+        summary: "The character quality of giving people fair consideration and acting with regard for rights, duties, and equitable treatment.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Justice"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      humility: {
+        id: "humility",
+        label: "Humility",
+        summary: "The character quality of holding an accurate, non-inflated view of oneself while remaining open to correction and others' contributions.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Humility"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      "self-control": {
+        id: "self-control",
+        label: "Self-control",
+        summary: "The character quality of regulating impulses, attention, emotion, and action in service of considered commitments.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Self-control"],
+        relationshipToParent: "QUALITY_OF",
+      },
+      responsibility: {
+        id: "responsibility",
+        label: "Responsibility",
+        summary: "The character quality of owning one's duties, choices, and their foreseeable consequences.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Individual differences", "Character", "Responsibility"],
+        relationshipToParent: "QUALITY_OF",
       },
       "personal-values": {
         id: "personal-values",
@@ -2039,12 +2616,18 @@
     };
 
     const nodesLayer = root.querySelector("[data-orbit-nodes]");
-    const connectionsLayer = root.querySelector("[data-orbit-connections]");
     const selectedLabel = root.querySelector("[data-selected-label]");
     const selectedRole = root.querySelector("[data-selected-role]");
     const selectedSummary = root.querySelector("[data-selected-summary]");
     const orbitDetail = root.querySelector(".orbit-detail");
     const orbitStage = root.querySelector(".orbit-stage");
+    const orbitPreview = root.querySelector("[data-orbit-preview]");
+    const orbitPreviewRole = root.querySelector("[data-orbit-preview-role]");
+    const orbitPreviewTitle = root.querySelector("[data-orbit-preview-title]");
+    const orbitPreviewSummary = root.querySelector("[data-orbit-preview-summary]");
+    const orbitPreviewQuestion = root.querySelector("[data-orbit-preview-question]");
+    const orbitPreviewDepth = root.querySelector("[data-orbit-preview-depth]");
+    const orbitHoverReticle = root.querySelector("[data-orbit-hover-reticle]");
     const actionGroup = root.querySelector("[data-orbit-actions]");
     const exploreButton = root.querySelector("[data-explore-action]");
     const detailAction = root.querySelector("[data-orbit-detail-action]");
@@ -2075,7 +2658,9 @@
     const understandMoreSummary = root.querySelector("[data-understand-more-summary]");
     const understandFields = root.querySelector("[data-understand-fields]");
     const svgNamespace = "http://www.w3.org/2000/svg";
-    const terminalOntologyLevel = 4;
+    const defaultOntologyLevel = 4;
+    const terminalOntologyLevel = 5;
+    const curatedLevelFivePolicy = "curated-level-five";
     const history = ["reality"];
     let selectedId = "reality";
 
@@ -2117,10 +2702,22 @@
         if (!Array.isArray(node.canonicalPath) || node.canonicalPath.length === 0) throw new Error(`Missing canonical path: ${node.label}`);
         if (ontologyLevel(node) > terminalOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
         const children = node.children ?? [];
+        if (node.expansionPolicy && (ontologyLevel(node) !== defaultOntologyLevel || node.expansionPolicy !== curatedLevelFivePolicy)) {
+          throw new Error(`Invalid level-5 expansion policy: ${node.label}`);
+        }
+        if (ontologyLevel(node) === defaultOntologyLevel && children.length > 0 && node.expansionPolicy !== curatedLevelFivePolicy) {
+          throw new Error(`Unapproved level-5 expansion: ${node.label}`);
+        }
+        if (ontologyLevel(node) === terminalOntologyLevel && children.length > 0) {
+          throw new Error(`Level-5 concept must be terminal: ${node.label}`);
+        }
         if (new Set(children).size !== children.length) throw new Error(`Duplicate child reference: ${node.label}`);
         children.forEach((childId) => {
           const child = ontology[childId];
           if (!child) throw new Error(`Unknown child ${childId} on ${node.label}`);
+          if (ontologyLevel(child) === terminalOntologyLevel && node.expansionPolicy !== curatedLevelFivePolicy) {
+            throw new Error(`Level-5 concept has unapproved parent: ${child.label}`);
+          }
           const expectedPath = [...node.canonicalPath, child.label];
           if (child.canonicalPath.join("/") !== expectedPath.join("/")) {
             throw new Error(`Canonical path mismatch: ${child.label}`);
@@ -2152,6 +2749,7 @@
       if (node.kind === "law-instance") return "Named law";
       if (path.length === 2) return "Dimension";
       if (path[1] === "Domain" && path.length === 3) return "Domain";
+      if (path[1] === "Domain" && path[2] === "Psychological" && path[3] === "Individual differences" && path[4] === "Character" && path.length === 6) return "Character quality";
       if (path[1] === "Domain") return "Domain concept";
       if (path[1] === "Category" && path.length === 3) return "Category type";
       if (path[2] === "Entity" && path.length === 4) return "Entity type";
@@ -2171,8 +2769,9 @@
 
     const relationshipForNode = (node) => {
       if (node.id === "reality") return null;
-      if (node.relationshipToParent) return node.relationshipToParent;
       const path = node.canonicalPath;
+      if (path[1] === "Domain" && path[2] === "Psychological" && path[3] === "Individual differences" && path[4] === "Character" && path.length === 6) return "QUALITY_OF";
+      if (node.relationshipToParent) return node.relationshipToParent;
       if (path.length === 2) return "DIMENSION_OF";
       if (node.kind === "law-instance") return "INSTANCE_OF";
       if (path.length === 3 && path[1] === "Domain") return "SUBDOMAIN_OF";
@@ -2243,12 +2842,6 @@
       name.className = "destination-name";
       name.textContent = node.label;
       label.appendChild(name);
-      if (ontologyLevel(node) === 1) {
-        const meta = document.createElement("span");
-        meta.className = "destination-meta";
-        meta.textContent = "Dimension";
-        label.appendChild(meta);
-      }
       button.append(marker, label);
     };
 
@@ -2309,10 +2902,30 @@
     };
 
     const buildConceptAnatomy = (node) => {
-      if (node.anatomy) return node.anatomy;
-
       const role = roleForNode(node);
-      const baseScope = `Use this concept where the following description applies: ${node.summary}`;
+      const summary = node.summary.trim();
+      const summaryWithoutStop = summary.replace(/[.!?]+$/, "");
+      const summaryInSentence = `${summaryWithoutStop.charAt(0).toLowerCase()}${summaryWithoutStop.slice(1)}`;
+      const parentLabel = node.canonicalPath.at(-2) ?? "Reality";
+      const dimensionLabel = node.canonicalPath[1] ?? "Reality";
+      const childLabels = (node.children ?? [])
+        .map((childId) => ontology[childId]?.label)
+        .filter(Boolean);
+      const joinLabels = (labels) => labels.length < 2
+        ? labels.join("")
+        : `${labels.slice(0, -1).join(", ")} and ${labels.at(-1)}`;
+      const baseScope = `${node.label} applies when the inquiry concerns ${summaryInSentence}; it does not replace the wider ${parentLabel} context or the other lenses on Reality.`;
+      const specificContext = {
+        "Governing question": `What becomes clearer within ${parentLabel} when ${node.label}—${summaryInSentence}—is brought into focus?`,
+        "Purpose": `Use ${node.label} to distinguish ${summaryInSentence} within ${parentLabel}, keeping the inquiry precise without losing its wider path through ${dimensionLabel}.`,
+        "First principles": `For ${node.label}, the defining boundary is specific: ${summary} Its meaning must remain distinct from ${parentLabel}, even when context, time, scale, or perspective changes what is observed.`,
+        "Mental model": `A quiet lens inside ${parentLabel}: bring ${node.label} to the centre and hold ${summaryInSentence} in focus while the surrounding map preserves context.`,
+        "Scope": baseScope,
+        "How to use it": childLabels.length > 0
+          ? `Begin with the definition of ${node.label}, then compare its immediate paths—${joinLabels(childLabels)}—and follow the one that best matches the current question.`
+          : `Begin with the definition of ${node.label}, compare it with adjacent ideas in ${parentLabel}, then test the same subject through Time, Scale, and Perspective before concluding.`,
+        "Common confusion": `Do not use ${node.label} as shorthand for all of ${parentLabel}. Here it refers specifically to ${summaryInSentence}.`,
+      };
 
       if (role === "Root concept") {
         return {
@@ -2338,6 +2951,7 @@
         };
       }
 
+      const roleAnatomy = (() => {
       if (role === "Domain") {
         return {
           "Purpose": `Use ${node.label} to set the broad subject-matter boundary for questions, evidence, and explanations.`,
@@ -2532,16 +3146,196 @@
         "How to use it": "Check that the situation matches the definition and scope before applying the concept.",
         "Common confusion": "The concept is a representation used for reasoning; it is not identical to the reality it represents.",
       };
+      })();
+
+      const anatomy = {
+        ...roleAnatomy,
+        ...specificContext,
+        ...(node.anatomy ?? {}),
+      };
+      const primaryFields = [
+        "Governing question",
+        "Purpose",
+        "First principles",
+        "Mental model",
+        "How to use it",
+        "Common confusion",
+        "Scope",
+      ];
+
+      return {
+        ...Object.fromEntries(primaryFields.map((field) => [field, anatomy[field]])),
+        ...Object.fromEntries(Object.entries(anatomy).filter(([field]) => !primaryFields.includes(field))),
+      };
     };
+
+    const thoughtForNode = (node) => {
+      const governingQuestion = buildConceptAnatomy(node)["Governing question"];
+      if (governingQuestion) return governingQuestion;
+      if ((node.children?.length ?? 0) > 0) {
+        return `What becomes visible when ${node.label} moves to the centre?`;
+      }
+      return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
+    };
+
+    let orbitPreviewExitTimer = null;
+    let orbitPreviewAnchor = null;
+    let orbitalCursorHideTimer = null;
+
+    const previewRoleForNode = (node) => roleForNode(node) === "Dimension" ? "Lens on reality" : roleForNode(node);
+
+    const positionOrbitPreview = (button) => {
+      const stageRect = orbitStage.getBoundingClientRect();
+      orbitPreview.style.removeProperty("--preview-width");
+      const visualRects = [button.querySelector(".destination-marker"), button.querySelector(".destination-label")]
+        .filter(Boolean)
+        .map((element) => element.getBoundingClientRect());
+      const buttonRect = button.getBoundingClientRect();
+      const targetRect = visualRects.length > 0
+        ? {
+            left: Math.min(...visualRects.map((rect) => rect.left)),
+            right: Math.max(...visualRects.map((rect) => rect.right)),
+            top: Math.min(...visualRects.map((rect) => rect.top)),
+            bottom: Math.max(...visualRects.map((rect) => rect.bottom)),
+          }
+        : buttonRect;
+      const targetHeight = targetRect.bottom - targetRect.top;
+      const naturalPreviewRect = orbitPreview.getBoundingClientRect();
+      const edgeGap = 12;
+      const nodeGap = 10;
+      const availableRight = stageRect.right - targetRect.right - edgeGap;
+      const availableLeft = targetRect.left - stageRect.left - edgeGap;
+      let placement = "right";
+      if (availableRight < naturalPreviewRect.width + nodeGap && availableLeft > availableRight) {
+        placement = "left";
+      }
+      const placementSpace = placement === "right" ? availableRight : availableLeft;
+      const previewWidth = Math.min(
+        naturalPreviewRect.width,
+        Math.max(1, placementSpace - nodeGap),
+      );
+      orbitPreview.style.setProperty("--preview-width", `${previewWidth}px`);
+      const previewRect = orbitPreview.getBoundingClientRect();
+      const preferredScreenLeft = placement === "right"
+        ? targetRect.right + nodeGap
+        : targetRect.left - previewRect.width - nodeGap;
+      const preferredScreenTop = targetRect.top + ((targetHeight - previewRect.height) / 2);
+      const desiredScreenLeft = Math.min(
+        Math.max(preferredScreenLeft, stageRect.left + edgeGap),
+        stageRect.right - previewRect.width - edgeGap,
+      );
+      const desiredScreenTop = Math.min(
+        Math.max(preferredScreenTop, stageRect.top + edgeGap),
+        stageRect.bottom - previewRect.height - edgeGap,
+      );
+      const localLeft = desiredScreenLeft - stageRect.left;
+      const localTop = desiredScreenTop - stageRect.top;
+
+      orbitPreview.dataset.placement = placement;
+      orbitPreview.style.setProperty("--preview-left", `${localLeft}px`);
+      orbitPreview.style.setProperty("--preview-top", `${localTop}px`);
+
+      const positionedRect = orbitPreview.getBoundingClientRect();
+      orbitPreview.style.setProperty("--preview-left", `${localLeft + desiredScreenLeft - positionedRect.left}px`);
+      orbitPreview.style.setProperty("--preview-top", `${localTop + desiredScreenTop - positionedRect.top}px`);
+    };
+
+    const showOrbitPreview = (node, button) => {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewAnchor = button;
+      orbitPreview.style.setProperty("--preview-color", nodeColor(node));
+      orbitPreviewRole.textContent = previewRoleForNode(node);
+      orbitPreviewTitle.textContent = node.label;
+      orbitPreviewSummary.textContent = node.summary;
+      orbitPreviewQuestion.textContent = thoughtForNode(node);
+      const pathCount = node.children?.length ?? 0;
+      let pathAvailability = "Focused concept";
+      if (pathCount > 0) {
+        const pathLabel = pathCount === 1 ? "path" : "paths";
+        pathAvailability = `${pathCount} ${pathLabel} available`;
+      }
+      orbitPreviewDepth.textContent = pathAvailability;
+      orbitPreview.hidden = false;
+      positionOrbitPreview(button);
+      requestAnimationFrame(() => {
+        orbitPreview.dataset.visible = "true";
+      });
+    };
+
+    const resetOrbitPreview = () => {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewExitTimer = null;
+      orbitPreviewAnchor = null;
+      orbitPreview.dataset.visible = "false";
+      orbitPreview.hidden = true;
+    };
+
+    const hideOrbitPreview = () => {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewExitTimer = window.setTimeout(resetOrbitPreview, 90);
+    };
+
+    const bindOrbitPreview = (button, node) => {
+      button.setAttribute("aria-describedby", "orbit-preview");
+      button.addEventListener("pointerenter", () => showOrbitPreview(node, button));
+      button.addEventListener("pointerleave", () => {
+        if (document.activeElement !== button) hideOrbitPreview();
+      });
+      button.addEventListener("focus", () => showOrbitPreview(node, button));
+      button.addEventListener("blur", hideOrbitPreview);
+    };
+
+    const showOrbitalCursor = (event) => {
+      if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
+      const target = event.target;
+      const nodeButton = target.closest?.("[data-node-id]");
+      const interactive = target.closest?.("button, a, summary, [role='button']");
+      const node = nodeButton ? ontology[nodeButton.dataset.nodeId] : null;
+      orbitHoverReticle.style.setProperty("--reticle-x", `${event.clientX}px`);
+      orbitHoverReticle.style.setProperty("--reticle-y", `${event.clientY}px`);
+      orbitHoverReticle.style.setProperty("--reticle-color", node ? nodeColor(node) : "#9fb6c0");
+      orbitHoverReticle.dataset.input = event.pointerType === "touch" ? "touch" : "mouse";
+      orbitHoverReticle.dataset.interactive = String(Boolean(interactive));
+      orbitHoverReticle.hidden = false;
+      orbitHoverReticle.dataset.visible = "true";
+    };
+
+    const hideOrbitalCursor = (linger = 0) => {
+      if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
+      orbitHoverReticle.dataset.visible = "false";
+      orbitalCursorHideTimer = window.setTimeout(() => {
+        orbitHoverReticle.hidden = true;
+      }, linger + 140);
+    };
+
+    const principleItemsFor = (value) => String(value)
+      .trim()
+      .split(/;\s+|(?<=[.!?])\s+(?=[A-Z])/)
+      .map((principle) => principle.trim())
+      .filter(Boolean)
+      .map((principle) => `${principle.charAt(0).toUpperCase()}${principle.slice(1)}`)
+      .map((principle) => /[.!?]$/.test(principle) ? principle : `${principle}.`);
 
     const createAnatomyField = ([label, value], className = "") => {
       const field = document.createElement("div");
       field.className = className;
+      field.dataset.anatomyField = label.toLowerCase().replaceAll(" ", "-");
       const term = document.createElement("dt");
       term.className = "text-small";
       term.textContent = label;
       const description = document.createElement("dd");
-      description.textContent = value;
+      if (label === "First principles") {
+        const principlesList = document.createElement("ul");
+        principlesList.className = "understand-principles";
+        principlesList.replaceChildren(...principleItemsFor(value).map((principle) => {
+          const item = document.createElement("li");
+          item.textContent = principle;
+          return item;
+        }));
+        description.append(principlesList);
+      } else {
+        description.textContent = value;
+      }
       field.append(term, description);
       return field;
     };
@@ -2549,47 +3343,29 @@
     const renderUnderstand = (node) => {
       const role = roleForNode(node);
       const entries = Object.entries(buildConceptAnatomy(node));
-      const usedLabels = new Set();
-      const take = (labels) => {
-        const entry = labels
-          .map((label) => entries.find(([entryLabel]) => entryLabel === label && !usedLabels.has(entryLabel)))
-          .find(Boolean);
-        if (entry) usedLabels.add(entry[0]);
-        return entry;
-      };
-      const takeAny = () => {
-        const entry = entries.find(([label]) => !usedLabels.has(label));
-        if (entry) usedLabels.add(entry[0]);
-        return entry;
-      };
-
-      const lead = take(["Statement", "Governing question", "Problem", "Predictions", "Prediction", "First principles"]) ?? takeAny();
-      const support = take(["Problem", "Purpose", "Mechanism", "First principles", "Mental model", "Predictions", "Prediction"]) ?? takeAny();
-      const foundations = [
-        take(["First principles", "Variables", "Mechanism", "Predictions", "Prediction"]),
-        take(["Mental model", "Predictions", "Prediction", "Variables", "Assumptions"]),
-      ].filter(Boolean);
-      const contextEntries = [
-        take(["Scope"]),
-        take(["How to use it", "Applications", "Application"]),
-        take(["Common confusion", "Limitations", "Related laws"]),
-      ].filter(Boolean);
-      while (contextEntries.length < 3) {
-        const fallback = takeAny();
-        if (!fallback) break;
-        contextEntries.push(fallback);
-      }
-      const remaining = entries.filter(([label]) => !usedLabels.has(label));
+      const entryFor = (label) => entries.find(([entryLabel]) => entryLabel === label);
+      const lead = entryFor("Governing question");
+      const support = entryFor("Purpose");
+      const foundations = ["First principles", "Mental model"].map(entryFor).filter(Boolean);
+      const contextEntries = ["How to use it", "Common confusion", "Scope"].map(entryFor).filter(Boolean);
+      const primaryLabels = new Set([
+        lead?.[0],
+        support?.[0],
+        ...foundations.map(([label]) => label),
+        ...contextEntries.map(([label]) => label),
+      ].filter(Boolean));
+      const remaining = entries.filter(([label]) => !primaryLabels.has(label));
+      const expandedFieldCount = foundations.length + contextEntries.length + remaining.length;
 
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-");
-      understandEyebrow.textContent = `${role} · Concept anatomy`;
+      understandEyebrow.textContent = role === "Dimension" ? "A lens on reality" : `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
-      understandLeadLabel.textContent = lead[0];
-      understandLead.textContent = lead[1];
-      understandSupportLabel.textContent = support[0];
-      understandSupport.textContent = support[1];
+      understandLeadLabel.textContent = lead?.[0] ?? "Governing question";
+      understandLead.textContent = lead?.[1] ?? node.summary;
+      understandSupportLabel.textContent = support?.[0] ?? "Purpose";
+      understandSupport.textContent = support?.[1] ?? node.summary;
 
       understandFoundations.replaceChildren(...foundations.map((entry) => createAnatomyField(entry)));
       understandFoundations.hidden = foundations.length === 0;
@@ -2598,8 +3374,12 @@
       understandContext.setAttribute("aria-label", `${node.label} context`);
 
       understandFields.replaceChildren(...remaining.map((entry) => createAnatomyField(entry)));
-      understandMore.hidden = remaining.length === 0;
-      understandMoreSummary.textContent = remaining.length === 1 ? "1 supporting field" : `${remaining.length} supporting fields`;
+      understandFields.hidden = remaining.length === 0;
+      understandMore.open = false;
+      understandMore.hidden = expandedFieldCount === 0;
+      understandMoreSummary.textContent = expandedFieldCount === 1
+        ? "1 node-specific field"
+        : `${expandedFieldCount} node-specific fields`;
     };
 
     const visualModelForNode = (node) => {
@@ -2607,7 +3387,7 @@
       const valueFor = (...labels) => labels
         .map((label) => anatomy[label])
         .find((value) => String(value ?? "").trim()) ?? node.summary;
-      const isNamedKnowledgeArtifact = node.canonicalPath.includes("Knowledge") && ontologyLevel(node) === terminalOntologyLevel;
+      const isNamedKnowledgeArtifact = roleForNode(node) === "Named knowledge artifact";
 
       return {
         mode: (node.children?.length ?? 0) > 0 ? "context" : isNamedKnowledgeArtifact ? "mechanism" : "focus",
@@ -2727,6 +3507,8 @@
     };
 
     const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) => {
+      resetOrbitPreview();
+      hideOrbitalCursor();
       selectedId = nodeId;
       const node = ontology[nodeId];
       root.querySelectorAll("[data-node-id]").forEach((button) => {
@@ -2735,11 +3517,9 @@
         button.setAttribute("aria-current", selected ? "true" : "false");
       });
       const context = buildChatContext(node);
-      root.querySelectorAll("[data-connection-id]").forEach((line) => {
-        line.dataset.active = String(line.dataset.connectionId === nodeId && nodeId !== currentId());
-      });
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
+      selectedRole.hidden = context.role === "Dimension";
       selectedSummary.textContent = context.explanation;
       const canPlayVisual = canPlayVisualForNode(node);
       openConceptVisualButton.hidden = !canPlayVisual;
@@ -2771,26 +3551,15 @@
     const renderOrbit = () => {
       const parent = currentNode();
       const positions = positionChildren(parent);
+      resetOrbitPreview();
       root.style.setProperty("--map-color", nodeColor(parent));
       nodesLayer.replaceChildren();
-      connectionsLayer.replaceChildren();
       renderPath();
 
       (parent.children ?? []).forEach((childId, index) => {
         const child = ontology[childId];
         const [x, y] = positions[index];
         const color = nodeColor(child);
-        const line = document.createElementNS(svgNamespace, "line");
-        line.setAttribute("x1", "50");
-        line.setAttribute("y1", "50");
-        line.setAttribute("x2", String(x));
-        line.setAttribute("y2", String(y));
-        line.setAttribute("class", "orbit-connection");
-        line.dataset.connectionId = child.id;
-        line.dataset.relationship = relationshipForNode(child);
-        line.dataset.active = "false";
-        line.style.setProperty("--connection-color", color);
-        connectionsLayer.appendChild(line);
 
         const button = document.createElement("button");
         button.type = "button";
@@ -2806,6 +3575,7 @@
         button.style.setProperty("--orbit-y", `${y}%`);
         button.style.setProperty("--node-color", color);
         appendDestinationContent(button, child);
+        bindOrbitPreview(button, child);
         button.addEventListener("click", (event) => {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail > 0) button.blur();
@@ -2827,6 +3597,7 @@
       centreButton.style.setProperty("--orbit-y", "50%");
       centreButton.style.setProperty("--node-color", nodeColor(parent));
       appendDestinationContent(centreButton, parent);
+      bindOrbitPreview(centreButton, parent);
       centreButton.addEventListener("click", (event) => {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail > 0) centreButton.blur();
@@ -2881,8 +3652,27 @@
       if (history.length > 1) transitionOrbit(() => history.pop(), { direction: -1 });
     });
 
+    root.addEventListener("mousemove", showOrbitalCursor);
+    root.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "mouse") showOrbitalCursor(event);
+    });
+    root.addEventListener("pointerdown", showOrbitalCursor);
+    root.addEventListener("mouseleave", () => hideOrbitalCursor());
+    root.addEventListener("pointerleave", (event) => {
+      if (event.pointerType !== "touch") hideOrbitalCursor();
+    });
+    root.addEventListener("pointerup", (event) => {
+      if (event.pointerType === "touch") hideOrbitalCursor();
+    });
+    root.addEventListener("pointercancel", () => hideOrbitalCursor());
+    window.addEventListener("blur", () => hideOrbitalCursor());
+    window.addEventListener("resize", () => {
+      if (orbitPreviewAnchor && !orbitPreview.hidden) positionOrbitPreview(orbitPreviewAnchor);
+    });
+
     root.dataset.canonicalDimensions = canonicalDimensions.join(",");
     root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
+    root.dataset.defaultOntologyLevel = String(defaultOntologyLevel);
     root.dataset.cameraState = "idle";
     validateOntology();
     renderOrbit();

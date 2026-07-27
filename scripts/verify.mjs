@@ -36,11 +36,22 @@ const requiredLabels = [
   "Second-order thinking",
 ];
 
-const [applicationDocument, document, fragment, observatoryBackground] = await Promise.all([
+const [
+  applicationDocument,
+  document,
+  fragment,
+  observatoryBackground,
+  applicationSource,
+  introductionSource,
+  applicationStyles,
+] = await Promise.all([
   readFile(new URL("../index.html", import.meta.url), "utf8"),
   readFile(new URL("../legacy-index.html", import.meta.url), "utf8"),
   readFile(new URL("../src/reality-orbit.html", import.meta.url), "utf8"),
   readFile(new URL("../assets/observatory-deep-space.webp", import.meta.url)),
+  readFile(new URL("../src/App.tsx", import.meta.url), "utf8"),
+  readFile(new URL("../src/components/ObservatoryIntroduction.tsx", import.meta.url), "utf8"),
+  readFile(new URL("../src/styles/app.css", import.meta.url), "utf8"),
 ]);
 
 const failures = [];
@@ -123,13 +134,66 @@ for (const orbitalVisualContract of [
   ".orbit-stage::after",
   ".destination-marker::before",
   "--space-display:",
-  'meta.textContent = "Dimension"',
   'understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-")',
   '.understand-view[data-selected-role="dimension"] .understand-context-card',
   "min-height: calc(100dvh - 0.625rem)",
 ]) {
   if (!fragment.includes(orbitalVisualContract)) {
     failures.push(`Missing deliberate orbital visual contract: ${orbitalVisualContract}.`);
+  }
+}
+
+for (const firstContactContract of [
+  [applicationSource, "reality-orbit-entered"],
+  [applicationSource, "<ObservatoryIntroduction"],
+  [introductionSource, "data-observatory-introduction"],
+  [introductionSource, "data-enter-observatory"],
+  [introductionSource, "Begin with Reality"],
+  [introductionSource, "Five lenses on Reality"],
+  [introductionSource, "Explore Reality"],
+  [applicationStyles, ".observatory-intro__enter:focus-visible"],
+  [applicationStyles, "@media (prefers-reduced-motion: reduce)"],
+]) {
+  if (!firstContactContract[0].includes(firstContactContract[1])) {
+    failures.push(`Missing observatory introduction contract: ${firstContactContract[1]}.`);
+  }
+}
+
+if (fragment.includes("destination-meta") || fragment.includes('meta.textContent = "Dimension"')) {
+  failures.push("The implied Dimension role must not be repeated beneath root destinations.");
+}
+
+for (const reflectiveHoverContract of [
+  "data-orbit-preview",
+  "data-orbit-preview-summary",
+  "data-orbit-preview-question",
+  "data-orbit-preview-depth",
+  "data-orbit-hover-reticle",
+  "thoughtForNode",
+  "bindOrbitPreview",
+  "showOrbitPreview",
+  "positionOrbitPreview",
+  'orbitPreview.style.setProperty("--preview-left"',
+  'orbitPreview.style.setProperty("--preview-top"',
+  'orbitPreview.style.setProperty("--preview-width"',
+  'orbitPreview.style.removeProperty("--preview-width")',
+  'window.addEventListener("resize"',
+  'roleForNode(node) === "Dimension" ? "Lens on reality"',
+  "orbitPreviewDepth.textContent = pathAvailability",
+  "showOrbitalCursor",
+  'root.addEventListener("mousemove", showOrbitalCursor)',
+  'if (event.pointerType !== "mouse") showOrbitalCursor(event)',
+  'orbitHoverReticle.dataset.input = event.pointerType === "touch" ? "touch" : "mouse"',
+  "cursor: none !important",
+  "@keyframes hover-reticle-shell-drift",
+  "@keyframes hover-reticle-orbit-drift",
+  'button.setAttribute("aria-describedby", "orbit-preview")',
+  "pointer-events: none",
+  'understandEyebrow.textContent = role === "Dimension" ? "A lens on reality"',
+  'selectedRole.hidden = context.role === "Dimension"',
+]) {
+  if (!fragment.includes(reflectiveHoverContract)) {
+    failures.push(`Missing reflective node-hover contract: ${reflectiveHoverContract}.`);
   }
 }
 
@@ -147,6 +211,17 @@ if (!fragment.includes("exploreSelectedNode")) {
 
 if (!fragment.includes("renderUnderstand(node)") || !fragment.includes("data-understand-view")) {
   failures.push("Every selection must automatically update the Concept Anatomy view.");
+}
+
+for (const principlesListContract of [
+  "principleItemsFor",
+  'label === "First principles"',
+  'principlesList.className = "understand-principles"',
+  'field.dataset.anatomyField = label.toLowerCase().replaceAll(" ", "-")',
+]) {
+  if (!fragment.includes(principlesListContract)) {
+    failures.push(`First principles must render as a semantic bullet list: ${principlesListContract}.`);
+  }
 }
 
 for (const visualRepresentationContract of [
@@ -261,7 +336,13 @@ if (!fragment.includes("relationshipToParent: relationshipForNode(node)")) {
   failures.push("The selected-node context must expose its typed relationship to its parent.");
 }
 
-for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF", "ENVIRONMENT_TYPE_OF", "SETTING_OF"]) {
+for (const removedVisualConnection of ["orbit-connection", "data-orbit-connections", "data-connection-id"]) {
+  if (fragment.includes(removedVisualConnection)) {
+    failures.push(`The destination map must not render redundant centre-to-node spokes: ${removedVisualConnection}.`);
+  }
+}
+
+for (const relationshipType of ["DIMENSION_OF", "SUBDOMAIN_OF", "TYPE_OF", "VALUE_OF", "LEVEL_OF", "LENS_OF", "CONCEPT_IN", "SUBTYPE_OF", "INSTANCE_OF", "ENVIRONMENT_TYPE_OF", "SETTING_OF", "QUALITY_OF"]) {
   if (!fragment.includes(`return "${relationshipType}"`)) {
     failures.push(`Missing canonical relationship type: ${relationshipType}.`);
   }
@@ -273,8 +354,15 @@ for (const internalGuideField of ["data-guide-path", "data-guide-parent", "data-
   }
 }
 
-if (!fragment.includes("const terminalOntologyLevel = 4") || !fragment.includes("ontologyLevel(node) > terminalOntologyLevel")) {
-  failures.push("The renderer must enforce the level-4 terminal boundary measured from Reality at level 0.");
+if (
+  !fragment.includes("const defaultOntologyLevel = 4")
+  || !fragment.includes("const terminalOntologyLevel = 5")
+  || !fragment.includes('const curatedLevelFivePolicy = "curated-level-five"')
+  || !fragment.includes("ontologyLevel(node) > terminalOntologyLevel")
+  || !fragment.includes("Unapproved level-5 expansion")
+  || !fragment.includes("Level-5 concept must be terminal")
+) {
+  failures.push("The renderer must enforce level 4 by default and allow only explicitly curated terminal level-5 exceptions.");
 }
 
 for (const explorationContract of [

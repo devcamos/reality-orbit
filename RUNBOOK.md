@@ -50,14 +50,25 @@ They remain fully explorable, but only after the user enters Category. This keep
 - **Centre:** Reality is the root reference point; the currently explored concept becomes the centre at deeper levels.
 - **Root map:** Domain, Category, Time, Scale, and Perspective.
 - **Field rings:** communicate shared context without claiming scientific coordinates.
-- **Centre-to-node connections:** show that each dimension is a lens on Reality.
-- **Active connection:** only the selected node and its relationship to Reality receive emphasis.
-- **Selection explanation:** name, knowledge role, and definition stay in the permanent detail strip below the map; floating cards never cover destinations.
+- **Relationship cue:** orbit position, stable hierarchy, hover feedback, the orbital cursor, and the canonical path communicate parent-child context without centre-to-node spokes.
+- **Selection explanation:** name, knowledge role, and definition stay in the permanent detail strip below the map; the translucent preview moves opposite the highlighted destination.
 - **Expansion:** exploring any selected non-root node moves it to the centre. Containers reveal one level of immediate children; terminal concepts become focused endpoints with no invented child level.
 - **Selection and Concept Anatomy:** selecting any concept, including the current centre, automatically updates its adjacent Concept Anatomy view. The learner never needs a separate Understand action.
 - **Explore action:** every selected concept except Reality exposes **Explore selected**. Explore changes the map centre; selection changes the adjacent teaching content. Once focused, the visible active state reads **Exploring** rather than offering a redundant second traversal.
 - **Path and Back:** expose the canonical location and allow reversible traversal.
-- **Typed relationship:** each connection retains a machine-readable relationship so type and instance edges do not blur together; this structural value is not shown in the learner panel.
+- **Typed relationship:** every node retains a machine-readable relationship to its parent so type and instance edges do not blur together; this structural value is not drawn on the map or shown in the learner panel.
+
+### First-contact experience
+
+The React shell presents a short observatory introduction before it loads the map for the first time in a browser session. It answers what Reality Orbit is, teaches the three-part interaction—choose a lens, follow an orbit, build understanding—and offers one clear **Enter the observatory** action. It is a threshold, not a marketing carousel: there are no competing calls to action, account prompts, or decorative steps.
+
+After entry, session storage prevents the introduction from interrupting refreshes during the same browser session. If storage is unavailable, entry still works. The screen shares the map's deep-space material language, stays usable at 320 px, and removes its slow ambient motion when reduced motion is requested.
+
+### Reflective hover guidance
+
+An original orbital reticle replaces the native mouse pointer throughout the observatory on fine-pointer devices. The segmented disk follows the user's actual pointer rather than snapping to a hovered planet, grows slightly over interactive controls, takes on a node's dimension colour when relevant, and turns its two rings slowly while active. Hovering or keyboard-focusing a node separately reveals a translucent pre-selection dossier immediately beside the highlighted destination. The dossier prefers the side with enough room, flips at an edge, and remains clamped inside the universe panel so its proximity communicates which planet it describes. It identifies the concept, explains it in one line, presents the question it helps answer, and signals whether further paths are available. Root dimensions are described as **Lens on reality**, keeping the underlying ontology role without repeating the implied word **Dimension**.
+
+The dossier is a shared accessible tooltip associated with each node through `aria-describedby`. It is click-through and does not compete with the planets for input. Pointer exit and keyboard blur remove it, selection remains unchanged, and touch users continue to receive the permanent selected-concept detail rather than an invented mobile hover state. Touch input shows the disk only at the active contact point and removes it shortly after the gesture. Cursor travel, ring rotation, and dossier transitions stop when reduced motion is requested. The internal `Dimension` role remains available to accessibility and ontology logic, but it is not repeated as visible metadata beneath every root destination or beside a selected root lens.
 
 The design parent is the abstract **spatial destination map** interaction pattern. Reality Orbit inherits full-canvas exploration, stable destinations, selection, travel, return, and contextual information. It does not copy Destiny artwork, assets, logos, icons, typography, names, or screen layouts.
 
@@ -69,7 +80,7 @@ Visual semantics are fixed:
 - Material reinforces the five root dimensions: Domain is rocky, Category is faceted, Time carries a slow ring, Scale uses nested circles, and Perspective refracts a restrained spectrum.
 - Reality alone uses a warm, breathing solar treatment. At deeper levels, the focused concept retains its dimension colour without pretending to be the ontological root.
 - The ring communicates selection.
-- A connection carries a typed relationship.
+- Typed parent relationships remain structural data rather than visual spokes.
 - Brightness means availability or current focus.
 - A diamond identifies an instance; containers remain circular.
 
@@ -118,7 +129,7 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 
 1. Read the current centre node from the ontology map.
 2. Read only its immediate `children`.
-3. Create one SVG connection and native button for every child.
+3. Create one native button for every child at its stable orbit position.
 4. Create the current node as the centre button.
 5. Select a child to read its learner-facing definition.
 6. Explore a curated child to push it into the history and rerender it as the centre.
@@ -126,15 +137,14 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 
 ### State transition
 
-`setSelectedNode(id)` performs five updates from one source of truth:
+`setSelectedNode(id)` performs four updates from one source of truth:
 
 1. Sets `aria-current` and `data-selected` on the selected destination.
-2. Sets `data-active` on the matching SVG connection.
-3. Updates the live selected label and summary.
-4. Always renders the selected concept's Concept Anatomy; every non-root selection also offers **Explore selected**, including terminal concepts that form the final focused endpoint.
-5. Keeps internal grounded-chat context separate while showing only the selected concept's name, type, and explanation in the permanent detail strip.
+2. Updates the live selected label and summary.
+3. Always renders the selected concept's Concept Anatomy; every non-root selection also offers **Explore selected**, including terminal concepts that form the final focused endpoint.
+4. Keeps internal grounded-chat context separate while showing only the selected concept's name, type, and explanation in the permanent detail strip.
 
-`history` stores the reversible centre path. Do not create separate view state for buttons, connections, text, and navigation; derive them from `selectedId`, the current history entry, and the ontology map.
+`history` stores the reversible centre path. Do not create separate view state for buttons, text, and navigation; derive them from `selectedId`, the current history entry, and the ontology map.
 
 ## Ask Chat context boundary
 
@@ -192,7 +202,15 @@ The published map supports intentional terminal concepts at different depths:
 Reality
 └── Domain
     └── Psychological
-        └── Emotion                 ← approved level-3 terminal
+        └── Emotion
+            └── Joy                 ← ordinary level-4 terminal
+
+Reality
+└── Domain
+    └── Psychological
+        └── Individual differences
+            └── Character            ← explicitly approved level-4 container
+                └── Courage          ← exceptional level-5 terminal
 
 Reality
 └── Category
@@ -207,7 +225,9 @@ Reality
             └── Terminal environmental setting
 ```
 
-Level 4 is the deepest permitted ontology level, not a target every branch must reach. A broad area such as Emotion may remain an approved level-3 terminal until a meaningful one-level expansion is curated. A named law, ecosystem, workplace, community setting, online platform, or regulatory setting can be a valid level-4 terminal when it is the smallest approved unit of teaching. Concept Anatomy is a teaching projection, not another ontology level.
+Level 4 is the default maximum, not a target every branch must reach. A node may remain terminal before level 4 until a meaningful one-level expansion is curated. A named law, emotion family, ecosystem, workplace, community setting, online platform, or regulatory setting can be a valid level-4 terminal when it is the smallest approved unit of teaching.
+
+Level 5 is an explicit exception, never an automatic continuation. Only a level-4 node marked with `expansionPolicy: "curated-level-five"` may have level-5 children, and every such child must be terminal. Character is the first and currently only approved container because direct access to Courage and other foundational qualities materially improves learning. Personality, Temperament, Values, Abilities, and every other unmarked level-4 concept remain terminal. Concept Anatomy is a teaching projection, not another ontology level.
 
 Environment was the first completed non-Knowledge category branch and remains the reference context-system branch:
 
@@ -230,17 +250,25 @@ Psychological
     ├── Personality
     ├── Temperament
     ├── Character
+    │   ├── Practical wisdom
+    │   ├── Courage
+    │   ├── Integrity
+    │   ├── Compassion
+    │   ├── Justice
+    │   ├── Humility
+    │   ├── Self-control
+    │   └── Responsibility
     ├── Values
     └── Abilities
 ```
 
-The separation protects meaning. Personality describes relatively stable patterns of thought, feeling, and behaviour. Temperament concerns early-emerging reactivity and regulation. Character concerns moral and self-regulatory qualities expressed through repeated choices and conduct. Values organise priorities, while Abilities describe capacities for learning or performance. Character is therefore not nested beneath Personality, which would make one theoretical model appear canonical for the whole ontology.
+The separation protects meaning. Personality describes relatively stable patterns of thought, feeling, and behaviour. Temperament concerns early-emerging reactivity and regulation. Character concerns moral and self-regulatory qualities expressed through repeated choices and conduct. Values organise priorities, while Abilities describe capacities for learning or performance. Character is therefore not nested beneath Personality, which would make one theoretical model appear canonical for the whole ontology. Its eight published qualities are a Pareto teaching set, not an exhaustive virtue theory.
 
 For example, `Reality → Category → Relationship → Ownership → Ownership arrangement` reaches a terminal teaching concept. The final concept binds the holder, object, bundle of rights, recognition, and conditions that make an ownership relationship concrete enough to teach without pretending it represents a particular real-world case.
 
-The renderer counts Reality as level 0 and enforces level 4 as the maximum boundary. Any childless node can be focused as an intentional exploration endpoint. A level-4 node cannot introduce level 5; malformed future data that exceeds the boundary is rejected before render.
+The renderer counts Reality as level 0, treats level 4 as the normal boundary, and enforces level 5 as the absolute terminal boundary. Any childless node can be focused as an intentional exploration endpoint. An unmarked level-4 node cannot introduce level 5, and a level-5 node can never introduce children. Malformed future data that bypasses either rule is rejected before render.
 
-Before the first render, `validateOntology()` also rejects key/ID drift, missing or duplicate child references, excessive depth, and child paths that do not extend their parent's canonical path by exactly one level.
+Before the first render, `validateOntology()` also rejects key/ID drift, missing or duplicate child references, invalid expansion policies, excessive depth, and child paths that do not extend their parent's canonical path by exactly one level.
 
 Every concept receives this baseline anatomy:
 
@@ -255,7 +283,7 @@ How to use it
 Common confusion
 ```
 
-The baseline language varies by concept role: root, dimension, domain, domain concept, category type, entity type, entity instance, environment type, environmental setting, relationship type, process type, resource type, knowledge type, named knowledge artifact, named law, perspective, scale, or time. Authored `anatomy` content replaces the baseline when the subject requires a more specific structure. Amdahl's Law uses a law-specific anatomy containing variables, mechanism, prediction, assumptions, derivation, limitations, applications, visual demonstration, and related laws. Ownership is the authored reference for a relationship type; Ownership arrangement is its terminal teaching concept.
+The baseline language varies by concept role: root, dimension, domain, domain concept, Character quality, category type, entity type, entity instance, environment type, environmental setting, relationship type, process type, resource type, knowledge type, named knowledge artifact, named law, perspective, scale, or time. Authored `anatomy` content replaces the baseline when the subject requires a more specific structure. Amdahl's Law uses a law-specific anatomy containing variables, mechanism, prediction, assumptions, derivation, limitations, applications, visual demonstration, and related laws. Ownership is the authored reference for a relationship type; Ownership arrangement is its terminal teaching concept.
 
 The Concept Anatomy presentation derives one responsive story from that anatomy:
 
@@ -280,6 +308,8 @@ Complete anatomy
 
 This is a projection of the existing Concept Anatomy, not a new schema. Baseline concepts usually fit entirely into the primary story and context rail. Richer law anatomy retains variables, predictions, assumptions, evidence, demonstrations, and related laws in the complete section.
 
+Every **First principles** field renders as a semantic bullet list. Semicolon-separated or independently punctuated claims become separate bullets; a single foundational claim remains one bullet. This presentation rule applies through the shared renderer, so authored and role-generated anatomy cannot silently fall back to paragraph formatting.
+
 ```text
 Ontology answers: Where does this concept belong?
 Concept Anatomy answers: What does it mean and how does it behave?
@@ -302,7 +332,7 @@ Both runtime and production checks traverse from Reality and reject unreachable 
 - Every selectable node has an ID, label, definition, canonical path, classified role, and at least seven non-empty Concept Anatomy fields.
 - Every child reference exists, is unique within its parent, and extends the canonical path by exactly one level.
 - The visible Concept Anatomy, Explore, and active Exploring states remain wired to the shared selection policy.
-- Every terminal path is recorded in editorial curation, may stop before level 4, and never exceeds level 4.
+- Every terminal path is recorded in editorial curation, may stop before level 4, and reaches level 5 only through an explicitly approved level-4 container.
 
 Run `npm test` while authoring. `npm run check` includes these unit tests and remains the complete release gate.
 
@@ -310,7 +340,7 @@ Run `npm test` while authoring. `npm run check` includes these unit tests and re
 
 The map renders children from the selected node's `children` array. A childless node at levels 0–3 is valid only when its terminal path is explicitly listed in `data/v1-curation.json`; an accidental deletion or unreviewed early stop changes the derived terminal paths and fails the release gate.
 
-This separates an intentional endpoint from incomplete authoring. Emotion, Motivation, Behaviour, and Development are complete level-3 concepts with distinct Concept Anatomy and approved paths. They can be expanded later, exactly one level at a time, when meaningful children are ready. The validator still rejects level-5 content and any child attached to a level-4 node.
+This separates an intentional endpoint from incomplete authoring. Emotion, Motivation, Behaviour, and Development now expose curated level-4 teaching concepts; their former level-3 endpoints were changed only after those children were reviewed. The contract still permits earlier endpoints when future branches are not ready. The validator rejects all unapproved level-5 content and every child attached to a level-5 node.
 
 ### Curated navigation, not forced breadth
 
@@ -320,7 +350,7 @@ For example, `Reality → Time → Future` currently leads only to **Expected va
 
 Depth and breadth are separate contracts:
 
-- **Depth:** every published path ends at an explicitly approved teaching concept at or before level 4.
+- **Depth:** every published path ends at an explicitly approved teaching concept at or before level 4, except for terminal level-5 concepts beneath a specifically approved level-4 container.
 - **Breadth:** a branch may offer one or many children; every visible child must be an intentional, valid canonical relationship.
 
 The unit suite protects this by verifying every visible child reference, its canonical path, and a one-child Future branch. It never creates content to satisfy a quota.
@@ -341,7 +371,7 @@ This is an editorial integrity control, not a claim that the map is an exhaustiv
 
 ## Canonical Ontology Expansion Contract
 
-Use this request whenever a selected canonical node at levels 0–3 has not yet been curated with approved next concepts:
+Use this request whenever a selected canonical node has not yet been curated with approved next concepts:
 
 ```text
 You are expanding the Canonical Reality Ontology.
@@ -362,9 +392,10 @@ Expansion Rules
 8. Preserve the existing ontology naming conventions.
 9. If multiple taxonomies exist, choose the most widely accepted and explain the rationale.
 10. Never expand grandchildren unless explicitly requested.
-11. Level 4 is a maximum, not a target. A node at levels 0–3 may remain terminal when no meaningful child has been approved.
-12. Do not expand a level-4 terminal teaching concept. State that it is terminal and propose no child nodes.
-13. Update `data/v1-curation.json` with the branch scope, decision, and exact approved terminal paths before publishing.
+11. Level 4 is the default maximum, not a target. A node at levels 0–3 may remain terminal when no meaningful child has been approved.
+12. Do not expand an ordinary level-4 terminal teaching concept. Level 5 is allowed only when that exact level-4 parent has received an explicit `curated-level-five` policy because the deeper concepts materially improve navigation.
+13. Expand an approved level-4 container exactly one level to terminal level-5 children. Never expand a level-5 node.
+14. Update `data/v1-curation.json` with the branch scope, decision, expansion exception, and exact approved terminal paths before publishing.
 
 Output Format
 Parent
@@ -382,12 +413,15 @@ Validation Checklist
 ✓ Covers the parent
 ✓ Suitable for long-term navigation
 ✓ Stable across industries and time
-✓ Level-4 terminal boundary respected
+✓ Default level-4 boundary respected
+✓ Any level-5 exception is explicit, necessary, and terminal
 
-If the requested node exists at levels 0–3, expand it. If it is a level-4
-terminal, explain that it cannot be expanded further. If it does not exist,
-explain why and suggest the closest valid canonical node. Never modify the
-canonical ontology while expanding it.
+If the requested node exists at levels 0–3, expand it. If it is an ordinary
+level-4 terminal, explain that it cannot be expanded further. If it is an
+explicitly approved level-4 container, expand exactly one level. If it is level
+5, state that it is terminal. If it does not exist, explain why and suggest the
+closest valid canonical node. Never modify the canonical ontology while
+expanding it.
 ```
 
 Review and approve the returned concepts in Notion first. Only then add them to the application ontology. This preserves the boundary between research and published knowledge.
@@ -397,7 +431,7 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 - Use percentage coordinates so the topology survives resizing.
 - Preserve the user-provided spatial order.
 - Keep the current explored concept fixed at the centre.
-- Use an SVG `viewBox="0 0 100 100"` so connections share the same coordinate system as the HTML buttons.
+- Use an SVG `viewBox="0 0 100 100"` for stable concentric field rings behind the HTML buttons.
 - At narrow widths, increase vertical space and allow the selected explanation to stack.
 - Do not use viewport-height layouts, fixed positioning, or horizontal scrolling.
 
@@ -425,10 +459,16 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 
 ### Functional checks
 
+Before testing the map:
+
+- Confirm a new browser session opens on **Begin with Reality**, with one **Enter the observatory** action and three concise orientation cues.
+- Enter the observatory, refresh, and confirm the introduction does not interrupt the same session again.
+- Hover Domain and keyboard-focus Perspective; confirm each reveals its own pre-selection dossier without changing selection. Confirm the visible `Dimension` badges and centre-to-node spokes are absent.
+
 1. Confirm six buttons render at root: five canonical dimensions plus Reality.
 2. Select every node once.
 3. Confirm exactly one destination is current after each selection.
-4. Confirm exactly one centre-to-node connection is active for an orbiting node.
+4. Confirm no centre-to-node spokes render at root or deeper levels.
 5. Explore Category and confirm it becomes the centre with six canonical category types.
 6. Explore Resource and confirm it becomes the centre with six immediate children.
 7. Use Back twice and confirm the Reality orbit is restored.
@@ -442,10 +482,12 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 15. Select Reality, Domain, and Razor and confirm each automatically renders the baseline Concept Anatomy fields alongside the map.
 16. Explore Category → Knowledge → Law, select Amdahl's Law, and confirm its authored law anatomy updates automatically.
 17. Confirm the Amdahl breadcrumb stops at level 4—five path entries including Reality—while its Concept Anatomy renders as content.
-18. Explore Category → Relationship → Ownership → Ownership arrangement and confirm Ownership is labelled **Relationship type**, its authored Concept Anatomy remains visible, and Ownership arrangement is the final teaching concept.
-19. At mobile width, confirm the Explore action occupies its own full-width row when relevant and Back remains at least 44 px high.
-20. At mobile width, confirm only the current destination is visually shown in the toolbar while the complete path remains accessible.
-21. Confirm the mobile Concept Anatomy follows the map, updates on selection, and shows no floating overlay.
+18. Explore Domain → Psychological → Individual differences → Character and confirm its eight approved qualities render.
+19. Explore Courage and confirm it is labelled **Character quality**, its breadcrumb reaches level 5, and it exposes no child destinations.
+20. Explore Category → Relationship → Ownership → Ownership arrangement and confirm Ownership is labelled **Relationship type**, its authored Concept Anatomy remains visible, and Ownership arrangement is the final teaching concept.
+21. At mobile width, confirm the Explore action occupies its own full-width row when relevant and Back remains at least 44 px high.
+22. At mobile width, confirm only the current destination is visually shown in the toolbar while the complete path remains accessible.
+23. Confirm the mobile Concept Anatomy follows the map, updates on selection, and shows no floating overlay.
 
 ### Responsive checks
 
@@ -460,7 +502,7 @@ Test at:
 - No JavaScript errors or warnings.
 - Every button works with keyboard activation.
 - The first render is meaningful before any interaction.
-- Light and dark themes retain visible rings, labels, focus, and active connections.
+- Light and dark themes retain visible rings, labels, focus, and selection feedback without relying on connecting spokes.
 
 ## Local preview
 
@@ -529,8 +571,9 @@ When applying the orbit screen to another knowledge set:
 - Reality, containers, and terminal concepts updated Concept Anatomy without creating additional ontology levels.
 - Reality and Category produced the expected internal versioned chat-context objects, including typed parent relationships, without exposing structural metadata in the learner panel.
 - Category → Knowledge → Law exposed eight named-law instances.
-- Amdahl's Law updated its Concept Anatomy while remaining the fifth and terminal ontology level.
-- Every selection updated `aria-current`, the active SVG connection, the eligible Explore action, the live permanent detail, and Concept Anatomy from one selected ID.
+- Amdahl's Law updated its Concept Anatomy while remaining terminal at level 4.
+- Psychological areas expose their curated level-4 vocabularies, while Character alone exposes terminal level-5 qualities including Courage.
+- Every selection updated `aria-current`, the eligible Explore action, the live permanent detail, and Concept Anatomy from one selected ID.
 - At 736 px, 390 px, and 320 px no floating selection content covered or visually attached itself to an unrelated destination.
 - At 390 px and 320 px the action moved to its own 44 px-high row, the visible path condensed to the current destination, and full destination labels remained readable.
 - The complete Amdahl's Law Concept Anatomy flowed in one column at 320 px without horizontal overflow.
@@ -543,6 +586,6 @@ When applying the orbit screen to another knowledge set:
 - **Reason:** React now owns application lifecycle, loading, recovery, composition, and future component migration; the compatibility boundary preserves the proven spatial interaction while Playwright protects behaviour during incremental change.
 - **Design parent:** the abstract spatial destination-map interaction pattern, implemented with original visual assets and semantic rules.
 - **Corrected root:** the five canonical dimensions replaced the earlier eight-shortcut root because mixing Category with its children represented two abstraction levels as peers.
-- **Implemented:** deterministic asymmetric placement, dimension colour identity, container/instance shapes, typed parent relationships, navigation from Reality at level 0 through level 4, and automatically synchronised Concept Anatomy views.
+- **Implemented:** deterministic asymmetric placement, dimension colour identity, container/instance shapes, typed parent relationships, navigation from Reality at level 0 through the default level-4 boundary and explicitly curated terminal level-5 exceptions, and automatically synchronised Concept Anatomy views.
 - **Deferred:** migrating the renderer across the React boundary component by component, physics simulation, dragging, persistence, route navigation, external content loading, and a dedicated graph library.
 - **Graph-library condition:** introduce a graph library only when node counts, authoring workflow, or edge routing complexity demonstrably exceed the deterministic renderer's maintainable limits.

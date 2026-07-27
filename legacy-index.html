@@ -972,7 +972,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     gap: 0.35rem;
     color: var(--space-muted);
     font-family: var(--space-display);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.01em;
     overflow: hidden;
     white-space: nowrap;
@@ -1083,28 +1083,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     pointer-events: none;
   }
 
-  #reality-orbit-prototype .orbit-ring,
-  #reality-orbit-prototype .orbit-connection {
+  #reality-orbit-prototype .orbit-ring {
     vector-effect: non-scaling-stroke;
     fill: none;
     stroke: rgba(164, 197, 218, 0.17);
     stroke-width: 1;
-  }
-
-  #reality-orbit-prototype .orbit-ring {
     opacity: 0.44;
-  }
-
-  #reality-orbit-prototype .orbit-connection {
-    opacity: 0.32;
-    stroke-linecap: round;
-    transition: opacity 180ms ease, stroke 180ms ease, stroke-width 180ms ease;
-  }
-
-  #reality-orbit-prototype .orbit-connection[data-active=&quot;true&quot;] {
-    opacity: 0.82;
-    stroke: var(--connection-color, var(--viz-series-1));
-    stroke-width: 1.5;
   }
 
   #reality-orbit-prototype .orbit-node {
@@ -1199,7 +1183,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55),
       0 0 0 0.58rem rgba(213, 153, 80, 0.09),
       0 0 2.8rem rgba(211, 148, 76, 0.33);
-    animation: reality-breathe 8s ease-in-out infinite;
+    animation: reality-breathe 3.6s ease-in-out infinite;
   }
 
   #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;sun&quot;] .destination-marker::before {
@@ -1297,25 +1281,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     display: block;
   }
 
-  #reality-orbit-prototype .destination-meta {
-    display: none;
-  }
-
   #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-name {
     color: #eef4f6;
     font-size: clamp(1rem, 0.92rem + 0.28vw, 1.16rem);
     font-weight: 600;
     letter-spacing: -0.018em;
-  }
-
-  #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-meta {
-    display: block;
-    color: color-mix(in srgb, var(--node-color, #88a9b5) 62%, #b9c6cc);
-    font-size: 0.59rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    line-height: 1.25;
-    text-transform: uppercase;
   }
 
   #reality-orbit-prototype .orbit-node[data-selected=&quot;true&quot;] .destination-label {
@@ -1353,6 +1323,284 @@ html&gt;body{padding:0}&lt;/style&gt;
     box-shadow:
       0 0 0 0.6rem color-mix(in srgb, var(--node-color, #c99d69) 8%, transparent),
       0 0 2.5rem color-mix(in srgb, var(--node-color, #c99d69) 22%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-preview {
+    --preview-color: #9fb6c0;
+    position: absolute;
+    z-index: 8;
+    top: var(--preview-top, clamp(0.75rem, 2vw, 1.2rem));
+    left: var(--preview-left, clamp(0.75rem, 2vw, 1.2rem));
+    display: grid;
+    width: min(var(--preview-width, 25rem), calc(100% - 2rem));
+    margin: 0;
+    overflow: hidden;
+    color: #d8e4e8;
+    text-align: left;
+    text-shadow: 0 1px 0.45rem rgba(0, 3, 8, 0.92);
+    border: 1px solid color-mix(in srgb, var(--preview-color) 24%, rgba(139, 170, 185, 0.12));
+    border-radius: 0.95rem;
+    background:
+      linear-gradient(145deg, rgba(9, 22, 33, 0.58), rgba(3, 10, 18, 0.42)),
+      radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--preview-color) 12%, transparent), transparent 42%);
+    box-shadow:
+      0 1.2rem 3.2rem rgba(0, 4, 9, 0.42),
+      inset 0 1px rgba(255, 255, 255, 0.035);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(0.45rem) scale(0.985);
+    transform-origin: top left;
+    transition: opacity 160ms ease, transform 210ms cubic-bezier(0.22, 0.68, 0, 1);
+    backdrop-filter: blur(8px) saturate(106%);
+  }
+
+  #reality-orbit-prototype .orbit-preview[data-placement=&quot;left&quot;] {
+    transform-origin: top right;
+  }
+
+  #reality-orbit-prototype .orbit-preview::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, var(--preview-color) 24%, color-mix(in srgb, var(--preview-color) 36%, transparent) 76%, transparent);
+    content: &quot;&quot;;
+    opacity: 0.78;
+  }
+
+  #reality-orbit-prototype .orbit-preview[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-preview[data-visible=&quot;true&quot;] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  #reality-orbit-prototype .orbit-preview-header {
+    display: grid;
+    grid-template-columns: 2.35rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.78rem;
+    padding: 0.85rem 0.95rem 0.78rem;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--preview-color) 10%, transparent), transparent 72%);
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark {
+    position: relative;
+    display: grid;
+    width: 2.35rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--preview-color) 62%, #d6e5e8);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 0.28rem color-mix(in srgb, var(--preview-color) 10%, transparent),
+      0 0 1rem color-mix(in srgb, var(--preview-color) 20%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::before,
+  #reality-orbit-prototype .orbit-preview-mark::after {
+    position: absolute;
+    border: 1px solid color-mix(in srgb, var(--preview-color) 72%, #eef7f8);
+    border-radius: 50%;
+    content: &quot;&quot;;
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::before {
+    inset: 22%;
+    border-right-color: transparent;
+  }
+
+  #reality-orbit-prototype .orbit-preview-mark::after {
+    inset: 38%;
+    background: color-mix(in srgb, var(--preview-color) 72%, rgba(238, 247, 248, 0.54));
+    border: 0;
+  }
+
+  #reality-orbit-prototype .orbit-preview-heading {
+    min-width: 0;
+  }
+
+  #reality-orbit-prototype .orbit-preview-role,
+  #reality-orbit-prototype .orbit-preview-section-label {
+    color: color-mix(in srgb, var(--preview-color) 66%, #b9cad0);
+    font-size: 0.59rem;
+    font-weight: 680;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  #reality-orbit-prototype .orbit-preview-title {
+    margin: 0.12rem 0 0;
+    overflow: hidden;
+    color: #f3f7f8;
+    font-family: var(--space-display);
+    font-size: clamp(1rem, 0.94rem + 0.24vw, 1.18rem);
+    font-weight: 610;
+    letter-spacing: -0.018em;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #reality-orbit-prototype .orbit-preview-summary {
+    margin: 0;
+    padding: 0.7rem 0.95rem 0.76rem;
+    color: #c5d2d6;
+    font-size: 0.76rem;
+    line-height: 1.45;
+    border-top: 1px solid rgba(157, 187, 199, 0.12);
+    border-bottom: 1px solid rgba(157, 187, 199, 0.12);
+  }
+
+  #reality-orbit-prototype .orbit-preview-insight {
+    display: grid;
+    gap: 0.26rem;
+    padding: 0.7rem 0.95rem 0.76rem;
+  }
+
+  #reality-orbit-prototype .orbit-preview-question {
+    color: #e2eaec;
+    font-family: var(--space-display);
+    font-size: clamp(0.76rem, 0.72rem + 0.14vw, 0.86rem);
+    font-weight: 510;
+    letter-spacing: -0.01em;
+    line-height: 1.38;
+    text-wrap: balance;
+  }
+
+  #reality-orbit-prototype .orbit-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 2rem;
+    padding: 0.5rem 0.95rem 0.55rem;
+    color: #8399a2;
+    font-size: 0.61rem;
+    font-weight: 560;
+    letter-spacing: 0.035em;
+    background: rgba(2, 8, 14, 0.34);
+  }
+
+  #reality-orbit-prototype .orbit-preview-action {
+    color: color-mix(in srgb, var(--preview-color) 62%, #cbd8dc);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle {
+    --reticle-size: 3.4rem;
+    position: fixed;
+    z-index: 50;
+    top: var(--reticle-y, -5rem);
+    left: var(--reticle-x, -5rem);
+    width: var(--reticle-size);
+    aspect-ratio: 1;
+    opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 0.8rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 22%, transparent));
+    transform: translate(-50%, -50%) scale(0.88);
+    transition:
+      top 45ms linear,
+      left 45ms linear,
+      opacity 130ms ease,
+      transform 160ms cubic-bezier(0.22, 0.68, 0, 1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[hidden] {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;] {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;][data-interactive=&quot;true&quot;] {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-input=&quot;touch&quot;] {
+    --reticle-size: 3.8rem;
+    opacity: 0.72;
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell,
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell {
+    inset: 0;
+    background:
+      conic-gradient(
+        from 12deg,
+        rgba(225, 235, 238, 0.22),
+        rgba(235, 242, 244, 0.86) 13%,
+        rgba(85, 106, 116, 0.56) 25%,
+        rgba(218, 230, 234, 0.8) 39%,
+        rgba(68, 87, 97, 0.42) 52%,
+        rgba(232, 239, 241, 0.84) 69%,
+        rgba(90, 110, 119, 0.5) 84%,
+        rgba(225, 235, 238, 0.22)
+      );
+    box-shadow:
+      inset 0 0 0 1px rgba(230, 241, 244, 0.3),
+      0 0 0 1px rgba(7, 15, 22, 0.88);
+    -webkit-mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+    mask: radial-gradient(circle, transparent 0 62%, #000 64% 100%);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-shell::before {
+    position: absolute;
+    inset: 12%;
+    border: 1px solid rgba(186, 210, 219, 0.34);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0.55rem rgba(147, 184, 198, 0.12),
+      0 0 0.45rem rgba(2, 7, 12, 0.72);
+    content: &quot;&quot;;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle-orbit {
+    inset: 23%;
+    border: 2px solid color-mix(in srgb, var(--reticle-color, #9fb6c0) 74%, #dbe8ec);
+    border-right-color: transparent;
+    border-bottom-color: rgba(103, 132, 143, 0.24);
+    box-shadow: 0 0 0.48rem color-mix(in srgb, var(--reticle-color, #9fb6c0) 24%, transparent);
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;] .orbit-hover-reticle-shell {
+    animation: hover-reticle-shell-drift 7s linear infinite;
+  }
+
+  #reality-orbit-prototype .orbit-hover-reticle[data-visible=&quot;true&quot;] .orbit-hover-reticle-orbit {
+    animation: hover-reticle-orbit-drift 2.8s linear infinite;
+  }
+
+  @keyframes hover-reticle-shell-drift {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes hover-reticle-orbit-drift {
+    to { transform: rotate(-360deg); }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    #reality-orbit-prototype,
+    #reality-orbit-prototype button,
+    #reality-orbit-prototype a,
+    #reality-orbit-prototype summary {
+      cursor: none !important;
+    }
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    #reality-orbit-prototype .orbit-preview {
+      display: none !important;
+    }
   }
 
   #reality-orbit-prototype .orbit-detail {
@@ -1618,8 +1866,8 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .understand-header h2,
   #reality-orbit-prototype .understand-story h3,
   #reality-orbit-prototype .understand-story p,
-  #reality-orbit-prototype .understand-more-header h3,
-  #reality-orbit-prototype .understand-more-header p {
+  #reality-orbit-prototype .understand-more-header strong,
+  #reality-orbit-prototype .understand-more-header span {
     margin: 0;
   }
 
@@ -1696,9 +1944,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
-    margin: auto 0 0;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(164, 196, 218, 0.13);
+    margin: 0;
   }
 
   #reality-orbit-prototype .understand-foundations div,
@@ -1720,6 +1966,22 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .understand-context-card dd,
   #reality-orbit-prototype .understand-fields dd {
     margin-top: 0.35rem;
+    overflow-wrap: anywhere;
+  }
+
+  #reality-orbit-prototype .understand-principles {
+    display: grid;
+    gap: 0.42rem;
+    margin: 0;
+    padding-left: 1.15rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li {
+    padding-left: 0.18rem;
+  }
+
+  #reality-orbit-prototype .understand-principles li::marker {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 72%, #d7e4e8);
   }
 
   #reality-orbit-prototype .understand-context {
@@ -1764,22 +2026,74 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .understand-more {
     margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(164, 196, 218, 0.13);
+    overflow: hidden;
+    border: 1px solid rgba(164, 196, 218, 0.14);
+    border-radius: 0.95rem;
+    background: rgba(4, 13, 23, 0.5);
   }
 
   #reality-orbit-prototype .understand-more-header {
-    display: flex;
-    align-items: end;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    min-height: 4.25rem;
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    transition: background 180ms ease, color 180ms ease;
+  }
+
+  #reality-orbit-prototype .understand-more-header::-webkit-details-marker {
+    display: none;
+  }
+
+  #reality-orbit-prototype .understand-more-header:hover {
+    background: color-mix(in srgb, var(--map-color, #c99d69) 7%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-more-header:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 72%, #dce7eb);
+    outline-offset: -3px;
+  }
+
+  #reality-orbit-prototype .understand-more-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.2rem;
+  }
+
+  #reality-orbit-prototype .understand-more-copy strong {
+    color: #dce5e8;
+    font-family: var(--space-display);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  #reality-orbit-prototype .understand-more-chevron {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 62%, #dce7eb);
+    font-size: 1.35rem;
+    line-height: 1;
+    transition: transform 180ms ease;
+  }
+
+  #reality-orbit-prototype .understand-more[open] .understand-more-chevron {
+    transform: rotate(180deg);
+  }
+
+  #reality-orbit-prototype .understand-expanded {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(164, 196, 218, 0.13);
   }
 
   #reality-orbit-prototype .understand-fields {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem 1.25rem;
-    margin: 1rem 0 0;
+    margin: 0;
   }
 
   #reality-orbit-prototype .understand-fields div {
@@ -1810,13 +2124,21 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   @keyframes reality-breathe {
-    0%, 100% {
+    0%, 36%, 100% {
       filter: brightness(0.98);
       box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55), 0 0 0 0.58rem rgba(213, 153, 80, 0.09), 0 0 2.55rem rgba(211, 148, 76, 0.28);
     }
-    50% {
-      filter: brightness(1.04);
-      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.52), 0 0 0 0.68rem rgba(213, 153, 80, 0.11), 0 0 3.15rem rgba(211, 148, 76, 0.36);
+    8% {
+      filter: brightness(1.055);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.5), 0 0 0 0.68rem rgba(213, 153, 80, 0.12), 0 0 3.2rem rgba(211, 148, 76, 0.38);
+    }
+    16% {
+      filter: brightness(1);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.54), 0 0 0 0.61rem rgba(213, 153, 80, 0.1), 0 0 2.75rem rgba(211, 148, 76, 0.31);
+    }
+    24% {
+      filter: brightness(1.075);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.49), 0 0 0 0.72rem rgba(213, 153, 80, 0.13), 0 0 3.5rem rgba(211, 148, 76, 0.42);
     }
   }
 
@@ -1828,6 +2150,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-actions[hidden],
   #reality-orbit-prototype .orbit-back[hidden],
   #reality-orbit-prototype .understand-foundations[hidden],
+  #reality-orbit-prototype .understand-fields[hidden],
   #reality-orbit-prototype .understand-more[hidden] {
     display: none;
   }
@@ -1887,9 +2210,21 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
 
     #reality-orbit-prototype .orbit-toolbar {
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       gap: 0.45rem;
+      min-height: 4.4rem;
       padding: 0.55rem 0.6rem;
+    }
+
+    #reality-orbit-prototype .orbit-path {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: center;
+      color: #e8eef1;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.015em;
     }
 
     #reality-orbit-prototype .orbit-path &gt; span {
@@ -1897,6 +2232,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
 
     #reality-orbit-prototype .orbit-toolbar .orbit-back {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
       min-height: 2.75rem;
     }
 
@@ -1937,12 +2275,18 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     #reality-orbit-prototype .understand-header {
       justify-items: start;
-      padding: 1.25rem 0.8rem;
+      padding: 0.85rem 0.8rem;
       text-align: left;
     }
 
     #reality-orbit-prototype .understand-header-meta {
       align-items: flex-start;
+    }
+
+    #reality-orbit-prototype .understand-header [data-understand-title],
+    #reality-orbit-prototype .understand-header .understand-definition-label,
+    #reality-orbit-prototype .understand-header .understand-statement {
+      display: none;
     }
 
     #reality-orbit-prototype .understand-header-meta .viz-badge {
@@ -1965,16 +2309,15 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
 
     #reality-orbit-prototype .understand-more-header {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.2rem;
+      align-items: center;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     #reality-orbit-prototype .orbit-canvas,
     #reality-orbit-prototype .orbit-node,
-    #reality-orbit-prototype .orbit-connection {
+    #reality-orbit-prototype .orbit-preview,
+    #reality-orbit-prototype .orbit-hover-reticle {
       transition: none;
     }
 
@@ -1984,14 +2327,20 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .destination-marker,
     #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker::before,
+    #reality-orbit-prototype .orbit-hover-reticle-shell,
+    #reality-orbit-prototype .orbit-hover-reticle-orbit,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-link,
     #reality-orbit-prototype .concept-visual-scene.is-playing .concept-visual-node[data-visual-kind=&quot;focus&quot;] .concept-visual-node-mark {
-      animation: none;
+      animation: none !important;
     }
   }
 &lt;/style&gt;
 
 &lt;section id=&quot;reality-orbit-prototype&quot; aria-label=&quot;Reality ontology destination map&quot;&gt;
+  &lt;div class=&quot;orbit-hover-reticle&quot; data-orbit-hover-reticle data-visible=&quot;false&quot; data-interactive=&quot;false&quot; hidden aria-hidden=&quot;true&quot;&gt;
+    &lt;span class=&quot;orbit-hover-reticle-shell&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;orbit-hover-reticle-orbit&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
   &lt;div class=&quot;orbit-shell&quot;&gt;
     &lt;section class=&quot;orbit-universe-panel&quot; aria-label=&quot;Universe workspace&quot;&gt;
       &lt;div class=&quot;orbit-workspace&quot;&gt;
@@ -2011,9 +2360,26 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;17&quot;&gt;&lt;/circle&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;31&quot;&gt;&lt;/circle&gt;
             &lt;circle class=&quot;orbit-ring&quot; cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;44&quot;&gt;&lt;/circle&gt;
-            &lt;g data-orbit-connections&gt;&lt;/g&gt;
           &lt;/svg&gt;
           &lt;div data-orbit-nodes&gt;&lt;/div&gt;
+          &lt;article class=&quot;orbit-preview&quot; id=&quot;orbit-preview&quot; role=&quot;tooltip&quot; data-orbit-preview data-visible=&quot;false&quot; hidden&gt;
+            &lt;header class=&quot;orbit-preview-header&quot;&gt;
+              &lt;span class=&quot;orbit-preview-mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+              &lt;div class=&quot;orbit-preview-heading&quot;&gt;
+                &lt;span class=&quot;orbit-preview-role&quot; data-orbit-preview-role&gt;&lt;/span&gt;
+                &lt;h3 class=&quot;orbit-preview-title&quot; data-orbit-preview-title&gt;Concept preview&lt;/h3&gt;
+              &lt;/div&gt;
+            &lt;/header&gt;
+            &lt;p class=&quot;orbit-preview-summary&quot; data-orbit-preview-summary&gt;&lt;/p&gt;
+            &lt;div class=&quot;orbit-preview-insight&quot;&gt;
+              &lt;span class=&quot;orbit-preview-section-label&quot;&gt;What it reveals&lt;/span&gt;
+              &lt;span class=&quot;orbit-preview-question&quot; data-orbit-preview-question&gt;&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;footer class=&quot;orbit-preview-footer&quot;&gt;
+              &lt;span data-orbit-preview-depth&gt;&lt;/span&gt;
+              &lt;span class=&quot;orbit-preview-action&quot;&gt;Select to inspect&lt;/span&gt;
+            &lt;/footer&gt;
+          &lt;/article&gt;
         &lt;/div&gt;
         &lt;div class=&quot;orbit-detail&quot;&gt;
           &lt;p class=&quot;orbit-status text-small&quot; aria-live=&quot;polite&quot;&gt;
@@ -2054,17 +2420,22 @@ html&gt;body{padding:0}&lt;/style&gt;
                   &lt;span class=&quot;text-small understand-support-label&quot; data-understand-support-label&gt;&lt;/span&gt;
                   &lt;p class=&quot;understand-support&quot; data-understand-support&gt;&lt;/p&gt;
                 &lt;/div&gt;
-                &lt;dl class=&quot;understand-foundations&quot; data-understand-foundations&gt;&lt;/dl&gt;
               &lt;/article&gt;
-              &lt;dl class=&quot;understand-context&quot; data-understand-context aria-label=&quot;Concept context&quot;&gt;&lt;/dl&gt;
             &lt;/div&gt;
-            &lt;section class=&quot;understand-more&quot; data-understand-more hidden aria-labelledby=&quot;understand-more-title&quot;&gt;
-              &lt;header class=&quot;understand-more-header&quot;&gt;
-                &lt;h3 id=&quot;understand-more-title&quot;&gt;Complete anatomy&lt;/h3&gt;
-                &lt;p class=&quot;text-small text-muted&quot; data-understand-more-summary&gt;&lt;/p&gt;
-              &lt;/header&gt;
-              &lt;dl class=&quot;understand-fields&quot; data-understand-fields&gt;&lt;/dl&gt;
-            &lt;/section&gt;
+            &lt;details class=&quot;understand-more&quot; data-understand-more hidden&gt;
+              &lt;summary class=&quot;understand-more-header&quot;&gt;
+                &lt;span class=&quot;understand-more-copy&quot;&gt;
+                  &lt;strong id=&quot;understand-more-title&quot;&gt;Open the full lens&lt;/strong&gt;
+                  &lt;span class=&quot;text-small text-muted&quot; data-understand-more-summary&gt;&lt;/span&gt;
+                &lt;/span&gt;
+                &lt;span class=&quot;understand-more-chevron&quot; aria-hidden=&quot;true&quot;&gt;⌄&lt;/span&gt;
+              &lt;/summary&gt;
+              &lt;div class=&quot;understand-expanded&quot;&gt;
+                &lt;dl class=&quot;understand-foundations&quot; data-understand-foundations aria-label=&quot;First principles and mental model&quot;&gt;&lt;/dl&gt;
+                &lt;dl class=&quot;understand-context&quot; data-understand-context aria-label=&quot;Concept context&quot;&gt;&lt;/dl&gt;
+                &lt;dl class=&quot;understand-fields&quot; data-understand-fields aria-label=&quot;Supporting concept anatomy&quot;&gt;&lt;/dl&gt;
+              &lt;/div&gt;
+            &lt;/details&gt;
           &lt;/div&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
@@ -2173,6 +2544,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         label: &quot;Emotion&quot;,
         summary: &quot;Coordinated experiential, physiological, expressive, and action-oriented responses to events that matter to an individual.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Emotion&quot;],
+        children: [&quot;joy&quot;, &quot;sadness&quot;, &quot;fear&quot;, &quot;anger&quot;, &quot;disgust&quot;, &quot;surprise&quot;],
         anatomy: {
           &quot;Purpose&quot;: &quot;Use Emotion to explain how significant events organise feeling, bodily response, expression, attention, and readiness to act.&quot;,
           &quot;Governing question&quot;: &quot;What event or appraisal elicited the emotional response, and how did its components unfold in context?&quot;,
@@ -2183,11 +2555,48 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;Common confusion&quot;: &quot;An emotion is not identical to an action or a moral judgment; feeling anger does not determine aggression, and an observer cannot infer the full experience from expression alone.&quot;,
         },
       },
+      joy: {
+        id: &quot;joy&quot;,
+        label: &quot;Joy&quot;,
+        summary: &quot;A positive emotional family associated with pleasure, fulfilment, connection, or valued progress.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Emotion&quot;, &quot;Joy&quot;],
+      },
+      sadness: {
+        id: &quot;sadness&quot;,
+        label: &quot;Sadness&quot;,
+        summary: &quot;An emotional family associated with loss, disappointment, separation, or diminished possibility.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Emotion&quot;, &quot;Sadness&quot;],
+      },
+      fear: {
+        id: &quot;fear&quot;,
+        label: &quot;Fear&quot;,
+        summary: &quot;An emotional family that responds to perceived threat, danger, uncertainty, or vulnerability.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Emotion&quot;, &quot;Fear&quot;],
+      },
+      anger: {
+        id: &quot;anger&quot;,
+        label: &quot;Anger&quot;,
+        summary: &quot;An emotional family associated with perceived obstruction, injustice, violation, or unwanted harm.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Emotion&quot;, &quot;Anger&quot;],
+      },
+      disgust: {
+        id: &quot;disgust&quot;,
+        label: &quot;Disgust&quot;,
+        summary: &quot;An emotional family involving aversion and withdrawal from something appraised as contaminating, offensive, or unacceptable.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Emotion&quot;, &quot;Disgust&quot;],
+      },
+      surprise: {
+        id: &quot;surprise&quot;,
+        label: &quot;Surprise&quot;,
+        summary: &quot;A brief emotional family that redirects attention when events depart from expectation.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Emotion&quot;, &quot;Surprise&quot;],
+      },
       motivation: {
         id: &quot;motivation&quot;,
         label: &quot;Motivation&quot;,
         summary: &quot;Processes that energise, direct, and sustain action toward desired outcomes or away from unwanted ones.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;],
+        children: [&quot;biological-regulation&quot;, &quot;threat-avoidance&quot;, &quot;incentive-motivation&quot;, &quot;achievement-motivation&quot;, &quot;affiliation-motivation&quot;, &quot;autonomy-motivation&quot;, &quot;meaning-motivation&quot;],
         anatomy: {
           &quot;Purpose&quot;: &quot;Use Motivation to explain why action begins, takes a particular direction, persists, changes, or stops.&quot;,
           &quot;Governing question&quot;: &quot;What need, goal, expectation, incentive, or value is directing and sustaining action in this context?&quot;,
@@ -2198,11 +2607,54 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;Common confusion&quot;: &quot;Motivation cannot be read directly from one outcome. Low performance may reflect limited ability, opportunity, clarity, health, or resources rather than weak desire.&quot;,
         },
       },
+      &quot;biological-regulation&quot;: {
+        id: &quot;biological-regulation&quot;,
+        label: &quot;Biological regulation&quot;,
+        summary: &quot;Motivation directed toward maintaining or restoring bodily conditions needed for survival and functioning.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;, &quot;Biological regulation&quot;],
+      },
+      &quot;threat-avoidance&quot;: {
+        id: &quot;threat-avoidance&quot;,
+        label: &quot;Threat avoidance&quot;,
+        summary: &quot;Motivation directed toward preventing, escaping, or reducing anticipated harm.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;, &quot;Threat avoidance&quot;],
+      },
+      &quot;incentive-motivation&quot;: {
+        id: &quot;incentive-motivation&quot;,
+        label: &quot;Incentive motivation&quot;,
+        summary: &quot;Motivation directed by the anticipated rewards, costs, or consequences of an action.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;, &quot;Incentive motivation&quot;],
+      },
+      &quot;achievement-motivation&quot;: {
+        id: &quot;achievement-motivation&quot;,
+        label: &quot;Achievement motivation&quot;,
+        summary: &quot;Motivation directed toward mastery, competence, improvement, or meeting a standard of excellence.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;, &quot;Achievement motivation&quot;],
+      },
+      &quot;affiliation-motivation&quot;: {
+        id: &quot;affiliation-motivation&quot;,
+        label: &quot;Affiliation motivation&quot;,
+        summary: &quot;Motivation directed toward belonging, connection, acceptance, and sustaining relationships.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;, &quot;Affiliation motivation&quot;],
+      },
+      &quot;autonomy-motivation&quot;: {
+        id: &quot;autonomy-motivation&quot;,
+        label: &quot;Autonomy motivation&quot;,
+        summary: &quot;Motivation directed toward agency, self-direction, and acting with a sense of willing choice.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;, &quot;Autonomy motivation&quot;],
+      },
+      &quot;meaning-motivation&quot;: {
+        id: &quot;meaning-motivation&quot;,
+        label: &quot;Meaning motivation&quot;,
+        summary: &quot;Motivation directed toward coherence, purpose, significance, or contribution beyond an immediate outcome.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Motivation&quot;, &quot;Meaning motivation&quot;],
+      },
       behaviour: {
         id: &quot;behaviour&quot;,
         label: &quot;Behaviour&quot;,
         summary: &quot;Observable actions and responses of an individual or organism within a defined context.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Behaviour&quot;],
+        children: [&quot;reflexive-behaviour&quot;, &quot;instinctive-behaviour&quot;, &quot;conditioned-behaviour&quot;, &quot;habitual-behaviour&quot;, &quot;goal-directed-behaviour&quot;],
         anatomy: {
           &quot;Purpose&quot;: &quot;Use Behaviour to describe what an individual or organism does before inferring the mental or environmental processes that may explain it.&quot;,
           &quot;Governing question&quot;: &quot;What action or response occurred, under which conditions, with what frequency, sequence, duration, and consequence?&quot;,
@@ -2213,11 +2665,42 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;Common confusion&quot;: &quot;Description and explanation are different tasks: naming what happened does not prove why it happened or what kind of person performed it.&quot;,
         },
       },
+      &quot;reflexive-behaviour&quot;: {
+        id: &quot;reflexive-behaviour&quot;,
+        label: &quot;Reflexive behaviour&quot;,
+        summary: &quot;A rapid, automatic response elicited by a specific stimulus through a relatively fixed response pathway.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Behaviour&quot;, &quot;Reflexive behaviour&quot;],
+      },
+      &quot;instinctive-behaviour&quot;: {
+        id: &quot;instinctive-behaviour&quot;,
+        label: &quot;Instinctive behaviour&quot;,
+        summary: &quot;An inherited, species-typical pattern that can emerge without being learned through individual experience.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Behaviour&quot;, &quot;Instinctive behaviour&quot;],
+      },
+      &quot;conditioned-behaviour&quot;: {
+        id: &quot;conditioned-behaviour&quot;,
+        label: &quot;Conditioned behaviour&quot;,
+        summary: &quot;A response whose likelihood or form has changed through learned associations or consequences.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Behaviour&quot;, &quot;Conditioned behaviour&quot;],
+      },
+      &quot;habitual-behaviour&quot;: {
+        id: &quot;habitual-behaviour&quot;,
+        label: &quot;Habitual behaviour&quot;,
+        summary: &quot;A learned response that is repeatedly cued and performed with limited deliberate evaluation.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Behaviour&quot;, &quot;Habitual behaviour&quot;],
+      },
+      &quot;goal-directed-behaviour&quot;: {
+        id: &quot;goal-directed-behaviour&quot;,
+        label: &quot;Goal-directed behaviour&quot;,
+        summary: &quot;Action selected in relation to an expected outcome and its current value.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Behaviour&quot;, &quot;Goal-directed behaviour&quot;],
+      },
       development: {
         id: &quot;development&quot;,
         label: &quot;Development&quot;,
         summary: &quot;Systematic continuity and change in psychological functions and behaviour across the life course.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Development&quot;],
+        children: [&quot;cognitive-development&quot;, &quot;emotional-development&quot;, &quot;social-development&quot;, &quot;personality-development&quot;, &quot;identity-development&quot;, &quot;moral-development&quot;],
         anatomy: {
           &quot;Purpose&quot;: &quot;Use Development to explain how psychological capacities, patterns, and relationships emerge, stabilise, and change over time.&quot;,
           &quot;Governing question&quot;: &quot;What changed or remained stable, through which processes, during which developmental period and context?&quot;,
@@ -2227,6 +2710,42 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;How to use it&quot;: &quot;Specify the function, developmental period, comparison point, context, and evidence over time; distinguish age-related observation from a demonstrated developmental mechanism.&quot;,
           &quot;Common confusion&quot;: &quot;Development is not always linear improvement, and an age difference between groups does not by itself prove how or why change occurred.&quot;,
         },
+      },
+      &quot;cognitive-development&quot;: {
+        id: &quot;cognitive-development&quot;,
+        label: &quot;Cognitive development&quot;,
+        summary: &quot;Continuity and change in perception, attention, memory, language, reasoning, learning, and decision-making across the life course.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Development&quot;, &quot;Cognitive development&quot;],
+      },
+      &quot;emotional-development&quot;: {
+        id: &quot;emotional-development&quot;,
+        label: &quot;Emotional development&quot;,
+        summary: &quot;Continuity and change in emotional experience, expression, understanding, and regulation across the life course.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Development&quot;, &quot;Emotional development&quot;],
+      },
+      &quot;social-development&quot;: {
+        id: &quot;social-development&quot;,
+        label: &quot;Social development&quot;,
+        summary: &quot;Continuity and change in relationships, social understanding, interaction, and participation across the life course.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Development&quot;, &quot;Social development&quot;],
+      },
+      &quot;personality-development&quot;: {
+        id: &quot;personality-development&quot;,
+        label: &quot;Personality development&quot;,
+        summary: &quot;Continuity and change in characteristic patterns of thought, feeling, and behaviour across the life course.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Development&quot;, &quot;Personality development&quot;],
+      },
+      &quot;identity-development&quot;: {
+        id: &quot;identity-development&quot;,
+        label: &quot;Identity development&quot;,
+        summary: &quot;The formation and revision of a person&#x27;s sense of self, commitments, roles, and belonging across the life course.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Development&quot;, &quot;Identity development&quot;],
+      },
+      &quot;moral-development&quot;: {
+        id: &quot;moral-development&quot;,
+        label: &quot;Moral development&quot;,
+        summary: &quot;Continuity and change in moral understanding, judgment, emotion, responsibility, and conduct across the life course.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Development&quot;, &quot;Moral development&quot;],
       },
       &quot;evolutionary-psychology&quot;: {
         id: &quot;evolutionary-psychology&quot;,
@@ -2307,6 +2826,8 @@ html&gt;body{padding:0}&lt;/style&gt;
         summary: &quot;Moral and self-regulatory qualities expressed through repeated choices, commitments, and conduct.&quot;,
         canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;],
         relationshipToParent: &quot;ASPECT_OF&quot;,
+        expansionPolicy: &quot;curated-level-five&quot;,
+        children: [&quot;practical-wisdom&quot;, &quot;courage&quot;, &quot;integrity&quot;, &quot;compassion&quot;, &quot;justice&quot;, &quot;humility&quot;, &quot;self-control&quot;, &quot;responsibility&quot;],
         anatomy: {
           &quot;Statement&quot;: &quot;Character concerns the moral and self-regulatory qualities that shape what a person repeatedly chooses, practises, and does.&quot;,
           &quot;First principles&quot;: &quot;Character is expressed in conduct over time; intentions, situational pressures, habits, reflection, and accountability all affect what repeated choices reveal.&quot;,
@@ -2320,6 +2841,62 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;Common confusion&quot;: &quot;Character is not simply a subtype of Personality. Personality describes characteristic tendencies; Character evaluates moral and self-regulatory qualities expressed in choice and conduct.&quot;,
           &quot;Related concepts&quot;: &quot;Personality, Temperament, Values, virtue, habit, agency, moral development, self-regulation, and social norms.&quot;,
         },
+      },
+      &quot;practical-wisdom&quot;: {
+        id: &quot;practical-wisdom&quot;,
+        label: &quot;Practical wisdom&quot;,
+        summary: &quot;The character quality of judging what matters in context and choosing fitting means toward worthwhile ends.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Practical wisdom&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
+      },
+      courage: {
+        id: &quot;courage&quot;,
+        label: &quot;Courage&quot;,
+        summary: &quot;The character quality of acting for a worthwhile purpose despite fear, uncertainty, difficulty, or risk.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Courage&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
+      },
+      integrity: {
+        id: &quot;integrity&quot;,
+        label: &quot;Integrity&quot;,
+        summary: &quot;The character quality of aligning conduct with stated principles and maintaining honesty and consistency under pressure.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Integrity&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
+      },
+      compassion: {
+        id: &quot;compassion&quot;,
+        label: &quot;Compassion&quot;,
+        summary: &quot;The character quality of recognising suffering and being disposed to respond with appropriate care or help.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Compassion&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
+      },
+      justice: {
+        id: &quot;justice&quot;,
+        label: &quot;Justice&quot;,
+        summary: &quot;The character quality of giving people fair consideration and acting with regard for rights, duties, and equitable treatment.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Justice&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
+      },
+      humility: {
+        id: &quot;humility&quot;,
+        label: &quot;Humility&quot;,
+        summary: &quot;The character quality of holding an accurate, non-inflated view of oneself while remaining open to correction and others&#x27; contributions.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Humility&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
+      },
+      &quot;self-control&quot;: {
+        id: &quot;self-control&quot;,
+        label: &quot;Self-control&quot;,
+        summary: &quot;The character quality of regulating impulses, attention, emotion, and action in service of considered commitments.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Self-control&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
+      },
+      responsibility: {
+        id: &quot;responsibility&quot;,
+        label: &quot;Responsibility&quot;,
+        summary: &quot;The character quality of owning one&#x27;s duties, choices, and their foreseeable consequences.&quot;,
+        canonicalPath: [&quot;Reality&quot;, &quot;Domain&quot;, &quot;Psychological&quot;, &quot;Individual differences&quot;, &quot;Character&quot;, &quot;Responsibility&quot;],
+        relationshipToParent: &quot;QUALITY_OF&quot;,
       },
       &quot;personal-values&quot;: {
         id: &quot;personal-values&quot;,
@@ -2916,12 +3493,18 @@ html&gt;body{padding:0}&lt;/style&gt;
     };
 
     const nodesLayer = root.querySelector(&quot;[data-orbit-nodes]&quot;);
-    const connectionsLayer = root.querySelector(&quot;[data-orbit-connections]&quot;);
     const selectedLabel = root.querySelector(&quot;[data-selected-label]&quot;);
     const selectedRole = root.querySelector(&quot;[data-selected-role]&quot;);
     const selectedSummary = root.querySelector(&quot;[data-selected-summary]&quot;);
     const orbitDetail = root.querySelector(&quot;.orbit-detail&quot;);
     const orbitStage = root.querySelector(&quot;.orbit-stage&quot;);
+    const orbitPreview = root.querySelector(&quot;[data-orbit-preview]&quot;);
+    const orbitPreviewRole = root.querySelector(&quot;[data-orbit-preview-role]&quot;);
+    const orbitPreviewTitle = root.querySelector(&quot;[data-orbit-preview-title]&quot;);
+    const orbitPreviewSummary = root.querySelector(&quot;[data-orbit-preview-summary]&quot;);
+    const orbitPreviewQuestion = root.querySelector(&quot;[data-orbit-preview-question]&quot;);
+    const orbitPreviewDepth = root.querySelector(&quot;[data-orbit-preview-depth]&quot;);
+    const orbitHoverReticle = root.querySelector(&quot;[data-orbit-hover-reticle]&quot;);
     const actionGroup = root.querySelector(&quot;[data-orbit-actions]&quot;);
     const exploreButton = root.querySelector(&quot;[data-explore-action]&quot;);
     const detailAction = root.querySelector(&quot;[data-orbit-detail-action]&quot;);
@@ -2952,7 +3535,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     const understandMoreSummary = root.querySelector(&quot;[data-understand-more-summary]&quot;);
     const understandFields = root.querySelector(&quot;[data-understand-fields]&quot;);
     const svgNamespace = &quot;http://www.w3.org/2000/svg&quot;;
-    const terminalOntologyLevel = 4;
+    const defaultOntologyLevel = 4;
+    const terminalOntologyLevel = 5;
+    const curatedLevelFivePolicy = &quot;curated-level-five&quot;;
     const history = [&quot;reality&quot;];
     let selectedId = &quot;reality&quot;;
 
@@ -2994,10 +3579,22 @@ html&gt;body{padding:0}&lt;/style&gt;
         if (!Array.isArray(node.canonicalPath) || node.canonicalPath.length === 0) throw new Error(`Missing canonical path: ${node.label}`);
         if (ontologyLevel(node) &gt; terminalOntologyLevel) throw new Error(`Ontology depth exceeded: ${node.label}`);
         const children = node.children ?? [];
+        if (node.expansionPolicy &amp;&amp; (ontologyLevel(node) !== defaultOntologyLevel || node.expansionPolicy !== curatedLevelFivePolicy)) {
+          throw new Error(`Invalid level-5 expansion policy: ${node.label}`);
+        }
+        if (ontologyLevel(node) === defaultOntologyLevel &amp;&amp; children.length &gt; 0 &amp;&amp; node.expansionPolicy !== curatedLevelFivePolicy) {
+          throw new Error(`Unapproved level-5 expansion: ${node.label}`);
+        }
+        if (ontologyLevel(node) === terminalOntologyLevel &amp;&amp; children.length &gt; 0) {
+          throw new Error(`Level-5 concept must be terminal: ${node.label}`);
+        }
         if (new Set(children).size !== children.length) throw new Error(`Duplicate child reference: ${node.label}`);
         children.forEach((childId) =&gt; {
           const child = ontology[childId];
           if (!child) throw new Error(`Unknown child ${childId} on ${node.label}`);
+          if (ontologyLevel(child) === terminalOntologyLevel &amp;&amp; node.expansionPolicy !== curatedLevelFivePolicy) {
+            throw new Error(`Level-5 concept has unapproved parent: ${child.label}`);
+          }
           const expectedPath = [...node.canonicalPath, child.label];
           if (child.canonicalPath.join(&quot;/&quot;) !== expectedPath.join(&quot;/&quot;)) {
             throw new Error(`Canonical path mismatch: ${child.label}`);
@@ -3029,6 +3626,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       if (node.kind === &quot;law-instance&quot;) return &quot;Named law&quot;;
       if (path.length === 2) return &quot;Dimension&quot;;
       if (path[1] === &quot;Domain&quot; &amp;&amp; path.length === 3) return &quot;Domain&quot;;
+      if (path[1] === &quot;Domain&quot; &amp;&amp; path[2] === &quot;Psychological&quot; &amp;&amp; path[3] === &quot;Individual differences&quot; &amp;&amp; path[4] === &quot;Character&quot; &amp;&amp; path.length === 6) return &quot;Character quality&quot;;
       if (path[1] === &quot;Domain&quot;) return &quot;Domain concept&quot;;
       if (path[1] === &quot;Category&quot; &amp;&amp; path.length === 3) return &quot;Category type&quot;;
       if (path[2] === &quot;Entity&quot; &amp;&amp; path.length === 4) return &quot;Entity type&quot;;
@@ -3048,8 +3646,9 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     const relationshipForNode = (node) =&gt; {
       if (node.id === &quot;reality&quot;) return null;
-      if (node.relationshipToParent) return node.relationshipToParent;
       const path = node.canonicalPath;
+      if (path[1] === &quot;Domain&quot; &amp;&amp; path[2] === &quot;Psychological&quot; &amp;&amp; path[3] === &quot;Individual differences&quot; &amp;&amp; path[4] === &quot;Character&quot; &amp;&amp; path.length === 6) return &quot;QUALITY_OF&quot;;
+      if (node.relationshipToParent) return node.relationshipToParent;
       if (path.length === 2) return &quot;DIMENSION_OF&quot;;
       if (node.kind === &quot;law-instance&quot;) return &quot;INSTANCE_OF&quot;;
       if (path.length === 3 &amp;&amp; path[1] === &quot;Domain&quot;) return &quot;SUBDOMAIN_OF&quot;;
@@ -3120,12 +3719,6 @@ html&gt;body{padding:0}&lt;/style&gt;
       name.className = &quot;destination-name&quot;;
       name.textContent = node.label;
       label.appendChild(name);
-      if (ontologyLevel(node) === 1) {
-        const meta = document.createElement(&quot;span&quot;);
-        meta.className = &quot;destination-meta&quot;;
-        meta.textContent = &quot;Dimension&quot;;
-        label.appendChild(meta);
-      }
       button.append(marker, label);
     };
 
@@ -3186,10 +3779,30 @@ html&gt;body{padding:0}&lt;/style&gt;
     };
 
     const buildConceptAnatomy = (node) =&gt; {
-      if (node.anatomy) return node.anatomy;
-
       const role = roleForNode(node);
-      const baseScope = `Use this concept where the following description applies: ${node.summary}`;
+      const summary = node.summary.trim();
+      const summaryWithoutStop = summary.replace(/[.!?]+$/, &quot;&quot;);
+      const summaryInSentence = `${summaryWithoutStop.charAt(0).toLowerCase()}${summaryWithoutStop.slice(1)}`;
+      const parentLabel = node.canonicalPath.at(-2) ?? &quot;Reality&quot;;
+      const dimensionLabel = node.canonicalPath[1] ?? &quot;Reality&quot;;
+      const childLabels = (node.children ?? [])
+        .map((childId) =&gt; ontology[childId]?.label)
+        .filter(Boolean);
+      const joinLabels = (labels) =&gt; labels.length &lt; 2
+        ? labels.join(&quot;&quot;)
+        : `${labels.slice(0, -1).join(&quot;, &quot;)} and ${labels.at(-1)}`;
+      const baseScope = `${node.label} applies when the inquiry concerns ${summaryInSentence}; it does not replace the wider ${parentLabel} context or the other lenses on Reality.`;
+      const specificContext = {
+        &quot;Governing question&quot;: `What becomes clearer within ${parentLabel} when ${node.label}—${summaryInSentence}—is brought into focus?`,
+        &quot;Purpose&quot;: `Use ${node.label} to distinguish ${summaryInSentence} within ${parentLabel}, keeping the inquiry precise without losing its wider path through ${dimensionLabel}.`,
+        &quot;First principles&quot;: `For ${node.label}, the defining boundary is specific: ${summary} Its meaning must remain distinct from ${parentLabel}, even when context, time, scale, or perspective changes what is observed.`,
+        &quot;Mental model&quot;: `A quiet lens inside ${parentLabel}: bring ${node.label} to the centre and hold ${summaryInSentence} in focus while the surrounding map preserves context.`,
+        &quot;Scope&quot;: baseScope,
+        &quot;How to use it&quot;: childLabels.length &gt; 0
+          ? `Begin with the definition of ${node.label}, then compare its immediate paths—${joinLabels(childLabels)}—and follow the one that best matches the current question.`
+          : `Begin with the definition of ${node.label}, compare it with adjacent ideas in ${parentLabel}, then test the same subject through Time, Scale, and Perspective before concluding.`,
+        &quot;Common confusion&quot;: `Do not use ${node.label} as shorthand for all of ${parentLabel}. Here it refers specifically to ${summaryInSentence}.`,
+      };
 
       if (role === &quot;Root concept&quot;) {
         return {
@@ -3215,6 +3828,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         };
       }
 
+      const roleAnatomy = (() =&gt; {
       if (role === &quot;Domain&quot;) {
         return {
           &quot;Purpose&quot;: `Use ${node.label} to set the broad subject-matter boundary for questions, evidence, and explanations.`,
@@ -3409,16 +4023,196 @@ html&gt;body{padding:0}&lt;/style&gt;
         &quot;How to use it&quot;: &quot;Check that the situation matches the definition and scope before applying the concept.&quot;,
         &quot;Common confusion&quot;: &quot;The concept is a representation used for reasoning; it is not identical to the reality it represents.&quot;,
       };
+      })();
+
+      const anatomy = {
+        ...roleAnatomy,
+        ...specificContext,
+        ...(node.anatomy ?? {}),
+      };
+      const primaryFields = [
+        &quot;Governing question&quot;,
+        &quot;Purpose&quot;,
+        &quot;First principles&quot;,
+        &quot;Mental model&quot;,
+        &quot;How to use it&quot;,
+        &quot;Common confusion&quot;,
+        &quot;Scope&quot;,
+      ];
+
+      return {
+        ...Object.fromEntries(primaryFields.map((field) =&gt; [field, anatomy[field]])),
+        ...Object.fromEntries(Object.entries(anatomy).filter(([field]) =&gt; !primaryFields.includes(field))),
+      };
     };
+
+    const thoughtForNode = (node) =&gt; {
+      const governingQuestion = buildConceptAnatomy(node)[&quot;Governing question&quot;];
+      if (governingQuestion) return governingQuestion;
+      if ((node.children?.length ?? 0) &gt; 0) {
+        return `What becomes visible when ${node.label} moves to the centre?`;
+      }
+      return `Where might ${node.label.toLowerCase()} change how you understand the subject?`;
+    };
+
+    let orbitPreviewExitTimer = null;
+    let orbitPreviewAnchor = null;
+    let orbitalCursorHideTimer = null;
+
+    const previewRoleForNode = (node) =&gt; roleForNode(node) === &quot;Dimension&quot; ? &quot;Lens on reality&quot; : roleForNode(node);
+
+    const positionOrbitPreview = (button) =&gt; {
+      const stageRect = orbitStage.getBoundingClientRect();
+      orbitPreview.style.removeProperty(&quot;--preview-width&quot;);
+      const visualRects = [button.querySelector(&quot;.destination-marker&quot;), button.querySelector(&quot;.destination-label&quot;)]
+        .filter(Boolean)
+        .map((element) =&gt; element.getBoundingClientRect());
+      const buttonRect = button.getBoundingClientRect();
+      const targetRect = visualRects.length &gt; 0
+        ? {
+            left: Math.min(...visualRects.map((rect) =&gt; rect.left)),
+            right: Math.max(...visualRects.map((rect) =&gt; rect.right)),
+            top: Math.min(...visualRects.map((rect) =&gt; rect.top)),
+            bottom: Math.max(...visualRects.map((rect) =&gt; rect.bottom)),
+          }
+        : buttonRect;
+      const targetHeight = targetRect.bottom - targetRect.top;
+      const naturalPreviewRect = orbitPreview.getBoundingClientRect();
+      const edgeGap = 12;
+      const nodeGap = 10;
+      const availableRight = stageRect.right - targetRect.right - edgeGap;
+      const availableLeft = targetRect.left - stageRect.left - edgeGap;
+      let placement = &quot;right&quot;;
+      if (availableRight &lt; naturalPreviewRect.width + nodeGap &amp;&amp; availableLeft &gt; availableRight) {
+        placement = &quot;left&quot;;
+      }
+      const placementSpace = placement === &quot;right&quot; ? availableRight : availableLeft;
+      const previewWidth = Math.min(
+        naturalPreviewRect.width,
+        Math.max(1, placementSpace - nodeGap),
+      );
+      orbitPreview.style.setProperty(&quot;--preview-width&quot;, `${previewWidth}px`);
+      const previewRect = orbitPreview.getBoundingClientRect();
+      const preferredScreenLeft = placement === &quot;right&quot;
+        ? targetRect.right + nodeGap
+        : targetRect.left - previewRect.width - nodeGap;
+      const preferredScreenTop = targetRect.top + ((targetHeight - previewRect.height) / 2);
+      const desiredScreenLeft = Math.min(
+        Math.max(preferredScreenLeft, stageRect.left + edgeGap),
+        stageRect.right - previewRect.width - edgeGap,
+      );
+      const desiredScreenTop = Math.min(
+        Math.max(preferredScreenTop, stageRect.top + edgeGap),
+        stageRect.bottom - previewRect.height - edgeGap,
+      );
+      const localLeft = desiredScreenLeft - stageRect.left;
+      const localTop = desiredScreenTop - stageRect.top;
+
+      orbitPreview.dataset.placement = placement;
+      orbitPreview.style.setProperty(&quot;--preview-left&quot;, `${localLeft}px`);
+      orbitPreview.style.setProperty(&quot;--preview-top&quot;, `${localTop}px`);
+
+      const positionedRect = orbitPreview.getBoundingClientRect();
+      orbitPreview.style.setProperty(&quot;--preview-left&quot;, `${localLeft + desiredScreenLeft - positionedRect.left}px`);
+      orbitPreview.style.setProperty(&quot;--preview-top&quot;, `${localTop + desiredScreenTop - positionedRect.top}px`);
+    };
+
+    const showOrbitPreview = (node, button) =&gt; {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewAnchor = button;
+      orbitPreview.style.setProperty(&quot;--preview-color&quot;, nodeColor(node));
+      orbitPreviewRole.textContent = previewRoleForNode(node);
+      orbitPreviewTitle.textContent = node.label;
+      orbitPreviewSummary.textContent = node.summary;
+      orbitPreviewQuestion.textContent = thoughtForNode(node);
+      const pathCount = node.children?.length ?? 0;
+      let pathAvailability = &quot;Focused concept&quot;;
+      if (pathCount &gt; 0) {
+        const pathLabel = pathCount === 1 ? &quot;path&quot; : &quot;paths&quot;;
+        pathAvailability = `${pathCount} ${pathLabel} available`;
+      }
+      orbitPreviewDepth.textContent = pathAvailability;
+      orbitPreview.hidden = false;
+      positionOrbitPreview(button);
+      requestAnimationFrame(() =&gt; {
+        orbitPreview.dataset.visible = &quot;true&quot;;
+      });
+    };
+
+    const resetOrbitPreview = () =&gt; {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewExitTimer = null;
+      orbitPreviewAnchor = null;
+      orbitPreview.dataset.visible = &quot;false&quot;;
+      orbitPreview.hidden = true;
+    };
+
+    const hideOrbitPreview = () =&gt; {
+      if (orbitPreviewExitTimer) window.clearTimeout(orbitPreviewExitTimer);
+      orbitPreviewExitTimer = window.setTimeout(resetOrbitPreview, 90);
+    };
+
+    const bindOrbitPreview = (button, node) =&gt; {
+      button.setAttribute(&quot;aria-describedby&quot;, &quot;orbit-preview&quot;);
+      button.addEventListener(&quot;pointerenter&quot;, () =&gt; showOrbitPreview(node, button));
+      button.addEventListener(&quot;pointerleave&quot;, () =&gt; {
+        if (document.activeElement !== button) hideOrbitPreview();
+      });
+      button.addEventListener(&quot;focus&quot;, () =&gt; showOrbitPreview(node, button));
+      button.addEventListener(&quot;blur&quot;, hideOrbitPreview);
+    };
+
+    const showOrbitalCursor = (event) =&gt; {
+      if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
+      const target = event.target;
+      const nodeButton = target.closest?.(&quot;[data-node-id]&quot;);
+      const interactive = target.closest?.(&quot;button, a, summary, [role=&#x27;button&#x27;]&quot;);
+      const node = nodeButton ? ontology[nodeButton.dataset.nodeId] : null;
+      orbitHoverReticle.style.setProperty(&quot;--reticle-x&quot;, `${event.clientX}px`);
+      orbitHoverReticle.style.setProperty(&quot;--reticle-y&quot;, `${event.clientY}px`);
+      orbitHoverReticle.style.setProperty(&quot;--reticle-color&quot;, node ? nodeColor(node) : &quot;#9fb6c0&quot;);
+      orbitHoverReticle.dataset.input = event.pointerType === &quot;touch&quot; ? &quot;touch&quot; : &quot;mouse&quot;;
+      orbitHoverReticle.dataset.interactive = String(Boolean(interactive));
+      orbitHoverReticle.hidden = false;
+      orbitHoverReticle.dataset.visible = &quot;true&quot;;
+    };
+
+    const hideOrbitalCursor = (linger = 0) =&gt; {
+      if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
+      orbitHoverReticle.dataset.visible = &quot;false&quot;;
+      orbitalCursorHideTimer = window.setTimeout(() =&gt; {
+        orbitHoverReticle.hidden = true;
+      }, linger + 140);
+    };
+
+    const principleItemsFor = (value) =&gt; String(value)
+      .trim()
+      .split(/;\s+|(?&lt;=[.!?])\s+(?=[A-Z])/)
+      .map((principle) =&gt; principle.trim())
+      .filter(Boolean)
+      .map((principle) =&gt; `${principle.charAt(0).toUpperCase()}${principle.slice(1)}`)
+      .map((principle) =&gt; /[.!?]$/.test(principle) ? principle : `${principle}.`);
 
     const createAnatomyField = ([label, value], className = &quot;&quot;) =&gt; {
       const field = document.createElement(&quot;div&quot;);
       field.className = className;
+      field.dataset.anatomyField = label.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
       const term = document.createElement(&quot;dt&quot;);
       term.className = &quot;text-small&quot;;
       term.textContent = label;
       const description = document.createElement(&quot;dd&quot;);
-      description.textContent = value;
+      if (label === &quot;First principles&quot;) {
+        const principlesList = document.createElement(&quot;ul&quot;);
+        principlesList.className = &quot;understand-principles&quot;;
+        principlesList.replaceChildren(...principleItemsFor(value).map((principle) =&gt; {
+          const item = document.createElement(&quot;li&quot;);
+          item.textContent = principle;
+          return item;
+        }));
+        description.append(principlesList);
+      } else {
+        description.textContent = value;
+      }
       field.append(term, description);
       return field;
     };
@@ -3426,47 +4220,29 @@ html&gt;body{padding:0}&lt;/style&gt;
     const renderUnderstand = (node) =&gt; {
       const role = roleForNode(node);
       const entries = Object.entries(buildConceptAnatomy(node));
-      const usedLabels = new Set();
-      const take = (labels) =&gt; {
-        const entry = labels
-          .map((label) =&gt; entries.find(([entryLabel]) =&gt; entryLabel === label &amp;&amp; !usedLabels.has(entryLabel)))
-          .find(Boolean);
-        if (entry) usedLabels.add(entry[0]);
-        return entry;
-      };
-      const takeAny = () =&gt; {
-        const entry = entries.find(([label]) =&gt; !usedLabels.has(label));
-        if (entry) usedLabels.add(entry[0]);
-        return entry;
-      };
-
-      const lead = take([&quot;Statement&quot;, &quot;Governing question&quot;, &quot;Problem&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;, &quot;First principles&quot;]) ?? takeAny();
-      const support = take([&quot;Problem&quot;, &quot;Purpose&quot;, &quot;Mechanism&quot;, &quot;First principles&quot;, &quot;Mental model&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;]) ?? takeAny();
-      const foundations = [
-        take([&quot;First principles&quot;, &quot;Variables&quot;, &quot;Mechanism&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;]),
-        take([&quot;Mental model&quot;, &quot;Predictions&quot;, &quot;Prediction&quot;, &quot;Variables&quot;, &quot;Assumptions&quot;]),
-      ].filter(Boolean);
-      const contextEntries = [
-        take([&quot;Scope&quot;]),
-        take([&quot;How to use it&quot;, &quot;Applications&quot;, &quot;Application&quot;]),
-        take([&quot;Common confusion&quot;, &quot;Limitations&quot;, &quot;Related laws&quot;]),
-      ].filter(Boolean);
-      while (contextEntries.length &lt; 3) {
-        const fallback = takeAny();
-        if (!fallback) break;
-        contextEntries.push(fallback);
-      }
-      const remaining = entries.filter(([label]) =&gt; !usedLabels.has(label));
+      const entryFor = (label) =&gt; entries.find(([entryLabel]) =&gt; entryLabel === label);
+      const lead = entryFor(&quot;Governing question&quot;);
+      const support = entryFor(&quot;Purpose&quot;);
+      const foundations = [&quot;First principles&quot;, &quot;Mental model&quot;].map(entryFor).filter(Boolean);
+      const contextEntries = [&quot;How to use it&quot;, &quot;Common confusion&quot;, &quot;Scope&quot;].map(entryFor).filter(Boolean);
+      const primaryLabels = new Set([
+        lead?.[0],
+        support?.[0],
+        ...foundations.map(([label]) =&gt; label),
+        ...contextEntries.map(([label]) =&gt; label),
+      ].filter(Boolean));
+      const remaining = entries.filter(([label]) =&gt; !primaryLabels.has(label));
+      const expandedFieldCount = foundations.length + contextEntries.length + remaining.length;
 
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
-      understandEyebrow.textContent = `${role} · Concept anatomy`;
+      understandEyebrow.textContent = role === &quot;Dimension&quot; ? &quot;A lens on reality&quot; : `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
-      understandLeadLabel.textContent = lead[0];
-      understandLead.textContent = lead[1];
-      understandSupportLabel.textContent = support[0];
-      understandSupport.textContent = support[1];
+      understandLeadLabel.textContent = lead?.[0] ?? &quot;Governing question&quot;;
+      understandLead.textContent = lead?.[1] ?? node.summary;
+      understandSupportLabel.textContent = support?.[0] ?? &quot;Purpose&quot;;
+      understandSupport.textContent = support?.[1] ?? node.summary;
 
       understandFoundations.replaceChildren(...foundations.map((entry) =&gt; createAnatomyField(entry)));
       understandFoundations.hidden = foundations.length === 0;
@@ -3475,8 +4251,12 @@ html&gt;body{padding:0}&lt;/style&gt;
       understandContext.setAttribute(&quot;aria-label&quot;, `${node.label} context`);
 
       understandFields.replaceChildren(...remaining.map((entry) =&gt; createAnatomyField(entry)));
-      understandMore.hidden = remaining.length === 0;
-      understandMoreSummary.textContent = remaining.length === 1 ? &quot;1 supporting field&quot; : `${remaining.length} supporting fields`;
+      understandFields.hidden = remaining.length === 0;
+      understandMore.open = false;
+      understandMore.hidden = expandedFieldCount === 0;
+      understandMoreSummary.textContent = expandedFieldCount === 1
+        ? &quot;1 node-specific field&quot;
+        : `${expandedFieldCount} node-specific fields`;
     };
 
     const visualModelForNode = (node) =&gt; {
@@ -3484,7 +4264,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       const valueFor = (...labels) =&gt; labels
         .map((label) =&gt; anatomy[label])
         .find((value) =&gt; String(value ?? &quot;&quot;).trim()) ?? node.summary;
-      const isNamedKnowledgeArtifact = node.canonicalPath.includes(&quot;Knowledge&quot;) &amp;&amp; ontologyLevel(node) === terminalOntologyLevel;
+      const isNamedKnowledgeArtifact = roleForNode(node) === &quot;Named knowledge artifact&quot;;
 
       return {
         mode: (node.children?.length ?? 0) &gt; 0 ? &quot;context&quot; : isNamedKnowledgeArtifact ? &quot;mechanism&quot; : &quot;focus&quot;,
@@ -3604,6 +4384,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     };
 
     const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) =&gt; {
+      resetOrbitPreview();
+      hideOrbitalCursor();
       selectedId = nodeId;
       const node = ontology[nodeId];
       root.querySelectorAll(&quot;[data-node-id]&quot;).forEach((button) =&gt; {
@@ -3612,11 +4394,9 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.setAttribute(&quot;aria-current&quot;, selected ? &quot;true&quot; : &quot;false&quot;);
       });
       const context = buildChatContext(node);
-      root.querySelectorAll(&quot;[data-connection-id]&quot;).forEach((line) =&gt; {
-        line.dataset.active = String(line.dataset.connectionId === nodeId &amp;&amp; nodeId !== currentId());
-      });
       selectedLabel.textContent = context.name;
       selectedRole.textContent = context.role;
+      selectedRole.hidden = context.role === &quot;Dimension&quot;;
       selectedSummary.textContent = context.explanation;
       const canPlayVisual = canPlayVisualForNode(node);
       openConceptVisualButton.hidden = !canPlayVisual;
@@ -3648,26 +4428,15 @@ html&gt;body{padding:0}&lt;/style&gt;
     const renderOrbit = () =&gt; {
       const parent = currentNode();
       const positions = positionChildren(parent);
+      resetOrbitPreview();
       root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
       nodesLayer.replaceChildren();
-      connectionsLayer.replaceChildren();
       renderPath();
 
       (parent.children ?? []).forEach((childId, index) =&gt; {
         const child = ontology[childId];
         const [x, y] = positions[index];
         const color = nodeColor(child);
-        const line = document.createElementNS(svgNamespace, &quot;line&quot;);
-        line.setAttribute(&quot;x1&quot;, &quot;50&quot;);
-        line.setAttribute(&quot;y1&quot;, &quot;50&quot;);
-        line.setAttribute(&quot;x2&quot;, String(x));
-        line.setAttribute(&quot;y2&quot;, String(y));
-        line.setAttribute(&quot;class&quot;, &quot;orbit-connection&quot;);
-        line.dataset.connectionId = child.id;
-        line.dataset.relationship = relationshipForNode(child);
-        line.dataset.active = &quot;false&quot;;
-        line.style.setProperty(&quot;--connection-color&quot;, color);
-        connectionsLayer.appendChild(line);
 
         const button = document.createElement(&quot;button&quot;);
         button.type = &quot;button&quot;;
@@ -3683,6 +4452,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         button.style.setProperty(&quot;--orbit-y&quot;, `${y}%`);
         button.style.setProperty(&quot;--node-color&quot;, color);
         appendDestinationContent(button, child);
+        bindOrbitPreview(button, child);
         button.addEventListener(&quot;click&quot;, (event) =&gt; {
           setSelectedNode(child.id, { revealMobileContent: true });
           if (event.detail &gt; 0) button.blur();
@@ -3704,6 +4474,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       centreButton.style.setProperty(&quot;--orbit-y&quot;, &quot;50%&quot;);
       centreButton.style.setProperty(&quot;--node-color&quot;, nodeColor(parent));
       appendDestinationContent(centreButton, parent);
+      bindOrbitPreview(centreButton, parent);
       centreButton.addEventListener(&quot;click&quot;, (event) =&gt; {
         setSelectedNode(parent.id, { revealMobileContent: true });
         if (event.detail &gt; 0) centreButton.blur();
@@ -3758,8 +4529,27 @@ html&gt;body{padding:0}&lt;/style&gt;
       if (history.length &gt; 1) transitionOrbit(() =&gt; history.pop(), { direction: -1 });
     });
 
+    root.addEventListener(&quot;mousemove&quot;, showOrbitalCursor);
+    root.addEventListener(&quot;pointermove&quot;, (event) =&gt; {
+      if (event.pointerType !== &quot;mouse&quot;) showOrbitalCursor(event);
+    });
+    root.addEventListener(&quot;pointerdown&quot;, showOrbitalCursor);
+    root.addEventListener(&quot;mouseleave&quot;, () =&gt; hideOrbitalCursor());
+    root.addEventListener(&quot;pointerleave&quot;, (event) =&gt; {
+      if (event.pointerType !== &quot;touch&quot;) hideOrbitalCursor();
+    });
+    root.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
+      if (event.pointerType === &quot;touch&quot;) hideOrbitalCursor();
+    });
+    root.addEventListener(&quot;pointercancel&quot;, () =&gt; hideOrbitalCursor());
+    window.addEventListener(&quot;blur&quot;, () =&gt; hideOrbitalCursor());
+    window.addEventListener(&quot;resize&quot;, () =&gt; {
+      if (orbitPreviewAnchor &amp;&amp; !orbitPreview.hidden) positionOrbitPreview(orbitPreviewAnchor);
+    });
+
     root.dataset.canonicalDimensions = canonicalDimensions.join(&quot;,&quot;);
     root.dataset.terminalOntologyLevel = String(terminalOntologyLevel);
+    root.dataset.defaultOntologyLevel = String(defaultOntologyLevel);
     root.dataset.cameraState = &quot;idle&quot;;
     validateOntology();
     renderOrbit();
