@@ -7,17 +7,12 @@ interface ObservatoryIntroductionProps {
 
 type LensName = "Domain" | "Category" | "Time" | "Scale" | "Perspective";
 
-interface Lens {
-  readonly name: LensName;
-  readonly question: string;
-}
-
-const lenses: readonly Lens[] = [
-  { name: "Domain", question: "What area of reality is this?" },
-  { name: "Category", question: "What kind of thing is it?" },
-  { name: "Time", question: "When does it exist or change?" },
-  { name: "Scale", question: "At what level are we looking?" },
-  { name: "Perspective", question: "From which viewpoint is it understood?" },
+const lenses: readonly LensName[] = [
+  "Domain",
+  "Category",
+  "Time",
+  "Scale",
+  "Perspective",
 ];
 
 function LensIcon({ name }: { readonly name: LensName }): ReactElement {
@@ -100,15 +95,12 @@ export function ObservatoryIntroduction({
         <div className="observatory-intro__opening">
           <h1 id="observatory-intro-title">Begin with Reality<span>.</span></h1>
           <p className="observatory-intro__lead">
-            Understand how ideas, systems, and experiences connect. Choose a
-            lens and move from the whole to the detail without losing context.
+            Explore how ideas, systems, and experiences connect—without losing
+            sight of the whole.
           </p>
         </div>
 
-        <figure
-          className="observatory-intro__map"
-          aria-label="Reality surrounded by five enduring lenses"
-        >
+        <figure className="observatory-intro__map">
           <div className="observatory-intro__map-field" aria-hidden="true">
             <span className="observatory-intro__map-orbit observatory-intro__map-orbit--outer" />
             <span className="observatory-intro__map-orbit observatory-intro__map-orbit--middle" />
@@ -116,30 +108,21 @@ export function ObservatoryIntroduction({
             <span className="observatory-intro__map-reality">Reality</span>
             {lenses.map((lens) => (
               <span
-                className={`observatory-intro__map-lens observatory-intro__map-lens--${lens.name.toLowerCase()}`}
-                key={lens.name}
+                className={`observatory-intro__map-lens observatory-intro__map-lens--${lens.toLowerCase()}`}
+                key={lens}
               >
                 <span className="observatory-intro__map-marker">
-                  <LensIcon name={lens.name} />
+                  <LensIcon name={lens} />
                 </span>
-                <span className="observatory-intro__map-label">{lens.name}</span>
+                <span className="observatory-intro__map-label">{lens}</span>
               </span>
             ))}
           </div>
+          <figcaption className="visually-hidden">
+            Reality surrounded by the five complementary lenses: Domain,
+            Category, Time, Scale, and Perspective.
+          </figcaption>
         </figure>
-
-        <ul
-          className="observatory-intro__lenses"
-          aria-label="Five lenses on Reality"
-        >
-          {lenses.map((lens) => (
-            <li key={lens.name}>
-              <LensIcon name={lens.name} />
-              <span>{lens.name}</span>
-              <span className="observatory-intro__lens-question">{lens.question}</span>
-            </li>
-          ))}
-        </ul>
 
         <button
           className="observatory-intro__enter"
@@ -150,32 +133,6 @@ export function ObservatoryIntroduction({
           <span>Explore Reality</span>
           <span aria-hidden="true">→</span>
         </button>
-
-        <details className="observatory-intro__explanation">
-          <summary>
-            <span>See how it works</span>
-            <span className="observatory-intro__play" aria-hidden="true">›</span>
-          </summary>
-          <ol aria-label="How to explore">
-            <li>Choose the lens that frames your question.</li>
-            <li>Select a concept to bring its meaning into focus.</li>
-            <li>Follow a curated path while Reality remains your reference point.</li>
-          </ol>
-        </details>
-
-        <nav className="observatory-intro__example" aria-label="Example route">
-          <ol>
-            <li>Reality</li>
-            <li>Social</li>
-            <li>Organisations</li>
-            <li>Trust</li>
-          </ol>
-        </nav>
-
-        <p className="observatory-intro__note">
-          <span className="observatory-intro__note-signal" aria-hidden="true" />
-          <span>A quiet map for understanding complex things.</span>
-        </p>
       </div>
     </section>
   );

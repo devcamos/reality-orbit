@@ -149,13 +149,25 @@ for (const firstContactContract of [
   [introductionSource, "data-observatory-introduction"],
   [introductionSource, "data-enter-observatory"],
   [introductionSource, "Begin with Reality"],
-  [introductionSource, "Five lenses on Reality"],
+  [introductionSource, "five complementary lenses"],
   [introductionSource, "Explore Reality"],
   [applicationStyles, ".observatory-intro__enter:focus-visible"],
   [applicationStyles, "@media (prefers-reduced-motion: reduce)"],
 ]) {
   if (!firstContactContract[0].includes(firstContactContract[1])) {
     failures.push(`Missing observatory introduction contract: ${firstContactContract[1]}.`);
+  }
+}
+
+for (const redundantEntryElement of [
+  "See how it works",
+  "How to explore",
+  "Example route",
+  "A quiet map for understanding complex things",
+  "observatory-intro__lenses",
+]) {
+  if (introductionSource.includes(redundantEntryElement)) {
+    failures.push(`The observatory entry must not repeat its visual explanation: ${redundantEntryElement}.`);
   }
 }
 

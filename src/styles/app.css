@@ -1,6 +1,16 @@
 :root {
   color-scheme: dark;
   font-family: "Avenir Next", "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+  --space-void: #02060d;
+  --space-navy: #07111f;
+  --space-text: #f1f5f7;
+  --space-muted: #9fadb8;
+  --reality-color: #c99d69;
+  --domain-color: #b38361;
+  --category-color: #6f9f9a;
+  --time-color: #7397bb;
+  --scale-color: #78926f;
+  --perspective-color: #9182a4;
   background: #02060d;
 }
 
@@ -26,6 +36,15 @@ button {
   font: inherit;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .app-shell,
 .orbit-frame-shell {
   min-height: 100dvh;
@@ -37,12 +56,14 @@ button {
   min-height: 100dvh;
   overflow: hidden;
   padding: clamp(1.5rem, 4vw, 3.5rem) 1rem;
-  color: #edf3f5;
+  color: var(--space-text);
   background:
-    radial-gradient(circle at 50% 42%, rgb(26 118 131 / 16%), transparent 31%),
+    radial-gradient(circle at 50% 42%, rgb(189 143 90 / 13%), transparent 31%),
+    radial-gradient(ellipse 28% 18% at 18% 72%, rgb(31 103 111 / 8%), transparent 72%),
+    radial-gradient(ellipse 28% 18% at 82% 23%, rgb(116 139 160 / 7%), transparent 75%),
     linear-gradient(180deg, rgb(2 7 15 / 91%), rgb(1 8 17 / 82%) 46%, rgb(0 5 12 / 98%)),
     var(--intro-background) center / cover no-repeat,
-    #02060d;
+    var(--space-void);
 }
 
 .observatory-intro::before,
@@ -68,14 +89,14 @@ button {
 
 .observatory-intro::after {
   background:
-    linear-gradient(105deg, transparent 30%, rgb(66 155 165 / 5%) 50%, transparent 70%),
+    linear-gradient(105deg, transparent 30%, rgb(189 143 90 / 4%) 50%, transparent 70%),
     radial-gradient(ellipse at center, transparent 38%, rgb(1 4 9 / 64%) 88%);
 }
 
 .observatory-intro__shell {
   position: relative;
   z-index: 2;
-  width: min(100%, 58rem);
+  width: min(100%, 46rem);
   margin: 0 auto;
 }
 
@@ -83,14 +104,14 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: clamp(2.4rem, 7vw, 4.8rem);
+  margin-bottom: clamp(2.25rem, 6vw, 3.75rem);
 }
 
 .observatory-intro__brand {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  color: #a7dbe0;
+  color: #b9c5cc;
   font-size: 0.76rem;
   font-weight: 650;
   letter-spacing: 0.23em;
@@ -103,17 +124,17 @@ button {
   width: 2.5rem;
   aspect-ratio: 1;
   place-items: center;
-  border: 1px solid rgb(125 226 230 / 46%);
+  border: 1px solid rgb(201 157 105 / 52%);
   border-right-color: transparent;
   border-radius: 50%;
-  box-shadow: 0 0 1.25rem rgb(71 220 222 / 14%);
+  box-shadow: 0 0 1.25rem rgb(201 157 105 / 15%);
 }
 
 .observatory-intro__brand-mark::before,
 .observatory-intro__brand-mark::after,
 .observatory-intro__brand-mark span {
   position: absolute;
-  border: 1px solid rgb(120 223 226 / 58%);
+  border: 1px solid rgb(201 157 105 / 62%);
   border-radius: 50%;
   content: "";
 }
@@ -132,8 +153,8 @@ button {
   width: 0.26rem;
   aspect-ratio: 1;
   border: 0;
-  background: #9ce9e8;
-  box-shadow: 0 0 0.65rem #74dfe2;
+  background: #e0b77f;
+  box-shadow: 0 0 0.65rem rgb(201 157 105 / 72%);
 }
 
 .observatory-intro__signal {
@@ -141,14 +162,14 @@ button {
   width: 2.65rem;
   aspect-ratio: 1;
   place-items: center;
-  color: #e7f6f6;
-  border: 1px solid rgb(147 200 210 / 25%);
+  color: #d8e1e6;
+  border: 1px solid rgb(164 196 218 / 20%);
   border-radius: 50%;
   box-shadow: inset 0 0 1rem rgb(64 144 159 / 7%);
 }
 
 .observatory-intro__opening {
-  max-width: 47rem;
+  max-width: 44rem;
 }
 
 .observatory-intro h1 {
@@ -162,22 +183,22 @@ button {
 }
 
 .observatory-intro h1 span {
-  color: #73e0e1;
-  text-shadow: 0 0 1.3rem rgb(77 219 221 / 36%);
+  color: var(--reality-color);
+  text-shadow: 0 0 1.3rem rgb(201 157 105 / 32%);
 }
 
 .observatory-intro__lead {
-  max-width: 54ch;
+  max-width: 48ch;
   margin: 1.1rem 0 0;
-  color: #9caeb6;
+  color: var(--space-muted);
   font-size: clamp(1rem, 2.2vw, 1.22rem);
   line-height: 1.58;
   text-wrap: pretty;
 }
 
 .observatory-intro__map {
-  width: min(100%, 35rem);
-  margin: clamp(2.4rem, 6vw, 4.2rem) auto clamp(1.8rem, 5vw, 3.2rem);
+  width: min(100%, 28rem);
+  margin: clamp(2.1rem, 5vw, 3.25rem) auto clamp(1rem, 3vw, 1.6rem);
 }
 
 .observatory-intro__map-field {
@@ -190,7 +211,7 @@ button {
   position: absolute;
   inset: 12%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(65 224 222 / 9%), transparent 62%);
+  background: radial-gradient(circle, rgb(201 157 105 / 9%), transparent 62%);
   content: "";
 }
 
@@ -199,7 +220,7 @@ button {
   top: 50%;
   left: 50%;
   aspect-ratio: 1;
-  border: 1px solid rgb(101 182 190 / 13%);
+  border: 1px solid rgb(164 197 218 / 15%);
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
@@ -227,17 +248,17 @@ button {
   width: clamp(5.5rem, 18vw, 7.7rem);
   aspect-ratio: 1;
   place-items: center;
-  color: #f1f8f8;
-  border: 1px solid rgb(157 249 245 / 75%);
+  color: #fff8ed;
+  border: 1px solid rgb(242 200 137 / 72%);
   border-radius: 50%;
   background:
-    radial-gradient(circle at 38% 32%, rgb(100 222 218 / 21%), transparent 17%),
-    radial-gradient(circle, rgb(13 74 83 / 90%), rgb(3 25 35 / 96%) 63%, rgb(1 12 20 / 100%));
+    radial-gradient(circle at 38% 31%, rgb(255 239 199 / 98%) 0 7%, rgb(229 180 112 / 92%) 20%, rgb(153 91 45 / 88%) 48%, rgb(52 30 21 / 96%) 74%),
+    #7a4a2f;
   box-shadow:
-    0 0 0 0.34rem rgb(73 228 225 / 8%),
-    0 0 1.8rem rgb(68 229 226 / 43%),
-    0 0 4.6rem rgb(52 187 192 / 23%),
-    inset 0 0 1.8rem rgb(126 240 237 / 14%);
+    inset -0.65rem -0.7rem 1.25rem rgb(36 13 5 / 55%),
+    0 0 0 0.58rem rgb(213 153 80 / 9%),
+    0 0 2.8rem rgb(211 148 76 / 33%),
+    0 0 4.6rem rgb(201 157 105 / 16%);
   font-size: clamp(0.92rem, 2.4vw, 1.15rem);
   font-weight: 640;
   transform: translate(-50%, -50%);
@@ -245,6 +266,7 @@ button {
 }
 
 .observatory-intro__map-lens {
+  --lens-color: #88a9b5;
   --lens-x: 50%;
   --lens-y: 50%;
   --label-x: 50%;
@@ -253,17 +275,19 @@ button {
   z-index: 3;
   top: var(--lens-y);
   left: var(--lens-x);
-  color: #b3c6cc;
+  color: color-mix(in srgb, var(--lens-color) 62%, #d8e1e6);
   transform: translate(-50%, -50%);
 }
 
 .observatory-intro__map-lens--domain {
+  --lens-color: var(--domain-color);
   --lens-x: 50%;
   --lens-y: 12%;
   --label-y: -1.45rem;
 }
 
 .observatory-intro__map-lens--category {
+  --lens-color: var(--category-color);
   --lens-x: 88%;
   --lens-y: 40%;
   --label-x: calc(100% + 0.7rem);
@@ -271,16 +295,19 @@ button {
 }
 
 .observatory-intro__map-lens--time {
+  --lens-color: var(--time-color);
   --lens-x: 72%;
   --lens-y: 84%;
 }
 
 .observatory-intro__map-lens--scale {
+  --lens-color: var(--scale-color);
   --lens-x: 28%;
   --lens-y: 84%;
 }
 
 .observatory-intro__map-lens--perspective {
+  --lens-color: var(--perspective-color);
   --lens-x: 12%;
   --lens-y: 49%;
   --label-x: -0.7rem;
@@ -292,14 +319,17 @@ button {
   width: clamp(2.8rem, 9vw, 3.65rem);
   aspect-ratio: 1;
   place-items: center;
-  color: #8de2e2;
-  border: 1px solid rgb(107 225 225 / 44%);
+  color: color-mix(in srgb, var(--lens-color) 72%, #eef4f6);
+  border: 1px solid color-mix(in srgb, var(--lens-color) 62%, rgb(184 207 220 / 24%));
   border-radius: 50%;
-  background: radial-gradient(circle at 42% 35%, rgb(44 167 172 / 24%), rgb(3 24 33 / 94%) 68%);
+  background:
+    radial-gradient(circle at 36% 28%, rgb(239 248 250 / 15%), transparent 20%),
+    radial-gradient(circle, color-mix(in srgb, var(--lens-color) 25%, transparent), transparent 66%),
+    rgb(5 15 25 / 90%);
   box-shadow:
-    0 0 0 0.24rem rgb(61 213 214 / 6%),
-    0 0 1.15rem rgb(52 209 210 / 28%),
-    inset 0 0 1rem rgb(54 178 184 / 10%);
+    inset -0.5rem -0.55rem 1.1rem rgb(0 3 8 / 46%),
+    0 0 0 0.24rem color-mix(in srgb, var(--lens-color) 7%, transparent),
+    0 0 1.15rem color-mix(in srgb, var(--lens-color) 22%, transparent);
 }
 
 .observatory-intro__map-label {
@@ -320,76 +350,23 @@ button {
   stroke-width: 1.45;
 }
 
-.observatory-intro__lenses {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin: 0;
-  padding: 0.78rem 0;
-  border: 1px solid rgb(122 180 192 / 22%);
-  border-radius: 1.25rem;
-  background: linear-gradient(180deg, rgb(5 18 29 / 58%), rgb(2 10 18 / 42%));
-  box-shadow:
-    inset 0 1px rgb(221 248 249 / 4%),
-    0 1.2rem 3rem rgb(0 4 9 / 22%);
-  list-style: none;
-  backdrop-filter: blur(14px);
-}
-
-.observatory-intro__lenses li {
-  position: relative;
-  display: grid;
-  min-width: 0;
-  justify-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.45rem;
-  color: #83949d;
-  font-size: clamp(0.62rem, 1.7vw, 0.74rem);
-}
-
-.observatory-intro__lenses li:first-child {
-  color: #91e6e4;
-}
-
-.observatory-intro__lenses li:not(:last-child)::after {
-  position: absolute;
-  top: 8%;
-  right: 0;
-  width: 1px;
-  height: 84%;
-  background: rgb(119 169 181 / 14%);
-  content: "";
-}
-
-.observatory-intro__lens-question {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.observatory-intro__enter,
-.observatory-intro__explanation {
-  width: 100%;
-}
-
 .observatory-intro__enter {
   display: flex;
+  width: min(100%, 32rem);
   min-height: 3.6rem;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1.55rem;
+  margin: 0 auto;
   padding: 0.9rem 1.35rem;
-  color: #f5f9fa;
-  border: 1px solid rgb(171 246 241 / 66%);
+  color: #fff8ef;
+  border: 1px solid rgb(219 180 128 / 58%);
   border-radius: 999px;
   background:
-    linear-gradient(105deg, rgb(27 76 87 / 96%), rgb(32 115 122 / 96%) 52%, rgb(35 125 130 / 96%));
+    linear-gradient(105deg, rgb(54 36 27 / 96%), rgb(91 59 39 / 96%) 52%, rgb(111 73 46 / 96%));
   box-shadow:
-    inset 0 1px 0 rgb(237 255 254 / 28%),
-    0 0 2rem rgb(59 220 216 / 17%),
+    inset 0 1px 0 rgb(255 239 215 / 24%),
+    0 0 2rem rgb(201 157 105 / 16%),
     0 1rem 2.8rem rgb(0 7 13 / 32%);
   font-size: 0.98rem;
   font-weight: 620;
@@ -402,17 +379,17 @@ button {
 }
 
 .observatory-intro__enter:hover {
-  border-color: rgb(209 255 252 / 82%);
+  border-color: rgb(240 205 157 / 78%);
   background:
-    linear-gradient(105deg, rgb(33 91 101 / 98%), rgb(34 120 127 / 98%) 52%, rgb(39 129 133 / 98%));
+    linear-gradient(105deg, rgb(65 43 31 / 98%), rgb(107 70 45 / 98%) 52%, rgb(126 84 52 / 98%));
   box-shadow:
-    inset 0 1px 0 rgb(237 255 254 / 34%),
-    0 0 2.7rem rgb(59 220 216 / 24%),
+    inset 0 1px 0 rgb(255 239 215 / 30%),
+    0 0 2.7rem rgb(201 157 105 / 22%),
     0 1.2rem 3rem rgb(0 7 13 / 38%);
 }
 
 .observatory-intro__enter:focus-visible {
-  outline: 2px solid #b2d1dc;
+  outline: 2px solid #dfbd90;
   outline-offset: 4px;
 }
 
@@ -438,104 +415,6 @@ button {
   31% {
     filter: brightness(1.01);
   }
-}
-
-.observatory-intro__explanation {
-  margin-top: 0.85rem;
-  border: 1px solid rgb(125 169 184 / 18%);
-  border-radius: 999px;
-  background: rgb(2 9 17 / 44%);
-}
-
-.observatory-intro__explanation summary {
-  display: flex;
-  min-height: 3.1rem;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 0.75rem 1.2rem;
-  color: #8999a2;
-  cursor: pointer;
-  list-style: none;
-}
-
-.observatory-intro__explanation summary::-webkit-details-marker {
-  display: none;
-}
-
-.observatory-intro__explanation summary:focus-visible {
-  outline: 2px solid #9bc9d0;
-  outline-offset: 4px;
-}
-
-.observatory-intro__play {
-  display: grid;
-  width: 1.35rem;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 1px solid rgb(159 199 209 / 48%);
-  border-radius: 50%;
-  transition: transform 180ms ease;
-}
-
-.observatory-intro__explanation[open] .observatory-intro__play {
-  transform: rotate(90deg);
-}
-
-.observatory-intro__explanation ol {
-  display: grid;
-  gap: 0.55rem;
-  margin: 0;
-  padding: 0.2rem 1.6rem 1.2rem 2.8rem;
-  color: #9baab1;
-  font-size: 0.82rem;
-  line-height: 1.5;
-}
-
-.observatory-intro__example {
-  margin-top: 1rem;
-}
-
-.observatory-intro__example ol {
-  display: flex;
-  max-width: max-content;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0;
-  margin: 0 auto;
-  padding: 0.55rem 1rem;
-  color: #71858e;
-  border: 1px solid rgb(113 158 173 / 12%);
-  border-radius: 999px;
-  background: rgb(2 10 18 / 38%);
-  font-size: 0.68rem;
-  list-style: none;
-}
-
-.observatory-intro__example li:not(:last-child)::after {
-  margin: 0 0.48rem;
-  color: #5bb9ba;
-  content: "→";
-}
-
-.observatory-intro__note {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  margin: 1rem 0 0;
-  color: #6f838c;
-  font-size: 0.74rem;
-  letter-spacing: 0.02em;
-  text-align: center;
-}
-
-.observatory-intro__note-signal {
-  width: 0.38rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #65d7d7;
-  box-shadow: 0 0 0.7rem #61d9da;
 }
 
 @keyframes intro-star-drift {
@@ -643,16 +522,20 @@ button {
     aspect-ratio: 1.08;
   }
 
-  .observatory-intro__lenses {
-    border-radius: 1.1rem;
-  }
-
-  .observatory-intro__lenses li {
-    padding-inline: 0.25rem;
-  }
-
   .observatory-intro__enter {
-    margin-top: 1.2rem;
+    min-height: 3.7rem;
+  }
+
+  .observatory-intro__map-lens--category {
+    --lens-x: 84%;
+    --label-x: 50%;
+    --label-y: calc(100% + 0.62rem);
+  }
+
+  .observatory-intro__map-lens--perspective {
+    --lens-x: 16%;
+    --label-x: 50%;
+    --label-y: calc(100% + 0.62rem);
   }
 }
 
@@ -671,20 +554,8 @@ button {
     width: 2.35rem;
   }
 
-  .observatory-intro__map-lens--category {
-    --lens-x: 84%;
-  }
-
-  .observatory-intro__map-lens--perspective {
-    --lens-x: 16%;
-  }
-
   .observatory-intro__map-label {
     font-size: 0.64rem;
-  }
-
-  .observatory-intro__lenses li {
-    font-size: 0.56rem;
   }
 
   .observatory-intro__lens-icon {
@@ -706,8 +577,7 @@ button {
     animation: none;
   }
 
-  .observatory-intro__enter,
-  .observatory-intro__play {
+  .observatory-intro__enter {
     transition: none;
   }
 }
