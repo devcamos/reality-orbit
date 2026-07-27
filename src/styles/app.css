@@ -523,10 +523,14 @@ button {
 
   .observatory-intro__map-lens--category {
     --lens-x: 84%;
+    --label-x: 50%;
+    --label-y: calc(100% + 0.62rem);
   }
 
   .observatory-intro__map-lens--perspective {
     --lens-x: 16%;
+    --label-x: 50%;
+    --label-y: calc(100% + 0.62rem);
   }
 
   .observatory-intro__map-label {

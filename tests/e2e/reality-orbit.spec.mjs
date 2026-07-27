@@ -66,11 +66,18 @@ test("the welcome call to action feels alive without displacing text or ignoring
           const rect = introduction.querySelector(selector).getBoundingClientRect();
           return rect.left < shellRect.left - 1 || rect.right > shellRect.right + 1;
         }),
+        clippedLensLabels: [...introduction.querySelectorAll(".observatory-intro__map-label")]
+          .filter((label) => {
+            const rect = label.getBoundingClientRect();
+            return rect.left < 0 || rect.right > document.documentElement.clientWidth;
+          })
+          .map((label) => label.textContent),
       };
     });
 
     expect(layout.horizontalOverflow).toBeLessThanOrEqual(1);
     expect(layout.misplaced).toEqual([]);
+    expect(layout.clippedLensLabels).toEqual([]);
   }
 
   const heartbeat = await page.locator("[data-enter-observatory]").evaluate((button) => ({
