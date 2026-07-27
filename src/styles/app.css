@@ -394,11 +394,11 @@ button {
   font-size: 0.98rem;
   font-weight: 620;
   cursor: pointer;
+  animation: intro-heartbeat 1.9s ease-in-out infinite;
   transition:
     border-color 180ms ease,
     background 180ms ease,
-    box-shadow 180ms ease,
-    transform 180ms ease;
+    box-shadow 180ms ease;
 }
 
 .observatory-intro__enter:hover {
@@ -409,12 +409,35 @@ button {
     inset 0 1px 0 rgb(237 255 254 / 34%),
     0 0 2.7rem rgb(59 220 216 / 24%),
     0 1.2rem 3rem rgb(0 7 13 / 38%);
-  transform: translateY(-1px);
 }
 
 .observatory-intro__enter:focus-visible {
   outline: 2px solid #b2d1dc;
   outline-offset: 4px;
+}
+
+@keyframes intro-heartbeat {
+  0%,
+  38%,
+  100% {
+    filter: brightness(1);
+  }
+
+  8% {
+    filter: brightness(1.055);
+  }
+
+  15% {
+    filter: brightness(1.01);
+  }
+
+  23% {
+    filter: brightness(1.075);
+  }
+
+  31% {
+    filter: brightness(1.01);
+  }
 }
 
 .observatory-intro__explanation {
@@ -678,7 +701,8 @@ button {
   }
 
   .observatory-intro::before,
-  .observatory-intro__map-reality {
+  .observatory-intro__map-reality,
+  .observatory-intro__enter {
     animation: none;
   }
 

@@ -435,6 +435,45 @@ test("every ontology node is reachable and has complete selection data", (contex
   context.diagnostic(`${nodes.length} ontology nodes passed the complete selection-data contract.`);
 });
 
+test("every reachable node has a distinct contextual lens rather than generic fallback copy", (context) => {
+  const requiredContextFields = [
+    "Governing question",
+    "Purpose",
+    "First principles",
+    "Mental model",
+    "How to use it",
+    "Common confusion",
+  ];
+  const fingerprints = new Map();
+  const genericFallbacks = [
+    /A useful concept needs a clear definition/i,
+    /A reusable lens that compresses detail/i,
+    /Check that the situation matches the definition/i,
+    /The concept is a representation used for reasoning/i,
+    /Use this concept where the following description applies/i,
+  ];
+
+  for (const node of nodes) {
+    const anatomy = contract.buildConceptAnatomy(node);
+    const contextualValues = requiredContextFields.map((field) => {
+      const value = String(anatomy[field] ?? "").trim();
+      assert.ok(value, `${node.label} must provide node-specific ${field}.`);
+      return value;
+    });
+    const combined = contextualValues.join(" ");
+    assert.match(combined, new RegExp(node.label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `${node.label}'s contextual lens must name its subject.`);
+    for (const genericFallback of genericFallbacks) {
+      assert.doesNotMatch(combined, genericFallback, `${node.label} must not expose generic fallback copy.`);
+    }
+
+    const fingerprint = contextualValues.join("\n");
+    assert.equal(fingerprints.has(fingerprint), false, `${node.label} must not duplicate ${fingerprints.get(fingerprint)}'s contextual lens.`);
+    fingerprints.set(fingerprint, node.label);
+  }
+
+  context.diagnostic(`${nodes.length} distinct node-specific contextual lenses passed review.`);
+});
+
 test("every visible child relationship is explicitly curated and advances the canonical path", () => {
   for (const node of nodes) {
     const children = node.children ?? [];
@@ -490,12 +529,17 @@ test("Concept Anatomy maps every visible teaching field to the selected node", (
   assert.doesNotMatch(fragment, /data-understand-flow/);
   assert.doesNotMatch(fragment, /understandFlowForNode/);
   assert.match(fragment, /const entries = Object\.entries\(buildConceptAnatomy\(node\)\);/);
-  assert.match(fragment, /\["Statement", "Governing question", "Problem", "Predictions", "Prediction"\]/);
+  assert.match(fragment, /const lead = entryFor\("Governing question"\);/);
+  assert.match(fragment, /const support = entryFor\("Purpose"\);/);
+  assert.match(fragment, /\["First principles", "Mental model"\]\.map\(entryFor\)/);
+  assert.match(fragment, /\["How to use it", "Common confusion", "Scope"\]\.map\(entryFor\)/);
   assert.match(fragment, /const principleItemsFor = \(value\)/);
   assert.match(fragment, /if \(label === "First principles"\)/);
   assert.match(fragment, /principlesList\.className = "understand-principles"/);
+  assert.match(fragment, /<details class="understand-more" data-understand-more hidden>/);
+  assert.match(fragment, /understandMore\.open = false;/);
   assert.match(fragment, /data-understand-support-label/);
-  assert.match(fragment, /understandSupportLabel\.textContent = support\[0\];/);
+  assert.match(fragment, /understandSupportLabel\.textContent = support\?\.\[0\] \?\? "Purpose";/);
   assert.match(fragment, /understandView\.dataset\.selectedNode = node\.id;/);
   assert.match(fragment, /understandEyebrow\.textContent = role === "Dimension" \? "A lens on reality" : `\$\{role\} · Concept anatomy`;/);
   assert.match(fragment, /understandTitle\.textContent = node\.label;/);

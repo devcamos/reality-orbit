@@ -95,7 +95,7 @@
     gap: 0.35rem;
     color: var(--space-muted);
     font-family: var(--space-display);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.01em;
     overflow: hidden;
     white-space: nowrap;
@@ -306,7 +306,7 @@
       inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55),
       0 0 0 0.58rem rgba(213, 153, 80, 0.09),
       0 0 2.8rem rgba(211, 148, 76, 0.33);
-    animation: reality-breathe 8s ease-in-out infinite;
+    animation: reality-breathe 3.6s ease-in-out infinite;
   }
 
   #reality-orbit-prototype .orbit-node[data-visual-archetype="sun"] .destination-marker::before {
@@ -989,8 +989,8 @@
   #reality-orbit-prototype .understand-header h2,
   #reality-orbit-prototype .understand-story h3,
   #reality-orbit-prototype .understand-story p,
-  #reality-orbit-prototype .understand-more-header h3,
-  #reality-orbit-prototype .understand-more-header p {
+  #reality-orbit-prototype .understand-more-header strong,
+  #reality-orbit-prototype .understand-more-header span {
     margin: 0;
   }
 
@@ -1067,9 +1067,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
-    margin: auto 0 0;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(164, 196, 218, 0.13);
+    margin: 0;
   }
 
   #reality-orbit-prototype .understand-foundations div,
@@ -1091,6 +1089,7 @@
   #reality-orbit-prototype .understand-context-card dd,
   #reality-orbit-prototype .understand-fields dd {
     margin-top: 0.35rem;
+    overflow-wrap: anywhere;
   }
 
   #reality-orbit-prototype .understand-principles {
@@ -1150,22 +1149,74 @@
 
   #reality-orbit-prototype .understand-more {
     margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(164, 196, 218, 0.13);
+    overflow: hidden;
+    border: 1px solid rgba(164, 196, 218, 0.14);
+    border-radius: 0.95rem;
+    background: rgba(4, 13, 23, 0.5);
   }
 
   #reality-orbit-prototype .understand-more-header {
-    display: flex;
-    align-items: end;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    min-height: 4.25rem;
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    list-style: none;
+    transition: background 180ms ease, color 180ms ease;
+  }
+
+  #reality-orbit-prototype .understand-more-header::-webkit-details-marker {
+    display: none;
+  }
+
+  #reality-orbit-prototype .understand-more-header:hover {
+    background: color-mix(in srgb, var(--map-color, #c99d69) 7%, transparent);
+  }
+
+  #reality-orbit-prototype .understand-more-header:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 72%, #dce7eb);
+    outline-offset: -3px;
+  }
+
+  #reality-orbit-prototype .understand-more-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.2rem;
+  }
+
+  #reality-orbit-prototype .understand-more-copy strong {
+    color: #dce5e8;
+    font-family: var(--space-display);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  #reality-orbit-prototype .understand-more-chevron {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 62%, #dce7eb);
+    font-size: 1.35rem;
+    line-height: 1;
+    transition: transform 180ms ease;
+  }
+
+  #reality-orbit-prototype .understand-more[open] .understand-more-chevron {
+    transform: rotate(180deg);
+  }
+
+  #reality-orbit-prototype .understand-expanded {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(164, 196, 218, 0.13);
   }
 
   #reality-orbit-prototype .understand-fields {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem 1.25rem;
-    margin: 1rem 0 0;
+    margin: 0;
   }
 
   #reality-orbit-prototype .understand-fields div {
@@ -1196,13 +1247,21 @@
   }
 
   @keyframes reality-breathe {
-    0%, 100% {
+    0%, 36%, 100% {
       filter: brightness(0.98);
       box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.55), 0 0 0 0.58rem rgba(213, 153, 80, 0.09), 0 0 2.55rem rgba(211, 148, 76, 0.28);
     }
-    50% {
-      filter: brightness(1.04);
-      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.52), 0 0 0 0.68rem rgba(213, 153, 80, 0.11), 0 0 3.15rem rgba(211, 148, 76, 0.36);
+    8% {
+      filter: brightness(1.055);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.5), 0 0 0 0.68rem rgba(213, 153, 80, 0.12), 0 0 3.2rem rgba(211, 148, 76, 0.38);
+    }
+    16% {
+      filter: brightness(1);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.54), 0 0 0 0.61rem rgba(213, 153, 80, 0.1), 0 0 2.75rem rgba(211, 148, 76, 0.31);
+    }
+    24% {
+      filter: brightness(1.075);
+      box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.49), 0 0 0 0.72rem rgba(213, 153, 80, 0.13), 0 0 3.5rem rgba(211, 148, 76, 0.42);
     }
   }
 
@@ -1214,6 +1273,7 @@
   #reality-orbit-prototype .orbit-actions[hidden],
   #reality-orbit-prototype .orbit-back[hidden],
   #reality-orbit-prototype .understand-foundations[hidden],
+  #reality-orbit-prototype .understand-fields[hidden],
   #reality-orbit-prototype .understand-more[hidden] {
     display: none;
   }
@@ -1273,9 +1333,21 @@
     }
 
     #reality-orbit-prototype .orbit-toolbar {
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       gap: 0.45rem;
+      min-height: 4.4rem;
       padding: 0.55rem 0.6rem;
+    }
+
+    #reality-orbit-prototype .orbit-path {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: center;
+      color: #e8eef1;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.015em;
     }
 
     #reality-orbit-prototype .orbit-path > span {
@@ -1283,6 +1355,9 @@
     }
 
     #reality-orbit-prototype .orbit-toolbar .orbit-back {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
       min-height: 2.75rem;
     }
 
@@ -1323,12 +1398,18 @@
 
     #reality-orbit-prototype .understand-header {
       justify-items: start;
-      padding: 1.25rem 0.8rem;
+      padding: 0.85rem 0.8rem;
       text-align: left;
     }
 
     #reality-orbit-prototype .understand-header-meta {
       align-items: flex-start;
+    }
+
+    #reality-orbit-prototype .understand-header [data-understand-title],
+    #reality-orbit-prototype .understand-header .understand-definition-label,
+    #reality-orbit-prototype .understand-header .understand-statement {
+      display: none;
     }
 
     #reality-orbit-prototype .understand-header-meta .viz-badge {
@@ -1351,9 +1432,7 @@
     }
 
     #reality-orbit-prototype .understand-more-header {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.2rem;
+      align-items: center;
     }
   }
 
@@ -1464,17 +1543,22 @@
                   <span class="text-small understand-support-label" data-understand-support-label></span>
                   <p class="understand-support" data-understand-support></p>
                 </div>
-                <dl class="understand-foundations" data-understand-foundations></dl>
               </article>
-              <dl class="understand-context" data-understand-context aria-label="Concept context"></dl>
             </div>
-            <section class="understand-more" data-understand-more hidden aria-labelledby="understand-more-title">
-              <header class="understand-more-header">
-                <h3 id="understand-more-title">Complete anatomy</h3>
-                <p class="text-small text-muted" data-understand-more-summary></p>
-              </header>
-              <dl class="understand-fields" data-understand-fields></dl>
-            </section>
+            <details class="understand-more" data-understand-more hidden>
+              <summary class="understand-more-header">
+                <span class="understand-more-copy">
+                  <strong id="understand-more-title">Open the full lens</strong>
+                  <span class="text-small text-muted" data-understand-more-summary></span>
+                </span>
+                <span class="understand-more-chevron" aria-hidden="true">⌄</span>
+              </summary>
+              <div class="understand-expanded">
+                <dl class="understand-foundations" data-understand-foundations aria-label="First principles and mental model"></dl>
+                <dl class="understand-context" data-understand-context aria-label="Concept context"></dl>
+                <dl class="understand-fields" data-understand-fields aria-label="Supporting concept anatomy"></dl>
+              </div>
+            </details>
           </div>
     </aside>
   </div>
@@ -2818,10 +2902,30 @@
     };
 
     const buildConceptAnatomy = (node) => {
-      if (node.anatomy) return node.anatomy;
-
       const role = roleForNode(node);
-      const baseScope = `Use this concept where the following description applies: ${node.summary}`;
+      const summary = node.summary.trim();
+      const summaryWithoutStop = summary.replace(/[.!?]+$/, "");
+      const summaryInSentence = `${summaryWithoutStop.charAt(0).toLowerCase()}${summaryWithoutStop.slice(1)}`;
+      const parentLabel = node.canonicalPath.at(-2) ?? "Reality";
+      const dimensionLabel = node.canonicalPath[1] ?? "Reality";
+      const childLabels = (node.children ?? [])
+        .map((childId) => ontology[childId]?.label)
+        .filter(Boolean);
+      const joinLabels = (labels) => labels.length < 2
+        ? labels.join("")
+        : `${labels.slice(0, -1).join(", ")} and ${labels.at(-1)}`;
+      const baseScope = `${node.label} applies when the inquiry concerns ${summaryInSentence}; it does not replace the wider ${parentLabel} context or the other lenses on Reality.`;
+      const specificContext = {
+        "Governing question": `What becomes clearer within ${parentLabel} when ${node.label}—${summaryInSentence}—is brought into focus?`,
+        "Purpose": `Use ${node.label} to distinguish ${summaryInSentence} within ${parentLabel}, keeping the inquiry precise without losing its wider path through ${dimensionLabel}.`,
+        "First principles": `For ${node.label}, the defining boundary is specific: ${summary} Its meaning must remain distinct from ${parentLabel}, even when context, time, scale, or perspective changes what is observed.`,
+        "Mental model": `A quiet lens inside ${parentLabel}: bring ${node.label} to the centre and hold ${summaryInSentence} in focus while the surrounding map preserves context.`,
+        "Scope": baseScope,
+        "How to use it": childLabels.length > 0
+          ? `Begin with the definition of ${node.label}, then compare its immediate paths—${joinLabels(childLabels)}—and follow the one that best matches the current question.`
+          : `Begin with the definition of ${node.label}, compare it with adjacent ideas in ${parentLabel}, then test the same subject through Time, Scale, and Perspective before concluding.`,
+        "Common confusion": `Do not use ${node.label} as shorthand for all of ${parentLabel}. Here it refers specifically to ${summaryInSentence}.`,
+      };
 
       if (role === "Root concept") {
         return {
@@ -2847,6 +2951,7 @@
         };
       }
 
+      const roleAnatomy = (() => {
       if (role === "Domain") {
         return {
           "Purpose": `Use ${node.label} to set the broad subject-matter boundary for questions, evidence, and explanations.`,
@@ -3041,6 +3146,27 @@
         "How to use it": "Check that the situation matches the definition and scope before applying the concept.",
         "Common confusion": "The concept is a representation used for reasoning; it is not identical to the reality it represents.",
       };
+      })();
+
+      const anatomy = {
+        ...roleAnatomy,
+        ...specificContext,
+        ...(node.anatomy ?? {}),
+      };
+      const primaryFields = [
+        "Governing question",
+        "Purpose",
+        "First principles",
+        "Mental model",
+        "How to use it",
+        "Common confusion",
+        "Scope",
+      ];
+
+      return {
+        ...Object.fromEntries(primaryFields.map((field) => [field, anatomy[field]])),
+        ...Object.fromEntries(Object.entries(anatomy).filter(([field]) => !primaryFields.includes(field))),
+      };
     };
 
     const thoughtForNode = (node) => {
@@ -3090,16 +3216,28 @@
       );
       orbitPreview.style.setProperty("--preview-width", `${previewWidth}px`);
       const previewRect = orbitPreview.getBoundingClientRect();
-      const preferredLeft = placement === "right"
-        ? targetRect.right - stageRect.left + nodeGap
-        : targetRect.left - stageRect.left - previewRect.width - nodeGap;
-      const preferredTop = targetRect.top - stageRect.top + ((targetHeight - previewRect.height) / 2);
-      const maxLeft = Math.max(edgeGap, stageRect.width - previewRect.width - edgeGap);
-      const maxTop = Math.max(edgeGap, stageRect.height - previewRect.height - edgeGap);
+      const preferredScreenLeft = placement === "right"
+        ? targetRect.right + nodeGap
+        : targetRect.left - previewRect.width - nodeGap;
+      const preferredScreenTop = targetRect.top + ((targetHeight - previewRect.height) / 2);
+      const desiredScreenLeft = Math.min(
+        Math.max(preferredScreenLeft, stageRect.left + edgeGap),
+        stageRect.right - previewRect.width - edgeGap,
+      );
+      const desiredScreenTop = Math.min(
+        Math.max(preferredScreenTop, stageRect.top + edgeGap),
+        stageRect.bottom - previewRect.height - edgeGap,
+      );
+      const localLeft = desiredScreenLeft - stageRect.left;
+      const localTop = desiredScreenTop - stageRect.top;
 
       orbitPreview.dataset.placement = placement;
-      orbitPreview.style.setProperty("--preview-left", `${Math.min(Math.max(preferredLeft, edgeGap), maxLeft)}px`);
-      orbitPreview.style.setProperty("--preview-top", `${Math.min(Math.max(preferredTop, edgeGap), maxTop)}px`);
+      orbitPreview.style.setProperty("--preview-left", `${localLeft}px`);
+      orbitPreview.style.setProperty("--preview-top", `${localTop}px`);
+
+      const positionedRect = orbitPreview.getBoundingClientRect();
+      orbitPreview.style.setProperty("--preview-left", `${localLeft + desiredScreenLeft - positionedRect.left}px`);
+      orbitPreview.style.setProperty("--preview-top", `${localTop + desiredScreenTop - positionedRect.top}px`);
     };
 
     const showOrbitPreview = (node, button) => {
@@ -3205,47 +3343,29 @@
     const renderUnderstand = (node) => {
       const role = roleForNode(node);
       const entries = Object.entries(buildConceptAnatomy(node));
-      const usedLabels = new Set();
-      const take = (labels) => {
-        const entry = labels
-          .map((label) => entries.find(([entryLabel]) => entryLabel === label && !usedLabels.has(entryLabel)))
-          .find(Boolean);
-        if (entry) usedLabels.add(entry[0]);
-        return entry;
-      };
-      const takeAny = (excludedLabels = []) => {
-        const entry = entries.find(([label]) => !usedLabels.has(label) && !excludedLabels.includes(label));
-        if (entry) usedLabels.add(entry[0]);
-        return entry;
-      };
-
-      const lead = take(["Statement", "Governing question", "Problem", "Predictions", "Prediction"]) ?? takeAny(["First principles"]) ?? takeAny();
-      const support = take(["Problem", "Purpose", "Mechanism", "Mental model", "Predictions", "Prediction"]) ?? takeAny(["First principles"]) ?? takeAny();
-      const foundations = [
-        take(["First principles", "Variables", "Mechanism", "Predictions", "Prediction"]),
-        take(["Mental model", "Predictions", "Prediction", "Variables", "Assumptions"]),
-      ].filter(Boolean);
-      const contextEntries = [
-        take(["Scope"]),
-        take(["How to use it", "Applications", "Application"]),
-        take(["Common confusion", "Limitations", "Related laws"]),
-      ].filter(Boolean);
-      while (contextEntries.length < 3) {
-        const fallback = takeAny();
-        if (!fallback) break;
-        contextEntries.push(fallback);
-      }
-      const remaining = entries.filter(([label]) => !usedLabels.has(label));
+      const entryFor = (label) => entries.find(([entryLabel]) => entryLabel === label);
+      const lead = entryFor("Governing question");
+      const support = entryFor("Purpose");
+      const foundations = ["First principles", "Mental model"].map(entryFor).filter(Boolean);
+      const contextEntries = ["How to use it", "Common confusion", "Scope"].map(entryFor).filter(Boolean);
+      const primaryLabels = new Set([
+        lead?.[0],
+        support?.[0],
+        ...foundations.map(([label]) => label),
+        ...contextEntries.map(([label]) => label),
+      ].filter(Boolean));
+      const remaining = entries.filter(([label]) => !primaryLabels.has(label));
+      const expandedFieldCount = foundations.length + contextEntries.length + remaining.length;
 
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-");
       understandEyebrow.textContent = role === "Dimension" ? "A lens on reality" : `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
       understandStatement.textContent = node.summary;
-      understandLeadLabel.textContent = lead[0];
-      understandLead.textContent = lead[1];
-      understandSupportLabel.textContent = support[0];
-      understandSupport.textContent = support[1];
+      understandLeadLabel.textContent = lead?.[0] ?? "Governing question";
+      understandLead.textContent = lead?.[1] ?? node.summary;
+      understandSupportLabel.textContent = support?.[0] ?? "Purpose";
+      understandSupport.textContent = support?.[1] ?? node.summary;
 
       understandFoundations.replaceChildren(...foundations.map((entry) => createAnatomyField(entry)));
       understandFoundations.hidden = foundations.length === 0;
@@ -3254,8 +3374,12 @@
       understandContext.setAttribute("aria-label", `${node.label} context`);
 
       understandFields.replaceChildren(...remaining.map((entry) => createAnatomyField(entry)));
-      understandMore.hidden = remaining.length === 0;
-      understandMoreSummary.textContent = remaining.length === 1 ? "1 supporting field" : `${remaining.length} supporting fields`;
+      understandFields.hidden = remaining.length === 0;
+      understandMore.open = false;
+      understandMore.hidden = expandedFieldCount === 0;
+      understandMoreSummary.textContent = expandedFieldCount === 1
+        ? "1 node-specific field"
+        : `${expandedFieldCount} node-specific fields`;
     };
 
     const visualModelForNode = (node) => {
@@ -3384,6 +3508,7 @@
 
     const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) => {
       resetOrbitPreview();
+      hideOrbitalCursor();
       selectedId = nodeId;
       const node = ontology[nodeId];
       root.querySelectorAll("[data-node-id]").forEach((button) => {
@@ -3537,7 +3662,7 @@
       if (event.pointerType !== "touch") hideOrbitalCursor();
     });
     root.addEventListener("pointerup", (event) => {
-      if (event.pointerType === "touch") hideOrbitalCursor(120);
+      if (event.pointerType === "touch") hideOrbitalCursor();
     });
     root.addEventListener("pointercancel", () => hideOrbitalCursor());
     window.addEventListener("blur", () => hideOrbitalCursor());

@@ -43,6 +43,52 @@ test("introduces the observatory before revealing the ontology map", async ({ pa
   await expect(app(page).locator("#reality-orbit-prototype")).toBeVisible();
 });
 
+test("the welcome call to action feels alive without displacing text or ignoring reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const layout = await page.locator("[data-observatory-introduction]").evaluate((introduction) => {
+      const shell = introduction.querySelector(".observatory-intro__shell");
+      const selectors = [
+        ".observatory-intro__opening",
+        ".observatory-intro__map",
+        ".observatory-intro__lenses",
+        ".observatory-intro__enter",
+        ".observatory-intro__explanation",
+        ".observatory-intro__example",
+        ".observatory-intro__note",
+      ];
+      const shellRect = shell.getBoundingClientRect();
+      return {
+        horizontalOverflow: shell.scrollWidth - shell.clientWidth,
+        misplaced: selectors.filter((selector) => {
+          const rect = introduction.querySelector(selector).getBoundingClientRect();
+          return rect.left < shellRect.left - 1 || rect.right > shellRect.right + 1;
+        }),
+      };
+    });
+
+    expect(layout.horizontalOverflow).toBeLessThanOrEqual(1);
+    expect(layout.misplaced).toEqual([]);
+  }
+
+  const heartbeat = await page.locator("[data-enter-observatory]").evaluate((button) => ({
+    name: getComputedStyle(button).animationName,
+    duration: getComputedStyle(button).animationDuration,
+  }));
+  expect(heartbeat).toEqual({ name: "intro-heartbeat", duration: "1.9s" });
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect
+    .poll(() => page.locator("[data-enter-observatory]").evaluate((button) => getComputedStyle(button).animationName))
+    .toBe("none");
+});
+
 test("loads the canonical Reality orbit without browser errors", async ({ page }) => {
   const errors = [];
   page.on("console", (message) => {
@@ -59,10 +105,30 @@ test("loads the canonical Reality orbit without browser errors", async ({ page }
   await expect(app(page).locator(".orbit-connection")).toHaveCount(0);
   await expect(app(page).locator("[data-orbit-path]")).toHaveText("Choose a dimension");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Reality");
+  await expect(app(page).locator("[data-understand-lead-label]")).toHaveText("Governing question");
+  await expect(app(page).locator("[data-understand-support-label]")).toHaveText("Purpose");
+  await expect(app(page).locator("[data-understand-more]")).not.toHaveAttribute("open", "");
+  await app(page).locator("[data-understand-more] summary").click();
   const firstPrinciples = app(page).locator('[data-anatomy-field="first-principles"] .understand-principles li');
   await expect(firstPrinciples).toHaveCount(2);
+  await expect(firstPrinciples.nth(0)).toBeVisible();
   await expect(firstPrinciples.nth(0)).toHaveText("Every useful description selects boundaries and leaves detail out.");
   await expect(firstPrinciples.nth(1)).toHaveText("No single dimension provides a complete account.");
+  const conceptLayout = await app(page).locator("[data-understand-view]").evaluate((view) => {
+    const viewRect = view.getBoundingClientRect();
+    const regions = [...view.querySelectorAll(".understand-story, .understand-more, [data-anatomy-field]")];
+    return {
+      horizontalOverflow: view.scrollWidth - view.clientWidth,
+      misplaced: regions
+        .filter((region) => {
+          const rect = region.getBoundingClientRect();
+          return rect.left < viewRect.left - 1 || rect.right > viewRect.right + 1;
+        })
+        .map((region) => region.className),
+    };
+  });
+  expect(conceptLayout.horizontalOverflow).toBeLessThanOrEqual(1);
+  expect(conceptLayout.misplaced).toEqual([]);
   expect(errors).toEqual([]);
 });
 
@@ -103,6 +169,9 @@ test("keyboard activation selects a dimension and exposes its action", async ({ 
 test("hover and keyboard focus reveal a pre-selection concept preview", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await openOrbit(page);
+
+  await expect(node(page, "reality").locator(".destination-marker")).toHaveCSS("animation-name", "reality-breathe");
+  await expect(node(page, "reality").locator(".destination-marker")).toHaveCSS("animation-duration", "3.6s");
 
   await node(page, "domain").hover();
   await expect(app(page).locator("[data-orbit-preview]")).toBeVisible();
@@ -191,14 +260,47 @@ test("mobile selection reveals the summary and uses the contextual explore contr
   await page.setViewportSize({ width: 390, height: 844 });
   await openOrbit(page);
 
+  await node(page, "time").dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    clientX: 210,
+    clientY: 220,
+  });
+  await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeVisible();
+  await node(page, "time").dispatchEvent("pointerup", {
+    pointerType: "touch",
+    clientX: 210,
+    clientY: 220,
+  });
+  await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeHidden();
+
   await node(page, "time").click();
+  await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeHidden();
   const detail = app(page).locator(".orbit-detail");
   await expect(detail).toBeInViewport();
   await expect(app(page).locator("[data-context-explore-action]")).toBeVisible();
+  await expect(app(page).locator("[data-understand-title]")).toBeHidden();
+  await expect(app(page).locator("[data-understand-statement]")).toBeHidden();
+  await expect(app(page).locator("[data-understand-lead]")).toBeVisible();
 
   await app(page).locator("[data-context-explore-action]").click();
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Time");
   await expect(node(page, "past")).toBeVisible();
+  const mobileToolbar = await app(page).locator(".orbit-toolbar").evaluate((toolbar) => {
+    const path = toolbar.querySelector("[data-orbit-path]");
+    const toolbarRect = toolbar.getBoundingClientRect();
+    const pathRect = path.getBoundingClientRect();
+    return {
+      centerDelta: Math.abs(
+        (pathRect.left + (pathRect.width / 2))
+        - (toolbarRect.left + (toolbarRect.width / 2)),
+      ),
+      fontWeight: Number.parseInt(getComputedStyle(path).fontWeight, 10),
+      text: path.textContent.trim(),
+    };
+  });
+  expect(mobileToolbar.centerDelta).toBeLessThanOrEqual(1);
+  expect(mobileToolbar.fontWeight).toBeGreaterThanOrEqual(700);
+  expect(mobileToolbar.text).toContain("Time");
 });
 
 test("reduced-motion mode removes ambient and navigational animation", async ({ page }) => {
