@@ -525,6 +525,18 @@ button {
   .observatory-intro__enter {
     min-height: 3.7rem;
   }
+
+  .observatory-intro__map-lens--category {
+    --lens-x: 84%;
+    --label-x: 50%;
+    --label-y: calc(100% + 0.62rem);
+  }
+
+  .observatory-intro__map-lens--perspective {
+    --lens-x: 16%;
+    --label-x: 50%;
+    --label-y: calc(100% + 0.62rem);
+  }
 }
 
 @media (max-width: 420px) {
@@ -540,18 +552,6 @@ button {
 
   .observatory-intro__signal {
     width: 2.35rem;
-  }
-
-  .observatory-intro__map-lens--category {
-    --lens-x: 84%;
-    --label-x: 50%;
-    --label-y: calc(100% + 0.62rem);
-  }
-
-  .observatory-intro__map-lens--perspective {
-    --lens-x: 16%;
-    --label-x: 50%;
-    --label-y: calc(100% + 0.62rem);
   }
 
   .observatory-intro__map-label {

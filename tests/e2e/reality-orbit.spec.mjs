@@ -48,6 +48,8 @@ test("the welcome call to action feels alive without displacing text or ignoring
 
   for (const viewport of [
     { width: 390, height: 844 },
+    { width: 430, height: 932 },
+    { width: 768, height: 1024 },
     { width: 1280, height: 900 },
   ]) {
     await page.setViewportSize(viewport);
