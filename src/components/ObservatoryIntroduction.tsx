@@ -173,8 +173,8 @@ export function ObservatoryIntroduction({
         </nav>
 
         <p className="observatory-intro__note">
-          <span aria-hidden="true" />
-          A quiet map for understanding complex things.
+          <span className="observatory-intro__note-signal" aria-hidden="true" />
+          <span>A quiet map for understanding complex things.</span>
         </p>
       </div>
     </section>
