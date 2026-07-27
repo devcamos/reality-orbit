@@ -26,6 +26,15 @@ button {
   font: inherit;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .app-shell,
 .orbit-frame-shell {
   min-height: 100dvh;
@@ -75,7 +84,7 @@ button {
 .observatory-intro__shell {
   position: relative;
   z-index: 2;
-  width: min(100%, 58rem);
+  width: min(100%, 46rem);
   margin: 0 auto;
 }
 
@@ -83,7 +92,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: clamp(2.4rem, 7vw, 4.8rem);
+  margin-bottom: clamp(2.25rem, 6vw, 3.75rem);
 }
 
 .observatory-intro__brand {
@@ -148,7 +157,7 @@ button {
 }
 
 .observatory-intro__opening {
-  max-width: 47rem;
+  max-width: 44rem;
 }
 
 .observatory-intro h1 {
@@ -167,7 +176,7 @@ button {
 }
 
 .observatory-intro__lead {
-  max-width: 54ch;
+  max-width: 48ch;
   margin: 1.1rem 0 0;
   color: #9caeb6;
   font-size: clamp(1rem, 2.2vw, 1.22rem);
@@ -176,8 +185,8 @@ button {
 }
 
 .observatory-intro__map {
-  width: min(100%, 35rem);
-  margin: clamp(2.4rem, 6vw, 4.2rem) auto clamp(1.8rem, 5vw, 3.2rem);
+  width: min(100%, 28rem);
+  margin: clamp(2.1rem, 5vw, 3.25rem) auto clamp(1rem, 3vw, 1.6rem);
 }
 
 .observatory-intro__map-field {
@@ -320,67 +329,14 @@ button {
   stroke-width: 1.45;
 }
 
-.observatory-intro__lenses {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin: 0;
-  padding: 0.78rem 0;
-  border: 1px solid rgb(122 180 192 / 22%);
-  border-radius: 1.25rem;
-  background: linear-gradient(180deg, rgb(5 18 29 / 58%), rgb(2 10 18 / 42%));
-  box-shadow:
-    inset 0 1px rgb(221 248 249 / 4%),
-    0 1.2rem 3rem rgb(0 4 9 / 22%);
-  list-style: none;
-  backdrop-filter: blur(14px);
-}
-
-.observatory-intro__lenses li {
-  position: relative;
-  display: grid;
-  min-width: 0;
-  justify-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.45rem;
-  color: #83949d;
-  font-size: clamp(0.62rem, 1.7vw, 0.74rem);
-}
-
-.observatory-intro__lenses li:first-child {
-  color: #91e6e4;
-}
-
-.observatory-intro__lenses li:not(:last-child)::after {
-  position: absolute;
-  top: 8%;
-  right: 0;
-  width: 1px;
-  height: 84%;
-  background: rgb(119 169 181 / 14%);
-  content: "";
-}
-
-.observatory-intro__lens-question {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
-}
-
-.observatory-intro__enter,
-.observatory-intro__explanation {
-  width: 100%;
-}
-
 .observatory-intro__enter {
   display: flex;
+  width: min(100%, 32rem);
   min-height: 3.6rem;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1.55rem;
+  margin: 0 auto;
   padding: 0.9rem 1.35rem;
   color: #f5f9fa;
   border: 1px solid rgb(171 246 241 / 66%);
@@ -438,104 +394,6 @@ button {
   31% {
     filter: brightness(1.01);
   }
-}
-
-.observatory-intro__explanation {
-  margin-top: 0.85rem;
-  border: 1px solid rgb(125 169 184 / 18%);
-  border-radius: 999px;
-  background: rgb(2 9 17 / 44%);
-}
-
-.observatory-intro__explanation summary {
-  display: flex;
-  min-height: 3.1rem;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 0.75rem 1.2rem;
-  color: #8999a2;
-  cursor: pointer;
-  list-style: none;
-}
-
-.observatory-intro__explanation summary::-webkit-details-marker {
-  display: none;
-}
-
-.observatory-intro__explanation summary:focus-visible {
-  outline: 2px solid #9bc9d0;
-  outline-offset: 4px;
-}
-
-.observatory-intro__play {
-  display: grid;
-  width: 1.35rem;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 1px solid rgb(159 199 209 / 48%);
-  border-radius: 50%;
-  transition: transform 180ms ease;
-}
-
-.observatory-intro__explanation[open] .observatory-intro__play {
-  transform: rotate(90deg);
-}
-
-.observatory-intro__explanation ol {
-  display: grid;
-  gap: 0.55rem;
-  margin: 0;
-  padding: 0.2rem 1.6rem 1.2rem 2.8rem;
-  color: #9baab1;
-  font-size: 0.82rem;
-  line-height: 1.5;
-}
-
-.observatory-intro__example {
-  margin-top: 1rem;
-}
-
-.observatory-intro__example ol {
-  display: flex;
-  max-width: max-content;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0;
-  margin: 0 auto;
-  padding: 0.55rem 1rem;
-  color: #71858e;
-  border: 1px solid rgb(113 158 173 / 12%);
-  border-radius: 999px;
-  background: rgb(2 10 18 / 38%);
-  font-size: 0.68rem;
-  list-style: none;
-}
-
-.observatory-intro__example li:not(:last-child)::after {
-  margin: 0 0.48rem;
-  color: #5bb9ba;
-  content: "→";
-}
-
-.observatory-intro__note {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  margin: 1rem 0 0;
-  color: #6f838c;
-  font-size: 0.74rem;
-  letter-spacing: 0.02em;
-  text-align: center;
-}
-
-.observatory-intro__note-signal {
-  width: 0.38rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #65d7d7;
-  box-shadow: 0 0 0.7rem #61d9da;
 }
 
 @keyframes intro-star-drift {
@@ -643,16 +501,8 @@ button {
     aspect-ratio: 1.08;
   }
 
-  .observatory-intro__lenses {
-    border-radius: 1.1rem;
-  }
-
-  .observatory-intro__lenses li {
-    padding-inline: 0.25rem;
-  }
-
   .observatory-intro__enter {
-    margin-top: 1.2rem;
+    min-height: 3.7rem;
   }
 }
 
@@ -683,10 +533,6 @@ button {
     font-size: 0.64rem;
   }
 
-  .observatory-intro__lenses li {
-    font-size: 0.56rem;
-  }
-
   .observatory-intro__lens-icon {
     width: 1.1rem;
     height: 1.1rem;
@@ -706,8 +552,7 @@ button {
     animation: none;
   }
 
-  .observatory-intro__enter,
-  .observatory-intro__play {
+  .observatory-intro__enter {
     transition: none;
   }
 }
