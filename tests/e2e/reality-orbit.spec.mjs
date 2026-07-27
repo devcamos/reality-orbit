@@ -129,17 +129,29 @@ test("hover and keyboard focus reveal a pre-selection concept preview", async ({
   await node(page, "category").hover();
   await expect(app(page).locator("[data-orbit-preview]")).toHaveAttribute("data-placement", "right");
   await expect(app(page).locator("[data-orbit-preview-title]")).toHaveText("Category");
-  const categoryPreviewGap = await app(page).locator("[data-orbit-preview]").evaluate((preview) => {
+  const categoryPreviewPosition = await app(page).locator("[data-orbit-preview]").evaluate((preview) => {
     const destination = document.querySelector('[data-node-id="category"]');
+    const stageRect = document.querySelector(".orbit-stage").getBoundingClientRect();
     const visualRight = Math.max(
       destination.querySelector(".destination-marker").getBoundingClientRect().right,
       destination.querySelector(".destination-label").getBoundingClientRect().right,
     );
     const previewRect = preview.getBoundingClientRect();
-    return previewRect.left - visualRight;
+    return {
+      gap: previewRect.left - visualRight,
+      constrainedWidth: preview.style.getPropertyValue("--preview-width"),
+      positionedLeft: preview.style.getPropertyValue("--preview-left"),
+      previewLeft: previewRect.left,
+      previewWidth: previewRect.width,
+      stageLeft: stageRect.left,
+      stageWidth: stageRect.width,
+      visualRight,
+    };
   });
-  expect(categoryPreviewGap).toBeGreaterThan(0);
-  expect(categoryPreviewGap).toBeLessThanOrEqual(12);
+  const categoryPreviewDiagnostics = JSON.stringify(categoryPreviewPosition);
+  expect(categoryPreviewPosition.gap, categoryPreviewDiagnostics).toBeGreaterThan(0);
+  expect(categoryPreviewPosition.gap).toBeLessThanOrEqual(12);
+  expect(categoryPreviewPosition.constrainedWidth).not.toBe("");
 
   await node(page, "perspective").hover();
   await expect(app(page).locator("[data-orbit-preview]")).toBeVisible();

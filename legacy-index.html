@@ -1332,7 +1332,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     top: var(--preview-top, clamp(0.75rem, 2vw, 1.2rem));
     left: var(--preview-left, clamp(0.75rem, 2vw, 1.2rem));
     display: grid;
-    width: min(25rem, calc(100% - 2rem));
+    width: min(var(--preview-width, 25rem), calc(100% - 2rem));
     margin: 0;
     overflow: hidden;
     color: #d8e4e8;
@@ -3937,6 +3937,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     const positionOrbitPreview = (button) =&gt; {
       const stageRect = orbitStage.getBoundingClientRect();
+      orbitPreview.style.removeProperty(&quot;--preview-width&quot;);
       const visualRects = [button.querySelector(&quot;.destination-marker&quot;), button.querySelector(&quot;.destination-label&quot;)]
         .filter(Boolean)
         .map((element) =&gt; element.getBoundingClientRect());
@@ -3950,14 +3951,22 @@ html&gt;body{padding:0}&lt;/style&gt;
           }
         : buttonRect;
       const targetHeight = targetRect.bottom - targetRect.top;
-      const previewRect = orbitPreview.getBoundingClientRect();
+      const naturalPreviewRect = orbitPreview.getBoundingClientRect();
       const edgeGap = 12;
       const nodeGap = 10;
       const availableRight = stageRect.right - targetRect.right - edgeGap;
       const availableLeft = targetRect.left - stageRect.left - edgeGap;
-      const placement = availableRight &gt;= previewRect.width + nodeGap || availableRight &gt;= availableLeft
-        ? &quot;right&quot;
-        : &quot;left&quot;;
+      let placement = &quot;right&quot;;
+      if (availableRight &lt; naturalPreviewRect.width + nodeGap &amp;&amp; availableLeft &gt; availableRight) {
+        placement = &quot;left&quot;;
+      }
+      const placementSpace = placement === &quot;right&quot; ? availableRight : availableLeft;
+      const previewWidth = Math.min(
+        naturalPreviewRect.width,
+        Math.max(1, placementSpace - nodeGap),
+      );
+      orbitPreview.style.setProperty(&quot;--preview-width&quot;, `${previewWidth}px`);
+      const previewRect = orbitPreview.getBoundingClientRect();
       const preferredLeft = placement === &quot;right&quot;
         ? targetRect.right - stageRect.left + nodeGap
         : targetRect.left - stageRect.left - previewRect.width - nodeGap;

@@ -175,6 +175,8 @@ for (const reflectiveHoverContract of [
   "positionOrbitPreview",
   'orbitPreview.style.setProperty("--preview-left"',
   'orbitPreview.style.setProperty("--preview-top"',
+  'orbitPreview.style.setProperty("--preview-width"',
+  'orbitPreview.style.removeProperty("--preview-width")',
   'window.addEventListener("resize"',
   'roleForNode(node) === "Dimension" ? "Lens on reality"',
   "orbitPreviewDepth.textContent = pathAvailability",
