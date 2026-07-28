@@ -85,7 +85,7 @@ test("expansion guidance preserves curated breadth and permits only explicit ter
   assert.match(expansionContract, /data\/v1-curation\.json/, "Expansion guidance must retain the editorial publication gate.");
 });
 
-test("Reality is the only selection without Explore selected", () => {
+test("Reality is the only selection without a contextual Explore action", () => {
   const withoutExplore = nodes.filter((node) => !contract.canExploreNode(node)).map((node) => node.id);
   assert.deepEqual(withoutExplore, ["reality"]);
   assert.equal(contract.canExploreNode(contract.ontology.reality), false);
@@ -109,11 +109,11 @@ test("each canonical dimension teaches distinct contextual guidance", () => {
   assert.doesNotMatch(combinedGuidance, /does not own or completely define/i);
 });
 
-test("every reachable non-root selection exposes Explore selected", () => {
+test("every reachable non-root selection exposes a contextual Explore action", () => {
   const reachable = reachableFromReality();
   for (const id of reachable) {
     if (id === "reality") continue;
-    assert.equal(contract.canExploreNode(contract.ontology[id]), true, `${id} must expose Explore selected`);
+    assert.equal(contract.canExploreNode(contract.ontology[id]), true, `${id} must expose a contextual Explore action`);
   }
 });
 
@@ -435,14 +435,39 @@ test("every ontology node is reachable and has complete selection data", (contex
   context.diagnostic(`${nodes.length} ontology nodes passed the complete selection-data contract.`);
 });
 
+test("every reachable node has the complete Pareto Concept Anatomy model", (context) => {
+  const paretoFields = [
+    "Definition",
+    "Mechanism",
+    "Applies when",
+    "Breaks when",
+    "Example",
+    "Counterexample",
+    "Decision rule",
+  ];
+
+  for (const node of nodes) {
+    const anatomy = contract.buildConceptAnatomy(node);
+    assert.equal(anatomy.Definition, node.summary, `${node.label} must use its canonical summary as Definition.`);
+    for (const field of paretoFields) {
+      assert.ok(String(anatomy[field] ?? "").trim(), `${node.label} must provide Pareto field ${field}.`);
+    }
+  }
+
+  assert.doesNotMatch(fragment, /data-understand-lead-label/);
+  assert.doesNotMatch(fragment, /data-understand-support-label/);
+  context.diagnostic(`${nodes.length} ontology nodes passed the Pareto Concept Anatomy review.`);
+});
+
 test("every reachable node has a distinct contextual lens rather than generic fallback copy", (context) => {
   const requiredContextFields = [
-    "Governing question",
-    "Purpose",
-    "First principles",
-    "Mental model",
-    "How to use it",
-    "Common confusion",
+    "Definition",
+    "Mechanism",
+    "Applies when",
+    "Breaks when",
+    "Example",
+    "Counterexample",
+    "Decision rule",
   ];
   const fingerprints = new Map();
   const genericFallbacks = [
@@ -498,7 +523,9 @@ test("selection automatically renders Concept Anatomy and exposes contextual exp
   assert.match(fragment, /actionGroup\.hidden = !canExplore/);
   assert.match(fragment, /exploreButton\.hidden = !canExplore/);
   assert.match(fragment, /exploreButton\.disabled = canExplore && isCurrent/);
-  assert.match(fragment, /exploreButton\.textContent = isCurrent \? "Exploring" : "Explore selected"/);
+  assert.match(fragment, /exploreButton\.style\.setProperty\("--explore-color", exploreColor\)/);
+  assert.match(fragment, /contextExploreButton\.style\.setProperty\("--explore-color", exploreColor\)/);
+  assert.match(fragment, /exploreButton\.textContent = isCurrent \? `Exploring \$\{node\.label\}` : `Explore \$\{node\.label\}`/);
   assert.match(fragment, /exploreButton\.setAttribute\("aria-pressed", String\(canExplore && isCurrent\)\)/);
   assert.match(fragment, /data-context-explore-action/);
   assert.match(fragment, /const canExploreFromDetail = canExplore && !isCurrent;/);
@@ -525,23 +552,22 @@ test("mobile contextual exploration returns the learner to the refreshed map", (
   assert.match(fragment, /contextExploreButton\.addEventListener\("click", \(\) => exploreSelectedNode\(selectedId, \{ revealMap: true \}\)\);/);
 });
 
-test("Concept Anatomy maps every visible teaching field to the selected node", () => {
+test("Concept Anatomy maps the simple Pareto model to the selected node", () => {
   assert.doesNotMatch(fragment, /data-understand-flow/);
   assert.doesNotMatch(fragment, /understandFlowForNode/);
   assert.match(fragment, /const entries = Object\.entries\(buildConceptAnatomy\(node\)\);/);
-  assert.match(fragment, /const lead = entryFor\("Governing question"\);/);
-  assert.match(fragment, /const support = entryFor\("Purpose"\);/);
-  assert.match(fragment, /\["First principles", "Mental model"\]\.map\(entryFor\)/);
-  assert.match(fragment, /\["How to use it", "Common confusion", "Scope"\]\.map\(entryFor\)/);
+  assert.match(fragment, /const paretoLabels = \[/);
+  for (const label of ["Definition", "Mechanism", "Applies when", "Breaks when", "Example", "Counterexample", "Decision rule"]) {
+    assert.match(fragment, new RegExp(`"${label}"`));
+  }
   assert.match(fragment, /const principleItemsFor = \(value\)/);
   assert.match(fragment, /if \(label === "First principles"\)/);
   assert.match(fragment, /principlesList\.className = "understand-principles"/);
   assert.match(fragment, /<details class="understand-more" data-understand-more hidden>/);
   assert.match(fragment, /understandMore\.open = false;/);
-  assert.match(fragment, /data-understand-support-label/);
-  assert.match(fragment, /understandSupportLabel\.textContent = support\?\.\[0\] \?\? "Purpose";/);
+  assert.match(fragment, /data-understand-pareto-fields/);
+  assert.match(fragment, /understandParetoFields\.replaceChildren/);
   assert.match(fragment, /understandView\.dataset\.selectedNode = node\.id;/);
   assert.match(fragment, /understandEyebrow\.textContent = role === "Dimension" \? "A lens on reality" : `\$\{role\} · Concept anatomy`;/);
   assert.match(fragment, /understandTitle\.textContent = node\.label;/);
-  assert.match(fragment, /understandStatement\.textContent = node\.summary;/);
 });

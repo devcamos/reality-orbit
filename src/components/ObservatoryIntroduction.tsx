@@ -95,8 +95,8 @@ export function ObservatoryIntroduction({
         <div className="observatory-intro__opening">
           <h1 id="observatory-intro-title">Begin with Reality<span>.</span></h1>
           <p className="observatory-intro__lead">
-            Explore how ideas, systems, and experiences connect—without losing
-            sight of the whole.
+            The organising reference point for exploring reality through five
+            complementary dimensions.
           </p>
         </div>
 

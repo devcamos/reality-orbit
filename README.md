@@ -1,6 +1,6 @@
 # Reality Orbit
 
-Reality Orbit is an expandable spatial destination map. Reality begins at the centre with its five canonical dimensions. Selecting any concept automatically updates its adjacent **Concept Anatomy** view; no separate Understand action is required. **Explore selected** focuses any non-root concept. Focusing a container reveals its curated children; focusing a terminal concept establishes the final exploration endpoint.
+Reality Orbit is an expandable spatial destination map. Reality begins at the centre with its five canonical dimensions. Selecting any concept automatically updates its adjacent **Concept Anatomy** view; no separate Understand action is required. The contextual **Explore {node}** action focuses any non-root concept and adopts that node's dimension colour. Focusing a container reveals its curated children; focusing a terminal concept establishes the final exploration endpoint.
 
 Selecting a node updates the permanent detail strip with its name, type, and explanation. Canonical paths, parents, typed relationships, and child IDs remain internal application context for traversal, validation, and a future grounded chat integration; they are not displayed as teaching content. Floating explanation cards are deliberately excluded because they can cover an unrelated destination and falsely imply that the explanation belongs to it.
 
@@ -44,6 +44,17 @@ This prototype is independent from Law Explorer. Law Explorer remains a law-only
 - `vercel.json` — security headers and static deployment configuration.
 
 The repository is the source of truth for the published interaction and its curated ontology data. Notion remains the research and governance workspace.
+
+## Agent guidance tree
+
+`AGENTS.md` is the repository source of truth for agent behaviour and routing. The root charter stays concise; scoped guidance is layered near the work it governs:
+
+- [`docs/AGENTS.md`](docs/AGENTS.md) — business requirements, product documentation, research and decisions.
+- [`data/AGENTS.md`](data/AGENTS.md) — canonical ontology, curation and level boundaries.
+- [`src/AGENTS.md`](src/AGENTS.md) — application experience, frontend engineering and accessibility.
+- [`tests/AGENTS.md`](tests/AGENTS.md) — tests, CI, generated artifacts and release verification.
+
+The live product and business backlog remains in the [Reality Orbit Backlog](https://app.notion.com/p/b52c7cc96b124a43a8a1c0606e0cb187). Agents should read the relevant scope file and linked backlog specification before changing code.
 
 ## Validate locally
 

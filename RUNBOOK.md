@@ -54,7 +54,7 @@ They remain fully explorable, but only after the user enters Category. This keep
 - **Selection explanation:** name, knowledge role, and definition stay in the permanent detail strip below the map; the translucent preview moves opposite the highlighted destination.
 - **Expansion:** exploring any selected non-root node moves it to the centre. Containers reveal one level of immediate children; terminal concepts become focused endpoints with no invented child level.
 - **Selection and Concept Anatomy:** selecting any concept, including the current centre, automatically updates its adjacent Concept Anatomy view. The learner never needs a separate Understand action.
-- **Explore action:** every selected concept except Reality exposes **Explore selected**. Explore changes the map centre; selection changes the adjacent teaching content. Once focused, the visible active state reads **Exploring** rather than offering a redundant second traversal.
+- **Explore action:** every selected concept except Reality exposes **Explore {node}** in the selected node's dimension colour. Explore changes the map centre; selection changes the adjacent teaching content. Once focused, the visible active state reads **Exploring {node}** rather than offering a redundant second traversal.
 - **Path and Back:** expose the canonical location and allow reversible traversal.
 - **Typed relationship:** every node retains a machine-readable relationship to its parent so type and instance edges do not blur together; this structural value is not drawn on the map or shown in the learner panel.
 
@@ -133,7 +133,7 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 4. Create the current node as the centre button.
 5. Select a child to read its learner-facing definition.
 6. Explore a curated child to push it into the history and rerender it as the centre.
-7. Selecting a concept automatically updates the adjacent Concept Anatomy without expanding the ontology; **Explore selected** alone changes the map centre. Reality is the only concept without Explore.
+7. Selecting a concept automatically updates the adjacent Concept Anatomy without expanding the ontology; the contextual **Explore {node}** action alone changes the map centre. Reality is the only concept without Explore.
 
 ### State transition
 
@@ -141,7 +141,7 @@ Canonical relationship inference distinguishes dimensions, subdomains, category 
 
 1. Sets `aria-current` and `data-selected` on the selected destination.
 2. Updates the live selected label and summary.
-3. Always renders the selected concept's Concept Anatomy; every non-root selection also offers **Explore selected**, including terminal concepts that form the final focused endpoint.
+3. Always renders the selected concept's Concept Anatomy; every non-root selection also offers **Explore {node}**, including terminal concepts that form the final focused endpoint.
 4. Keeps internal grounded-chat context separate while showing only the selected concept's name, type, and explanation in the permanent detail strip.
 
 `history` stores the reversible centre path. Do not create separate view state for buttons, text, and navigation; derive them from `selectedId`, the current history entry, and the ontology map.
@@ -325,8 +325,8 @@ Both runtime and production checks traverse from Reality and reject unreachable 
 
 `scripts/selection-contract.test.mjs` reads the same ontology and policy declarations used by the application, then tests every reachable selection. The suite proves that:
 
-- Reality is the only node without **Explore selected**.
-- Every non-root node exposes **Explore selected**.
+- Reality is the only node without a contextual Explore action.
+- Every non-root node exposes **Explore {node}** using its dimension theme.
 - Terminal concepts remain explorable as final focused destinations.
 - Every ontology record is reachable from Reality.
 - Every selectable node has an ID, label, definition, canonical path, classified role, and at least seven non-empty Concept Anatomy fields.
@@ -439,7 +439,7 @@ Review and approve the returned concepts in Notion first. Only then add them to 
 
 - Preserve the destination map and its stable positions; mobile is the same mental model, not a separate list-only interface.
 - Show only the current destination visually in the compact toolbar. The complete breadcrumb remains in the accessible DOM, while **Back** carries the visible ancestry interaction.
-- Move the responsive action group onto its own full-width toolbar row. **Explore selected**, when relevant, remains a 44 px touch target; Concept Anatomy updates automatically below the map.
+- Move the responsive action group onto its own full-width toolbar row. **Explore {node}**, when relevant, remains a 44 px touch target; Concept Anatomy updates automatically below the map.
 - Use the permanent detail below the map at every width as the single source of visible name, type, and explanation, avoiding duplicated information and covered destinations.
 - After a user selects a destination at mobile width, scroll to the permanent detail so the selected name, role, and definition lead directly into its Concept Anatomy. Initial rendering, Explore, and Back retain the map position for spatial orientation.
 - Reduce the mobile map to a responsive 430–480 px range while retaining safe space around the lowest destinations. This keeps the current action and selected explanation closer to the map without crowding narrow screens.
@@ -473,9 +473,9 @@ Before testing the map:
 6. Explore Resource and confirm it becomes the centre with six immediate children.
 7. Use Back twice and confirm the Reality orbit is restored.
 8. Explore Perspective and confirm its five approved lenses render.
-9. Confirm Reality renders Concept Anatomy automatically and does not expose **Explore selected**.
-10. Select any non-root concept and confirm its Concept Anatomy updates automatically and **Explore selected** is present.
-11. Explore a terminal concept and confirm it becomes a focused endpoint, keeps its Concept Anatomy visible, shows the active **Exploring** state, and invents no child nodes.
+9. Confirm Reality renders Concept Anatomy automatically and does not expose an Explore action.
+10. Select any non-root concept and confirm its Concept Anatomy updates automatically, **Explore {node}** is present, and the action uses the node's dimension colour.
+11. Explore a terminal concept and confirm it becomes a focused endpoint, keeps its Concept Anatomy visible, shows **Exploring {node}**, and invents no child nodes.
 12. Confirm selecting a node updates the permanent detail title, role, and explanation.
 13. Confirm canonical path, parent, typed relationship, and immediate children are absent from the visible panel but remain available in `buildChatContext(node)`.
 14. Confirm the selected label and summary match the node data.

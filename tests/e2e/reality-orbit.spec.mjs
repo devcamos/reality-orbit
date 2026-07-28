@@ -95,6 +95,7 @@ test("the welcome call to action feels alive without displacing text or ignoring
 });
 
 test("loads the canonical Reality orbit without browser errors", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   const errors = [];
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
@@ -104,28 +105,37 @@ test("loads the canonical Reality orbit without browser errors", async ({ page }
   await openOrbit(page);
 
   await expect(node(page, "reality")).toBeVisible();
+  const starfieldMotion = await app(page).locator(".orbit-starfield").evaluate((starfield) => {
+    const far = getComputedStyle(starfield, "::before");
+    const near = getComputedStyle(starfield, "::after");
+    return {
+      far: { name: far.animationName, duration: far.animationDuration },
+      near: { name: near.animationName, duration: near.animationDuration },
+    };
+  });
+  expect(starfieldMotion).toEqual({
+    far: { name: "starfield-drift-far", duration: "44s" },
+    near: { name: "starfield-drift-near", duration: "24s" },
+  });
   for (const dimension of ["domain", "category", "time", "scale", "perspective"]) {
     await expect(node(page, dimension)).toBeVisible();
   }
   await expect(app(page).locator(".orbit-connection")).toHaveCount(0);
   await expect(app(page).locator("[data-orbit-path]")).toHaveText("Choose a dimension");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Reality");
-  await expect(app(page).locator("[data-understand-lead-label]")).toHaveText("Governing question");
-  await expect(app(page).locator("[data-understand-support-label]")).toHaveText("Purpose");
-  await expect(app(page).locator("[data-understand-more]")).not.toHaveAttribute("open", "");
-  await app(page).locator("[data-understand-more] summary").click();
-  const firstPrinciples = app(page).locator('[data-anatomy-field="first-principles"] .understand-principles li');
-  await expect(firstPrinciples).toHaveCount(2);
-  await expect(firstPrinciples.nth(0)).toBeVisible();
-  await expect(firstPrinciples.nth(0)).toHaveText("Every useful description selects boundaries and leaves detail out.");
-  await expect(firstPrinciples.nth(1)).toHaveText("No single dimension provides a complete account.");
+  await expect(app(page).locator("[data-understand-pareto-fields] [data-anatomy-field]")).toHaveCount(7);
+  await expect(app(page).locator('[data-anatomy-field="definition"] dd')).toHaveText(
+    "The organising reference point for exploring reality through five complementary dimensions.",
+  );
+  await expect(app(page).locator("[data-understand-more]")).toBeHidden();
   const conceptLayout = await app(page).locator("[data-understand-view]").evaluate((view) => {
     const viewRect = view.getBoundingClientRect();
     const regions = [...view.querySelectorAll(".understand-story, .understand-more, [data-anatomy-field]")];
     return {
       horizontalOverflow: view.scrollWidth - view.clientWidth,
-      misplaced: regions
+        misplaced: regions
         .filter((region) => {
+          if (region.hidden) return false;
           const rect = region.getBoundingClientRect();
           return rect.left < viewRect.left - 1 || rect.right > viewRect.right + 1;
         })
@@ -146,11 +156,15 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
   await expect(app(page).locator(".orbit-role[data-selected-role]")).toBeHidden();
   await expect(app(page).locator(".destination-meta")).toHaveCount(0);
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
-  await expect(app(page).locator("[data-explore-action]")).toBeVisible();
+  const exploreAction = app(page).locator("[data-explore-action]");
+  await expect(exploreAction).toBeVisible();
+  await expect(exploreAction).toHaveText("Explore Scale");
+  await expect(exploreAction).toHaveCSS("--explore-color", "#78926f");
 
-  await app(page).locator("[data-explore-action]").click();
+  await exploreAction.click();
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Reality");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Scale");
+  await expect(exploreAction).toHaveText("Exploring Scale");
   await expect(node(page, "scale")).toHaveClass(/orbit-core/);
   await expect(node(page, "individual")).toBeVisible();
 
@@ -177,6 +191,12 @@ test("hover and keyboard focus reveal a pre-selection concept preview", async ({
 
   await expect(node(page, "reality").locator(".destination-marker")).toHaveCSS("animation-name", "reality-breathe");
   await expect(node(page, "reality").locator(".destination-marker")).toHaveCSS("animation-duration", "3.6s");
+  await expect
+    .poll(() => node(page, "domain").locator(".destination-marker").evaluate((marker) => getComputedStyle(marker, "::before").animationName))
+    .toBe("dimension-ring-drift");
+  await expect
+    .poll(() => node(page, "time").locator(".destination-marker").evaluate((marker) => getComputedStyle(marker, "::before").animationName))
+    .toBe("time-ring-drift");
 
   await node(page, "domain").hover();
   await expect(app(page).locator("[data-orbit-preview]")).toBeVisible();
@@ -187,7 +207,7 @@ test("hover and keyboard focus reveal a pre-selection concept preview", async ({
     "The broad area of reality being studied.",
   );
   await expect(app(page).locator("[data-orbit-preview-question]")).toHaveText(
-    "What broad area of reality is being studied?",
+    "Name the phenomenon and question, select the domain carrying the main explanatory responsibility, then record any other domains needed to understand cross-domain effects.",
   );
   await expect(app(page).locator("[data-orbit-preview-depth]")).toHaveText("7 paths available");
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Reality");
@@ -233,7 +253,7 @@ test("hover and keyboard focus reveal a pre-selection concept preview", async ({
   await expect(app(page).locator("[data-orbit-hover-reticle]")).toBeVisible();
   await expect(app(page).locator("[data-orbit-preview-title]")).toHaveText("Perspective");
   await expect(app(page).locator("[data-orbit-preview-question]")).toHaveText(
-    "From which viewpoint or interpretive lens is it being understood?",
+    "Name the observer or lens, state its assumptions and valued evidence, then compare another perspective and identify which facts remain invariant.",
   );
   const perspectivePreviewGap = await app(page).locator("[data-orbit-preview]").evaluate((preview) => {
     const destination = document.querySelector('[data-node-id="perspective"]');
@@ -284,8 +304,7 @@ test("mobile selection reveals the summary and uses the contextual explore contr
   await expect(detail).toBeInViewport();
   await expect(app(page).locator("[data-context-explore-action]")).toBeVisible();
   await expect(app(page).locator("[data-understand-title]")).toBeHidden();
-  await expect(app(page).locator("[data-understand-statement]")).toBeHidden();
-  await expect(app(page).locator("[data-understand-lead]")).toBeVisible();
+  await expect(app(page).locator('[data-anatomy-field="definition"]')).toBeVisible();
 
   await app(page).locator("[data-context-explore-action]").click();
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Time");
