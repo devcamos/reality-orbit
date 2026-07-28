@@ -127,6 +127,8 @@ for (const orbitalVisualContract of [
   "@keyframes observatory-drift",
   "@keyframes starfield-drift-far",
   "@keyframes starfield-drift-near",
+  "@keyframes dimension-ring-drift",
+  '#reality-orbit-prototype .orbit-node[data-visual-archetype="time"] .destination-glyph',
   '<div class="orbit-starfield" aria-hidden="true"></div>',
   ".orbit-starfield::before",
   ".orbit-starfield::after",
@@ -303,17 +305,14 @@ if (!fragment.includes("buildConceptAnatomy") || !fragment.includes("renderUnder
   failures.push("Every selected concept must automatically render role-aware Concept Anatomy.");
 }
 
-if (!fragment.includes("understand-definition-label") || !fragment.includes(">Definition</span>")) {
-  failures.push("Concept Anatomy must explicitly identify the selected concept's definition.");
+if (!fragment.includes("understand-definition-label") || !fragment.includes(">Concept</span>")) {
+  failures.push("Concept Anatomy must explicitly identify the selected concept.");
 }
 
 for (const understandLayoutContract of [
   "data-understand-eyebrow",
   "data-understand-title",
-  "data-understand-statement",
-  "data-understand-lead",
-  "data-understand-foundations",
-  "data-understand-context",
+  "data-understand-pareto-fields",
   "data-understand-more",
 ]) {
   if (!fragment.includes(understandLayoutContract)) {
@@ -329,7 +328,7 @@ for (const selectedContentContract of [
   "const entries = Object.entries(buildConceptAnatomy(node))",
   "understandView.dataset.selectedNode = node.id",
   "understandTitle.textContent = node.label",
-  "understandStatement.textContent = node.summary",
+  "understandParetoFields.replaceChildren",
 ]) {
   if (!fragment.includes(selectedContentContract)) {
     failures.push(`Concept Anatomy must map selected-node content: ${selectedContentContract}.`);
@@ -382,7 +381,9 @@ for (const explorationContract of [
   "actionGroup.hidden = !canExplore",
   "exploreButton.hidden = !canExplore",
   "exploreButton.disabled = canExplore && isCurrent",
-  'exploreButton.textContent = isCurrent ? "Exploring" : "Explore selected"',
+  'exploreButton.style.setProperty("--explore-color", exploreColor)',
+  'contextExploreButton.style.setProperty("--explore-color", exploreColor)',
+  'exploreButton.textContent = isCurrent ? `Exploring ${node.label}` : `Explore ${node.label}`',
 ]) {
   if (!fragment.includes(explorationContract)) {
     failures.push(`Missing root-aware exploration contract: ${explorationContract}.`);
@@ -491,9 +492,9 @@ for (const anatomyField of ["Statement", "First principles", "Variables", "Menta
   }
 }
 
-for (const baselineAnatomyField of ["Purpose", "Governing question", "First principles", "Mental model", "Scope", "How to use it", "Common confusion"]) {
-  if (!fragment.includes(`"${baselineAnatomyField}"`)) {
-    failures.push(`Baseline Concept Anatomy is missing field: ${baselineAnatomyField}.`);
+for (const paretoAnatomyField of ["Definition", "Mechanism", "Applies when", "Breaks when", "Example", "Counterexample", "Decision rule"]) {
+  if (!fragment.includes(`"${paretoAnatomyField}"`)) {
+    failures.push(`Pareto Concept Anatomy is missing field: ${paretoAnatomyField}.`);
   }
 }
 

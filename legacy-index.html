@@ -997,6 +997,55 @@ html&gt;body{padding:0}&lt;/style&gt;
     gap: 0.5rem;
   }
 
+  #reality-orbit-prototype .orbit-action,
+  #reality-orbit-prototype .orbit-context-explore {
+    --explore-color: #c99d69;
+    min-height: 2.75rem;
+    padding-inline: 1rem;
+    border-color: color-mix(in srgb, var(--explore-color) 68%, rgba(222, 235, 240, 0.48));
+    color: #f5f9fa;
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--explore-color) 58%, #152330),
+        color-mix(in srgb, var(--explore-color) 32%, #06101d)
+      );
+    box-shadow:
+      inset 0 1px rgba(255, 255, 255, 0.11),
+      0 0 0 1px color-mix(in srgb, var(--explore-color) 13%, transparent),
+      0 0.55rem 1.45rem color-mix(in srgb, var(--explore-color) 18%, transparent);
+    font-family: var(--space-display);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  #reality-orbit-prototype .orbit-action:not(:disabled):hover,
+  #reality-orbit-prototype .orbit-context-explore:not(:disabled):hover {
+    border-color: color-mix(in srgb, var(--explore-color) 82%, #eef6f8);
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--explore-color) 68%, #1b2a36),
+        color-mix(in srgb, var(--explore-color) 42%, #07131f)
+      );
+    box-shadow:
+      inset 0 1px rgba(255, 255, 255, 0.15),
+      0 0 0 1px color-mix(in srgb, var(--explore-color) 18%, transparent),
+      0 0.75rem 1.8rem color-mix(in srgb, var(--explore-color) 25%, transparent);
+    transform: translateY(-1px);
+  }
+
+  #reality-orbit-prototype .orbit-action:focus-visible,
+  #reality-orbit-prototype .orbit-context-explore:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--explore-color) 64%, #eef7f9);
+    outline-offset: 3px;
+  }
+
   #reality-orbit-prototype .orbit-action[data-exploring=&quot;true&quot;] {
     cursor: default;
     opacity: 0.72;
@@ -1062,16 +1111,17 @@ html&gt;body{padding:0}&lt;/style&gt;
       radial-gradient(circle, rgba(213, 177, 134, 0.48) 0 0.5px, transparent 0.9px);
     background-position: 13px 19px, 47px 61px, 89px 31px;
     background-size: 67px 73px, 113px 127px, 179px 163px;
-    animation: starfield-drift-far 96s ease-in-out infinite alternate;
+    animation: starfield-drift-far 44s ease-in-out infinite alternate;
   }
 
   #reality-orbit-prototype .orbit-starfield::after {
     background-image:
       radial-gradient(circle, rgba(236, 246, 249, 0.72) 0 0.9px, transparent 1.35px),
-      radial-gradient(circle, rgba(154, 197, 214, 0.54) 0 0.75px, transparent 1.2px);
-    background-position: 73px 41px, 19px 97px;
-    background-size: 211px 193px, 157px 181px;
-    animation: starfield-drift-near 58s ease-in-out infinite alternate;
+      radial-gradient(circle, rgba(154, 197, 214, 0.54) 0 0.75px, transparent 1.2px),
+      linear-gradient(112deg, transparent 0 42%, rgba(136, 183, 204, 0.045) 48%, transparent 54%);
+    background-position: 73px 41px, 19px 97px, 0 0;
+    background-size: 211px 193px, 157px 181px, 100% 100%;
+    animation: starfield-drift-near 24s ease-in-out infinite alternate;
   }
 
   #reality-orbit-prototype .orbit-map {
@@ -1211,7 +1261,17 @@ html&gt;body{padding:0}&lt;/style&gt;
   #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker {
     background:
       radial-gradient(circle at 40% 30%, rgba(225, 239, 249, 0.25), transparent 19%),
+      radial-gradient(circle at 50% 73%, rgba(208, 172, 112, 0.28), transparent 26%),
       radial-gradient(circle, #42617e, #172a42 66%, #091522);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-marker::before {
+    inset: 43% -0.56rem;
+    border-color: color-mix(in srgb, var(--node-color, #88a9b5) 40%, transparent);
+    border-right-color: transparent;
+    border-radius: 50%;
+    transform: rotate(12deg);
+    animation: dimension-ring-drift 28s linear infinite;
   }
 
   #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker::before {
@@ -1220,6 +1280,27 @@ html&gt;body{padding:0}&lt;/style&gt;
     border-radius: 50%;
     transform: rotate(-16deg);
     animation: time-ring-drift 18s linear infinite;
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-glyph {
+    position: relative;
+    width: 1.08rem;
+    height: 1.3rem;
+    border-radius: 0;
+    background:
+      linear-gradient(180deg, rgba(224, 196, 145, 0.96) 0 24%, transparent 25% 68%, rgba(210, 176, 116, 0.96) 69% 100%);
+    clip-path: polygon(4% 0, 96% 0, 61% 45%, 96% 100%, 4% 100%, 39% 45%);
+  }
+
+  #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-glyph::after {
+    position: absolute;
+    top: 34%;
+    left: calc(50% - 1px);
+    width: 2px;
+    height: 31%;
+    border-radius: 999px;
+    background: rgba(226, 205, 161, 0.9);
+    content: &quot;&quot;;
   }
 
   #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;scale&quot;] .destination-marker {
@@ -1887,7 +1968,6 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype .understand-eyebrow,
-  #reality-orbit-prototype .understand-lead-label,
   #reality-orbit-prototype .understand-support-label,
   #reality-orbit-prototype .understand-context-card dt,
   #reality-orbit-prototype .understand-fields dt {
@@ -1926,9 +2006,37 @@ html&gt;body{padding:0}&lt;/style&gt;
     box-shadow: inset 0 1px 0 rgba(225, 239, 246, 0.045);
   }
 
-  #reality-orbit-prototype .understand-story-lead {
+  #reality-orbit-prototype .understand-pareto-fields {
     display: grid;
-    gap: 0.45rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem 1.15rem;
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .understand-pareto-fields &gt; div {
+    min-width: 0;
+    padding-top: 0.72rem;
+    border-top: 1px solid color-mix(in srgb, var(--map-color, #c99d69) 19%, rgba(164, 196, 218, 0.12));
+  }
+
+  #reality-orbit-prototype .understand-pareto-fields &gt; div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  #reality-orbit-prototype .understand-pareto-fields dt {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 66%, #dce7eb);
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
+
+  #reality-orbit-prototype .understand-pareto-fields dd {
+    margin: 0.36rem 0 0;
+    color: #c6d1d6;
+    line-height: 1.52;
+    overflow-wrap: anywhere;
   }
 
   #reality-orbit-prototype .understand-support-group {
@@ -1988,6 +2096,16 @@ html&gt;body{padding:0}&lt;/style&gt;
     display: grid;
     grid-auto-rows: minmax(0, 1fr);
     gap: 0.8rem;
+  }
+
+  @media (max-width: 680px) {
+    #reality-orbit-prototype .understand-pareto-fields {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    #reality-orbit-prototype .understand-pareto-fields &gt; div:last-child {
+      grid-column: auto;
+    }
   }
 
   #reality-orbit-prototype .understand-view[data-selected-role=&quot;dimension&quot;] .understand-story {
@@ -2107,15 +2225,17 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   @keyframes starfield-drift-far {
-    0% { opacity: 0.36; transform: translate3d(-0.8%, -0.45%, 0) scale(1.01); }
-    52% { opacity: 0.58; }
-    100% { opacity: 0.44; transform: translate3d(0.85%, 0.55%, 0) scale(1.022); }
+    0% { opacity: 0.44; transform: translate3d(-2.4%, -1.2%, 0) scale(1.015); }
+    32% { opacity: 0.64; }
+    68% { opacity: 0.5; }
+    100% { opacity: 0.58; transform: translate3d(2.2%, 1.45%, 0) scale(1.045); }
   }
 
   @keyframes starfield-drift-near {
-    0% { opacity: 0.3; transform: translate3d(0.65%, -0.5%, 0) scale(1.018); }
-    46% { opacity: 0.5; }
-    100% { opacity: 0.36; transform: translate3d(-0.7%, 0.45%, 0) scale(1.032); }
+    0% { opacity: 0.36; transform: translate3d(3.8%, -2.6%, 0) scale(1.035); }
+    34% { opacity: 0.68; }
+    66% { opacity: 0.46; }
+    100% { opacity: 0.58; transform: translate3d(-3.2%, 2.4%, 0) scale(1.08); }
   }
 
   @keyframes orbit-node-arrive {
@@ -2140,6 +2260,11 @@ html&gt;body{padding:0}&lt;/style&gt;
       filter: brightness(1.075);
       box-shadow: inset -0.65rem -0.7rem 1.25rem rgba(36, 13, 5, 0.49), 0 0 0 0.72rem rgba(213, 153, 80, 0.13), 0 0 3.5rem rgba(211, 148, 76, 0.42);
     }
+  }
+
+  @keyframes dimension-ring-drift {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   @keyframes time-ring-drift {
@@ -2326,6 +2451,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .orbit-starfield::after,
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .destination-marker,
+    #reality-orbit-prototype .orbit-node[data-ontology-level=&quot;1&quot;] .destination-marker::before,
     #reality-orbit-prototype .orbit-node[data-visual-archetype=&quot;time&quot;] .destination-marker::before,
     #reality-orbit-prototype .orbit-hover-reticle-shell,
     #reality-orbit-prototype .orbit-hover-reticle-orbit,
@@ -2349,7 +2475,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           &lt;button class=&quot;btn btn-ghost orbit-back&quot; type=&quot;button&quot; data-orbit-back hidden aria-label=&quot;Return to the previous orbit&quot;&gt;← Back&lt;/button&gt;
           &lt;div class=&quot;orbit-path text-small&quot; data-orbit-path aria-label=&quot;Current ontology path&quot;&gt;&lt;/div&gt;
           &lt;div class=&quot;orbit-actions&quot; data-orbit-actions hidden&gt;
-            &lt;button class=&quot;btn btn-primary orbit-action&quot; type=&quot;button&quot; data-explore-action&gt;Explore selected&lt;/button&gt;
+            &lt;button class=&quot;btn btn-primary orbit-action&quot; type=&quot;button&quot; data-explore-action&gt;Explore concept&lt;/button&gt;
           &lt;/div&gt;
         &lt;/div&gt;
         &lt;div class=&quot;orbit-stage&quot;&gt;
@@ -2372,7 +2498,7 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;/header&gt;
             &lt;p class=&quot;orbit-preview-summary&quot; data-orbit-preview-summary&gt;&lt;/p&gt;
             &lt;div class=&quot;orbit-preview-insight&quot;&gt;
-              &lt;span class=&quot;orbit-preview-section-label&quot;&gt;What it reveals&lt;/span&gt;
+              &lt;span class=&quot;orbit-preview-section-label&quot;&gt;Decision rule&lt;/span&gt;
               &lt;span class=&quot;orbit-preview-question&quot; data-orbit-preview-question&gt;&lt;/span&gt;
             &lt;/div&gt;
             &lt;footer class=&quot;orbit-preview-footer&quot;&gt;
@@ -2387,12 +2513,12 @@ html&gt;body{padding:0}&lt;/style&gt;
               &lt;strong data-selected-label&gt;Reality&lt;/strong&gt;
               &lt;span class=&quot;viz-badge orbit-role&quot; data-selected-role&gt;Root concept&lt;/span&gt;
             &lt;/span&gt;
-            &lt;span class=&quot;orbit-summary&quot; data-selected-summary&gt;The five canonical dimensions used to describe anything represented in the ontology.&lt;/span&gt;
+            &lt;span class=&quot;orbit-summary&quot; data-selected-summary&gt;The organising reference point for exploring reality through five complementary dimensions.&lt;/span&gt;
           &lt;/p&gt;
           &lt;div class=&quot;orbit-detail-actions&quot;&gt;
             &lt;button class=&quot;btn orbit-detail-visual&quot; type=&quot;button&quot; data-open-concept-visual hidden&gt;Play visual&lt;/button&gt;
             &lt;div class=&quot;orbit-detail-action&quot; data-orbit-detail-action hidden&gt;
-              &lt;button class=&quot;btn btn-primary orbit-context-explore&quot; type=&quot;button&quot; data-context-explore-action&gt;Explore selected&lt;/button&gt;
+              &lt;button class=&quot;btn btn-primary orbit-context-explore&quot; type=&quot;button&quot; data-context-explore-action&gt;Explore concept&lt;/button&gt;
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/div&gt;
@@ -2405,21 +2531,13 @@ html&gt;body{padding:0}&lt;/style&gt;
               &lt;p class=&quot;text-small understand-eyebrow&quot; data-understand-eyebrow&gt;&lt;/p&gt;
               &lt;span class=&quot;viz-badge&quot;&gt;Concept anatomy&lt;/span&gt;
             &lt;/div&gt;
+            &lt;span class=&quot;text-small understand-definition-label&quot;&gt;Concept&lt;/span&gt;
             &lt;h2 id=&quot;understand-title&quot; data-understand-title&gt;&lt;/h2&gt;
-            &lt;span class=&quot;text-small understand-definition-label&quot;&gt;Definition&lt;/span&gt;
-            &lt;p class=&quot;understand-statement&quot; data-understand-statement&gt;&lt;/p&gt;
           &lt;/header&gt;
           &lt;div class=&quot;understand-body&quot;&gt;
             &lt;div class=&quot;understand-layout&quot;&gt;
               &lt;article class=&quot;card understand-story&quot;&gt;
-                &lt;div class=&quot;understand-story-lead&quot;&gt;
-                  &lt;span class=&quot;text-small understand-lead-label&quot; data-understand-lead-label&gt;&lt;/span&gt;
-                  &lt;h3 data-understand-lead&gt;&lt;/h3&gt;
-                &lt;/div&gt;
-                &lt;div class=&quot;understand-support-group&quot;&gt;
-                  &lt;span class=&quot;text-small understand-support-label&quot; data-understand-support-label&gt;&lt;/span&gt;
-                  &lt;p class=&quot;understand-support&quot; data-understand-support&gt;&lt;/p&gt;
-                &lt;/div&gt;
+                &lt;dl class=&quot;understand-pareto-fields&quot; data-understand-pareto-fields aria-label=&quot;Concept anatomy&quot;&gt;&lt;/dl&gt;
               &lt;/article&gt;
             &lt;/div&gt;
             &lt;details class=&quot;understand-more&quot; data-understand-more hidden&gt;
@@ -2468,7 +2586,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       reality: {
         id: &quot;reality&quot;,
         label: &quot;Reality&quot;,
-        summary: &quot;The five canonical dimensions used to describe anything represented in the ontology.&quot;,
+        summary: &quot;The organising reference point for exploring reality through five complementary dimensions.&quot;,
         canonicalPath: [&quot;Reality&quot;],
         children: [&quot;domain&quot;, &quot;category&quot;, &quot;time&quot;, &quot;scale&quot;, &quot;perspective&quot;],
         positions: [[50, 15], [17, 35], [82, 30], [25, 77], [73, 80]],
@@ -3524,11 +3642,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const understandView = root.querySelector(&quot;[data-understand-view]&quot;);
     const understandEyebrow = root.querySelector(&quot;[data-understand-eyebrow]&quot;);
     const understandTitle = root.querySelector(&quot;[data-understand-title]&quot;);
-    const understandStatement = root.querySelector(&quot;[data-understand-statement]&quot;);
-    const understandLeadLabel = root.querySelector(&quot;[data-understand-lead-label]&quot;);
-    const understandLead = root.querySelector(&quot;[data-understand-lead]&quot;);
-    const understandSupportLabel = root.querySelector(&quot;[data-understand-support-label]&quot;);
-    const understandSupport = root.querySelector(&quot;[data-understand-support]&quot;);
+    const understandParetoFields = root.querySelector(&quot;[data-understand-pareto-fields]&quot;);
     const understandFoundations = root.querySelector(&quot;[data-understand-foundations]&quot;);
     const understandContext = root.querySelector(&quot;[data-understand-context]&quot;);
     const understandMore = root.querySelector(&quot;[data-understand-more]&quot;);
@@ -3804,8 +3918,52 @@ html&gt;body{padding:0}&lt;/style&gt;
         &quot;Common confusion&quot;: `Do not use ${node.label} as shorthand for all of ${parentLabel}. Here it refers specifically to ${summaryInSentence}.`,
       };
 
-      if (role === &quot;Root concept&quot;) {
+      const withParetoFields = (baseAnatomy) =&gt; {
+        const anatomy = baseAnatomy ?? {};
+        const authoredPareto = node.pareto ?? {};
+        const firstChildLabel = childLabels[0] ?? &quot;a neighbouring concept&quot;;
+        const paretoAnatomy = {
+          &quot;Definition&quot;: authoredPareto.Definition ?? node.summary,
+          &quot;Mechanism&quot;: authoredPareto.Mechanism
+            ?? anatomy.Mechanism
+            ?? anatomy[&quot;First principles&quot;]
+            ?? `It works by making ${summaryInSentence} the relevant feature of the question, then testing it against the surrounding ${parentLabel} context.`,
+          &quot;Applies when&quot;: authoredPareto[&quot;Applies when&quot;]
+            ?? anatomy.Scope
+            ?? anatomy[&quot;How to use it&quot;]
+            ?? `Apply ${node.label} when the inquiry concerns ${summaryInSentence}.`,
+          &quot;Breaks when&quot;: authoredPareto[&quot;Breaks when&quot;]
+            ?? anatomy.Limitations
+            ?? anatomy[&quot;Common confusion&quot;]
+            ?? `It breaks when the case falls outside ${node.label}&#x27;s scope or when another lens changes the result.`,
+          &quot;Example&quot;: authoredPareto.Example
+            ?? anatomy.Example
+            ?? anatomy.Applications
+            ?? anatomy[&quot;Visual demonstration&quot;]
+            ?? (childLabels.length &gt; 0
+              ? `For example, use ${node.label} to distinguish ${joinLabels(childLabels.slice(0, 3))} within ${parentLabel}.`
+              : `For example, apply ${node.label} to a case that matches ${summaryInSentence}.`),
+          &quot;Counterexample&quot;: authoredPareto.Counterexample
+            ?? anatomy.Counterexample
+            ?? (anatomy.Limitations
+              ? `A counterexample is a case where ${summaryInSentence} appears relevant but the stated limits do not hold: ${anatomy.Limitations}`
+              : anatomy[&quot;Common confusion&quot;]
+                ? `A counterexample is a case that resembles ${node.label} but is actually ${anatomy[&quot;Common confusion&quot;]}`
+                : `A counterexample is a case that mentions ${summaryInSentence} without satisfying ${node.label}&#x27;s definition.`),
+          &quot;Decision rule&quot;: authoredPareto[&quot;Decision rule&quot;]
+            ?? anatomy[&quot;How to use it&quot;]
+            ?? anatomy.Purpose
+            ?? `Choose ${node.label} when the question is specifically about ${summaryInSentence}; otherwise use ${firstChildLabel} or another better-fitting lens.`,
+        };
+
         return {
+          ...anatomy,
+          ...paretoAnatomy,
+        };
+      };
+
+      if (role === &quot;Root concept&quot;) {
+        return withParetoFields({
           &quot;Purpose&quot;: &quot;Use Reality as the shared starting point before choosing what is being studied, what kind of thing it is, when and at what scale it is examined, and from which perspective.&quot;,
           &quot;Governing question&quot;: &quot;Which dimensions are needed to describe the part of reality under discussion?&quot;,
           &quot;First principles&quot;: &quot;Every useful description selects boundaries and leaves detail out; no single dimension provides a complete account.&quot;,
@@ -3813,11 +3971,11 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;Scope&quot;: &quot;Reality is the organising root of this ontology, not a claim that the map exhausts everything that exists.&quot;,
           &quot;How to use it&quot;: &quot;Begin here, select the dimension that answers your immediate question, then combine dimensions when one view is insufficient.&quot;,
           &quot;Common confusion&quot;: &quot;Reality is not another peer topic and the map positions are not scientific coordinates.&quot;,
-        };
+        });
       }
 
       if (role === &quot;Dimension&quot;) {
-        return dimensionAnatomies[node.id] ?? {
+        return withParetoFields(dimensionAnatomies[node.id] ?? {
           &quot;Purpose&quot;: `Use ${node.label} as one of the five complementary dimensions for describing reality.`,
           &quot;Governing question&quot;: dimensionQuestions[node.label] ?? `What does ${node.label} reveal about the subject?`,
           &quot;First principles&quot;: &quot;A dimension isolates one aspect of a subject for reasoning; choosing it does not replace the other dimensions.&quot;,
@@ -3825,7 +3983,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;Scope&quot;: `The ${node.label} dimension can be applied across every subject represented in the ontology.`,
           &quot;How to use it&quot;: `Choose a value within ${node.label}, then combine it with the other relevant dimensions as needed.`,
           &quot;Common confusion&quot;: &quot;A dimension classifies an aspect of a subject; it does not own or completely define that subject.&quot;,
-        };
+        });
       }
 
       const roleAnatomy = (() =&gt; {
@@ -4030,25 +4188,12 @@ html&gt;body{padding:0}&lt;/style&gt;
         ...specificContext,
         ...(node.anatomy ?? {}),
       };
-      const primaryFields = [
-        &quot;Governing question&quot;,
-        &quot;Purpose&quot;,
-        &quot;First principles&quot;,
-        &quot;Mental model&quot;,
-        &quot;How to use it&quot;,
-        &quot;Common confusion&quot;,
-        &quot;Scope&quot;,
-      ];
-
-      return {
-        ...Object.fromEntries(primaryFields.map((field) =&gt; [field, anatomy[field]])),
-        ...Object.fromEntries(Object.entries(anatomy).filter(([field]) =&gt; !primaryFields.includes(field))),
-      };
+      return withParetoFields(anatomy);
     };
 
     const thoughtForNode = (node) =&gt; {
-      const governingQuestion = buildConceptAnatomy(node)[&quot;Governing question&quot;];
-      if (governingQuestion) return governingQuestion;
+      const decisionRule = buildConceptAnatomy(node)[&quot;Decision rule&quot;];
+      if (decisionRule) return decisionRule;
       if ((node.children?.length ?? 0) &gt; 0) {
         return `What becomes visible when ${node.label} moves to the centre?`;
       }
@@ -4221,42 +4366,41 @@ html&gt;body{padding:0}&lt;/style&gt;
       const role = roleForNode(node);
       const entries = Object.entries(buildConceptAnatomy(node));
       const entryFor = (label) =&gt; entries.find(([entryLabel]) =&gt; entryLabel === label);
-      const lead = entryFor(&quot;Governing question&quot;);
-      const support = entryFor(&quot;Purpose&quot;);
-      const foundations = [&quot;First principles&quot;, &quot;Mental model&quot;].map(entryFor).filter(Boolean);
-      const contextEntries = [&quot;How to use it&quot;, &quot;Common confusion&quot;, &quot;Scope&quot;].map(entryFor).filter(Boolean);
-      const primaryLabels = new Set([
-        lead?.[0],
-        support?.[0],
-        ...foundations.map(([label]) =&gt; label),
-        ...contextEntries.map(([label]) =&gt; label),
-      ].filter(Boolean));
-      const remaining = entries.filter(([label]) =&gt; !primaryLabels.has(label));
-      const expandedFieldCount = foundations.length + contextEntries.length + remaining.length;
+      const paretoLabels = [
+        &quot;Definition&quot;,
+        &quot;Mechanism&quot;,
+        &quot;Applies when&quot;,
+        &quot;Breaks when&quot;,
+        &quot;Example&quot;,
+        &quot;Counterexample&quot;,
+        &quot;Decision rule&quot;,
+      ];
+      const paretoEntries = paretoLabels.map(entryFor).filter(Boolean);
+      const hiddenLegacyFields = new Set([
+        ...paretoLabels,
+        &quot;Governing question&quot;,
+        &quot;Purpose&quot;,
+        &quot;First principles&quot;,
+        &quot;Mental model&quot;,
+        &quot;Scope&quot;,
+        &quot;How to use it&quot;,
+        &quot;Common confusion&quot;,
+      ]);
+      const remaining = entries.filter(([label]) =&gt; !hiddenLegacyFields.has(label));
 
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
       understandEyebrow.textContent = role === &quot;Dimension&quot; ? &quot;A lens on reality&quot; : `${role} · Concept anatomy`;
       understandTitle.textContent = node.label;
-      understandStatement.textContent = node.summary;
-      understandLeadLabel.textContent = lead?.[0] ?? &quot;Governing question&quot;;
-      understandLead.textContent = lead?.[1] ?? node.summary;
-      understandSupportLabel.textContent = support?.[0] ?? &quot;Purpose&quot;;
-      understandSupport.textContent = support?.[1] ?? node.summary;
-
-      understandFoundations.replaceChildren(...foundations.map((entry) =&gt; createAnatomyField(entry)));
-      understandFoundations.hidden = foundations.length === 0;
-
-      understandContext.replaceChildren(...contextEntries.map((entry) =&gt; createAnatomyField(entry, &quot;card understand-context-card&quot;)));
-      understandContext.setAttribute(&quot;aria-label&quot;, `${node.label} context`);
+      understandParetoFields.replaceChildren(...paretoEntries.map((entry) =&gt; createAnatomyField(entry)));
 
       understandFields.replaceChildren(...remaining.map((entry) =&gt; createAnatomyField(entry)));
       understandFields.hidden = remaining.length === 0;
       understandMore.open = false;
-      understandMore.hidden = expandedFieldCount === 0;
-      understandMoreSummary.textContent = expandedFieldCount === 1
+      understandMore.hidden = remaining.length === 0;
+      understandMoreSummary.textContent = remaining.length === 1
         ? &quot;1 node-specific field&quot;
-        : `${expandedFieldCount} node-specific fields`;
+        : `${remaining.length} supporting node-specific fields`;
     };
 
     const visualModelForNode = (node) =&gt; {
@@ -4414,7 +4558,10 @@ html&gt;body{padding:0}&lt;/style&gt;
       exploreButton.hidden = !canExplore;
       exploreButton.disabled = canExplore &amp;&amp; isCurrent;
       exploreButton.dataset.exploring = String(canExplore &amp;&amp; isCurrent);
-      exploreButton.textContent = isCurrent ? &quot;Exploring&quot; : &quot;Explore selected&quot;;
+      const exploreColor = nodeColor(node);
+      exploreButton.style.setProperty(&quot;--explore-color&quot;, exploreColor);
+      contextExploreButton.style.setProperty(&quot;--explore-color&quot;, exploreColor);
+      exploreButton.textContent = isCurrent ? `Exploring ${node.label}` : `Explore ${node.label}`;
       exploreButton.setAttribute(&quot;aria-pressed&quot;, String(canExplore &amp;&amp; isCurrent));
       exploreButton.setAttribute(&quot;aria-label&quot;, isCurrent ? `Currently exploring ${node.label}` : `Explore ${node.label}`);
       const canExploreFromDetail = canExplore &amp;&amp; !isCurrent;
