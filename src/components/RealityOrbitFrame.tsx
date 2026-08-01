@@ -20,7 +20,7 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
     frameRef.current.contentWindow.postMessage({
       type: "reality-orbit:select-node",
       nodeId: requestedNodeId,
-    }, "*");
+    }, window.location.origin);
   };
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
         }}
         ref={frameRef}
         referrerPolicy="no-referrer"
-        sandbox="allow-scripts"
+        sandbox="allow-scripts allow-same-origin"
         srcDoc={orbitDocument}
         title="Reality Orbit"
       />

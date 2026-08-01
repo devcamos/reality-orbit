@@ -16,7 +16,8 @@ const extractDeclaration = (startMarker, endMarker) => {
 };
 
 const ontologyMatch = fragment.match(/const ontology = (\{[\s\S]*?\n    \});\n\n    const canonicalDimensions/);
-assert.ok(ontologyMatch, "The canonical ontology must remain readable by the contract tests.");
+const ontologySource = ontologyMatch?.[1];
+if (!ontologySource) throw new Error("The canonical ontology must remain readable by the contract tests.");
 
 const policySource = extractDeclaration("const canExploreNode", "\n\n    const validateOntology");
 const roleSource = extractDeclaration("const roleForNode", "\n\n    const relationshipForNode");
@@ -27,7 +28,7 @@ const anatomySource = extractDeclaration("const buildConceptAnatomy", "\n\n    c
 const visualSource = extractDeclaration("const visualModelForNode", "\n\n    const parentForNode");
 
 const contract = runInNewContext(`
-  const ontology = ${ontologyMatch[1]};
+  const ontology = ${ontologySource};
   const defaultOntologyLevel = 4;
   const terminalOntologyLevel = 5;
   const curatedLevelFivePolicy = "curated-level-five";

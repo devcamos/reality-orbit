@@ -19,7 +19,7 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
   const [notes, setNotes] = useState<readonly FieldNote[]>(fieldNotes);
   const [adminOpen, setAdminOpen] = useState(false);
   const selectedNote = notes.find((note) => note.slug === selectedSlug);
-  const subcategoryFilters = [...new Set(notes.map((note) => note.subcategory).filter((subcategory): subcategory is string => Boolean(subcategory)))].sort();
+  const subcategoryFilters = [...new Set(notes.map((note) => note.subcategory).filter((subcategory): subcategory is string => Boolean(subcategory)))].sort((left, right) => left.localeCompare(right));
   const filterOptions = ["all", ...FIELD_NOTE_DIMENSIONS, ...subcategoryFilters];
   const visibleNotes = notes.filter((note) => {
       if (activeFilter === "all") return true;

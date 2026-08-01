@@ -7,9 +7,22 @@ interface SkillsMatrixSurfaceProps {
 
 const areas = ["All areas", ...new Set(skillSignals.map((skill) => skill.area))];
 
+const pointOffsets: Record<string, readonly [number, number]> = {
+  "systems-thinking": [2.8, 3.6],
+  "first-principles": [-2.8, -3.6],
+  "decision-making": [1.6, 2.4],
+  "clear-communication": [-1.6, -2.4],
+  "learning-loops": [0.8, 1.6],
+  "ethical-judgement": [-0.8, -1.6],
+  "attention-allocation": [0.7, 1.2],
+  "operating-systems": [-0.7, -1.2],
+};
+
+const clampPercent = (value: number): number => Math.min(94, Math.max(6, value));
+
 const pointStyle = (skill: SkillSignal): CSSProperties => ({
-  "--skill-left": `${skill.value * 100}%`,
-  "--skill-bottom": `${skill.evidenceQuality * 100}%`,
+  "--skill-left": `${clampPercent(skill.value * 100 + (pointOffsets[skill.id]?.[0] ?? 0))}%`,
+  "--skill-bottom": `${clampPercent(skill.evidenceQuality * 100 + (pointOffsets[skill.id]?.[1] ?? 0))}%`,
   "--skill-size": `${2.1 + skill.impact * 1.7}rem`,
 } as CSSProperties);
 
@@ -42,7 +55,8 @@ export function SkillsMatrixSurface({ onExploreNode }: SkillsMatrixSurfaceProps)
         </div>
 
         <div className="skills-layout">
-          <div className="skills-matrix" role="group" aria-label="Skills plotted by outcome value and evidence quality">
+          <fieldset className="skills-matrix">
+            <legend className="visually-hidden">Skills plotted by outcome value and evidence quality</legend>
             <div className="skills-matrix__quadrant skills-matrix__quadrant--high">High evidence<br />High value</div>
             <div className="skills-matrix__quadrant skills-matrix__quadrant--low">Low evidence<br />Low value</div>
             <div className="skills-matrix__mobile-axis" aria-hidden="true">Evidence quality ↑</div>
@@ -64,7 +78,7 @@ export function SkillsMatrixSurface({ onExploreNode }: SkillsMatrixSurfaceProps)
                 </button>
               ))}
             </div>
-          </div>
+          </fieldset>
 
           <div className="skills-mobile-list" aria-label="Skills list">
             {visibleSkills.map((skill) => (

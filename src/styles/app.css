@@ -316,8 +316,8 @@ button {
   padding: 0.7rem 1rem;
   border: 1px solid rgb(111 159 154 / 45%);
   border-radius: 999px;
-  color: #e8f2f1;
-  background: rgb(111 159 154 / 13%);
+  color: #f0f8f7;
+  background: #12302f;
   cursor: pointer;
   font-weight: 700;
 }
@@ -325,7 +325,7 @@ button {
 .content-surface__action:hover,
 .content-surface__action:focus-visible {
   border-color: rgb(111 159 154 / 78%);
-  background: rgb(111 159 154 / 24%);
+  background: #1a4a47;
 }
 
 .content-surface__action:focus-visible {
@@ -407,6 +407,8 @@ button {
 
 .skills-matrix {
   position: relative;
+  min-inline-size: 0;
+  margin: 0;
   min-height: clamp(25rem, 55vw, 37rem);
   padding: 2.6rem 2.8rem 2.7rem 3.5rem;
   overflow: hidden;
@@ -747,14 +749,14 @@ button {
   padding: 0.36rem 0.7rem;
   border-radius: 0.42rem;
   color: #fff7e8;
-  background: #d88d16;
+  background: #8d5b16;
   font-size: 0.78rem;
   font-weight: 750;
 }
 
 .blog-card--systems .blog-card__media span {
   color: #eaf3ff;
-  background: #3473da;
+  background: #2456a1;
 }
 
 .blog-card__body {

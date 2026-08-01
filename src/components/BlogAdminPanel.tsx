@@ -12,8 +12,22 @@ type AdminStatus =
   | { readonly kind: "error"; readonly message: string }
   | { readonly kind: "connected"; readonly message: string };
 
-const apiPath = (baseUrl: string, path: string): string =>
-  `${baseUrl.replace(/\/$/, "")}${path}`;
+const LIFE_WORLD_ORIGINS = {
+  local: "http://localhost:3000",
+  loopback: "http://127.0.0.1:3000",
+} as const;
+
+type LifeWorldOrigin = (typeof LIFE_WORLD_ORIGINS)[keyof typeof LIFE_WORLD_ORIGINS];
+
+const trustedApiOrigin = (candidate: string): LifeWorldOrigin => {
+  const normalized = candidate.trim().replace(/\/$/, "");
+  return normalized === LIFE_WORLD_ORIGINS.loopback
+    ? LIFE_WORLD_ORIGINS.loopback
+    : LIFE_WORLD_ORIGINS.local;
+};
+
+const apiPath = (origin: LifeWorldOrigin, path: string): string =>
+  `${origin}${path}`;
 
 const slugify = (value: string): string => value
   .toLowerCase()
@@ -45,11 +59,12 @@ export function BlogAdminPanel({ onCancel, onCreated }: BlogAdminPanelProps): Re
     event.preventDefault();
     setStatus({ kind: "pending", message: "Verifying the authoring session…" });
     try {
-      const response = await fetch(apiPath(baseUrl, "/api/blog/categories"), {
+      const origin = trustedApiOrigin(baseUrl);
+      const response = await fetch(apiPath(origin, "/api/blog/categories"), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error("The blog service did not verify this session.");
-      const profileResponse = await fetch(apiPath(baseUrl, "/api/user/profile"), {
+      const profileResponse = await fetch(apiPath(origin, "/api/user/profile"), {
         headers: { Authorization: `Bearer ${token}` },
       });
       const profile = await profileResponse.json() as { isAdmin?: boolean };
@@ -66,7 +81,7 @@ export function BlogAdminPanel({ onCancel, onCreated }: BlogAdminPanelProps): Re
     const tagValues = tags.split(",").map((tag) => tag.trim()).filter(Boolean);
     const slug = slugify(title);
     try {
-      const response = await fetch(apiPath(baseUrl, "/api/blog/posts"), {
+      const response = await fetch(apiPath(trustedApiOrigin(baseUrl), "/api/blog/posts"), {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -113,11 +128,11 @@ export function BlogAdminPanel({ onCancel, onCreated }: BlogAdminPanelProps): Re
       {!connected ? (
         <form className="blog-admin__form" onSubmit={connectAdmin}>
           <label>
-            Life World API base URL
+            <span>Life World API base URL</span>
             <input value={baseUrl} onChange={(event) => setBaseUrl(event.target.value)} type="url" required />
           </label>
           <label>
-            Admin bearer token
+            <span>Admin bearer token</span>
             <input value={token} onChange={(event) => setToken(event.target.value)} type="password" autoComplete="off" required />
           </label>
           <button className="content-surface__action" type="submit">Verify authoring access <span aria-hidden="true">→</span></button>
@@ -126,40 +141,40 @@ export function BlogAdminPanel({ onCancel, onCreated }: BlogAdminPanelProps): Re
         <form className="blog-admin__form" onSubmit={publishPost}>
           <div className="blog-admin__grid">
             <label>
-              Title
+              <span>Title</span>
               <input value={title} onChange={(event) => setTitle(event.target.value)} required maxLength={255} />
             </label>
             <label>
-              Reality dimension
+              <span>Reality dimension</span>
               <select value={dimension} onChange={(event) => setDimension(event.target.value as (typeof FIELD_NOTE_DIMENSIONS)[number])}>
                 {FIELD_NOTE_DIMENSIONS.map((option) => <option key={option} value={option}>{option}</option>)}
               </select>
             </label>
             <label>
-              Primary node ID
+              <span>Primary node ID</span>
               <input value={primaryNodeId} onChange={(event) => setPrimaryNodeId(event.target.value)} placeholder="paradox" required />
             </label>
             <label>
-              Category
+              <span>Category</span>
               <input value={category} onChange={(event) => setCategory(event.target.value)} required />
             </label>
             <label>
-              Subcategory
+              <span>Subcategory</span>
               <input value={subcategory} onChange={(event) => setSubcategory(event.target.value)} />
             </label>
           </div>
           <label>
-            Tags, separated by commas
+            <span>Tags, separated by commas</span>
             <input value={tags} onChange={(event) => setTags(event.target.value)} />
           </label>
           <label>
-            Article content
+            <span>Article content</span>
             <textarea value={content} onChange={(event) => setContent(event.target.value)} required rows={12} placeholder="Explain the idea plainly, then connect it back to the map." />
           </label>
           <button className="content-surface__action" type="submit">Publish field note <span aria-hidden="true">→</span></button>
         </form>
       )}
-      <p className={`blog-admin__status blog-admin__status--${status.kind}`} role={status.kind === "error" ? "alert" : "status"}>{status.message}</p>
+      <output className={`blog-admin__status blog-admin__status--${status.kind}`} aria-live={status.kind === "error" ? "assertive" : "polite"}>{status.message}</output>
     </section>
   );
 }
