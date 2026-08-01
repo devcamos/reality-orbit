@@ -42,6 +42,33 @@ If a change crosses scopes, read every relevant scope file. Scoped files add con
 - Treat client input and external metadata as untrusted.
 - Do not place secrets, credentials, or private feedback bodies in source, logs, or generated bundles.
 
+## Planned Change Model
+
+Before implementing a requested change, state the following in the working update:
+
+1. **Intent** — the user problem and desired outcome.
+2. **Scope** — the screens, components, data, and agents affected.
+3. **Product and ontology fit** — how the change supports understanding, preserves the canonical ontology, and respects existing boundaries.
+4. **Interaction impact** — what users will see, select, search, navigate, or hear next.
+5. **Constraints and risks** — accessibility, responsive, security, performance, and compatibility considerations.
+6. **Acceptance criteria** — the observable conditions that define completion.
+7. **Verification plan** — the checks to run, including build, smoke, accessibility, and responsive journeys where relevant.
+8. **Handoff** — what changed, remaining risk, and a clickable local URL after completion.
+
+Call this format the **Planned Change Model**. Keep it concise for small changes and expand it when the change crosses product, ontology, or infrastructure boundaries.
+
+## UI Change Agreement
+
+For any visual or interaction change, agree the intended interface before implementation:
+
+1. Provide a design sample: Figma frame, annotated screenshot, wireframe, or small local prototype.
+2. State the screen purpose, hierarchy, primary action, and what must remain unchanged.
+3. Show the important states: default, selected, expanded, empty, loading, error, and reduced motion where relevant.
+4. Specify mobile, tablet, and desktop behaviour, including overflow and touch targets.
+5. Record the agreed sample or decision in the change handoff before coding begins.
+
+Do not invent a different visual direction during implementation. If the sample is ambiguous, pause and surface the ambiguity rather than silently choosing a new pattern. Treat an unapproved visual as provisional and label it clearly in the local handoff.
+
 ## Definition of done
 
 - Relevant tests and checks pass.

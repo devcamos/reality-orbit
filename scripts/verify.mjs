@@ -203,7 +203,8 @@ for (const reflectiveHoverContract of [
   "@keyframes hover-reticle-orbit-drift",
   'button.setAttribute("aria-describedby", "orbit-preview")',
   "pointer-events: none",
-  'understandEyebrow.textContent = role === "Dimension" ? "A lens on reality"',
+  "summaryTitleForNode",
+  'understandEyebrow.textContent = summaryTitleForNode(node, role)',
   'selectedRole.hidden = context.role === "Dimension"',
 ]) {
   if (!fragment.includes(reflectiveHoverContract)) {
@@ -459,7 +460,7 @@ if (!fragment.includes('canonicalPath: ["Reality", "Category", "Resource"]')) {
 
 const canonicalExpansions = [
   '["physical", "biological", "psychological", "social", "economic", "informational", "mathematical"]',
-  '["law", "principle", "razor", "framework", "model", "theorem", "pattern", "theory", "method"]',
+  '["law", "principle", "razor", "framework", "model", "theorem", "pattern", "theory", "method", "paradox"]',
   '["resource-time", "energy", "capital", "information", "attention", "compute"]',
   '["process-change", "transformation", "exchange", "learning", "production"]',
   '["ownership", "dependency", "communication", "competition", "cooperation"]',

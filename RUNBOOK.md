@@ -77,7 +77,7 @@ Visual semantics are fixed:
 - Size means navigation prominence.
 - Position is stable map placement, not a scientific coordinate.
 - Colour identifies the canonical dimension.
-- Material reinforces the five root dimensions: Domain is rocky, Category is faceted, Time carries a slow ring, Scale uses nested circles, and Perspective refracts a restrained spectrum.
+- Material reinforces the five root dimensions: Domain is rocky, Category is faceted, Time carries a slow aurora, Scale uses nested circles, and Perspective refracts a restrained spectrum.
 - Reality alone uses a warm, breathing solar treatment. At deeper levels, the focused concept retains its dimension colour without pretending to be the ontological root.
 - The ring communicates selection.
 - Typed parent relationships remain structural data rather than visual spokes.
@@ -88,7 +88,7 @@ Visual semantics are fixed:
 
 The original `assets/observatory-deep-space.webp` field establishes depth without carrying ontology meaning. It stays low contrast beneath a dark readability veil so labels, focus, paths, and Concept Anatomy remain the primary information. The production gate keeps this asset below 250 KB and requires both standalone content policies to permit the local file.
 
-The map uses cinematic light sparingly: warm light anchors Reality, blue ambient light separates the surrounding field, and dimension accents remain muted. Background drift, the Reality glow, Time's ring, node arrival, and camera easing are intentionally slow and are removed when the user requests reduced motion.
+The map uses cinematic light sparingly: warm light anchors Reality, blue ambient light separates the surrounding field, and dimension accents remain muted. Background drift, the Reality glow, Time's aurora, node arrival, and camera easing are intentionally slow and are removed when the user requests reduced motion.
 
 The adjacent Concept Anatomy surface is the knowledge instrument rather than decorative “mission control.” Its dark glass, restrained borders, sticky definition, and generous spacing keep the selected concept readable while preserving a visual connection to the map.
 
@@ -514,7 +514,11 @@ npm run check
 npm run start
 ```
 
-Open `http://127.0.0.1:4175/`. The React shell fills the viewport, while the observatory preserves its 1440 px desktop composition and collapses to one column below 980 px.
+Open `http://127.0.0.1:4175/` on the development machine. Vite also exposes port `4175` on the host's LAN address, so a phone or tablet on the same trusted Wi-Fi can open the printed Network URL for responsive review. The development server is not a production authentication boundary.
+
+Field Notes keep canonical dimension and editorial category metadata on each note, while discovery remains intentionally focused on search and reading. The canonical hierarchy is explored in the main orbit rather than duplicated as a second tree inside the library.
+
+The Field Notes admin authoring panel is local-development-only. It is rendered when `import.meta.env.DEV` is true and omitted from production builds. The connected Life World service must still enforce the admin token and authorization for every publishing request; local visibility is not an API security control.
 
 ## Production release
 

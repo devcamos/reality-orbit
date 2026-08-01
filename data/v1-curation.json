@@ -13,7 +13,7 @@
     {
       "id": "knowledge",
       "scope": "What is known, claimed, represented, or inferred.",
-      "decision": "Selects the core artifact vocabulary, a small set of named law instances, and explicitly scoped examples of principles, models, theories, and methods; it does not claim exhaustive coverage.",
+    "decision": "Selects the core artifact vocabulary, a small set of named law instances, principles, models, theories, methods, and paradoxes; it does not claim exhaustive coverage.",
       "approvedPaths": [
         [
           "law",
@@ -94,6 +94,34 @@
         [
           "method",
           "second-order-thinking"
+        ],
+        [
+          "paradox",
+          "ship-of-theseus"
+        ],
+        [
+          "paradox",
+          "sorites-paradox"
+        ],
+        [
+          "paradox",
+          "paradox-of-choice"
+        ],
+        [
+          "paradox",
+          "paradox-of-tolerance"
+        ],
+        [
+          "paradox",
+          "abilene-paradox"
+        ],
+        [
+          "paradox",
+          "jevons-paradox"
+        ],
+        [
+          "paradox",
+          "stockdale-paradox"
         ]
       ]
     },

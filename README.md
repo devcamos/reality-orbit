@@ -45,6 +45,10 @@ This prototype is independent from Law Explorer. Law Explorer remains a law-only
 
 The repository is the source of truth for the published interaction and its curated ontology data. Notion remains the research and governance workspace.
 
+The Skills matrix is an analytical view over `Psychological → Individual Differences → Abilities`. Its initial points are local seeded signals that compare outcome value with evidence quality; they are not additional canonical ontology nodes or objective rankings. Selecting a point can return to its related Reality Orbit concept.
+
+Admin authoring is intentionally available only from the local Vite development server. Production builds do not render the authoring controls, and the connected Life World API remains responsible for enforcing admin authentication and authorization.
+
 ## Agent guidance tree
 
 `AGENTS.md` is the repository source of truth for agent behaviour and routing. The root charter stays concise; scoped guidance is layered near the work it governs:
@@ -105,7 +109,7 @@ Start the typed React/Vite application locally with:
 npm run start
 ```
 
-The local preview is then available at `http://127.0.0.1:4175/`.
+The local preview is available at `http://127.0.0.1:4175/` and on the host machine's LAN address at port `4175`. Vite prints the network URL when the server starts; open that URL on a phone or tablet connected to the same Wi-Fi. This is intended for trusted local networks only—the development server has no production authentication boundary.
 
 When updating the visualization fragment, run `npm run frame:desktop` to rebuild `legacy-index.html`. The React shell reads that generated frame through an explicit compatibility adapter, preserving the existing ontology behaviour while allowing application lifecycle, delivery, and future interface work to migrate incrementally.
 

@@ -16,7 +16,8 @@ const extractDeclaration = (startMarker, endMarker) => {
 };
 
 const ontologyMatch = fragment.match(/const ontology = (\{[\s\S]*?\n    \});\n\n    const canonicalDimensions/);
-assert.ok(ontologyMatch, "The canonical ontology must remain readable by the contract tests.");
+const ontologySource = ontologyMatch?.[1];
+if (!ontologySource) throw new Error("The canonical ontology must remain readable by the contract tests.");
 
 const policySource = extractDeclaration("const canExploreNode", "\n\n    const validateOntology");
 const roleSource = extractDeclaration("const roleForNode", "\n\n    const relationshipForNode");
@@ -27,7 +28,7 @@ const anatomySource = extractDeclaration("const buildConceptAnatomy", "\n\n    c
 const visualSource = extractDeclaration("const visualModelForNode", "\n\n    const parentForNode");
 
 const contract = runInNewContext(`
-  const ontology = ${ontologyMatch[1]};
+  const ontology = ${ontologySource};
   const defaultOntologyLevel = 4;
   const terminalOntologyLevel = 5;
   const curatedLevelFivePolicy = "curated-level-five";
@@ -499,6 +500,46 @@ test("every reachable node has a distinct contextual lens rather than generic fa
   context.diagnostic(`${nodes.length} distinct node-specific contextual lenses passed review.`);
 });
 
+test("content audit keeps every teaching value unique and Feynman-sized enough to review", (context) => {
+  const reachableNodes = nodes.filter((node) => reachableFromReality().has(node.id));
+  const fields = ["summary", "Definition", "Mechanism", "Applies when", "Breaks when", "Example", "Counterexample", "Decision rule"];
+  const duplicateGroups = {};
+  const longValues = [];
+
+  for (const field of fields) {
+    const values = new Map();
+    for (const node of reachableNodes) {
+      const value = field === "summary"
+        ? node.summary
+        : contract.buildConceptAnatomy(node)[field];
+      const normalized = String(value ?? "").trim().replace(/\s+/g, " ").toLowerCase();
+      if (!normalized) continue;
+      const wordCount = normalized.split(/\s+/).length;
+      if (wordCount > 40) {
+        longValues.push({ label: node.label, field, wordCount, value: String(value).trim() });
+      }
+      const ids = values.get(normalized) ?? [];
+      ids.push(node.id);
+      values.set(normalized, ids);
+    }
+    duplicateGroups[field] = [...values.values()]
+      .filter((ids) => ids.length > 1)
+      .map((ids) => ids.map((id) => contract.ontology[id].label));
+  }
+
+  for (const [field, groups] of Object.entries(duplicateGroups)) {
+    assert.deepEqual(groups, [], `${field} must not repeat exact teaching copy across reachable nodes.`);
+  }
+
+  assert.deepEqual(
+    longValues.map(({ label, field, wordCount }) => ({ label, field, wordCount })),
+    [],
+    "Feynman teaching fields should stay at or below 40 words; split or simplify the authored copy when they exceed it.",
+  );
+
+  context.diagnostic(JSON.stringify({ reachable: reachableNodes.length, duplicateGroups, longValueCount: longValues.length }));
+});
+
 test("every visible child relationship is explicitly curated and advances the canonical path", () => {
   for (const node of nodes) {
     const children = node.children ?? [];
@@ -566,8 +607,15 @@ test("Concept Anatomy maps the simple Pareto model to the selected node", () => 
   assert.match(fragment, /<details class="understand-more" data-understand-more hidden>/);
   assert.match(fragment, /understandMore\.open = false;/);
   assert.match(fragment, /data-understand-pareto-fields/);
+  assert.match(fragment, /const anatomySections = \[/);
+  for (const sectionTitle of ["Meaning", "Boundary", "Contrast", "Use"]) {
+    assert.match(fragment, new RegExp(`title: "${sectionTitle}"`));
+  }
+  assert.match(fragment, /createAnatomySection/);
+  assert.doesNotMatch(fragment, /understand-verse-ref/);
   assert.match(fragment, /understandParetoFields\.replaceChildren/);
   assert.match(fragment, /understandView\.dataset\.selectedNode = node\.id;/);
-  assert.match(fragment, /understandEyebrow\.textContent = role === "Dimension" \? "A lens on reality" : `\$\{role\} · Concept anatomy`;/);
+  assert.match(fragment, /const summaryTitleForNode = \(node, role\) =>/);
+  assert.match(fragment, /understandEyebrow\.textContent = summaryTitleForNode\(node, role\);/);
   assert.match(fragment, /understandTitle\.textContent = node\.label;/);
 });

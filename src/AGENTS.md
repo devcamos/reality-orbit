@@ -17,10 +17,13 @@ This scope governs the React shell, compatibility frame, visualization, interact
 - Preserve the ontology data contract; do not duplicate canonical node data in UI components.
 - Keep generated `legacy-index.html` synchronised from the readable source fragment.
 - Keep user-facing labels contextual, accessible, and specific to the selected node.
+- Keep Field Notes metadata aligned to the canonical dimensions; do not duplicate the ontology as a second navigation tree inside the library or mutate the canonical graph.
 - Use semantic HTML, accessible names, live regions only when needed, and visible focus states.
 - Respect reduced-motion preferences and maintain 44px touch targets.
 - Test desktop, mobile, keyboard, hover-capable, touch, and failure states.
+- Treat 390px mobile, 768px iPad/tablet, and 1280px desktop as the minimum responsive review widths for every UI change; verify no horizontal overflow, clipped labels, or trapped content.
 - Avoid visual effects that reduce readability, obscure destinations, or imply false relationships.
+- Keep admin authoring controls local-development-only. Production builds must not expose them; any external publishing API must still enforce authentication and authorization server-side.
 
 ## Review checklist
 
