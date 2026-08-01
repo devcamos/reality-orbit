@@ -297,7 +297,7 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
 
   await node(page, "scale").click();
   await expect(node(page, "scale")).toHaveAttribute("aria-current", "true");
-  await expect(app(page).locator("#reality-orbit-prototype")).toHaveAttribute("data-cosmic-scene", "scale");
+  await expect(app(page).locator("#reality-orbit-prototype")).toHaveAttribute("data-cosmic-scene", "reality");
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Scale");
   await expect(app(page).locator(".orbit-role[data-selected-role]")).toBeHidden();
   await expect(app(page).locator(".destination-meta")).toHaveCount(0);
@@ -309,6 +309,7 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
   await expect(exploreAction).toHaveCSS("--explore-color", "#78926f");
 
   await exploreAction.click();
+  await expect(app(page).locator("#reality-orbit-prototype")).toHaveAttribute("data-cosmic-scene", "scale");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Reality");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Scale");
   await expect(exploreAction).toHaveText("Exploring Scale");

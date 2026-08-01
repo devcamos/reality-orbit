@@ -4990,7 +4990,8 @@ html&gt;body{padding:0}&lt;/style&gt;
       hideOrbitalCursor();
       selectedId = nodeId;
       const node = ontology[nodeId];
-      root.dataset.cosmicScene = cosmicSceneForNode(node);
+      // Keep the entry map anchored to Reality; a lens scene is revealed only after Explore.
+      root.dataset.cosmicScene = cosmicSceneForNode(currentNode());
       root.querySelectorAll(&quot;[data-node-id]&quot;).forEach((button) =&gt; {
         const selected = button.dataset.nodeId === nodeId;
         button.dataset.selected = String(selected);
