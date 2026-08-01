@@ -77,7 +77,7 @@ Visual semantics are fixed:
 - Size means navigation prominence.
 - Position is stable map placement, not a scientific coordinate.
 - Colour identifies the canonical dimension.
-- Material reinforces the five root dimensions: Domain is rocky, Category is faceted, Time carries a slow ring, Scale uses nested circles, and Perspective refracts a restrained spectrum.
+- Material reinforces the five root dimensions: Domain is rocky, Category is faceted, Time carries a slow aurora, Scale uses nested circles, and Perspective refracts a restrained spectrum.
 - Reality alone uses a warm, breathing solar treatment. At deeper levels, the focused concept retains its dimension colour without pretending to be the ontological root.
 - The ring communicates selection.
 - Typed parent relationships remain structural data rather than visual spokes.
@@ -88,7 +88,7 @@ Visual semantics are fixed:
 
 The original `assets/observatory-deep-space.webp` field establishes depth without carrying ontology meaning. It stays low contrast beneath a dark readability veil so labels, focus, paths, and Concept Anatomy remain the primary information. The production gate keeps this asset below 250 KB and requires both standalone content policies to permit the local file.
 
-The map uses cinematic light sparingly: warm light anchors Reality, blue ambient light separates the surrounding field, and dimension accents remain muted. Background drift, the Reality glow, Time's ring, node arrival, and camera easing are intentionally slow and are removed when the user requests reduced motion.
+The map uses cinematic light sparingly: warm light anchors Reality, blue ambient light separates the surrounding field, and dimension accents remain muted. Background drift, the Reality glow, Time's aurora, node arrival, and camera easing are intentionally slow and are removed when the user requests reduced motion.
 
 The adjacent Concept Anatomy surface is the knowledge instrument rather than decorative “mission control.” Its dark glass, restrained borders, sticky definition, and generous spacing keep the selected concept readable while preserving a visual connection to the map.
 

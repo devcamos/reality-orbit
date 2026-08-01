@@ -293,19 +293,22 @@
 
   #reality-orbit-prototype[data-cosmic-scene="time"] .orbit-cosmic-scenery::before {
     background:
-      radial-gradient(circle at 52% 49%, rgba(211, 233, 244, 0.5) 0 0.7%, rgba(112, 170, 211, 0.24) 2.5%, transparent 16%),
-      repeating-conic-gradient(from 8deg at 52% 49%, transparent 0 15deg, rgba(132, 190, 226, 0.13) 17deg 18deg, transparent 20deg 44deg);
-    opacity: 0.84;
-    animation: cosmic-pulsar-turn 18s linear infinite;
+      radial-gradient(ellipse 38% 70% at 18% 45%, rgba(78, 171, 159, 0.2), transparent 72%),
+      radial-gradient(ellipse 42% 75% at 50% 42%, rgba(115, 188, 175, 0.22), transparent 70%),
+      radial-gradient(ellipse 36% 65% at 82% 48%, rgba(92, 130, 201, 0.18), transparent 72%),
+      linear-gradient(116deg, transparent 18%, rgba(132, 207, 190, 0.12) 33%, transparent 47%, rgba(129, 156, 219, 0.12) 66%, transparent 82%);
+    filter: blur(12px) saturate(125%);
+    opacity: 0.78;
+    animation: cosmic-aurora-drift 26s ease-in-out infinite alternate;
   }
 
   #reality-orbit-prototype[data-cosmic-scene="time"] .orbit-cosmic-scenery::after {
     background:
-      linear-gradient(90deg, transparent 40%, rgba(158, 205, 230, 0.19) 48%, rgba(229, 244, 250, 0.38) 50%, rgba(158, 205, 230, 0.19) 52%, transparent 60%),
-      linear-gradient(0deg, transparent 42%, rgba(158, 205, 230, 0.09) 49%, rgba(220, 239, 246, 0.18) 50%, rgba(158, 205, 230, 0.09) 51%, transparent 58%);
-    opacity: 0.46;
-    transform: rotate(-18deg) scale(1.3);
-    animation: cosmic-pulsar-beam 7s ease-in-out infinite alternate;
+      repeating-linear-gradient(112deg, transparent 0 13%, rgba(158, 221, 199, 0.1) 15%, transparent 19% 30%),
+      linear-gradient(100deg, transparent 15%, rgba(95, 180, 182, 0.08) 35%, rgba(178, 204, 158, 0.13) 48%, transparent 68%);
+    opacity: 0.58;
+    filter: blur(1px);
+    animation: cosmic-aurora-curtain 18s ease-in-out infinite alternate;
   }
 
   #reality-orbit-prototype[data-cosmic-scene="scale"] .orbit-cosmic-scenery::before {
@@ -1550,14 +1553,14 @@
     to { transform: translate3d(1.5%, 0.5%, 0) skewX(1deg); }
   }
 
-  @keyframes cosmic-pulsar-turn {
-    from { transform: rotate(0deg) scale(1); }
-    to { transform: rotate(360deg) scale(1.04); }
+  @keyframes cosmic-aurora-drift {
+    from { transform: translate3d(-2%, 1%, 0) scale(1.02) skewX(-2deg); }
+    to { transform: translate3d(2%, -1%, 0) scale(1.08) skewX(2deg); }
   }
 
-  @keyframes cosmic-pulsar-beam {
-    from { opacity: 0.18; transform: rotate(-18deg) scale(1.22); }
-    to { opacity: 0.5; transform: rotate(-14deg) scale(1.38); }
+  @keyframes cosmic-aurora-curtain {
+    from { opacity: 0.28; transform: translate3d(-1%, 0, 0) skewX(-2deg) scaleX(1.02); }
+    to { opacity: 0.62; transform: translate3d(1.5%, 1%, 0) skewX(2deg) scaleX(1.06); }
   }
 
   @keyframes cosmic-supernova-expand {
