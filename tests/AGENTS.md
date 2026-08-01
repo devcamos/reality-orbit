@@ -19,6 +19,7 @@ For normal implementation changes, run the narrowest relevant checks and then th
 - Test user outcomes and contracts, not implementation trivia.
 - Add regression coverage for every new interaction or ontology rule.
 - Cover desktop, mobile, keyboard, reduced motion, and accessible naming where relevant.
+- Every UI change must include responsive acceptance at 390px mobile, 768px iPad/tablet, and 1280px desktop widths, including overflow and clipping checks for the changed surface.
 - Keep Playwright journeys readable and focused on meaningful user paths.
 - Treat console errors, page errors, serious accessibility violations, flaky results, and unexpected skips as failures requiring explanation.
 

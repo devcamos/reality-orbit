@@ -1,16 +1,31 @@
-import { memo, useState, type ReactElement } from "react";
+import { memo, useEffect, useRef, useState, type ReactElement } from "react";
 
 interface RealityOrbitFrameProps {
   orbitDocument: string;
+  requestedNodeId?: string;
 }
 
 type FrameStatus = "loading" | "ready" | "error";
 
 export const RealityOrbitFrame = memo(function RealityOrbitFrame({
   orbitDocument,
+  requestedNodeId,
 }: RealityOrbitFrameProps): ReactElement {
   const [frameStatus, setFrameStatus] = useState<FrameStatus>("loading");
   const [frameVersion, setFrameVersion] = useState(0);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+
+  const requestNodeSelection = (): void => {
+    if (!requestedNodeId || !frameRef.current?.contentWindow) return;
+    frameRef.current.contentWindow.postMessage({
+      type: "reality-orbit:select-node",
+      nodeId: requestedNodeId,
+    }, "*");
+  };
+
+  useEffect(() => {
+    if (frameStatus === "ready") requestNodeSelection();
+  }, [frameStatus, requestedNodeId]);
 
   const reloadFrame = (): void => {
     setFrameStatus("loading");
@@ -36,7 +51,11 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
         key={frameVersion}
         className="orbit-frame"
         onError={() => setFrameStatus("error")}
-        onLoad={() => setFrameStatus("ready")}
+        onLoad={() => {
+          setFrameStatus("ready");
+          requestNodeSelection();
+        }}
+        ref={frameRef}
         referrerPolicy="no-referrer"
         sandbox="allow-scripts"
         srcDoc={orbitDocument}

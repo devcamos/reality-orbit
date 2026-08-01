@@ -514,7 +514,11 @@ npm run check
 npm run start
 ```
 
-Open `http://127.0.0.1:4175/`. The React shell fills the viewport, while the observatory preserves its 1440 px desktop composition and collapses to one column below 980 px.
+Open `http://127.0.0.1:4175/` on the development machine. Vite also exposes port `4175` on the host's LAN address, so a phone or tablet on the same trusted Wi-Fi can open the printed Network URL for responsive review. The development server is not a production authentication boundary.
+
+Field Notes keep canonical dimension and editorial category metadata on each note, while discovery remains intentionally focused on search and reading. The canonical hierarchy is explored in the main orbit rather than duplicated as a second tree inside the library.
+
+The Field Notes admin authoring panel is local-development-only. It is rendered when `import.meta.env.DEV` is true and omitted from production builds. The connected Life World service must still enforce the admin token and authorization for every publishing request; local visibility is not an API security control.
 
 ## Production release
 

@@ -94,6 +94,145 @@ test("the welcome call to action feels alive without displacing text or ignoring
     .toBe("none");
 });
 
+test("app tabs expose content surfaces without losing the selected orbit node", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-enter-observatory]").click();
+  await expect(page.locator("[data-primary-navigation]")).toBeVisible();
+  await expect(page.locator("[data-primary-navigation] .app-navigation__tab").first()).toHaveText("About");
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+
+  await node(page, "scale").click();
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
+
+  await page.getByRole("button", { name: "Field notes", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Field notes", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.locator('[data-content-surface="field-notes"]')).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Field notes", exact: true })).toBeVisible();
+  await expect(page.locator('[data-field-note="paradoxes-where-simple-rules-stop-working"]')).toBeVisible();
+  await expect(page.getByRole("button", { name: "Read Paradoxes: Where simple rules stop working" })).toBeVisible();
+  await expect(page.locator('iframe[title="Reality Orbit"]')).toBeHidden();
+
+  await page.getByRole("button", { name: "Home", exact: true }).click();
+  await expect(page.locator('iframe[title="Reality Orbit"]')).toBeVisible();
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
+
+  for (const tab of ["Skills", "Library", "About"]) {
+    await page.getByRole("button", { name: tab, exact: true }).click();
+    await expect(page.locator(`[data-content-surface="${tab.toLowerCase()}"]`)).toBeVisible();
+    await expect(page.locator('iframe[title="Reality Orbit"]')).toBeHidden();
+  }
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1280, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const layout = await page.locator("[data-primary-navigation]").evaluate((navigation) => {
+      const navigationRect = navigation.getBoundingClientRect();
+      return {
+        horizontalOverflow: navigation.scrollWidth - navigation.clientWidth,
+        misplacedTabs: [...navigation.querySelectorAll(".app-navigation__tab")]
+          .filter((tab) => {
+            const rect = tab.getBoundingClientRect();
+            return rect.left < navigationRect.left - 1 || rect.right > navigationRect.right + 1;
+          })
+          .map((tab) => tab.textContent),
+      };
+    });
+    expect(layout.horizontalOverflow).toBeLessThanOrEqual(1);
+    expect(layout.misplacedTabs).toEqual([]);
+  }
+});
+
+test("the Skills matrix exposes evidence, value, and orbit context", async ({ page }) => {
+  await openOrbit(page);
+  await page.getByRole("button", { name: "Skills", exact: true }).click();
+  await expect(page.locator('[data-content-surface="skills"]')).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Skills matrix", exact: true })).toBeVisible();
+  await expect(page.locator("[data-skill-id]")).toHaveCount(8);
+  await page.locator("[data-skill-id='systems-thinking']").click();
+  await expect(page.getByRole("heading", { name: "Systems thinking", exact: true })).toBeVisible();
+  await expect(page.getByText("Evidence quality").last()).toBeVisible();
+  await page.getByRole("button", { name: /Explore Systems thinking context/ }).click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Second-order thinking");
+
+  await page.getByRole("button", { name: "Skills", exact: true }).click();
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1280, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const surface = page.locator('[data-content-surface="skills"]');
+    const layout = await surface.evaluate((element) => ({
+      horizontalOverflow: element.scrollWidth - element.clientWidth,
+      matrixVisible: Boolean(element.querySelector(".skills-matrix")),
+    }));
+    expect(layout.horizontalOverflow).toBeLessThanOrEqual(1);
+    expect(layout.matrixVisible).toBe(true);
+    if (viewport.width === 390) {
+      await expect(surface.locator(".skills-mobile-list")).toBeVisible();
+      await expect(surface.locator(".skills-mobile-list__item")).toHaveCount(8);
+      expect(await surface.locator(".skills-point span").first().evaluate((element) => getComputedStyle(element).display)).toBe("none");
+    }
+  }
+});
+
+test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-enter-observatory]").click();
+  await page.getByRole("button", { name: "Field notes", exact: true }).click();
+  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(4);
+  await expect(page.locator("[data-blog-taxonomy]")).toHaveCount(0);
+  await expect(page.locator("[data-blog-filter]")).toBeVisible();
+  await page.locator("[data-blog-filter]").selectOption("Resources");
+  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(1);
+  await page.locator("[data-blog-filter]").selectOption("all");
+  await page.getByRole("button", { name: "Admin authoring", exact: true }).click();
+  await expect(page.locator("[data-blog-admin]")).toBeVisible();
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("button", { name: "Read Paradoxes: Where simple rules stop working" }).click();
+  await expect(page.locator("[data-blog-reader='paradoxes-where-simple-rules-stop-working']")).toBeVisible();
+  await page.getByRole("button", { name: /Explore Paradox in Reality Orbit/ }).click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Paradox");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Paradox");
+});
+
+test("a local admin can create and publish a Field Note", async ({ page }) => {
+  await page.route("http://localhost:3000/api/**", async (route) => {
+    const requestUrl = new URL(route.request().url());
+    if (requestUrl.pathname.endsWith("/categories")) {
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ categories: ["Knowledge", "Systems"] }) });
+      return;
+    }
+    if (requestUrl.pathname.endsWith("/profile")) {
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ isAdmin: true }) });
+      return;
+    }
+    if (requestUrl.pathname.endsWith("/posts")) {
+      await route.fulfill({ status: 201, contentType: "application/json", body: JSON.stringify({ post: { slug: "local-admin-field-note", date: "2026-08-01" } }) });
+      return;
+    }
+    await route.continue();
+  });
+
+  await page.goto("/");
+  await page.locator("[data-enter-observatory]").click();
+  await page.getByRole("button", { name: "Field notes", exact: true }).click();
+  await page.getByRole("button", { name: "Admin authoring", exact: true }).click();
+  await page.getByLabel("Admin bearer token").fill("local-test-token");
+  await page.getByRole("button", { name: "Verify authoring access" }).click();
+  await expect(page.getByText(/Authoring session verified/)).toBeVisible();
+  await page.getByLabel("Title").fill("A local field note");
+  await page.getByLabel("Primary node ID").fill("paradox");
+  await page.getByLabel("Article content").fill("A local admin can publish a clear explanation and connect it to the map.");
+  await page.getByRole("button", { name: "Publish field note" }).click();
+  await expect(page.getByRole("heading", { name: "A local field note", exact: true })).toBeVisible();
+});
+
 test("loads the canonical Reality orbit without browser errors", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   const errors = [];
@@ -117,13 +256,19 @@ test("loads the canonical Reality orbit without browser errors", async ({ page }
     far: { name: "starfield-drift-far", duration: "44s" },
     near: { name: "starfield-drift-near", duration: "24s" },
   });
+  await expect(app(page).locator("[data-shooting-stars] .orbit-shooting-star")).toHaveCount(8);
   for (const dimension of ["domain", "category", "time", "scale", "perspective"]) {
     await expect(node(page, dimension)).toBeVisible();
   }
   await expect(app(page).locator(".orbit-connection")).toHaveCount(0);
   await expect(app(page).locator("[data-orbit-path]")).toHaveText("Choose a dimension");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Reality");
+  await expect(app(page).locator("[data-understand-eyebrow]")).toHaveText("The organising root");
   await expect(app(page).locator("[data-understand-pareto-fields] [data-anatomy-field]")).toHaveCount(7);
+  await expect(app(page).locator("[data-understand-pareto-fields] .understand-section")).toHaveCount(4);
+  await expect(app(page).locator('[data-anatomy-section="meaning"] .understand-section-title')).toHaveText("Meaning");
+  await expect(app(page).locator("[data-understand-pareto-fields] .understand-verse-ref")).toHaveCount(0);
+  await expect(app(page).locator('[data-anatomy-field="definition"] dt')).toHaveText("Definition");
   await expect(app(page).locator('[data-anatomy-field="definition"] dd')).toHaveText(
     "The organising reference point for exploring reality through five complementary dimensions.",
   );
@@ -152,10 +297,12 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
 
   await node(page, "scale").click();
   await expect(node(page, "scale")).toHaveAttribute("aria-current", "true");
+  await expect(app(page).locator("#reality-orbit-prototype")).toHaveAttribute("data-cosmic-scene", "scale");
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Scale");
   await expect(app(page).locator(".orbit-role[data-selected-role]")).toBeHidden();
   await expect(app(page).locator(".destination-meta")).toHaveCount(0);
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
+  await expect(app(page).locator("[data-understand-eyebrow]")).toHaveText("At what level");
   const exploreAction = app(page).locator("[data-explore-action]");
   await expect(exploreAction).toBeVisible();
   await expect(exploreAction).toHaveText("Explore Scale");
@@ -170,6 +317,7 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
 
   await app(page).locator("[data-orbit-back]").click();
   await expect(app(page).locator("[data-orbit-path]")).toHaveText("Choose a dimension");
+  await expect(app(page).locator("#reality-orbit-prototype")).toHaveAttribute("data-cosmic-scene", "reality");
   await expect(node(page, "scale")).toBeVisible();
 });
 
@@ -327,6 +475,46 @@ test("mobile selection reveals the summary and uses the contextual explore contr
   expect(mobileToolbar.text).toContain("Time");
 });
 
+test("Concept Anatomy sections remain readable across mobile, tablet, and desktop", async ({ page }) => {
+  for (const viewport of [
+    { name: "mobile", width: 390, height: 844 },
+    { name: "iPad", width: 768, height: 1024 },
+    { name: "desktop", width: 1280, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await openOrbit(page);
+    await node(page, "time").click();
+
+    const anatomyLayout = await app(page).locator("[data-understand-view]").evaluate((view) => {
+      const viewRect = view.getBoundingClientRect();
+      const sections = [...view.querySelectorAll(".understand-section")];
+      const items = [...view.querySelectorAll(".understand-anatomy-item")];
+      return {
+        horizontalOverflow: view.scrollWidth - view.clientWidth,
+        sections: sections.length,
+        items: items.length,
+        itemsAligned: items.every((item) => {
+          const labelRect = item.querySelector("dt").getBoundingClientRect();
+          const descriptionRect = item.querySelector("dd").getBoundingClientRect();
+          return Math.abs(labelRect.left - descriptionRect.left) <= 1;
+        }),
+        misplaced: [...sections, ...items]
+          .filter((region) => {
+            const rect = region.getBoundingClientRect();
+            return rect.left < viewRect.left - 1 || rect.right > viewRect.right + 1;
+          })
+          .map((region) => region.className),
+      };
+    });
+
+    expect(anatomyLayout.horizontalOverflow, viewport.name).toBeLessThanOrEqual(1);
+    expect(anatomyLayout.sections, viewport.name).toBe(4);
+    expect(anatomyLayout.items, viewport.name).toBe(7);
+    expect(anatomyLayout.itemsAligned, viewport.name).toBe(true);
+    expect(anatomyLayout.misplaced, viewport.name).toEqual([]);
+  }
+});
+
 test("reduced-motion mode removes ambient and navigational animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await openOrbit(page);
@@ -340,6 +528,7 @@ test("reduced-motion mode removes ambient and navigational animation", async ({ 
       canvasTransition: getComputedStyle(canvas).transitionDuration,
       nearStars: getComputedStyle(starfield, "::after").animationName,
       farStars: getComputedStyle(starfield, "::before").animationName,
+      shootingStars: [...root.querySelectorAll(".orbit-shooting-star")].map((star) => getComputedStyle(star).animationName),
       timeRing: getComputedStyle(timeMarker, "::before").animationName,
       hoverReticle: getComputedStyle(root.querySelector(".orbit-hover-reticle-orbit")).animationName,
       hoverTransition: getComputedStyle(root.querySelector(".orbit-hover-reticle")).transitionDuration,
@@ -350,6 +539,7 @@ test("reduced-motion mode removes ambient and navigational animation", async ({ 
     canvasTransition: "0s",
     nearStars: "none",
     farStars: "none",
+    shootingStars: Array(8).fill("none"),
     timeRing: "none",
     hoverReticle: "none",
     hoverTransition: "0s",

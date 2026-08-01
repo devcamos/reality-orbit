@@ -247,6 +247,139 @@
     animation: starfield-drift-near 24s ease-in-out infinite alternate;
   }
 
+  #reality-orbit-prototype .orbit-cosmic-scenery {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 900ms ease;
+  }
+
+  #reality-orbit-prototype .orbit-cosmic-scenery::before,
+  #reality-orbit-prototype .orbit-cosmic-scenery::after {
+    position: absolute;
+    inset: -12%;
+    content: "";
+    opacity: 0;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="domain"] .orbit-cosmic-scenery,
+  #reality-orbit-prototype[data-cosmic-scene="time"] .orbit-cosmic-scenery,
+  #reality-orbit-prototype[data-cosmic-scene="scale"] .orbit-cosmic-scenery,
+  #reality-orbit-prototype[data-cosmic-scene="perspective"] .orbit-cosmic-scenery,
+  #reality-orbit-prototype[data-cosmic-scene="category"] .orbit-cosmic-scenery {
+    opacity: 1;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="domain"] .orbit-cosmic-scenery::before {
+    background:
+      radial-gradient(ellipse 32% 54% at 25% 48%, rgba(91, 177, 185, 0.34), transparent 72%),
+      radial-gradient(ellipse 42% 28% at 73% 27%, rgba(198, 143, 96, 0.22), transparent 76%),
+      radial-gradient(ellipse 50% 24% at 54% 82%, rgba(76, 123, 177, 0.2), transparent 78%);
+    filter: blur(15px) saturate(118%);
+    opacity: 0.94;
+    animation: cosmic-nebula-drift 34s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="domain"] .orbit-cosmic-scenery::after {
+    background:
+      repeating-linear-gradient(112deg, transparent 0 14%, rgba(188, 222, 230, 0.075) 15%, transparent 19% 31%),
+      radial-gradient(ellipse 58% 13% at 34% 56%, rgba(174, 214, 222, 0.1), transparent 74%);
+    opacity: 0.76;
+    animation: cosmic-nebula-filaments 42s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="time"] .orbit-cosmic-scenery::before {
+    background:
+      radial-gradient(circle at 52% 49%, rgba(211, 233, 244, 0.5) 0 0.7%, rgba(112, 170, 211, 0.24) 2.5%, transparent 16%),
+      repeating-conic-gradient(from 8deg at 52% 49%, transparent 0 15deg, rgba(132, 190, 226, 0.13) 17deg 18deg, transparent 20deg 44deg);
+    opacity: 0.84;
+    animation: cosmic-pulsar-turn 18s linear infinite;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="time"] .orbit-cosmic-scenery::after {
+    background:
+      linear-gradient(90deg, transparent 40%, rgba(158, 205, 230, 0.19) 48%, rgba(229, 244, 250, 0.38) 50%, rgba(158, 205, 230, 0.19) 52%, transparent 60%),
+      linear-gradient(0deg, transparent 42%, rgba(158, 205, 230, 0.09) 49%, rgba(220, 239, 246, 0.18) 50%, rgba(158, 205, 230, 0.09) 51%, transparent 58%);
+    opacity: 0.46;
+    transform: rotate(-18deg) scale(1.3);
+    animation: cosmic-pulsar-beam 7s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="scale"] .orbit-cosmic-scenery::before {
+    background:
+      radial-gradient(circle at 50% 53%, rgba(255, 213, 151, 0.44) 0 1.2%, rgba(224, 143, 76, 0.25) 4%, transparent 19%),
+      repeating-radial-gradient(circle at 50% 53%, rgba(225, 172, 111, 0.13) 0 1px, transparent 2px 10%);
+    opacity: 0.74;
+    animation: cosmic-supernova-expand 24s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="scale"] .orbit-cosmic-scenery::after {
+    background: radial-gradient(ellipse at 50% 53%, transparent 0 20%, rgba(229, 178, 109, 0.15) 30%, transparent 53%);
+    filter: blur(3px);
+    opacity: 0.7;
+    animation: cosmic-supernova-breathe 12s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="perspective"] .orbit-cosmic-scenery::before {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(0, 1, 4, 0.98) 0 8%, rgba(3, 7, 16, 0.82) 12%, transparent 20%),
+      radial-gradient(ellipse at 50% 50%, transparent 18%, rgba(154, 132, 196, 0.27) 22%, transparent 33%);
+    opacity: 0.96;
+    animation: cosmic-lensing-breathe 16s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="perspective"] .orbit-cosmic-scenery::after {
+    inset: 18% 30%;
+    border: 1px solid rgba(187, 170, 223, 0.3);
+    border-radius: 50%;
+    box-shadow: 0 0 3.5rem rgba(151, 123, 204, 0.24), inset 0 0 2.4rem rgba(151, 123, 204, 0.14);
+    opacity: 0.86;
+    transform: rotate(-16deg) scaleX(1.45);
+    animation: cosmic-lensing-orbit 28s linear infinite;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="category"] .orbit-cosmic-scenery::before {
+    background:
+      radial-gradient(circle at 72% 40%, rgba(147, 188, 214, 0.32) 0 3%, rgba(68, 100, 127, 0.18) 5%, transparent 14%),
+      radial-gradient(circle at 72% 40%, rgba(217, 237, 244, 0.24) 0 0.6%, transparent 1.2%);
+    opacity: 0.94;
+    animation: cosmic-rogue-drift 32s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype[data-cosmic-scene="category"] .orbit-cosmic-scenery::after {
+    background:
+      linear-gradient(102deg, transparent 0 58%, rgba(143, 185, 211, 0.12) 69%, transparent 82%),
+      radial-gradient(ellipse 40% 8% at 69% 41%, rgba(166, 201, 220, 0.1), transparent 74%);
+    opacity: 0.84;
+    transform: translateX(-4%);
+    animation: cosmic-rogue-trail 26s ease-in-out infinite alternate;
+  }
+
+  #reality-orbit-prototype .orbit-shooting-stars {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  #reality-orbit-prototype .orbit-shooting-star {
+    position: absolute;
+    top: var(--shooting-star-y);
+    left: var(--shooting-star-x);
+    width: var(--shooting-star-length);
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(211, 232, 240, 0.78), transparent);
+    opacity: 0;
+    transform: rotate(var(--shooting-star-angle));
+    transform-origin: left center;
+    animation: shooting-star-flight var(--shooting-star-duration) var(--shooting-star-delay) ease-out infinite;
+  }
+
   #reality-orbit-prototype .orbit-map {
     position: absolute;
     inset: 0;
@@ -1131,31 +1264,80 @@
 
   #reality-orbit-prototype .understand-pareto-fields {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.9rem 1.15rem;
+    gap: 1.15rem;
     margin: 0;
   }
 
-  #reality-orbit-prototype .understand-pareto-fields > div {
+  #reality-orbit-prototype .understand-section {
     min-width: 0;
-    padding-top: 0.72rem;
+    padding-top: 0.95rem;
     border-top: 1px solid color-mix(in srgb, var(--map-color, #c99d69) 19%, rgba(164, 196, 218, 0.12));
   }
 
-  #reality-orbit-prototype .understand-pareto-fields > div:last-child {
-    grid-column: 1 / -1;
+  #reality-orbit-prototype .understand-section:first-child {
+    padding-top: 0;
+    border-top: 0;
   }
 
-  #reality-orbit-prototype .understand-pareto-fields dt {
-    color: color-mix(in srgb, var(--map-color, #c99d69) 66%, #dce7eb);
-    font-size: 0.68rem;
-    font-weight: 650;
-    letter-spacing: 0.14em;
-    line-height: 1.25;
+  #reality-orbit-prototype .understand-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    margin-bottom: 0.62rem;
+  }
+
+  #reality-orbit-prototype .understand-section-kicker {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 74%, #dce7eb);
+    font-size: 0.66rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
   }
 
-  #reality-orbit-prototype .understand-pareto-fields dd {
+  #reality-orbit-prototype .understand-section-title {
+    color: #dbe7eb;
+    font-family: var(--space-display);
+    font-size: 0.94rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  #reality-orbit-prototype .understand-section-fields {
+    display: grid;
+    gap: 0;
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item {
+    display: block;
+    min-width: 0;
+    padding: 0.74rem 0;
+    border-bottom: 1px solid rgba(164, 196, 218, 0.1);
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item:last-child {
+    border-bottom: 0;
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item dt,
+  #reality-orbit-prototype .understand-anatomy-item dd {
+    margin: 0;
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item dt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.38rem;
+    color: color-mix(in srgb, var(--map-color, #c99d69) 66%, #dce7eb);
+    font-size: 0.67rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item dd {
     margin: 0.36rem 0 0;
     color: #c6d1d6;
     line-height: 1.52;
@@ -1219,16 +1401,6 @@
     display: grid;
     grid-auto-rows: minmax(0, 1fr);
     gap: 0.8rem;
-  }
-
-  @media (max-width: 680px) {
-    #reality-orbit-prototype .understand-pareto-fields {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    #reality-orbit-prototype .understand-pareto-fields > div:last-child {
-      grid-column: auto;
-    }
   }
 
   #reality-orbit-prototype .understand-view[data-selected-role="dimension"] .understand-story {
@@ -1359,6 +1531,63 @@
     34% { opacity: 0.68; }
     66% { opacity: 0.46; }
     100% { opacity: 0.58; transform: translate3d(-3.2%, 2.4%, 0) scale(1.08); }
+  }
+
+  @keyframes shooting-star-flight {
+    0%, 68% { opacity: 0; transform: rotate(var(--shooting-star-angle)) translate3d(0, 0, 0) scaleX(0.35); }
+    72% { opacity: 0.72; }
+    82% { opacity: 0.12; transform: rotate(var(--shooting-star-angle)) translate3d(12rem, 3rem, 0) scaleX(1); }
+    100% { opacity: 0; transform: rotate(var(--shooting-star-angle)) translate3d(18rem, 4.5rem, 0) scaleX(0.65); }
+  }
+
+  @keyframes cosmic-nebula-drift {
+    from { transform: translate3d(-2%, 1%, 0) scale(1.02) rotate(-1deg); }
+    to { transform: translate3d(2%, -1%, 0) scale(1.08) rotate(1deg); }
+  }
+
+  @keyframes cosmic-nebula-filaments {
+    from { transform: translate3d(-1%, 0, 0) skewX(-1deg); }
+    to { transform: translate3d(1.5%, 0.5%, 0) skewX(1deg); }
+  }
+
+  @keyframes cosmic-pulsar-turn {
+    from { transform: rotate(0deg) scale(1); }
+    to { transform: rotate(360deg) scale(1.04); }
+  }
+
+  @keyframes cosmic-pulsar-beam {
+    from { opacity: 0.18; transform: rotate(-18deg) scale(1.22); }
+    to { opacity: 0.5; transform: rotate(-14deg) scale(1.38); }
+  }
+
+  @keyframes cosmic-supernova-expand {
+    from { transform: scale(0.94); opacity: 0.48; }
+    to { transform: scale(1.1); opacity: 0.82; }
+  }
+
+  @keyframes cosmic-supernova-breathe {
+    from { transform: scale(0.92); opacity: 0.3; }
+    to { transform: scale(1.08); opacity: 0.74; }
+  }
+
+  @keyframes cosmic-lensing-breathe {
+    from { transform: scale(0.96); opacity: 0.62; }
+    to { transform: scale(1.04); opacity: 0.9; }
+  }
+
+  @keyframes cosmic-lensing-orbit {
+    from { transform: rotate(-16deg) scaleX(1.45); }
+    to { transform: rotate(344deg) scaleX(1.45); }
+  }
+
+  @keyframes cosmic-rogue-drift {
+    from { transform: translate3d(-2%, 1%, 0) scale(0.98); }
+    to { transform: translate3d(2%, -1%, 0) scale(1.06); }
+  }
+
+  @keyframes cosmic-rogue-trail {
+    from { transform: translateX(-6%); opacity: 0.26; }
+    to { transform: translateX(5%); opacity: 0.7; }
   }
 
   @keyframes orbit-node-arrive {
@@ -1570,8 +1799,11 @@
     }
 
     #reality-orbit-prototype .orbit-stage::before,
+    #reality-orbit-prototype .orbit-cosmic-scenery::before,
+    #reality-orbit-prototype .orbit-cosmic-scenery::after,
     #reality-orbit-prototype .orbit-starfield::before,
     #reality-orbit-prototype .orbit-starfield::after,
+    #reality-orbit-prototype .orbit-shooting-star,
     #reality-orbit-prototype .orbit-node,
     #reality-orbit-prototype .destination-marker,
     #reality-orbit-prototype .orbit-node[data-ontology-level="1"] .destination-marker::before,
@@ -1602,7 +1834,9 @@
           </div>
         </div>
         <div class="orbit-stage">
+          <div class="orbit-cosmic-scenery" aria-hidden="true"></div>
           <div class="orbit-starfield" aria-hidden="true"></div>
+          <div class="orbit-shooting-stars" data-shooting-stars aria-hidden="true"></div>
           <svg class="orbit-map" viewBox="0 0 100 100" role="img" aria-labelledby="reality-orbit-title reality-orbit-desc" preserveAspectRatio="none">
             <title id="reality-orbit-title">Reality ontology destination map</title>
             <desc id="reality-orbit-desc">Select a concept destination to update its Concept Anatomy alongside the map. Explore any non-root concept as a focused destination.</desc>
@@ -1660,7 +1894,7 @@
           <div class="understand-body">
             <div class="understand-layout">
               <article class="card understand-story">
-                <dl class="understand-pareto-fields" data-understand-pareto-fields aria-label="Concept anatomy"></dl>
+                <div class="understand-pareto-fields" data-understand-pareto-fields aria-label="Concept anatomy"></div>
               </article>
             </div>
             <details class="understand-more" data-understand-more hidden>
@@ -1726,7 +1960,7 @@
         label: "Knowledge",
         summary: "What is known, claimed, represented, or inferred.",
         canonicalPath: ["Reality", "Category", "Knowledge"],
-        children: ["law", "principle", "razor", "framework", "model", "theorem", "pattern", "theory", "method"],
+        children: ["law", "principle", "razor", "framework", "model", "theorem", "pattern", "theory", "method", "paradox"],
       },
       category: {
         id: "category",
@@ -2012,6 +2246,11 @@
         label: "Adaptive explanation",
         summary: "An explanation that proposes how a trait, mechanism, or behaviour may have contributed to survival or reproduction in an ancestral context, subject to evidence and alternatives.",
         canonicalPath: ["Reality", "Domain", "Psychological", "Evolutionary psychology", "Adaptive explanation"],
+        pareto: {
+          Mechanism: "It compares a trait or behaviour with plausible ancestral pressures, then checks cultural, developmental, and current explanations against evidence.",
+          "Applies when": "Use it when asking whether a trait or behaviour could have helped survival or reproduction in an ancestral setting.",
+          "Decision rule": "Choose it only when an evolutionary explanation adds testable evidence; keep alternative explanations in view.",
+        },
       },
       "individual-differences": {
         id: "individual-differences",
@@ -2299,6 +2538,120 @@
         },
       },
       method: { id: "method", label: "Method", summary: "A defined approach for investigating, reasoning about, or carrying out a task.", canonicalPath: ["Reality", "Category", "Knowledge", "Method"], children: ["first-principles-thinking", "second-order-thinking"] },
+      paradox: {
+        id: "paradox",
+        label: "Paradox",
+        summary: "A claim, problem, or effect that exposes tension between plausible assumptions and surprising consequences.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox"],
+        children: ["ship-of-theseus", "sorites-paradox", "paradox-of-choice", "paradox-of-tolerance", "abilene-paradox", "jevons-paradox", "stockdale-paradox"],
+        anatomy: {
+          "Purpose": "Use Paradox to stress-test a simple rule when plausible assumptions produce a surprising, conflicting, or self-undermining result.",
+          "Governing question": "Which assumptions seem reasonable, and where do they produce a result the original model cannot explain?",
+          "First principles": "A paradox reveals tension in definitions, boundaries, incentives, or causal assumptions; it is a prompt to refine the model, not proof that anything is possible.",
+          "Mental model": "A thought experiment or observed effect that pushes one idea to its edge until a hidden condition becomes visible.",
+          "Scope": "This branch holds named paradoxes used to examine identity, vagueness, choice, tolerance, group decisions, efficiency, and resilience.",
+          "How to use it": "State the rule, follow it carefully, identify the surprising result, then revise the boundary or assumption that created the tension.",
+          "Common confusion": "A paradox is not automatically a contradiction or a licence for mysticism; many are resolved by clarifying definitions, context, or measurement.",
+        },
+      },
+      "ship-of-theseus": {
+        id: "ship-of-theseus",
+        label: "Ship of Theseus",
+        summary: "Ship of Theseus is a thought experiment asking whether an object remains the same when its parts are gradually replaced.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox", "Ship of Theseus"],
+        pareto: {
+          Mechanism: "Replace one part at a time, then ask whether continuity of form, function, history, or material preserves identity.",
+          "Applies when": "Use it when a thing changes gradually but you need to decide what makes it the same thing.",
+          "Breaks when": "It breaks when identity is treated as one settled property rather than a question with competing criteria.",
+          Example: "A tool can keep its name and use while every component is replaced.",
+          Counterexample: "Replacing a component without changing the relevant identity criterion may not create an identity problem.",
+          "Decision rule": "Choose it when gradual change makes identity or continuity the central question.",
+        },
+      },
+      "sorites-paradox": {
+        id: "sorites-paradox",
+        label: "Sorites paradox",
+        summary: "Sorites paradox shows how repeated small changes can make a vague boundary difficult to place.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox", "Sorites paradox"],
+        pareto: {
+          Mechanism: "Apply a seemingly harmless step repeatedly until a category changes, even though no single step appears sufficient to cause the change.",
+          "Applies when": "Use it when gradual accumulation challenges a binary label such as enough, tall, rich, or harmful.",
+          "Breaks when": "It breaks when a threshold is presented as precise even though the category has no agreed boundary.",
+          Example: "Removing one grain from a heap seems harmless, yet repeating the step challenges when the heap stops being a heap.",
+          Counterexample: "A measurement with an explicit tolerance can define a practical boundary and avoid the vague-category problem.",
+          "Decision rule": "Choose it when small changes accumulate but the classification rule hides a boundary decision.",
+        },
+      },
+      "paradox-of-choice": {
+        id: "paradox-of-choice",
+        label: "Paradox of choice",
+        summary: "Paradox of choice is the possibility that more available options can reduce decision quality, confidence, or satisfaction.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox", "Paradox of choice"],
+        pareto: {
+          Mechanism: "More options increase comparison cost, uncertainty, regret, and responsibility for the final choice.",
+          "Applies when": "Use it when an expanding choice set is making selection slower, less confident, or less satisfying.",
+          "Breaks when": "It breaks when added options are clearly distinct, easy to compare, or genuinely useful to the decision.",
+          Example: "A long menu can make a simple meal harder to choose and easier to second-guess.",
+          Counterexample: "A well-filtered set of additional options can improve fit without increasing meaningful decision burden.",
+          "Decision rule": "Reduce or sequence options when comparison cost exceeds the value of additional variety.",
+        },
+      },
+      "paradox-of-tolerance": {
+        id: "paradox-of-tolerance",
+        label: "Paradox of tolerance",
+        summary: "Paradox of tolerance is a political argument that unlimited tolerance can allow intolerant forces to damage tolerant institutions.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox", "Paradox of tolerance"],
+        pareto: {
+          Mechanism: "An open norm can be exploited by actors who reject the norm and use its protections to remove protections for others.",
+          "Applies when": "Use it when a community must balance openness with safeguards against coercion or institutional destruction.",
+          "Breaks when": "It breaks when boundary-setting is used to silence ordinary disagreement or define opponents as intolerant without evidence.",
+          Example: "A democratic forum can restrict threats that aim to prevent other participants from speaking safely.",
+          Counterexample: "Disagreeing with a policy is not itself an attempt to destroy tolerance or equal participation.",
+          "Decision rule": "Protect participation with narrow, evidence-based boundaries aimed at coercive harm rather than unpopular views.",
+        },
+      },
+      "abilene-paradox": {
+        id: "abilene-paradox",
+        label: "Abilene paradox",
+        summary: "Abilene paradox is a group decision pattern in which people act on assumed consensus that nobody privately supports.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox", "Abilene paradox"],
+        pareto: {
+          Mechanism: "Each person misreads silence or politeness as agreement, reinforcing a group plan that conflicts with private preferences.",
+          "Applies when": "Use it when a group reports agreement but members later reveal that they did not want the decision.",
+          "Breaks when": "It breaks when preferences are voiced, dissent is invited, and consent is checked directly.",
+          Example: "Everyone agrees to a difficult trip because each assumes the others want it.",
+          Counterexample: "A decision with explicit dissent, alternatives, and recorded consent is not merely assumed consensus.",
+          "Decision rule": "Ask each participant privately and publicly what they prefer before treating silence as consent.",
+        },
+      },
+      "jevons-paradox": {
+        id: "jevons-paradox",
+        label: "Jevons paradox",
+        summary: "Jevons paradox is the possibility that efficiency improvements increase total resource consumption rather than reducing it.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox", "Jevons paradox"],
+        pareto: {
+          Mechanism: "Lower resource cost can increase demand, expand use, or redirect savings into activities that consume more of the resource.",
+          "Applies when": "Use it when efficiency gains are expected to reduce total use across a responsive system.",
+          "Breaks when": "It breaks when demand is fixed, capacity is constrained, or policy prevents rebound use.",
+          Example: "More efficient lighting can make illumination cheaper, encouraging more lights or longer operating hours.",
+          Counterexample: "Efficiency paired with a binding consumption cap can reduce total use despite increased demand.",
+          "Decision rule": "Measure total demand after efficiency gains, not only resource use per unit of service.",
+        },
+      },
+      "stockdale-paradox": {
+        id: "stockdale-paradox",
+        label: "Stockdale paradox",
+        summary: "Stockdale paradox is a resilience principle that combines confidence in eventual success with an unsparing view of present facts.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Paradox", "Stockdale paradox"],
+        pareto: {
+          Mechanism: "Separate long-term commitment from short-term forecasts so hope does not erase evidence or prevent adaptation.",
+          "Applies when": "Use it when a difficult situation requires persistence without denying current constraints, losses, or uncertainty.",
+          "Breaks when": "It breaks when optimism becomes a promise of success or realism becomes resignation without action.",
+          Example: "A team commits to recovery while openly tracking the setbacks that require a different plan.",
+          Counterexample: "Ignoring evidence because a positive outcome feels motivating is not disciplined resilience.",
+          "Decision rule": "Hold the destination firmly, update the route honestly, and act on the next observable constraint.",
+        },
+      },
       "first-principles-thinking": {
         id: "first-principles-thinking",
         label: "First-principles thinking",
@@ -2374,6 +2727,9 @@
         label: "Ecosystem",
         summary: "A community of organisms and their physical surroundings interacting through flows of energy, matter, and information.",
         canonicalPath: ["Reality", "Category", "Environment", "Natural environment", "Ecosystem"],
+        pareto: {
+          Mechanism: "Organisms exchange energy and matter with one another and their surroundings; those flows change which populations can persist.",
+        },
       },
       "built-environment": {
         id: "built-environment",
@@ -2387,6 +2743,9 @@
         label: "Workplace",
         summary: "A designed setting in which people, tools, rules, and resources are organised to perform work.",
         canonicalPath: ["Reality", "Category", "Environment", "Built environment", "Workplace"],
+        pareto: {
+          Mechanism: "People coordinate through roles, tools, rules, and resources; those arrangements shape what work can be done and how reliably.",
+        },
       },
       "social-environment": {
         id: "social-environment",
@@ -2400,6 +2759,9 @@
         label: "Community setting",
         summary: "A local social context in which membership, norms, relationships, and shared resources influence participation and behaviour.",
         canonicalPath: ["Reality", "Category", "Environment", "Social environment", "Community setting"],
+        pareto: {
+          Mechanism: "Membership, norms, relationships, and shared resources influence who participates, what behaviour is accepted, and how support circulates.",
+        },
       },
       "digital-environment": {
         id: "digital-environment",
@@ -2413,6 +2775,9 @@
         label: "Online platform",
         summary: "A digital environment that connects participants through shared software, rules, data, interfaces, and network effects.",
         canonicalPath: ["Reality", "Category", "Environment", "Digital environment", "Online platform"],
+        pareto: {
+          Mechanism: "Software rules, interfaces, data, and network effects connect participants; each participant can increase or reduce the platform's usefulness to others.",
+        },
       },
       "institutional-environment": {
         id: "institutional-environment",
@@ -2426,6 +2791,9 @@
         label: "Regulatory setting",
         summary: "A governed context in which laws, standards, supervisory expectations, permissions, and enforcement shape permitted action.",
         canonicalPath: ["Reality", "Category", "Environment", "Institutional environment", "Regulatory setting"],
+        pareto: {
+          Mechanism: "Rules, permissions, supervision, and enforcement change which actions are allowed, rewarded, delayed, or penalised.",
+        },
       },
       individual: { id: "individual", label: "Individual", summary: "A single person, organism, agent, or unit of analysis.", canonicalPath: ["Reality", "Scale", "Individual"], children: ["person"] },
       person: { id: "person", label: "Person", summary: "A human individual considered as a bounded actor at the individual scale.", canonicalPath: ["Reality", "Scale", "Individual", "Person"], children: ["individual-actor"] },
@@ -2453,7 +2821,15 @@
       "expected-outcome": { id: "expected-outcome", label: "Expected outcome", summary: "A specifically described future result that is anticipated under stated conditions, assumptions, and uncertainty.", canonicalPath: ["Reality", "Time", "Future", "Expectation", "Expected outcome"] },
       duration: { id: "duration", label: "Duration", summary: "The amount of time between a beginning and an end.", canonicalPath: ["Reality", "Time", "Duration"], children: ["time-interval"] },
       "time-interval": { id: "time-interval", label: "Time interval", summary: "A bounded span between two stated points in time.", canonicalPath: ["Reality", "Time", "Duration", "Time interval"], children: ["measured-duration"] },
-      "measured-duration": { id: "measured-duration", label: "Measured duration", summary: "An elapsed span recorded with a stated start, end, unit, and measurement basis so that it can be compared or used in analysis.", canonicalPath: ["Reality", "Time", "Duration", "Time interval", "Measured duration"] },
+      "measured-duration": {
+        id: "measured-duration",
+        label: "Measured duration",
+        summary: "An elapsed span recorded with a stated start, end, unit, and measurement basis so that it can be compared or used in analysis.",
+        canonicalPath: ["Reality", "Time", "Duration", "Time interval", "Measured duration"],
+        pareto: {
+          "Decision rule": "Choose Measured duration when a time span needs a stated start, end, unit, and measurement basis before it can be compared.",
+        },
+      },
       sequence: { id: "sequence", label: "Sequence", summary: "The order in which events, states, or actions occur.", canonicalPath: ["Reality", "Time", "Sequence"], children: ["event-order"] },
       "event-order": { id: "event-order", label: "Event order", summary: "The stated ordering of events or actions relative to one another.", canonicalPath: ["Reality", "Time", "Sequence", "Event order"], children: ["ordered-event-sequence"] },
       "ordered-event-sequence": { id: "ordered-event-sequence", label: "Ordered event sequence", summary: "A defined sequence that records which events occur before, after, or alongside others within a stated time frame.", canonicalPath: ["Reality", "Time", "Sequence", "Event order", "Ordered event sequence"] },
@@ -2646,6 +3022,10 @@
         kind: "law-instance",
         summary: "When two forms of money are accepted at the same nominal value, the overvalued form tends to circulate while the undervalued form is retained or exported.",
         canonicalPath: ["Reality", "Category", "Knowledge", "Law", "Gresham's Law"],
+        pareto: {
+          "Applies when": "Use Gresham's Law when two monies are accepted at one nominal value but differ in market or alternative value.",
+          "Decision rule": "Choose Gresham's Law when the less valuable money is spent first and the more valuable money is held or exported.",
+        },
         anatomy: {
           "Statement": "When two forms of money are accepted at the same nominal value, the overvalued form tends to circulate while the undervalued form is retained or exported.",
           "First principles": "People respond to relative value and exchange rules. A fixed official rate can differ from the market value of the underlying money.",
@@ -2771,6 +3151,30 @@
     const understandMore = root.querySelector("[data-understand-more]");
     const understandMoreSummary = root.querySelector("[data-understand-more-summary]");
     const understandFields = root.querySelector("[data-understand-fields]");
+    const shootingStars = root.querySelector("[data-shooting-stars]");
+
+    const shootingStarLayout = [
+      [12, 18, 5.2, 28, -16],
+      [68, 14, 4.4, 34, 13],
+      [34, 27, 6.8, 38, -22],
+      [84, 39, 4.9, 31, 18],
+      [17, 56, 5.6, 42, -11],
+      [63, 64, 7.2, 36, 20],
+      [41, 82, 4.1, 30, -18],
+      [91, 75, 5.5, 40, 15],
+    ];
+
+    shootingStars.replaceChildren(...shootingStarLayout.map(([x, y, length, duration, angle], index) => {
+      const star = document.createElement("span");
+      star.className = "orbit-shooting-star";
+      star.style.setProperty("--shooting-star-x", `${x}%`);
+      star.style.setProperty("--shooting-star-y", `${y}%`);
+      star.style.setProperty("--shooting-star-length", `${length}rem`);
+      star.style.setProperty("--shooting-star-duration", `${duration}s`);
+      star.style.setProperty("--shooting-star-delay", `${index * 4.7 - 18}s`);
+      star.style.setProperty("--shooting-star-angle", `${angle}deg`);
+      return star;
+    }));
     const svgNamespace = "http://www.w3.org/2000/svg";
     const defaultOntologyLevel = 4;
     const terminalOntologyLevel = 5;
@@ -2782,6 +3186,7 @@
     const currentNode = () => ontology[currentId()];
     const ontologyLevel = (node) => node.canonicalPath.length - 1;
     const nodeColor = (node) => dimensionColors[node.canonicalPath[1]] ?? "#c99d69";
+    const cosmicSceneForNode = (node) => node.id === "reality" ? "reality" : (node.canonicalPath[1] ?? "Reality").toLowerCase();
     const visualArchetypeForNode = (node) => {
       if (node.id === "reality") return "sun";
       if (node.canonicalPath.length === 2) return node.id;
@@ -3021,6 +3426,7 @@
       const summaryWithoutStop = summary.replace(/[.!?]+$/, "");
       const summaryInSentence = `${summaryWithoutStop.charAt(0).toLowerCase()}${summaryWithoutStop.slice(1)}`;
       const parentLabel = node.canonicalPath.at(-2) ?? "Reality";
+      const nodePath = node.canonicalPath.slice(0, -1).join(" › ") || "Reality";
       const dimensionLabel = node.canonicalPath[1] ?? "Reality";
       const childLabels = (node.children ?? [])
         .map((childId) => ontology[childId]?.label)
@@ -3043,39 +3449,35 @@
 
       const withParetoFields = (baseAnatomy) => {
         const anatomy = baseAnatomy ?? {};
+        const authoredAnatomy = node.anatomy ?? {};
         const authoredPareto = node.pareto ?? {};
         const firstChildLabel = childLabels[0] ?? "a neighbouring concept";
         const paretoAnatomy = {
           "Definition": authoredPareto.Definition ?? node.summary,
           "Mechanism": authoredPareto.Mechanism
-            ?? anatomy.Mechanism
-            ?? anatomy["First principles"]
-            ?? `It works by making ${summaryInSentence} the relevant feature of the question, then testing it against the surrounding ${parentLabel} context.`,
+            ?? authoredAnatomy.Mechanism
+            ?? `It works by making ${summaryInSentence} the focal feature, then connecting it to ${parentLabel} and testing what changes.`,
           "Applies when": authoredPareto["Applies when"]
-            ?? anatomy.Scope
-            ?? anatomy["How to use it"]
-            ?? `Apply ${node.label} when the inquiry concerns ${summaryInSentence}.`,
+            ?? authoredAnatomy["Applies when"]
+            ?? `Apply ${node.label} when the inquiry concerns ${summaryInSentence} within ${nodePath}.`,
           "Breaks when": authoredPareto["Breaks when"]
-            ?? anatomy.Limitations
-            ?? anatomy["Common confusion"]
-            ?? `It breaks when the case falls outside ${node.label}'s scope or when another lens changes the result.`,
+            ?? authoredAnatomy.Limitations
+            ?? `It breaks when ${node.label} is used outside ${nodePath}, or when another lens changes the result.`,
           "Example": authoredPareto.Example
-            ?? anatomy.Example
-            ?? anatomy.Applications
-            ?? anatomy["Visual demonstration"]
+            ?? authoredAnatomy.Example
+            ?? authoredAnatomy.Applications
+            ?? authoredAnatomy["Visual demonstration"]
             ?? (childLabels.length > 0
               ? `For example, use ${node.label} to distinguish ${joinLabels(childLabels.slice(0, 3))} within ${parentLabel}.`
               : `For example, apply ${node.label} to a case that matches ${summaryInSentence}.`),
           "Counterexample": authoredPareto.Counterexample
-            ?? anatomy.Counterexample
-            ?? (anatomy.Limitations
-              ? `A counterexample is a case where ${summaryInSentence} appears relevant but the stated limits do not hold: ${anatomy.Limitations}`
-              : anatomy["Common confusion"]
-                ? `A counterexample is a case that resembles ${node.label} but is actually ${anatomy["Common confusion"]}`
-                : `A counterexample is a case that mentions ${summaryInSentence} without satisfying ${node.label}'s definition.`),
+            ?? authoredAnatomy.Counterexample
+            ?? (authoredAnatomy.Limitations
+              ? `It fails when ${authoredAnatomy.Limitations}`
+              : `A counterexample is a case that mentions ${summaryInSentence} without satisfying ${node.label}'s definition.`),
           "Decision rule": authoredPareto["Decision rule"]
-            ?? anatomy["How to use it"]
-            ?? anatomy.Purpose
+            ?? authoredAnatomy["Decision rule"]
+            ?? (role === "Dimension" ? anatomy["How to use it"] : null)
             ?? `Choose ${node.label} when the question is specifically about ${summaryInSentence}; otherwise use ${firstChildLabel} or another better-fitting lens.`,
         };
 
@@ -3307,8 +3709,8 @@
       })();
 
       const anatomy = {
-        ...roleAnatomy,
         ...specificContext,
+        ...roleAnatomy,
         ...(node.anatomy ?? {}),
       };
       return withParetoFields(anatomy);
@@ -3485,6 +3887,56 @@
       return field;
     };
 
+    const anatomySections = [
+      { id: "meaning", title: "Meaning", fields: ["Definition", "Mechanism"] },
+      { id: "boundary", title: "Boundary", fields: ["Applies when", "Breaks when"] },
+      { id: "contrast", title: "Contrast", fields: ["Example", "Counterexample"] },
+      { id: "use", title: "Use", fields: ["Decision rule"] },
+    ];
+
+    const summaryTitleForNode = (node, role) => {
+      const canonicalTitles = {
+        reality: "The organising root",
+        domain: "The subject field",
+        category: "The kind of thing",
+        time: "When change occurs",
+        scale: "At what level",
+        perspective: "From which viewpoint",
+      };
+      if (canonicalTitles[node.id]) return canonicalTitles[node.id];
+
+      const roleTitle = role === "Knowledge"
+        ? "knowledge lens"
+        : role.toLowerCase();
+      return `${node.label} · ${roleTitle}`.split(/\s+/).slice(0, 5).join(" ");
+    };
+
+    const createAnatomySection = (sectionDefinition, entries) => {
+      const section = document.createElement("section");
+      section.className = "understand-section";
+      section.dataset.anatomySection = sectionDefinition.id;
+
+      const heading = document.createElement("header");
+      heading.className = "understand-section-header";
+      const sectionKicker = document.createElement("span");
+      sectionKicker.className = "understand-section-kicker";
+      sectionKicker.textContent = "Concept anatomy";
+      const sectionTitle = document.createElement("h3");
+      sectionTitle.className = "understand-section-title";
+      sectionTitle.textContent = sectionDefinition.title;
+      heading.append(sectionKicker, sectionTitle);
+
+      const fields = document.createElement("dl");
+      fields.className = "understand-section-fields";
+      fields.setAttribute("aria-label", `${sectionDefinition.title} fields`);
+      fields.replaceChildren(...entries.map(([label, value]) =>
+        createAnatomyField([label, value], "understand-anatomy-item"),
+      ));
+
+      section.append(heading, fields);
+      return section;
+    };
+
     const renderUnderstand = (node) => {
       const role = roleForNode(node);
       const entries = Object.entries(buildConceptAnatomy(node));
@@ -3499,6 +3951,7 @@
         "Decision rule",
       ];
       const paretoEntries = paretoLabels.map(entryFor).filter(Boolean);
+      const entryForField = (label) => paretoEntries.find(([entryLabel]) => entryLabel === label);
       const hiddenLegacyFields = new Set([
         ...paretoLabels,
         "Governing question",
@@ -3513,9 +3966,14 @@
 
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-");
-      understandEyebrow.textContent = role === "Dimension" ? "A lens on reality" : `${role} · Concept anatomy`;
+      understandEyebrow.textContent = summaryTitleForNode(node, role);
       understandTitle.textContent = node.label;
-      understandParetoFields.replaceChildren(...paretoEntries.map((entry) => createAnatomyField(entry)));
+      understandParetoFields.replaceChildren(...anatomySections.map((sectionDefinition) =>
+        createAnatomySection(
+          sectionDefinition,
+          sectionDefinition.fields.map(entryForField).filter(Boolean),
+        ),
+      ));
 
       understandFields.replaceChildren(...remaining.map((entry) => createAnatomyField(entry)));
       understandFields.hidden = remaining.length === 0;
@@ -3655,6 +4113,7 @@
       hideOrbitalCursor();
       selectedId = nodeId;
       const node = ontology[nodeId];
+      root.dataset.cosmicScene = cosmicSceneForNode(node);
       root.querySelectorAll("[data-node-id]").forEach((button) => {
         const selected = button.dataset.nodeId === nodeId;
         button.dataset.selected = String(selected);
@@ -3694,6 +4153,18 @@
       contextExploreButton.setAttribute("aria-label", `Explore ${node.label} and return to the map`);
       if (revealMobileContent) revealMobileSelection();
     };
+
+    window.addEventListener("message", (event) => {
+      if (event.source !== window.parent) return;
+      if (event.data?.type !== "reality-orbit:select-node") return;
+      const requestedNode = ontology[event.data.nodeId];
+      if (!requestedNode) return;
+      if (requestedNode.id !== currentId() && canExploreNode(requestedNode)) {
+        exploreSelectedNode(requestedNode.id, { revealMap: true });
+      } else {
+        setSelectedNode(requestedNode.id, { revealMobileContent: true });
+      }
+    });
 
     const renderOrbit = () => {
       const parent = currentNode();

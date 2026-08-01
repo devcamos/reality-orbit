@@ -14,7 +14,10 @@ export default defineConfig({
     },
   },
   server: {
-    host: "127.0.0.1",
+    // Bind the development server to the LAN so phones and tablets on the
+    // same Wi-Fi can review the responsive experience.
+    host: "0.0.0.0",
     port: 4175,
+    strictPort: true,
   },
 });
