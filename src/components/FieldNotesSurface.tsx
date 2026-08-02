@@ -1,9 +1,12 @@
-import { useState, type ReactElement } from "react";
+import { useEffect, useState, type ReactElement } from "react";
 import { BlogAdminPanel } from "./BlogAdminPanel";
 import { FIELD_NOTE_DIMENSIONS, fieldNotes, type FieldNote } from "../lib/field-notes";
+import { relatedSkillForNote } from "../lib/weekly-ritual";
 
 interface FieldNotesSurfaceProps {
   readonly onExploreNode?: (nodeId: string) => void;
+  readonly onOpenSkills?: (skillId?: string) => void;
+  readonly requestedNoteSlug?: string;
 }
 
 const labelForNodeId = (nodeId: string): string => nodeId
@@ -13,22 +16,32 @@ const labelForNodeId = (nodeId: string): string => nodeId
 
 const localAdminEnabled = import.meta.env.DEV;
 
-export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): ReactElement {
+export function FieldNotesSurface({
+  onExploreNode,
+  onOpenSkills,
+  requestedNoteSlug,
+}: FieldNotesSurfaceProps): ReactElement {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [selectedSlug, setSelectedSlug] = useState<string>();
+  const [selectedSlug, setSelectedSlug] = useState<string | undefined>(requestedNoteSlug);
   const [notes, setNotes] = useState<readonly FieldNote[]>(fieldNotes);
   const [adminOpen, setAdminOpen] = useState(false);
   const selectedNote = notes.find((note) => note.slug === selectedSlug);
+  const relatedSkill = selectedNote ? relatedSkillForNote(selectedNote.primaryNodeId) : undefined;
   const subcategoryFilters = [...new Set(notes.map((note) => note.subcategory).filter((subcategory): subcategory is string => Boolean(subcategory)))].sort((left, right) => left.localeCompare(right));
   const filterOptions = ["all", ...FIELD_NOTE_DIMENSIONS, ...subcategoryFilters];
   const visibleNotes = notes.filter((note) => {
-      if (activeFilter === "all") return true;
-      return note.dimension === activeFilter || note.subcategory === activeFilter;
-    });
+    if (activeFilter === "all") return true;
+    return note.dimension === activeFilter || note.subcategory === activeFilter;
+  });
+
+  useEffect(() => {
+    if (requestedNoteSlug) setSelectedSlug(requestedNoteSlug);
+  }, [requestedNoteSlug]);
 
   if (selectedNote) {
     return (
-      <section className="content-surface" aria-labelledby="field-note-reader-title" data-content-surface="field-notes">
+      <section className="content-surface content-surface--observatory" aria-labelledby="field-note-reader-title" data-content-surface="field-notes">
+        <div className="content-surface__atmosphere" aria-hidden="true" />
         <div className="content-surface__inner content-surface__reader">
           <button className="content-surface__back" type="button" onClick={() => setSelectedSlug(undefined)}>← Back to field notes</button>
           <article className="blog-reader" data-blog-reader={selectedNote.slug}>
@@ -52,9 +65,23 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
             <div className="content-surface__tags" aria-label="Field note topics">
               {selectedNote.tags.map((tag) => <span key={tag}>{tag}</span>)}
             </div>
-            <button className="content-surface__action" type="button" onClick={() => onExploreNode?.(selectedNote.primaryNodeId)}>
-              Explore {labelForNodeId(selectedNote.primaryNodeId)} in Reality Orbit <span aria-hidden="true">→</span>
-            </button>
+            <div className="blog-reader__throughline" data-note-throughline>
+              <p className="content-surface__eyebrow">Continue the thread</p>
+              <div className="blog-reader__throughline-actions">
+                <button className="content-surface__action" type="button" onClick={() => onExploreNode?.(selectedNote.primaryNodeId)}>
+                  Explore {labelForNodeId(selectedNote.primaryNodeId)} in Reality Orbit <span aria-hidden="true">→</span>
+                </button>
+                {relatedSkill && (
+                  <button
+                    className="content-surface__quiet-action"
+                    type="button"
+                    onClick={() => onOpenSkills?.(relatedSkill.id)}
+                  >
+                    Related skill: {relatedSkill.name}
+                  </button>
+                )}
+              </div>
+            </div>
           </article>
         </div>
       </section>
@@ -62,13 +89,14 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
   }
 
   return (
-    <section className="content-surface" aria-labelledby="field-notes-title" data-content-surface="field-notes">
+    <section className="content-surface content-surface--observatory" aria-labelledby="field-notes-title" data-content-surface="field-notes">
+      <div className="content-surface__atmosphere" aria-hidden="true" />
       <div className="content-surface__inner">
         <header className="content-surface__header content-surface__header--split">
           <div>
             <p className="content-surface__eyebrow">A layer of understanding</p>
             <h1 id="field-notes-title">Field notes</h1>
-            <p className="content-surface__lead">Read an idea in its own space, then return to the map with the context intact.</p>
+            <p className="content-surface__lead">Read an idea in its own space, then return to the map — and onward to a related skill when one fits.</p>
           </div>
           {localAdminEnabled && (
             <button className="content-surface__quiet-action" type="button" onClick={() => setAdminOpen((open) => !open)} aria-expanded={adminOpen}>
@@ -122,7 +150,10 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
                 ))}
               </div>
             ) : (
-              <p className="blog-library-empty">No field notes match this filter yet. Try another option.</p>
+              <div className="blog-library-empty" role="status">
+                <strong>No field notes in this filter</strong>
+                <span>Try another option, or return to All field notes to see the full shelf.</span>
+              </div>
             )}
           </div>
         </div>

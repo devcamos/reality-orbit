@@ -100,9 +100,13 @@ test("app tabs expose content surfaces without losing the selected orbit node", 
   await expect(page.locator("[data-primary-navigation]")).toBeVisible();
   await expect(page.locator("[data-primary-navigation] .app-navigation__tab").first()).toHaveText("About");
   await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.locator("[data-home-ritual]")).toBeVisible();
+  await expect(page.locator("[data-weekly-concept]")).toBeVisible();
+  await expect(page.locator("[data-weekly-practice]")).toBeVisible();
 
   await node(page, "scale").click();
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
+  await expect(page.locator("[data-continue-path]")).toBeVisible();
 
   await page.getByRole("button", { name: "Field notes", exact: true }).click();
   await expect(page.getByRole("button", { name: "Field notes", exact: true })).toHaveAttribute("aria-current", "page");
@@ -114,6 +118,7 @@ test("app tabs expose content surfaces without losing the selected orbit node", 
 
   await page.getByRole("button", { name: "Home", exact: true }).click();
   await expect(page.locator('iframe[title="Reality Orbit"]')).toBeVisible();
+  await expect(page.locator("[data-home-ritual]")).toBeVisible();
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
 
   for (const tab of ["Skills", "Library", "About"]) {
@@ -121,6 +126,11 @@ test("app tabs expose content surfaces without losing the selected orbit node", 
     await expect(page.locator(`[data-content-surface="${tab.toLowerCase()}"]`)).toBeVisible();
     await expect(page.locator('iframe[title="Reality Orbit"]')).toBeHidden();
   }
+
+  await page.getByRole("button", { name: "Library", exact: true }).click();
+  await expect(page.locator("[data-library-empty]")).toBeVisible();
+  await page.getByRole("button", { name: "About", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "A weekly return loop" })).toBeVisible();
 
   for (const viewport of [
     { width: 390, height: 844 },
@@ -150,13 +160,20 @@ test("the Skills matrix exposes evidence, value, and orbit context", async ({ pa
   await page.getByRole("button", { name: "Skills", exact: true }).click();
   await expect(page.locator('[data-content-surface="skills"]')).toBeVisible();
   await expect(page.getByRole("heading", { name: "Skills matrix", exact: true })).toBeVisible();
-  await expect(page.locator("[data-skill-id]")).toHaveCount(8);
-  await page.locator("[data-skill-id='systems-thinking']").click();
-  await expect(page.getByRole("heading", { name: "Systems thinking", exact: true })).toBeVisible();
+  await expect(page.locator("[data-skill-id]")).toHaveCount(10);
+  await page.locator("[data-skill-id='critical-thinking']").click();
+  await expect(page.getByRole("heading", { name: "Critical thinking", exact: true })).toBeVisible();
   await expect(page.getByText("Evidence quality").last()).toBeVisible();
-  await page.getByRole("button", { name: /Explore Systems thinking context/ }).click();
+  await expect(page.locator("[data-skill-evidence]")).toBeVisible();
+  await expect(page.locator("[data-skills-week-focus]")).toBeVisible();
+  await page.locator("[data-skill-evidence-input]").fill("I weighed two assumptions before deciding this week.");
+  await page.locator("[data-skill-outcome-input]").fill("The decision felt clearer and faster.");
+  await page.getByRole("button", { name: /Log evidence/ }).click();
+  await expect(page.locator("[data-skill-evidence] li")).toHaveCount(1);
+  await expect(page.locator("[data-skill-evidence] li").first()).toContainText("Result:");
+  await page.getByRole("button", { name: /Explore Critical thinking context/ }).click();
   await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(app(page).locator("[data-understand-title]")).toHaveText("Second-order thinking");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Evidence assessment");
 
   await page.getByRole("button", { name: "Skills", exact: true }).click();
   for (const viewport of [
@@ -174,10 +191,31 @@ test("the Skills matrix exposes evidence, value, and orbit context", async ({ pa
     expect(layout.matrixVisible).toBe(true);
     if (viewport.width === 390) {
       await expect(surface.locator(".skills-mobile-list")).toBeVisible();
-      await expect(surface.locator(".skills-mobile-list__item")).toHaveCount(8);
-      expect(await surface.locator(".skills-point span").first().evaluate((element) => getComputedStyle(element).display)).toBe("none");
+      await expect(surface.locator(".skills-mobile-list__item")).toHaveCount(10);
+      // Ticker-style labels stay visible on mobile so plotted points remain identifiable.
+      expect(await surface.locator(".skills-point span").first().evaluate((element) => getComputedStyle(element).display)).not.toBe("none");
     }
   }
+});
+
+test("the weekly home ritual can open a concept and mark practice", async ({ page }) => {
+  await openOrbit(page);
+  await expect(page.locator("[data-home-ritual]")).toBeVisible();
+  await expect(page.locator("[data-concept-export]")).toBeVisible();
+  await expect(page.locator("[data-skill-focus]")).toBeVisible();
+  await page.locator("[data-personal-note-input]").fill("My working example from this week");
+  await page.getByRole("button", { name: "Save to my map" }).click();
+  await expect(page.locator("[data-personal-example]")).toContainText("My working example");
+  await expect(page.locator("[data-personal-map]")).toBeVisible();
+  await page.locator("[data-weekly-practice]").click();
+  await expect(page.locator("[data-weekly-practice]")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("[data-weekly-summary]")).toContainText("practice marked done");
+  await page.locator("[data-export-brief]").click();
+  await expect(page.locator("[data-concept-export]")).toContainText(/Brief copied|Download/i);
+  await page.locator("[data-weekly-concept]").click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).not.toHaveText("");
+  await expect(page.locator("[data-continue-path]")).toBeVisible();
 });
 
 test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
@@ -195,6 +233,8 @@ test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await page.getByRole("button", { name: "Close", exact: true }).click();
   await page.getByRole("button", { name: "Read Paradoxes: Where simple rules stop working" }).click();
   await expect(page.locator("[data-blog-reader='paradoxes-where-simple-rules-stop-working']")).toBeVisible();
+  await expect(page.locator("[data-note-throughline]")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Related skill:/ })).toBeVisible();
   await page.getByRole("button", { name: /Explore Paradox in Reality Orbit/ }).click();
   await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Paradox");

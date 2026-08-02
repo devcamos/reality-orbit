@@ -2123,7 +2123,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   #reality-orbit-prototype .understand-body {
-    padding: 1rem;
+    padding: 1.15rem 1.05rem 1.25rem;
   }
 
   #reality-orbit-prototype .understand-layout {
@@ -2136,68 +2136,95 @@ html&gt;body{padding:0}&lt;/style&gt;
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0;
+    padding: 0.15rem 0.15rem 0.35rem;
     border-color: rgba(164, 196, 218, 0.12);
-    background: rgba(6, 16, 28, 0.56);
+    background:
+      radial-gradient(ellipse 80% 40% at 20% 0%, color-mix(in srgb, var(--map-color, #c99d69) 10%, transparent), transparent 55%),
+      rgba(6, 16, 28, 0.56);
     box-shadow: inset 0 1px 0 rgba(225, 239, 246, 0.045);
   }
 
   #reality-orbit-prototype .understand-pareto-fields {
     display: grid;
-    gap: 1.15rem;
+    gap: 0;
     margin: 0;
   }
 
   #reality-orbit-prototype .understand-section {
     min-width: 0;
-    padding-top: 0.95rem;
-    border-top: 1px solid color-mix(in srgb, var(--map-color, #c99d69) 19%, rgba(164, 196, 218, 0.12));
+    padding: 1.05rem 0.85rem 0.35rem;
+    border-top: 1px solid color-mix(in srgb, var(--map-color, #c99d69) 16%, rgba(164, 196, 218, 0.1));
   }
 
   #reality-orbit-prototype .understand-section:first-child {
-    padding-top: 0;
+    padding-top: 0.75rem;
     border-top: 0;
+  }
+
+  #reality-orbit-prototype .understand-section[data-anatomy-section=&quot;meaning&quot;],
+  #reality-orbit-prototype .understand-section[data-anatomy-section=&quot;use&quot;] {
+    border-radius: 0.85rem;
+    background: rgba(8, 22, 36, 0.55);
   }
 
   #reality-orbit-prototype .understand-section-header {
     display: flex;
     align-items: baseline;
     gap: 0.65rem;
-    margin-bottom: 0.62rem;
+    margin-bottom: 0.55rem;
   }
 
   #reality-orbit-prototype .understand-section-kicker {
-    color: color-mix(in srgb, var(--map-color, #c99d69) 74%, #dce7eb);
-    font-size: 0.66rem;
+    color: color-mix(in srgb, var(--map-color, #c99d69) 70%, #dce7eb);
+    font-size: 0.64rem;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
   #reality-orbit-prototype .understand-section-title {
-    color: #dbe7eb;
+    color: #e4eef1;
     font-family: var(--space-display);
-    font-size: 0.94rem;
+    font-size: 1rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 
   #reality-orbit-prototype .understand-section-fields {
     display: grid;
-    gap: 0;
+    gap: 0.15rem;
     margin: 0;
   }
 
   #reality-orbit-prototype .understand-anatomy-item {
     display: block;
     min-width: 0;
-    padding: 0.74rem 0;
-    border-bottom: 1px solid rgba(164, 196, 218, 0.1);
+    padding: 0.62rem 0.2rem;
+    border-bottom: 1px solid rgba(164, 196, 218, 0.08);
   }
 
   #reality-orbit-prototype .understand-anatomy-item:last-child {
     border-bottom: 0;
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item[data-emphasis=&quot;primary&quot;] {
+    margin: 0.15rem 0 0.35rem;
+    padding: 0.85rem 0.8rem;
+    border: 1px solid color-mix(in srgb, var(--map-color, #c99d69) 22%, rgba(164, 196, 218, 0.12));
+    border-radius: 0.75rem;
+    background: rgba(12, 28, 42, 0.72);
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item[data-emphasis=&quot;secondary&quot;] {
+    padding-block: 0.5rem;
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item[data-emphasis=&quot;secondary&quot;] dd {
+    color: #a8b6be;
+    font-size: 0.92rem;
+    line-height: 1.5;
   }
 
   #reality-orbit-prototype .understand-anatomy-item dt,
@@ -2217,11 +2244,22 @@ html&gt;body{padding:0}&lt;/style&gt;
     text-transform: uppercase;
   }
 
+  #reality-orbit-prototype .understand-anatomy-item[data-emphasis=&quot;primary&quot;] dt {
+    color: color-mix(in srgb, var(--map-color, #c99d69) 82%, #f0e2c4);
+    font-size: 0.7rem;
+  }
+
   #reality-orbit-prototype .understand-anatomy-item dd {
     margin: 0.36rem 0 0;
     color: #c6d1d6;
     line-height: 1.52;
     overflow-wrap: anywhere;
+  }
+
+  #reality-orbit-prototype .understand-anatomy-item[data-emphasis=&quot;primary&quot;] dd {
+    color: #e7eef1;
+    font-size: 0.98rem;
+    line-height: 1.58;
   }
 
   #reality-orbit-prototype .understand-support-group {
@@ -2515,6 +2553,8 @@ html&gt;body{padding:0}&lt;/style&gt;
   @media (max-width: 980px) {
     #reality-orbit-prototype .orbit-shell {
       grid-template-columns: 1fr;
+      gap: 0.75rem;
+      padding: 0.55rem;
     }
 
     #reality-orbit-prototype .orbit-workspace {
@@ -2524,6 +2564,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .understand-view {
       position: static;
       max-height: none;
+      order: 2;
+    }
+
+    #reality-orbit-prototype .orbit-universe-panel {
+      order: 1;
     }
 
     #reality-orbit-prototype .orbit-toolbar .orbit-actions {
@@ -2542,11 +2587,15 @@ html&gt;body{padding:0}&lt;/style&gt;
     #reality-orbit-prototype .orbit-detail-visual {
       min-height: 2.75rem;
     }
+
+    #reality-orbit-prototype .orbit-stage {
+      height: clamp(420px, 92vw, 560px);
+    }
   }
 
   @media (max-width: 680px) {
     #reality-orbit-prototype .orbit-shell {
-      gap: 0.55rem;
+      gap: 0.65rem;
     }
   }
 
@@ -2563,7 +2612,9 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   @media (max-width: 480px) {
     #reality-orbit-prototype .orbit-stage {
-      height: clamp(430px, 118vw, 480px);
+      /* Designed mobile stage: tall enough for rings, short enough to leave room for anatomy. */
+      height: min(72dvh, 520px);
+      min-height: 360px;
     }
 
     #reality-orbit-prototype .orbit-toolbar {
@@ -4743,10 +4794,13 @@ html&gt;body{padding:0}&lt;/style&gt;
       .map((principle) =&gt; `${principle.charAt(0).toUpperCase()}${principle.slice(1)}`)
       .map((principle) =&gt; /[.!?]$/.test(principle) ? principle : `${principle}.`);
 
+    const primaryAnatomyLabels = new Set([&quot;Definition&quot;, &quot;Decision rule&quot;]);
+
     const createAnatomyField = ([label, value], className = &quot;&quot;) =&gt; {
       const field = document.createElement(&quot;div&quot;);
       field.className = className;
       field.dataset.anatomyField = label.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
+      field.dataset.emphasis = primaryAnatomyLabels.has(label) ? &quot;primary&quot; : &quot;secondary&quot;;
       const term = document.createElement(&quot;dt&quot;);
       term.className = &quot;text-small&quot;;
       term.textContent = label;
@@ -4768,10 +4822,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     };
 
     const anatomySections = [
-      { id: &quot;meaning&quot;, title: &quot;Meaning&quot;, fields: [&quot;Definition&quot;, &quot;Mechanism&quot;] },
-      { id: &quot;boundary&quot;, title: &quot;Boundary&quot;, fields: [&quot;Applies when&quot;, &quot;Breaks when&quot;] },
-      { id: &quot;contrast&quot;, title: &quot;Contrast&quot;, fields: [&quot;Example&quot;, &quot;Counterexample&quot;] },
-      { id: &quot;use&quot;, title: &quot;Use&quot;, fields: [&quot;Decision rule&quot;] },
+      { id: &quot;meaning&quot;, title: &quot;Meaning&quot;, index: &quot;01&quot;, fields: [&quot;Definition&quot;, &quot;Mechanism&quot;] },
+      { id: &quot;boundary&quot;, title: &quot;Boundary&quot;, index: &quot;02&quot;, fields: [&quot;Applies when&quot;, &quot;Breaks when&quot;] },
+      { id: &quot;contrast&quot;, title: &quot;Contrast&quot;, index: &quot;03&quot;, fields: [&quot;Example&quot;, &quot;Counterexample&quot;] },
+      { id: &quot;use&quot;, title: &quot;Use&quot;, index: &quot;04&quot;, fields: [&quot;Decision rule&quot;] },
     ];
 
     const summaryTitleForNode = (node, role) =&gt; {
@@ -4800,7 +4854,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       heading.className = &quot;understand-section-header&quot;;
       const sectionKicker = document.createElement(&quot;span&quot;);
       sectionKicker.className = &quot;understand-section-kicker&quot;;
-      sectionKicker.textContent = &quot;Concept anatomy&quot;;
+      sectionKicker.textContent = sectionDefinition.index ?? &quot;Concept anatomy&quot;;
       const sectionTitle = document.createElement(&quot;h3&quot;);
       sectionTitle.className = &quot;understand-section-title&quot;;
       sectionTitle.textContent = sectionDefinition.title;
@@ -5033,10 +5087,40 @@ html&gt;body{padding:0}&lt;/style&gt;
       contextExploreButton.textContent = `Explore ${node.label}`;
       contextExploreButton.setAttribute(&quot;aria-label&quot;, `Explore ${node.label} and return to the map`);
       if (revealMobileContent) revealMobileSelection();
+      try {
+        // srcdoc frames can report a null origin; &quot;*&quot; keeps the parent bridge reliable.
+        window.parent.postMessage({
+          type: &quot;reality-orbit:selection&quot;,
+          nodeId: node.id,
+          label: node.label,
+          path: node.canonicalPath ?? [],
+        }, &quot;*&quot;);
+      } catch {
+        // Parent bridge is optional when the frame is opened alone.
+      }
     };
 
     window.addEventListener(&quot;message&quot;, (event) =&gt; {
       if (event.source !== window.parent) return;
+      if (event.data?.type === &quot;reality-orbit:request-brief&quot;) {
+        const briefNode = ontology[event.data.nodeId] ?? ontology[selectedId];
+        if (!briefNode) return;
+        const anatomy = buildConceptAnatomy(briefNode);
+        try {
+          window.parent.postMessage({
+            type: &quot;reality-orbit:brief&quot;,
+            requestId: event.data.requestId,
+            nodeId: briefNode.id,
+            label: briefNode.label,
+            definition: anatomy.Definition ?? briefNode.summary ?? &quot;&quot;,
+            decisionRule: anatomy[&quot;Decision rule&quot;] ?? &quot;&quot;,
+            example: anatomy.Example ?? &quot;&quot;,
+          }, &quot;*&quot;);
+        } catch {
+          // Parent bridge is optional when the frame is opened alone.
+        }
+        return;
+      }
       if (event.data?.type !== &quot;reality-orbit:select-node&quot;) return;
       const requestedNode = ontology[event.data.nodeId];
       if (!requestedNode) return;
