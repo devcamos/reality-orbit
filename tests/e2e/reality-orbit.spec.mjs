@@ -334,6 +334,31 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
   await expect(node(page, "scale")).toBeVisible();
 });
 
+test("Cognition keeps Decision process and Reasoning visible together", async ({ page }) => {
+  await openOrbit(page);
+
+  await explore(page, "domain");
+  await explore(page, "psychological");
+  await explore(page, "cognition");
+
+  await expect(node(page, "decision-process")).toBeVisible();
+  await expect(node(page, "reasoning")).toBeVisible();
+
+  const stageBox = await app(page).locator(".orbit-stage").boundingBox();
+  const childBoxes = await Promise.all([
+    app(page).locator('[data-node-id="decision-process"]').boundingBox(),
+    app(page).locator('[data-node-id="reasoning"]').boundingBox(),
+  ]);
+  expect(stageBox).not.toBeNull();
+  for (const childBox of childBoxes) {
+    expect(childBox).not.toBeNull();
+    expect(childBox.x).toBeGreaterThanOrEqual(stageBox.x);
+    expect(childBox.y).toBeGreaterThanOrEqual(stageBox.y);
+    expect(childBox.x + childBox.width).toBeLessThanOrEqual(stageBox.x + stageBox.width);
+    expect(childBox.y + childBox.height).toBeLessThanOrEqual(stageBox.y + stageBox.height);
+  }
+});
+
 test("a learner can save a concept and return to it from the orbit", async ({ page }) => {
   await openOrbit(page);
 

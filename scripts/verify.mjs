@@ -130,6 +130,7 @@ for (const orbitalVisualContract of [
   "@keyframes starfield-drift-far",
   "@keyframes starfield-drift-near",
   "@keyframes dimension-ring-drift",
+  "2: [[27, 31], [73, 31]]",
   '#reality-orbit-prototype .orbit-node[data-visual-archetype="time"] .destination-glyph',
   '<div class="orbit-starfield" aria-hidden="true"></div>',
   ".orbit-starfield::before",
