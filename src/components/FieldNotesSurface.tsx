@@ -30,7 +30,7 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
     return (
       <section className="content-surface" aria-labelledby="field-note-reader-title" data-content-surface="field-notes">
         <div className="content-surface__inner content-surface__reader">
-          <button className="content-surface__back" type="button" onClick={() => setSelectedSlug(undefined)}>← Back to field notes</button>
+              <button className="content-surface__back" type="button" onClick={() => setSelectedSlug(undefined)}>← Back to notes</button>
           <article className="blog-reader" data-blog-reader={selectedNote.slug}>
             <header className="blog-reader__header">
               <div className="blog-card__meta">
@@ -49,7 +49,7 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
                 </section>
               ))}
             </div>
-            <div className="content-surface__tags" aria-label="Field note topics">
+            <div className="content-surface__tags" aria-label="Note topics">
               {selectedNote.tags.map((tag) => <span key={tag}>{tag}</span>)}
             </div>
             <button className="content-surface__action" type="button" onClick={() => onExploreNode?.(selectedNote.primaryNodeId)}>
@@ -66,8 +66,8 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
       <div className="content-surface__inner">
         <header className="content-surface__header content-surface__header--split">
           <div>
-            <p className="content-surface__eyebrow">A layer of understanding</p>
-            <h1 id="field-notes-title">Field notes</h1>
+            <p className="content-surface__eyebrow">Ideas in context</p>
+            <h1 id="field-notes-title">Notes</h1>
             <p className="content-surface__lead">Read an idea in its own space, then return to the map with the context intact.</p>
           </div>
           {localAdminEnabled && (
@@ -91,17 +91,17 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
         <div className="blog-library-layout">
           <aside className="blog-library-sidebar" aria-label="Blog discovery">
             <label className="blog-filter">
-              <span>Filter field notes</span>
+              <span>Filter notes</span>
               <select data-blog-filter value={activeFilter} onChange={(event) => setActiveFilter(event.target.value)}>
                 {filterOptions.map((option) => (
-                  <option key={option} value={option}>{option === "all" ? "All field notes" : option}</option>
+                  <option key={option} value={option}>{option === "all" ? "All notes" : option}</option>
                 ))}
               </select>
             </label>
           </aside>
           <div className="blog-library-results">
             <div className="blog-library-toolbar" aria-live="polite">
-              <span>{visibleNotes.length} {visibleNotes.length === 1 ? "field note" : "field notes"}</span>
+              <span>{visibleNotes.length} {visibleNotes.length === 1 ? "note" : "notes"}</span>
               {activeFilter !== "all" && <span>filtered by {activeFilter}</span>}
             </div>
             {visibleNotes.length > 0 ? (
@@ -122,7 +122,7 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
                 ))}
               </div>
             ) : (
-              <p className="blog-library-empty">No field notes match this filter yet. Try another option.</p>
+              <p className="blog-library-empty">No notes match this filter yet. Try another option.</p>
             )}
           </div>
         </div>

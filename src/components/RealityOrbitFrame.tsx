@@ -33,7 +33,14 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
   };
 
   return (
-    <section className="orbit-frame-shell" aria-label="Reality Orbit observatory">
+    <section
+      className="orbit-frame-shell"
+      aria-busy={frameStatus === "loading"}
+      aria-label="Reality Orbit observatory"
+    >
+      <p id="orbit-frame-instructions" className="visually-hidden">
+        Interactive ontology map. Use Tab to move between concepts, Enter to select a concept, and the Explore action to enter it.
+      </p>
       {frameStatus === "loading" && (
         <output className="orbit-frame-status" aria-live="polite">
           Aligning the observatory…
@@ -59,6 +66,7 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
         referrerPolicy="no-referrer"
         sandbox="allow-scripts allow-same-origin"
         srcDoc={orbitDocument}
+        aria-describedby="orbit-frame-instructions"
         title="Reality Orbit"
       />
     </section>

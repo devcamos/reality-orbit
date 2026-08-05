@@ -34,11 +34,13 @@ export function App(): ReactElement {
   };
 
   return (
-    <main className="app-shell">
+    <>
+      <a className="skip-link" href="#app-content">Skip to main content</a>
+      <main id="main-content" className="app-shell" tabIndex={-1}>
       {hasEntered ? (
         <div className="app-observatory">
           <AppNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-          <div className="app-observatory__views">
+          <div id="app-content" className="app-observatory__views" tabIndex={-1}>
             <div className="app-observatory__home" hidden={activeTab !== "home"}>
               <RealityOrbitFrame orbitDocument={orbitDocument} requestedNodeId={requestedNodeId} />
             </div>
@@ -48,6 +50,7 @@ export function App(): ReactElement {
       ) : (
         <ObservatoryIntroduction onEnter={enterObservatory} />
       )}
-    </main>
+      </main>
+    </>
   );
 }

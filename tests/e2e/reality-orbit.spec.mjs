@@ -43,6 +43,17 @@ test("introduces the observatory before revealing the ontology map", async ({ pa
   await expect(app(page).locator("#reality-orbit-prototype")).toBeVisible();
 });
 
+test("keyboard users can skip directly to the app content", async ({ page }) => {
+  await page.goto("/");
+
+  const skipLink = page.getByRole("link", { name: "Skip to main content", exact: true });
+  await expect(skipLink).toHaveCount(1);
+  await skipLink.focus();
+  await skipLink.press("Enter");
+
+  await expect(page.locator("#app-content")).toBeFocused();
+});
+
 test("the welcome call to action feels alive without displacing text or ignoring reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
 
@@ -103,11 +114,12 @@ test("app tabs expose content surfaces without losing the selected orbit node", 
 
   await node(page, "scale").click();
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
+  await expect(app(page).locator("[data-orbit-how-to] strong")).toHaveText("How to use");
 
-  await page.getByRole("button", { name: "Field notes", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Field notes", exact: true })).toHaveAttribute("aria-current", "page");
+  await page.getByRole("button", { name: "Notes", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Notes", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(page.locator('[data-content-surface="field-notes"]')).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Field notes", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Notes", exact: true })).toBeVisible();
   await expect(page.locator('[data-field-note="paradoxes-where-simple-rules-stop-working"]')).toBeVisible();
   await expect(page.getByRole("button", { name: "Read Paradoxes: Where simple rules stop working" })).toBeVisible();
   await expect(page.locator('iframe[title="Reality Orbit"]')).toBeHidden();
@@ -183,7 +195,7 @@ test("the Skills matrix exposes evidence, value, and orbit context", async ({ pa
 test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
-  await page.getByRole("button", { name: "Field notes", exact: true }).click();
+  await page.getByRole("button", { name: "Notes", exact: true }).click();
   await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(4);
   await expect(page.locator("[data-blog-taxonomy]")).toHaveCount(0);
   await expect(page.locator("[data-blog-filter]")).toBeVisible();
@@ -221,7 +233,7 @@ test("a local admin can create and publish a Field Note", async ({ page }) => {
 
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
-  await page.getByRole("button", { name: "Field notes", exact: true }).click();
+  await page.getByRole("button", { name: "Notes", exact: true }).click();
   await page.getByRole("button", { name: "Admin authoring", exact: true }).click();
   await page.getByLabel("Admin bearer token").fill("local-test-token");
   await page.getByRole("button", { name: "Verify authoring access" }).click();
@@ -322,6 +334,24 @@ test("selection and exploration keep the map, summary, and Concept Anatomy align
   await expect(node(page, "scale")).toBeVisible();
 });
 
+test("a learner can save a concept and return to it from the orbit", async ({ page }) => {
+  await openOrbit(page);
+
+  await node(page, "time").click();
+  const saveButton = app(page).locator("[data-save-concept]");
+  await expect(saveButton).toHaveAttribute("aria-pressed", "false");
+  await saveButton.click();
+  await expect(saveButton).toHaveAttribute("aria-pressed", "true");
+  await expect(app(page).locator("[data-saved-concepts]")).toBeVisible();
+
+  const savedTime = app(page).getByRole("button", { name: "Open saved concept Time", exact: true });
+  await expect(savedTime).toBeVisible();
+  await savedTime.click();
+
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Time");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Time");
+});
+
 test("keyboard activation selects a dimension and exposes its action", async ({ page }) => {
   await openOrbit(page);
 
@@ -331,7 +361,11 @@ test("keyboard activation selects a dimension and exposes its action", async ({ 
   await expect(node(page, "perspective")).toBeFocused();
   await expect(node(page, "perspective")).toHaveAttribute("aria-current", "true");
   await expect(app(page).locator("[data-selected-label]")).toHaveText("Perspective");
-  await expect(app(page).locator("[data-explore-action]")).toBeVisible();
+  const exploreAction = app(page).locator("[data-explore-action]");
+  await expect(exploreAction).toBeVisible();
+  await exploreAction.focus();
+  await exploreAction.press("Enter");
+  await expect(node(page, "perspective")).toBeFocused();
 });
 
 test("hover and keyboard focus reveal a pre-selection concept preview", async ({ page }) => {
@@ -587,7 +621,19 @@ test("reduced-motion mode removes ambient and navigational animation", async ({ 
 test("the observatory exposes a stable accessible structure without serious violations", async ({ page }) => {
   await openOrbit(page);
 
+  await page.addScriptTag({ path: axePath });
+  const outerResults = await page.evaluate(async () => window.axe.run(document, {
+    resultTypes: ["violations"],
+    rules: {
+      "color-contrast": { enabled: true },
+    },
+  }));
+  const outerSeriousViolations = outerResults.violations.filter(({ impact }) => ["serious", "critical"].includes(impact));
+  expect(outerSeriousViolations).toEqual([]);
+
   const orbit = app(page).locator("#reality-orbit-prototype");
+  await expect(page.locator('iframe[title="Reality Orbit"]')).toHaveAttribute("aria-describedby", "orbit-frame-instructions");
+  await expect(app(page).locator('[role="status"][aria-live="polite"]')).toHaveAttribute("aria-atomic", "true");
   await expect(orbit).toMatchAriaSnapshot(`
     - region "Reality ontology destination map":
       - region "Universe workspace":

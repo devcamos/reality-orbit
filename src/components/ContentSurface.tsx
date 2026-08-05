@@ -21,8 +21,8 @@ const surfaceContent: Record<ContentSurfaceProps["tab"], {
     sections: [],
   },
   "field-notes": {
-    eyebrow: "A layer of understanding",
-    title: "Field notes",
+    eyebrow: "Ideas in context",
+    title: "Notes",
     lead: "Short explanations that begin with a question and stay anchored to the map of reality.",
     sections: [
       {
@@ -38,15 +38,15 @@ const surfaceContent: Record<ContentSurfaceProps["tab"], {
   library: {
     eyebrow: "Sources and artefacts",
     title: "Library",
-    lead: "A calm reference layer for the material that supports deeper understanding.",
+    lead: "The sources and references behind the ideas in Reality Orbit.",
     sections: [
       {
-        title: "Evidence to return to",
-        body: "Research papers, books, documentation, datasets, podcasts, and videos can be gathered here and linked back to the concepts they illuminate.",
+        title: "What belongs here",
+        body: "Research papers, books, documentation, datasets, podcasts, and videos that help you check, extend, or apply an idea.",
       },
       {
-        title: "The subject stays separate",
-        body: "A source is an information artefact. It can explain a concept without becoming the concept itself or changing its canonical place.",
+        title: "How it connects",
+        body: "Each source can point back to the concept it illuminates. The source supports understanding without changing the concept's canonical place.",
       },
     ],
   },

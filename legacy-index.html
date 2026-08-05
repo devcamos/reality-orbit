@@ -987,9 +987,32 @@ html&gt;body{padding:0}&lt;/style&gt;
     text-overflow: ellipsis;
   }
 
+  #reality-orbit-prototype .orbit-how-to {
+    display: grid;
+    flex: 0 1 20rem;
+    gap: 0.15rem;
+    min-width: 10rem;
+    margin: 0;
+    color: var(--space-muted);
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  #reality-orbit-prototype .orbit-how-to strong {
+    color: #d7e4e8;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
   #reality-orbit-prototype .orbit-toolbar .orbit-actions,
-  #reality-orbit-prototype .orbit-toolbar .orbit-back {
+  #reality-orbit-prototype .orbit-toolbar .orbit-back,
+  #reality-orbit-prototype .orbit-toolbar .orbit-saved {
     flex: 0 0 auto;
+  }
+
+  #reality-orbit-prototype .orbit-toolbar .orbit-saved {
+    margin: 0;
   }
 
   #reality-orbit-prototype .orbit-actions {
@@ -1820,6 +1843,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
   }
 
+  @media (max-width: 980px) {
+    #reality-orbit-prototype[data-touch-selected=&quot;true&quot;] .orbit-hover-reticle {
+      display: none !important;
+    }
+  }
+
   #reality-orbit-prototype .orbit-detail {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -1847,6 +1876,26 @@ html&gt;body{padding:0}&lt;/style&gt;
     gap: 0.5rem;
   }
 
+  #reality-orbit-prototype .orbit-save {
+    min-height: 2.75rem;
+    border-color: color-mix(in srgb, var(--map-color, #c99d69) 42%, rgba(164, 196, 218, 0.34));
+    color: #d8e5e8;
+    background: rgba(7, 19, 32, 0.62);
+  }
+
+  #reality-orbit-prototype .orbit-save:hover,
+  #reality-orbit-prototype .orbit-save:focus-visible,
+  #reality-orbit-prototype .orbit-save[aria-pressed=&quot;true&quot;] {
+    border-color: color-mix(in srgb, var(--map-color, #c99d69) 78%, #eef6f8);
+    color: #fff6e8;
+    background: color-mix(in srgb, var(--map-color, #c99d69) 16%, rgba(7, 19, 32, 0.78));
+  }
+
+  #reality-orbit-prototype .orbit-save:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 70%, #eef7f9);
+    outline-offset: 3px;
+  }
+
   #reality-orbit-prototype .orbit-detail-visual,
   #reality-orbit-prototype .orbit-detail-action {
     flex: 1 1 11rem;
@@ -1854,6 +1903,76 @@ html&gt;body{padding:0}&lt;/style&gt;
 
   #reality-orbit-prototype .orbit-detail-visual[hidden] {
     display: none !important;
+  }
+
+  #reality-orbit-prototype .orbit-saved {
+    margin: 0.65rem 0 0;
+    border: 1px solid rgba(164, 196, 218, 0.16);
+    border-radius: 0.85rem;
+    background: rgba(4, 13, 23, 0.6);
+  }
+
+  #reality-orbit-prototype .orbit-saved-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.85rem;
+    color: #d7e4e8;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 650;
+    list-style: none;
+  }
+
+  #reality-orbit-prototype .orbit-saved-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-saved-summary:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 70%, #eef7f9);
+    outline-offset: -3px;
+  }
+
+  #reality-orbit-prototype .orbit-saved-count {
+    display: inline-grid;
+    min-width: 1.45rem;
+    min-height: 1.45rem;
+    place-items: center;
+    padding-inline: 0.35rem;
+    color: #07111f;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--map-color, #c99d69) 68%, #f0f5f6);
+    font-size: 0.68rem;
+  }
+
+  #reality-orbit-prototype .orbit-saved-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0 0.85rem 0.8rem;
+  }
+
+  #reality-orbit-prototype .orbit-saved-list button {
+    min-height: 2.35rem;
+    padding: 0.45rem 0.7rem;
+    color: #cbd9dd;
+    border: 1px solid rgba(164, 196, 218, 0.22);
+    border-radius: 999px;
+    background: rgba(9, 24, 39, 0.76);
+    cursor: pointer;
+  }
+
+  #reality-orbit-prototype .orbit-saved-list button:hover,
+  #reality-orbit-prototype .orbit-saved-list button:focus-visible {
+    color: #fff6e8;
+    border-color: color-mix(in srgb, var(--map-color, #c99d69) 68%, #eef6f8);
+  }
+
+  #reality-orbit-prototype .orbit-saved-list button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 70%, #eef7f9);
+    outline-offset: 2px;
   }
 
   #reality-orbit-prototype .concept-visual-dialog {
@@ -2616,6 +2735,13 @@ html&gt;body{padding:0}&lt;/style&gt;
       padding: 0.55rem 0.6rem;
     }
 
+    #reality-orbit-prototype .orbit-how-to {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      min-width: 0;
+      font-size: 0.64rem;
+    }
+
     #reality-orbit-prototype .orbit-path {
       grid-column: 2;
       grid-row: 1;
@@ -2641,6 +2767,16 @@ html&gt;body{padding:0}&lt;/style&gt;
       order: 3;
       width: 100%;
       flex-basis: 100%;
+    }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-saved {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      justify-self: stretch;
+    }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-saved-summary {
+      min-height: 2.5rem;
     }
 
     #reality-orbit-prototype .orbit-actions .orbit-action {
@@ -2751,9 +2887,20 @@ html&gt;body{padding:0}&lt;/style&gt;
         &lt;div class=&quot;orbit-toolbar&quot;&gt;
           &lt;button class=&quot;btn btn-ghost orbit-back&quot; type=&quot;button&quot; data-orbit-back hidden aria-label=&quot;Return to the previous orbit&quot;&gt;← Back&lt;/button&gt;
           &lt;div class=&quot;orbit-path text-small&quot; data-orbit-path aria-label=&quot;Current ontology path&quot;&gt;&lt;/div&gt;
+          &lt;p class=&quot;orbit-how-to&quot; data-orbit-how-to&gt;
+            &lt;strong&gt;How to use&lt;/strong&gt;
+            &lt;span&gt;Choose a lens, select a node, then Explore to move from the whole to the detail.&lt;/span&gt;
+          &lt;/p&gt;
           &lt;div class=&quot;orbit-actions&quot; data-orbit-actions hidden&gt;
             &lt;button class=&quot;btn btn-primary orbit-action&quot; type=&quot;button&quot; data-explore-action&gt;Explore concept&lt;/button&gt;
           &lt;/div&gt;
+          &lt;details class=&quot;orbit-saved&quot; data-saved-concepts hidden&gt;
+            &lt;summary class=&quot;orbit-saved-summary&quot;&gt;
+              &lt;span&gt;Saved concepts&lt;/span&gt;
+              &lt;span class=&quot;orbit-saved-count&quot; data-saved-count&gt;0&lt;/span&gt;
+            &lt;/summary&gt;
+            &lt;div class=&quot;orbit-saved-list&quot; data-saved-list aria-label=&quot;Saved concepts&quot;&gt;&lt;/div&gt;
+          &lt;/details&gt;
         &lt;/div&gt;
         &lt;div class=&quot;orbit-stage&quot;&gt;
           &lt;div class=&quot;orbit-cosmic-scenery&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;
@@ -2786,8 +2933,8 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;/footer&gt;
           &lt;/article&gt;
         &lt;/div&gt;
-        &lt;div class=&quot;orbit-detail&quot;&gt;
-          &lt;p class=&quot;orbit-status text-small&quot; aria-live=&quot;polite&quot;&gt;
+          &lt;div class=&quot;orbit-detail&quot;&gt;
+          &lt;p class=&quot;orbit-status text-small&quot; role=&quot;status&quot; aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;
             &lt;span class=&quot;orbit-status-heading&quot;&gt;
               &lt;strong data-selected-label&gt;Reality&lt;/strong&gt;
               &lt;span class=&quot;viz-badge orbit-role&quot; data-selected-role&gt;Root concept&lt;/span&gt;
@@ -2795,6 +2942,7 @@ html&gt;body{padding:0}&lt;/style&gt;
             &lt;span class=&quot;orbit-summary&quot; data-selected-summary&gt;The organising reference point for exploring reality through five complementary dimensions.&lt;/span&gt;
           &lt;/p&gt;
           &lt;div class=&quot;orbit-detail-actions&quot;&gt;
+            &lt;button class=&quot;btn orbit-save&quot; type=&quot;button&quot; data-save-concept aria-pressed=&quot;false&quot;&gt;☆ Save concept&lt;/button&gt;
             &lt;button class=&quot;btn orbit-detail-visual&quot; type=&quot;button&quot; data-open-concept-visual hidden&gt;Play visual&lt;/button&gt;
             &lt;div class=&quot;orbit-detail-action&quot; data-orbit-detail-action hidden&gt;
               &lt;button class=&quot;btn btn-primary orbit-context-explore&quot; type=&quot;button&quot; data-context-explore-action&gt;Explore concept&lt;/button&gt;
@@ -4074,6 +4222,13 @@ html&gt;body{padding:0}&lt;/style&gt;
     const understandMoreSummary = root.querySelector(&quot;[data-understand-more-summary]&quot;);
     const understandFields = root.querySelector(&quot;[data-understand-fields]&quot;);
     const shootingStars = root.querySelector(&quot;[data-shooting-stars]&quot;);
+    const saveConceptButton = root.querySelector(&quot;[data-save-concept]&quot;);
+    const savedConcepts = root.querySelector(&quot;[data-saved-concepts]&quot;);
+    const savedCount = root.querySelector(&quot;[data-saved-count]&quot;);
+    const savedList = root.querySelector(&quot;[data-saved-list]&quot;);
+    let conceptVisualTrigger = null;
+    let orbitalCursorSuppressedUntil = 0;
+    let touchInteraction = false;
 
     const shootingStarLayout = [
       [12, 18, 5.2, 28, -16],
@@ -4102,10 +4257,73 @@ html&gt;body{padding:0}&lt;/style&gt;
     const terminalOntologyLevel = 5;
     const curatedLevelFivePolicy = &quot;curated-level-five&quot;;
     const history = [&quot;reality&quot;];
+    const savedConceptStorageKey = &quot;reality-orbit:saved-concepts&quot;;
+    const savedConceptIds = new Set();
     let selectedId = &quot;reality&quot;;
+
+    try {
+      const storedConcepts = JSON.parse(window.localStorage.getItem(savedConceptStorageKey) ?? &quot;[]&quot;);
+      if (Array.isArray(storedConcepts)) {
+        storedConcepts
+          .filter((id) =&gt; typeof id === &quot;string&quot; &amp;&amp; ontology[id])
+          .forEach((id) =&gt; savedConceptIds.add(id));
+      }
+    } catch {
+      // Saving is an enhancement; the map remains usable when storage is unavailable.
+    }
 
     const currentId = () =&gt; history[history.length - 1];
     const currentNode = () =&gt; ontology[currentId()];
+
+    const persistSavedConcepts = () =&gt; {
+      try {
+        window.localStorage.setItem(savedConceptStorageKey, JSON.stringify([...savedConceptIds]));
+      } catch {
+        // Storage can be blocked by privacy settings without affecting navigation.
+      }
+    };
+
+    const renderSavedConcepts = () =&gt; {
+      const nodes = [...savedConceptIds].map((id) =&gt; ontology[id]).filter(Boolean);
+      savedConcepts.hidden = nodes.length === 0;
+      savedConcepts.open = nodes.length &gt; 0;
+      savedCount.textContent = String(nodes.length);
+      savedList.replaceChildren(...nodes.map((node) =&gt; {
+        const button = document.createElement(&quot;button&quot;);
+        button.type = &quot;button&quot;;
+        button.dataset.savedNodeId = node.id;
+        button.textContent = node.label;
+        button.setAttribute(&quot;aria-label&quot;, `Open saved concept ${node.label}`);
+        button.addEventListener(&quot;click&quot;, () =&gt; {
+          const targetPath = node.canonicalPath;
+          const nextHistory = targetPath.map((_, index) =&gt; {
+            const path = targetPath.slice(0, index + 1);
+            return Object.values(ontology).find((candidate) =&gt; candidate.canonicalPath.join(&quot;/&quot;) === path.join(&quot;/&quot;))?.id;
+          }).filter(Boolean);
+          history.splice(0, history.length, ...nextHistory);
+          renderOrbit();
+          setSelectedNode(node.id, { revealMobileContent: true });
+          savedConcepts.open = false;
+        });
+        return button;
+      }));
+    };
+
+    const updateSavedConcept = (node) =&gt; {
+      const isSaved = savedConceptIds.has(node.id);
+      saveConceptButton.setAttribute(&quot;aria-pressed&quot;, String(isSaved));
+      saveConceptButton.textContent = isSaved ? &quot;★ Saved concept&quot; : &quot;☆ Save concept&quot;;
+      saveConceptButton.setAttribute(&quot;aria-label&quot;, isSaved ? `Remove ${node.label} from saved concepts` : `Save ${node.label} for later`);
+    };
+
+    const toggleSavedConcept = () =&gt; {
+      const node = ontology[selectedId];
+      if (savedConceptIds.has(node.id)) savedConceptIds.delete(node.id);
+      else savedConceptIds.add(node.id);
+      persistSavedConcepts();
+      updateSavedConcept(node);
+      renderSavedConcepts();
+    };
     const ontologyLevel = (node) =&gt; node.canonicalPath.length - 1;
     const nodeColor = (node) =&gt; dimensionColors[node.canonicalPath[1]] ?? &quot;#c99d69&quot;;
     const cosmicSceneForNode = (node) =&gt; node.id === &quot;reality&quot; ? &quot;reality&quot; : (node.canonicalPath[1] ?? &quot;Reality&quot;).toLowerCase();
@@ -4772,6 +4990,10 @@ html&gt;body{padding:0}&lt;/style&gt;
     const hideOrbitalCursor = (linger = 0) =&gt; {
       if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
       orbitHoverReticle.dataset.visible = &quot;false&quot;;
+      if (typeof isCompactViewport === &quot;function&quot; &amp;&amp; isCompactViewport()) {
+        orbitHoverReticle.hidden = true;
+        return;
+      }
       orbitalCursorHideTimer = window.setTimeout(() =&gt; {
         orbitHoverReticle.hidden = true;
       }, linger + 140);
@@ -5017,6 +5239,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const openConceptVisual = () =&gt; {
       const node = ontology[selectedId];
       if (!node || !canPlayVisualForNode(node)) return;
+      conceptVisualTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       renderConceptVisual(node);
       if (!conceptVisualDialog.open) {
         if (typeof conceptVisualDialog.showModal === &quot;function&quot;) conceptVisualDialog.showModal();
@@ -5025,14 +5248,28 @@ html&gt;body{padding:0}&lt;/style&gt;
       requestAnimationFrame(playConceptVisual);
     };
 
+    const restoreConceptVisualFocus = () =&gt; {
+      const trigger = conceptVisualTrigger;
+      conceptVisualTrigger = null;
+      if (!trigger?.isConnected) return;
+      requestAnimationFrame(() =&gt; trigger.focus({ preventScroll: true }));
+    };
+
     const closeConceptVisual = () =&gt; {
       if (typeof conceptVisualDialog.close === &quot;function&quot;) conceptVisualDialog.close();
-      else conceptVisualDialog.removeAttribute(&quot;open&quot;);
+      else {
+        conceptVisualDialog.removeAttribute(&quot;open&quot;);
+        restoreConceptVisualFocus();
+      }
     };
+
+    conceptVisualDialog.addEventListener(&quot;close&quot;, restoreConceptVisualFocus);
 
     const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) =&gt; {
       resetOrbitPreview();
       hideOrbitalCursor();
+      orbitalCursorSuppressedUntil = performance.now() + 220;
+      root.dataset.touchSelected = &quot;true&quot;;
       selectedId = nodeId;
       const node = ontology[nodeId];
       // Keep the entry map anchored to Reality; a lens scene is revealed only after Explore.
@@ -5047,6 +5284,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       selectedRole.textContent = context.role;
       selectedRole.hidden = context.role === &quot;Dimension&quot;;
       selectedSummary.textContent = context.explanation;
+      updateSavedConcept(node);
       const canPlayVisual = canPlayVisualForNode(node);
       openConceptVisualButton.hidden = !canPlayVisual;
       openConceptVisualButton.disabled = !canPlayVisual;
@@ -5153,12 +5391,23 @@ html&gt;body{padding:0}&lt;/style&gt;
       transitionOrbit(() =&gt; history.push(nodeId), { revealMap, direction: 1 });
     }
 
+    const focusOrbitNode = (nodeId) =&gt; {
+      const button = [...root.querySelectorAll(&quot;[data-node-id]&quot;)]
+        .find((candidate) =&gt; candidate.dataset.nodeId === nodeId);
+      button?.focus({ preventScroll: true });
+    };
+
     const transitionOrbit = (commitNavigation, { revealMap = false, direction = 1 } = {}) =&gt; {
       if (root.dataset.cameraState !== &quot;idle&quot;) return;
       const reduceMotion = window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches;
+      const activeElement = document.activeElement;
+      const restoreFocus = activeElement instanceof HTMLElement
+        &amp;&amp; root.contains(activeElement)
+        &amp;&amp; activeElement.matches(&quot;[data-explore-action], [data-context-explore-action], [data-orbit-back]&quot;);
       const completeNavigation = () =&gt; {
         commitNavigation();
         renderOrbit();
+        if (restoreFocus) focusOrbitNode(currentId());
         if (revealMap) revealOrbitMap();
       };
 
@@ -5172,6 +5421,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       window.setTimeout(() =&gt; {
         commitNavigation();
         renderOrbit();
+        if (restoreFocus) focusOrbitNode(currentId());
         root.dataset.cameraState = &quot;arriving&quot;;
         requestAnimationFrame(() =&gt; {
           root.dataset.cameraState = &quot;idle&quot;;
@@ -5180,6 +5430,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       }, 220);
     };
 
+    saveConceptButton.addEventListener(&quot;click&quot;, toggleSavedConcept);
     exploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId));
     contextExploreButton.addEventListener(&quot;click&quot;, () =&gt; exploreSelectedNode(selectedId, { revealMap: true }));
     openConceptVisualButton.addEventListener(&quot;click&quot;, openConceptVisual);
@@ -5193,17 +5444,48 @@ html&gt;body{padding:0}&lt;/style&gt;
       if (history.length &gt; 1) transitionOrbit(() =&gt; history.pop(), { direction: -1 });
     });
 
-    root.addEventListener(&quot;mousemove&quot;, showOrbitalCursor);
+    let orbitalCursorFrame = 0;
+    let orbitalCursorEvent = null;
+    const isCompactViewport = () =&gt; {
+      const parentViewportWidth = window.parent === window ? window.innerWidth : window.parent.innerWidth;
+      return Math.min(window.innerWidth, parentViewportWidth) &lt;= 980;
+    };
+    const scheduleOrbitalCursor = (event) =&gt; {
+      if (isCompactViewport()
+        || window.matchMedia(&quot;(max-width: 980px)&quot;).matches
+        || window.matchMedia(&quot;(hover: none) and (pointer: coarse)&quot;).matches
+        || touchInteraction
+        || performance.now() &lt; orbitalCursorSuppressedUntil) {
+        hideOrbitalCursor();
+        return;
+      }
+      orbitalCursorEvent = event;
+      if (orbitalCursorFrame) return;
+      orbitalCursorFrame = requestAnimationFrame(() =&gt; {
+        orbitalCursorFrame = 0;
+        if (orbitalCursorEvent) showOrbitalCursor(orbitalCursorEvent);
+      });
+    };
+
+    root.addEventListener(&quot;mousemove&quot;, scheduleOrbitalCursor);
     root.addEventListener(&quot;pointermove&quot;, (event) =&gt; {
-      if (event.pointerType !== &quot;mouse&quot;) showOrbitalCursor(event);
+      if (event.pointerType !== &quot;mouse&quot;) scheduleOrbitalCursor(event);
     });
-    root.addEventListener(&quot;pointerdown&quot;, showOrbitalCursor);
+    root.addEventListener(&quot;pointerdown&quot;, (event) =&gt; {
+      touchInteraction = event.pointerType === &quot;touch&quot;;
+      if (touchInteraction) root.dataset.touchSelected = &quot;false&quot;;
+      if (!isCompactViewport() || touchInteraction) showOrbitalCursor(event);
+      else hideOrbitalCursor();
+    });
     root.addEventListener(&quot;mouseleave&quot;, () =&gt; hideOrbitalCursor());
     root.addEventListener(&quot;pointerleave&quot;, (event) =&gt; {
       if (event.pointerType !== &quot;touch&quot;) hideOrbitalCursor();
     });
     root.addEventListener(&quot;pointerup&quot;, (event) =&gt; {
-      if (event.pointerType === &quot;touch&quot;) hideOrbitalCursor();
+      if (event.pointerType === &quot;touch&quot;) {
+        orbitalCursorSuppressedUntil = performance.now() + 500;
+        hideOrbitalCursor();
+      }
     });
     root.addEventListener(&quot;pointercancel&quot;, () =&gt; hideOrbitalCursor());
     window.addEventListener(&quot;blur&quot;, () =&gt; hideOrbitalCursor());
@@ -5216,6 +5498,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     root.dataset.defaultOntologyLevel = String(defaultOntologyLevel);
     root.dataset.cameraState = &quot;idle&quot;;
     validateOntology();
+    renderSavedConcepts();
     renderOrbit();
   })();
 &lt;/script&gt;

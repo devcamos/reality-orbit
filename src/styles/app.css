@@ -45,6 +45,34 @@ button {
   white-space: nowrap;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.7rem 1rem;
+  color: #07111f;
+  border: 2px solid #f0d2a6;
+  border-radius: 999px;
+  background: #f5e4c8;
+  box-shadow: 0 0.6rem 1.6rem rgb(0 0 0 / 28%);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transform: translateY(-150%);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+#main-content:focus,
+#app-content:focus {
+  outline: 0;
+}
+
 .app-shell,
 .orbit-frame-shell {
   min-height: 100dvh;
@@ -1653,6 +1681,10 @@ button {
   }
 
   .observatory-intro__enter {
+    transition: none;
+  }
+
+  .skip-link {
     transition: none;
   }
 
