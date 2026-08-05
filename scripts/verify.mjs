@@ -17,6 +17,8 @@ const requiredLabels = [
   "Evolutionary psychology",
   "Individual differences",
   "Emotion",
+  "Reasoning",
+  "Inference",
   "Motivation",
   "Behaviour",
   "Development",

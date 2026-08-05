@@ -312,6 +312,31 @@ test("Psychological coverage exposes the approved level-4 teaching vocabularies"
   );
 });
 
+test("Reasoning gives Inference an explicit cognitive home", () => {
+  const cognition = contract.ontology.cognition;
+  assert.deepEqual(Array.from(cognition.children), ["decision-process", "reasoning"]);
+
+  const reasoning = contract.ontology.reasoning;
+  assert.deepEqual(
+    Array.from(reasoning.canonicalPath),
+    ["Reality", "Domain", "Psychological", "Cognition", "Reasoning"],
+  );
+  assert.equal(reasoning.expansionPolicy, curatedLevelFivePolicy);
+  assert.deepEqual(Array.from(reasoning.children), ["inference"]);
+
+  const inference = contract.ontology.inference;
+  assert.deepEqual(
+    Array.from(inference.canonicalPath),
+    ["Reality", "Domain", "Psychological", "Cognition", "Reasoning", "Inference"],
+  );
+  assert.equal(ontologyLevel(inference), terminalOntologyLevel);
+  assert.equal(inference.children?.length ?? 0, 0);
+  assert.equal(contract.roleForNode(inference), "Domain concept");
+  for (const field of ["Definition", "Mechanism", "Applies when", "Breaks when", "Example", "Counterexample", "Decision rule"]) {
+    assert.ok(contract.buildConceptAnatomy(inference)[field]?.trim(), `Inference must explain ${field}.`);
+  }
+});
+
 test("every named law provides the complete law teaching anatomy", () => {
   const requiredFields = [
     "Statement",
@@ -404,12 +429,12 @@ test("every ontology branch respects the default level-4 boundary and explicit t
   context.diagnostic(`Approved terminal concepts by level: ${JSON.stringify(countsByLevel)}.`);
 
   assert.equal(overdeepNodes.length, 0, "No ontology node may exceed terminal level 5.");
-  assert.deepEqual(levelFourContainers.map((node) => node.id), ["character"], "Character must be the sole level-4 container.");
-  assert.equal(levelFourContainers[0].expansionPolicy, curatedLevelFivePolicy);
+  assert.deepEqual(new Set(levelFourContainers.map((node) => node.id)), new Set(["character", "reasoning"]), "Only Character and Reasoning may expose curated level-5 concepts.");
+  for (const container of levelFourContainers) assert.equal(container.expansionPolicy, curatedLevelFivePolicy);
   assert.ok(levelFiveNodes.length > 0, "The approved Character exception must expose level-5 concepts.");
   for (const node of levelFiveNodes) {
     assert.equal(node.children?.length ?? 0, 0, `${node.label} must be terminal at level 5.`);
-    assert.equal(node.canonicalPath[4], "Character", `${node.label} must sit beneath the approved Character container.`);
+    assert.ok(["Character", "Reasoning"].includes(node.canonicalPath[4]), `${node.label} must sit beneath an approved level-4 container.`);
   }
 });
 

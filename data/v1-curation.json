@@ -150,11 +150,16 @@
     {
       "id": "psychological",
       "scope": "Mind, cognition, emotion, perception, motivation, behaviour, development, and individual variation.",
-      "decision": "Publishes theory-aware, learner-facing level-4 vocabularies for Emotion, Motivation, Behaviour, and Development without claiming that any one taxonomy is exhaustive or that overlapping psychological processes are mutually exclusive. Character is the sole approved level-4 container: it exposes a compact set of foundational moral and self-regulatory qualities as terminal level-5 concepts so Courage and its peers remain directly navigable. Personality, Temperament, Values, and Abilities remain terminal at level 4. The existing Evolutionary psychology path remains a cross-cutting explanatory approach rather than a mutually exclusive process family.",
+      "decision": "Publishes theory-aware, learner-facing level-4 vocabularies for Cognition, Emotion, Motivation, Behaviour, and Development without claiming that any one taxonomy is exhaustive or that overlapping psychological processes are mutually exclusive. Character and Reasoning are the approved level-4 containers: Character exposes foundational moral and self-regulatory qualities, while Reasoning exposes Inference as a terminal cognitive operation. Personality, Temperament, Values, and Abilities remain terminal at level 4. The existing Evolutionary psychology path remains a cross-cutting explanatory approach rather than a mutually exclusive process family.",
       "approvedPaths": [
         [
           "cognition",
           "decision-process"
+        ],
+        [
+          "cognition",
+          "reasoning",
+          "inference"
         ],
         [
           "emotion",
