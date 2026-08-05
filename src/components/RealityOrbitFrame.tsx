@@ -3,6 +3,8 @@ import { memo, useEffect, useRef, useState, type ReactElement } from "react";
 interface RealityOrbitFrameProps {
   orbitDocument: string;
   requestedNodeId?: string;
+  requestedPath?: string[];
+  requestMode?: "restore" | "select";
 }
 
 type FrameStatus = "loading" | "ready" | "error";
@@ -10,6 +12,8 @@ type FrameStatus = "loading" | "ready" | "error";
 export const RealityOrbitFrame = memo(function RealityOrbitFrame({
   orbitDocument,
   requestedNodeId,
+  requestedPath,
+  requestMode = "restore",
 }: RealityOrbitFrameProps): ReactElement {
   const [frameStatus, setFrameStatus] = useState<FrameStatus>("loading");
   const [frameVersion, setFrameVersion] = useState(0);
@@ -17,15 +21,23 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
 
   const requestNodeSelection = (): void => {
     if (!requestedNodeId || !frameRef.current?.contentWindow) return;
+    if (requestMode === "restore" && (requestedPath?.length ?? 0) > 1) {
+      frameRef.current.contentWindow.postMessage({
+        type: "reality-orbit:restore-navigation",
+        path: requestedPath,
+        selectedNodeId: requestedNodeId,
+      }, window.location.origin);
+      return;
+    }
     frameRef.current.contentWindow.postMessage({
-      type: "reality-orbit:select-node",
+      type: requestMode === "select" ? "reality-orbit:select-node" : "reality-orbit:restore-node",
       nodeId: requestedNodeId,
     }, window.location.origin);
   };
 
   useEffect(() => {
     if (frameStatus === "ready") requestNodeSelection();
-  }, [frameStatus, requestedNodeId]);
+  }, [frameStatus, requestedNodeId, requestedPath, requestMode]);
 
   const reloadFrame = (): void => {
     setFrameStatus("loading");

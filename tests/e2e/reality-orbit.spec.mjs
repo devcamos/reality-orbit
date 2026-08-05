@@ -124,8 +124,19 @@ test("app tabs expose content surfaces without losing the selected orbit node", 
   await expect(page.getByRole("button", { name: "Read Paradoxes: Where simple rules stop working" })).toBeVisible();
   await expect(page.locator('iframe[title="Reality Orbit"]')).toBeHidden();
 
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Notes", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.locator('[data-content-surface="field-notes"]')).toBeVisible();
+
   await page.getByRole("button", { name: "Home", exact: true }).click();
   await expect(page.locator('iframe[title="Reality Orbit"]')).toBeVisible();
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
+
+  await app(page).locator("[data-explore-action]").click();
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Scale");
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Scale");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
 
   for (const tab of ["Skills", "Library", "About"]) {

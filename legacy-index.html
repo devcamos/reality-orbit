@@ -4289,10 +4289,36 @@ html&gt;body{padding:0}&lt;/style&gt;
     const defaultOntologyLevel = 4;
     const terminalOntologyLevel = 5;
     const curatedLevelFivePolicy = &quot;curated-level-five&quot;;
-    const history = [&quot;reality&quot;];
+    const navigationStorageKey = &quot;reality-orbit:navigation-history&quot;;
+    const selectionStorageKey = &quot;reality-orbit:selected-node&quot;;
+    let selectionSyncReady = false;
+    const readNavigationHistory = () =&gt; {
+      try {
+        const storedHistory = JSON.parse(window.sessionStorage.getItem(navigationStorageKey) ?? &quot;null&quot;);
+        if (!Array.isArray(storedHistory)) return [&quot;reality&quot;];
+        const restoredHistory = storedHistory.reduce((path, nodeId) =&gt; {
+          if (typeof nodeId !== &quot;string&quot; || !ontology[nodeId]) return path;
+          if (path.length === 0 &amp;&amp; nodeId !== &quot;reality&quot;) return path;
+          const parent = ontology[path.at(-1)];
+          if (path.length &gt; 0 &amp;&amp; !parent?.children?.includes(nodeId)) return path;
+          path.push(nodeId);
+          return path;
+        }, []);
+        return restoredHistory.length &gt; 0 ? restoredHistory : [&quot;reality&quot;];
+      } catch {
+        return [&quot;reality&quot;];
+      }
+    };
+    const history = readNavigationHistory();
     const savedConceptStorageKey = &quot;reality-orbit:saved-concepts&quot;;
     const savedConceptIds = new Set();
     let selectedId = &quot;reality&quot;;
+    try {
+      const storedSelection = window.sessionStorage.getItem(selectionStorageKey);
+      if (storedSelection &amp;&amp; ontology[storedSelection]) selectedId = storedSelection;
+    } catch {
+      // Session storage is an enhancement; the map remains usable when storage is unavailable.
+    }
 
     try {
       const storedConcepts = JSON.parse(window.localStorage.getItem(savedConceptStorageKey) ?? &quot;[]&quot;);
@@ -4307,6 +4333,35 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     const currentId = () =&gt; history[history.length - 1];
     const currentNode = () =&gt; ontology[currentId()];
+    const canonicalPathIds = (nodeId) =&gt; {
+      const labels = ontology[nodeId]?.canonicalPath ?? [];
+      return labels
+        .map((_, index) =&gt; labels.slice(0, index + 1).join(&quot;/&quot;))
+        .map((path) =&gt; Object.values(ontology).find((node) =&gt; node.canonicalPath.join(&quot;/&quot;) === path)?.id)
+        .filter(Boolean);
+    };
+
+    const persistNavigation = () =&gt; {
+      try {
+        window.sessionStorage.setItem(navigationStorageKey, JSON.stringify(history));
+      } catch {
+        // Session storage is an enhancement; navigation must still work when storage is unavailable.
+      }
+      if (selectionSyncReady &amp;&amp; window.parent !== window) {
+        window.parent.postMessage({ type: &quot;reality-orbit:navigation&quot;, path: [...history] }, &quot;*&quot;);
+      }
+    };
+
+    const persistSelection = (nodeId) =&gt; {
+      try {
+        window.sessionStorage.setItem(selectionStorageKey, nodeId);
+      } catch {
+        // Session storage is an enhancement; selection must still work when storage is unavailable.
+      }
+      if (selectionSyncReady &amp;&amp; window.parent !== window) {
+        window.parent.postMessage({ type: &quot;reality-orbit:selected-node&quot;, nodeId }, &quot;*&quot;);
+      }
+    };
 
     const persistSavedConcepts = () =&gt; {
       try {
@@ -4334,6 +4389,7 @@ html&gt;body{padding:0}&lt;/style&gt;
             return Object.values(ontology).find((candidate) =&gt; candidate.canonicalPath.join(&quot;/&quot;) === path.join(&quot;/&quot;))?.id;
           }).filter(Boolean);
           history.splice(0, history.length, ...nextHistory);
+          persistNavigation();
           renderOrbit();
           setSelectedNode(node.id, { revealMobileContent: true });
           savedConcepts.open = false;
@@ -5141,6 +5197,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       ]);
       const remaining = entries.filter(([label]) =&gt; !hiddenLegacyFields.has(label));
 
+      persistSelection(node.id);
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(&quot; &quot;, &quot;-&quot;);
       understandEyebrow.textContent = summaryTitleForNode(node, role);
@@ -5350,9 +5407,46 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     window.addEventListener(&quot;message&quot;, (event) =&gt; {
       if (event.source !== window.parent) return;
-      if (event.data?.type !== &quot;reality-orbit:select-node&quot;) return;
+      if (![
+        &quot;reality-orbit:select-node&quot;,
+        &quot;reality-orbit:restore-node&quot;,
+        &quot;reality-orbit:restore-navigation&quot;,
+      ].includes(event.data?.type)) return;
+      if (event.data.type === &quot;reality-orbit:restore-navigation&quot;) {
+        const restoredPath = Array.isArray(event.data.path)
+          ? event.data.path.reduce((path, nodeId) =&gt; {
+            if (typeof nodeId !== &quot;string&quot; || !ontology[nodeId]) return path;
+            if (path.length === 0 &amp;&amp; nodeId !== &quot;reality&quot;) return path;
+            const parent = ontology[path.at(-1)];
+            if (path.length &gt; 0 &amp;&amp; !parent?.children?.includes(nodeId)) return path;
+            path.push(nodeId);
+            return path;
+          }, [])
+          : [];
+        const selectedPath = typeof event.data.selectedNodeId === &quot;string&quot;
+          ? canonicalPathIds(event.data.selectedNodeId)
+          : [];
+        const resolvedPath = restoredPath.length === event.data.path?.length
+          ? restoredPath
+          : selectedPath;
+        if (resolvedPath.length === 0) return;
+        history.splice(0, history.length, ...resolvedPath);
+        if (typeof event.data.selectedNodeId === &quot;string&quot; &amp;&amp; ontology[event.data.selectedNodeId]) {
+          selectedId = event.data.selectedNodeId;
+        }
+        persistNavigation();
+        renderOrbit();
+        return;
+      }
       const requestedNode = ontology[event.data.nodeId];
       if (!requestedNode) return;
+      if (event.data.type === &quot;reality-orbit:restore-node&quot;) {
+        const parent = currentNode();
+        if (requestedNode.id === parent.id || parent.children?.includes(requestedNode.id)) {
+          setSelectedNode(requestedNode.id, { revealMobileContent: true });
+        }
+        return;
+      }
       if (requestedNode.id !== currentId() &amp;&amp; canExploreNode(requestedNode)) {
         exploreSelectedNode(requestedNode.id, { revealMap: true });
       } else {
@@ -5362,6 +5456,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
     const renderOrbit = () =&gt; {
       const parent = currentNode();
+      const preferredSelectedId = selectedId;
       const positions = positionChildren(parent);
       resetOrbitPreview();
       root.style.setProperty(&quot;--map-color&quot;, nodeColor(parent));
@@ -5416,12 +5511,20 @@ html&gt;body{padding:0}&lt;/style&gt;
       });
       nodesLayer.appendChild(centreButton);
       setSelectedNode(parent.id);
+      const preferredNode = ontology[preferredSelectedId];
+      if (preferredNode &amp;&amp; (preferredSelectedId === parent.id || parent.children?.includes(preferredSelectedId))) {
+        setSelectedNode(preferredSelectedId);
+      }
     };
 
     function exploreSelectedNode(nodeId = selectedId, { revealMap = false } = {}) {
       const node = ontology[nodeId];
       if (!node || node.id === currentId() || !canExploreNode(node)) return;
-      transitionOrbit(() =&gt; history.push(nodeId), { revealMap, direction: 1 });
+      transitionOrbit(() =&gt; {
+        const canonicalPath = canonicalPathIds(nodeId);
+        history.splice(0, history.length, ...(canonicalPath.length &gt; 0 ? canonicalPath : [...history, nodeId]));
+        persistNavigation();
+      }, { revealMap, direction: 1 });
     }
 
     const focusOrbitNode = (nodeId) =&gt; {
@@ -5474,7 +5577,12 @@ html&gt;body{padding:0}&lt;/style&gt;
     });
 
     backButton.addEventListener(&quot;click&quot;, () =&gt; {
-      if (history.length &gt; 1) transitionOrbit(() =&gt; history.pop(), { direction: -1 });
+      if (history.length &gt; 1) {
+        transitionOrbit(() =&gt; {
+          history.pop();
+          persistNavigation();
+        }, { direction: -1 });
+      }
     });
 
     let orbitalCursorFrame = 0;
@@ -5532,7 +5640,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     root.dataset.cameraState = &quot;idle&quot;;
     validateOntology();
     renderSavedConcepts();
+    persistNavigation();
     renderOrbit();
+    selectionSyncReady = true;
   })();
 &lt;/script&gt;
 &lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;

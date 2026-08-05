@@ -3412,10 +3412,36 @@
     const defaultOntologyLevel = 4;
     const terminalOntologyLevel = 5;
     const curatedLevelFivePolicy = "curated-level-five";
-    const history = ["reality"];
+    const navigationStorageKey = "reality-orbit:navigation-history";
+    const selectionStorageKey = "reality-orbit:selected-node";
+    let selectionSyncReady = false;
+    const readNavigationHistory = () => {
+      try {
+        const storedHistory = JSON.parse(window.sessionStorage.getItem(navigationStorageKey) ?? "null");
+        if (!Array.isArray(storedHistory)) return ["reality"];
+        const restoredHistory = storedHistory.reduce((path, nodeId) => {
+          if (typeof nodeId !== "string" || !ontology[nodeId]) return path;
+          if (path.length === 0 && nodeId !== "reality") return path;
+          const parent = ontology[path.at(-1)];
+          if (path.length > 0 && !parent?.children?.includes(nodeId)) return path;
+          path.push(nodeId);
+          return path;
+        }, []);
+        return restoredHistory.length > 0 ? restoredHistory : ["reality"];
+      } catch {
+        return ["reality"];
+      }
+    };
+    const history = readNavigationHistory();
     const savedConceptStorageKey = "reality-orbit:saved-concepts";
     const savedConceptIds = new Set();
     let selectedId = "reality";
+    try {
+      const storedSelection = window.sessionStorage.getItem(selectionStorageKey);
+      if (storedSelection && ontology[storedSelection]) selectedId = storedSelection;
+    } catch {
+      // Session storage is an enhancement; the map remains usable when storage is unavailable.
+    }
 
     try {
       const storedConcepts = JSON.parse(window.localStorage.getItem(savedConceptStorageKey) ?? "[]");
@@ -3430,6 +3456,35 @@
 
     const currentId = () => history[history.length - 1];
     const currentNode = () => ontology[currentId()];
+    const canonicalPathIds = (nodeId) => {
+      const labels = ontology[nodeId]?.canonicalPath ?? [];
+      return labels
+        .map((_, index) => labels.slice(0, index + 1).join("/"))
+        .map((path) => Object.values(ontology).find((node) => node.canonicalPath.join("/") === path)?.id)
+        .filter(Boolean);
+    };
+
+    const persistNavigation = () => {
+      try {
+        window.sessionStorage.setItem(navigationStorageKey, JSON.stringify(history));
+      } catch {
+        // Session storage is an enhancement; navigation must still work when storage is unavailable.
+      }
+      if (selectionSyncReady && window.parent !== window) {
+        window.parent.postMessage({ type: "reality-orbit:navigation", path: [...history] }, "*");
+      }
+    };
+
+    const persistSelection = (nodeId) => {
+      try {
+        window.sessionStorage.setItem(selectionStorageKey, nodeId);
+      } catch {
+        // Session storage is an enhancement; selection must still work when storage is unavailable.
+      }
+      if (selectionSyncReady && window.parent !== window) {
+        window.parent.postMessage({ type: "reality-orbit:selected-node", nodeId }, "*");
+      }
+    };
 
     const persistSavedConcepts = () => {
       try {
@@ -3457,6 +3512,7 @@
             return Object.values(ontology).find((candidate) => candidate.canonicalPath.join("/") === path.join("/"))?.id;
           }).filter(Boolean);
           history.splice(0, history.length, ...nextHistory);
+          persistNavigation();
           renderOrbit();
           setSelectedNode(node.id, { revealMobileContent: true });
           savedConcepts.open = false;
@@ -4264,6 +4320,7 @@
       ]);
       const remaining = entries.filter(([label]) => !hiddenLegacyFields.has(label));
 
+      persistSelection(node.id);
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-");
       understandEyebrow.textContent = summaryTitleForNode(node, role);
@@ -4473,9 +4530,46 @@
 
     window.addEventListener("message", (event) => {
       if (event.source !== window.parent) return;
-      if (event.data?.type !== "reality-orbit:select-node") return;
+      if (![
+        "reality-orbit:select-node",
+        "reality-orbit:restore-node",
+        "reality-orbit:restore-navigation",
+      ].includes(event.data?.type)) return;
+      if (event.data.type === "reality-orbit:restore-navigation") {
+        const restoredPath = Array.isArray(event.data.path)
+          ? event.data.path.reduce((path, nodeId) => {
+            if (typeof nodeId !== "string" || !ontology[nodeId]) return path;
+            if (path.length === 0 && nodeId !== "reality") return path;
+            const parent = ontology[path.at(-1)];
+            if (path.length > 0 && !parent?.children?.includes(nodeId)) return path;
+            path.push(nodeId);
+            return path;
+          }, [])
+          : [];
+        const selectedPath = typeof event.data.selectedNodeId === "string"
+          ? canonicalPathIds(event.data.selectedNodeId)
+          : [];
+        const resolvedPath = restoredPath.length === event.data.path?.length
+          ? restoredPath
+          : selectedPath;
+        if (resolvedPath.length === 0) return;
+        history.splice(0, history.length, ...resolvedPath);
+        if (typeof event.data.selectedNodeId === "string" && ontology[event.data.selectedNodeId]) {
+          selectedId = event.data.selectedNodeId;
+        }
+        persistNavigation();
+        renderOrbit();
+        return;
+      }
       const requestedNode = ontology[event.data.nodeId];
       if (!requestedNode) return;
+      if (event.data.type === "reality-orbit:restore-node") {
+        const parent = currentNode();
+        if (requestedNode.id === parent.id || parent.children?.includes(requestedNode.id)) {
+          setSelectedNode(requestedNode.id, { revealMobileContent: true });
+        }
+        return;
+      }
       if (requestedNode.id !== currentId() && canExploreNode(requestedNode)) {
         exploreSelectedNode(requestedNode.id, { revealMap: true });
       } else {
@@ -4485,6 +4579,7 @@
 
     const renderOrbit = () => {
       const parent = currentNode();
+      const preferredSelectedId = selectedId;
       const positions = positionChildren(parent);
       resetOrbitPreview();
       root.style.setProperty("--map-color", nodeColor(parent));
@@ -4539,12 +4634,20 @@
       });
       nodesLayer.appendChild(centreButton);
       setSelectedNode(parent.id);
+      const preferredNode = ontology[preferredSelectedId];
+      if (preferredNode && (preferredSelectedId === parent.id || parent.children?.includes(preferredSelectedId))) {
+        setSelectedNode(preferredSelectedId);
+      }
     };
 
     function exploreSelectedNode(nodeId = selectedId, { revealMap = false } = {}) {
       const node = ontology[nodeId];
       if (!node || node.id === currentId() || !canExploreNode(node)) return;
-      transitionOrbit(() => history.push(nodeId), { revealMap, direction: 1 });
+      transitionOrbit(() => {
+        const canonicalPath = canonicalPathIds(nodeId);
+        history.splice(0, history.length, ...(canonicalPath.length > 0 ? canonicalPath : [...history, nodeId]));
+        persistNavigation();
+      }, { revealMap, direction: 1 });
     }
 
     const focusOrbitNode = (nodeId) => {
@@ -4597,7 +4700,12 @@
     });
 
     backButton.addEventListener("click", () => {
-      if (history.length > 1) transitionOrbit(() => history.pop(), { direction: -1 });
+      if (history.length > 1) {
+        transitionOrbit(() => {
+          history.pop();
+          persistNavigation();
+        }, { direction: -1 });
+      }
     });
 
     let orbitalCursorFrame = 0;
@@ -4655,6 +4763,8 @@
     root.dataset.cameraState = "idle";
     validateOntology();
     renderSavedConcepts();
+    persistNavigation();
     renderOrbit();
+    selectionSyncReady = true;
   })();
 </script>
