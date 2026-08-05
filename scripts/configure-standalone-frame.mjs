@@ -30,7 +30,7 @@ const escapeForSrcdoc = (value) => value
   .replaceAll("'", "&#x27;");
 
 const sourceStartMarker = "&lt;style&gt;\n  :root {\n    color-scheme: dark !important;";
-const sourceEndMarker = "    renderOrbit();\n  })();\n&lt;/script&gt;";
+const sourceEndMarker = "    renderOrbit();\n    selectionSyncReady = true;\n  })();\n&lt;/script&gt;";
 const sourceStart = document.indexOf(sourceStartMarker);
 const sourceEndStart = document.indexOf(sourceEndMarker, sourceStart);
 

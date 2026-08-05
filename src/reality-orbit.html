@@ -110,9 +110,32 @@
     text-overflow: ellipsis;
   }
 
+  #reality-orbit-prototype .orbit-how-to {
+    display: grid;
+    flex: 0 1 20rem;
+    gap: 0.15rem;
+    min-width: 10rem;
+    margin: 0;
+    color: var(--space-muted);
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  #reality-orbit-prototype .orbit-how-to strong {
+    color: #d7e4e8;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
   #reality-orbit-prototype .orbit-toolbar .orbit-actions,
-  #reality-orbit-prototype .orbit-toolbar .orbit-back {
+  #reality-orbit-prototype .orbit-toolbar .orbit-back,
+  #reality-orbit-prototype .orbit-toolbar .orbit-saved {
     flex: 0 0 auto;
+  }
+
+  #reality-orbit-prototype .orbit-toolbar .orbit-saved {
+    margin: 0;
   }
 
   #reality-orbit-prototype .orbit-actions {
@@ -943,6 +966,12 @@
     }
   }
 
+  @media (max-width: 980px) {
+    #reality-orbit-prototype[data-touch-selected="true"] .orbit-hover-reticle {
+      display: none !important;
+    }
+  }
+
   #reality-orbit-prototype .orbit-detail {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -970,6 +999,26 @@
     gap: 0.5rem;
   }
 
+  #reality-orbit-prototype .orbit-save {
+    min-height: 2.75rem;
+    border-color: color-mix(in srgb, var(--map-color, #c99d69) 42%, rgba(164, 196, 218, 0.34));
+    color: #d8e5e8;
+    background: rgba(7, 19, 32, 0.62);
+  }
+
+  #reality-orbit-prototype .orbit-save:hover,
+  #reality-orbit-prototype .orbit-save:focus-visible,
+  #reality-orbit-prototype .orbit-save[aria-pressed="true"] {
+    border-color: color-mix(in srgb, var(--map-color, #c99d69) 78%, #eef6f8);
+    color: #fff6e8;
+    background: color-mix(in srgb, var(--map-color, #c99d69) 16%, rgba(7, 19, 32, 0.78));
+  }
+
+  #reality-orbit-prototype .orbit-save:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 70%, #eef7f9);
+    outline-offset: 3px;
+  }
+
   #reality-orbit-prototype .orbit-detail-visual,
   #reality-orbit-prototype .orbit-detail-action {
     flex: 1 1 11rem;
@@ -977,6 +1026,76 @@
 
   #reality-orbit-prototype .orbit-detail-visual[hidden] {
     display: none !important;
+  }
+
+  #reality-orbit-prototype .orbit-saved {
+    margin: 0.65rem 0 0;
+    border: 1px solid rgba(164, 196, 218, 0.16);
+    border-radius: 0.85rem;
+    background: rgba(4, 13, 23, 0.6);
+  }
+
+  #reality-orbit-prototype .orbit-saved-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.85rem;
+    color: #d7e4e8;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 650;
+    list-style: none;
+  }
+
+  #reality-orbit-prototype .orbit-saved-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #reality-orbit-prototype .orbit-saved-summary:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 70%, #eef7f9);
+    outline-offset: -3px;
+  }
+
+  #reality-orbit-prototype .orbit-saved-count {
+    display: inline-grid;
+    min-width: 1.45rem;
+    min-height: 1.45rem;
+    place-items: center;
+    padding-inline: 0.35rem;
+    color: #07111f;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--map-color, #c99d69) 68%, #f0f5f6);
+    font-size: 0.68rem;
+  }
+
+  #reality-orbit-prototype .orbit-saved-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0 0.85rem 0.8rem;
+  }
+
+  #reality-orbit-prototype .orbit-saved-list button {
+    min-height: 2.35rem;
+    padding: 0.45rem 0.7rem;
+    color: #cbd9dd;
+    border: 1px solid rgba(164, 196, 218, 0.22);
+    border-radius: 999px;
+    background: rgba(9, 24, 39, 0.76);
+    cursor: pointer;
+  }
+
+  #reality-orbit-prototype .orbit-saved-list button:hover,
+  #reality-orbit-prototype .orbit-saved-list button:focus-visible {
+    color: #fff6e8;
+    border-color: color-mix(in srgb, var(--map-color, #c99d69) 68%, #eef6f8);
+  }
+
+  #reality-orbit-prototype .orbit-saved-list button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 70%, #eef7f9);
+    outline-offset: 2px;
   }
 
   #reality-orbit-prototype .concept-visual-dialog {
@@ -1739,6 +1858,13 @@
       padding: 0.55rem 0.6rem;
     }
 
+    #reality-orbit-prototype .orbit-how-to {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      min-width: 0;
+      font-size: 0.64rem;
+    }
+
     #reality-orbit-prototype .orbit-path {
       grid-column: 2;
       grid-row: 1;
@@ -1764,6 +1890,16 @@
       order: 3;
       width: 100%;
       flex-basis: 100%;
+    }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-saved {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      justify-self: stretch;
+    }
+
+    #reality-orbit-prototype .orbit-toolbar .orbit-saved-summary {
+      min-height: 2.5rem;
     }
 
     #reality-orbit-prototype .orbit-actions .orbit-action {
@@ -1874,9 +2010,20 @@
         <div class="orbit-toolbar">
           <button class="btn btn-ghost orbit-back" type="button" data-orbit-back hidden aria-label="Return to the previous orbit">← Back</button>
           <div class="orbit-path text-small" data-orbit-path aria-label="Current ontology path"></div>
+          <p class="orbit-how-to" data-orbit-how-to>
+            <strong>How to use</strong>
+            <span>Choose a lens, select a node, then Explore to move from the whole to the detail.</span>
+          </p>
           <div class="orbit-actions" data-orbit-actions hidden>
             <button class="btn btn-primary orbit-action" type="button" data-explore-action>Explore concept</button>
           </div>
+          <details class="orbit-saved" data-saved-concepts hidden>
+            <summary class="orbit-saved-summary">
+              <span>Saved concepts</span>
+              <span class="orbit-saved-count" data-saved-count>0</span>
+            </summary>
+            <div class="orbit-saved-list" data-saved-list aria-label="Saved concepts"></div>
+          </details>
         </div>
         <div class="orbit-stage">
           <div class="orbit-cosmic-scenery" aria-hidden="true"></div>
@@ -1909,8 +2056,8 @@
             </footer>
           </article>
         </div>
-        <div class="orbit-detail">
-          <p class="orbit-status text-small" aria-live="polite">
+          <div class="orbit-detail">
+          <p class="orbit-status text-small" role="status" aria-live="polite" aria-atomic="true">
             <span class="orbit-status-heading">
               <strong data-selected-label>Reality</strong>
               <span class="viz-badge orbit-role" data-selected-role>Root concept</span>
@@ -1918,6 +2065,7 @@
             <span class="orbit-summary" data-selected-summary>The organising reference point for exploring reality through five complementary dimensions.</span>
           </p>
           <div class="orbit-detail-actions">
+            <button class="btn orbit-save" type="button" data-save-concept aria-pressed="false">☆ Save concept</button>
             <button class="btn orbit-detail-visual" type="button" data-open-concept-visual hidden>Play visual</button>
             <div class="orbit-detail-action" data-orbit-detail-action hidden>
               <button class="btn btn-primary orbit-context-explore" type="button" data-context-explore-action>Explore concept</button>
@@ -2057,8 +2205,40 @@
           "Common confusion": "These areas are not isolated causes. Evolutionary psychology is a cross-cutting explanatory approach that can investigate topics across the other areas, so its retained path should not be mistaken for a mutually exclusive process category.",
         },
       },
-      cognition: { id: "cognition", label: "Cognition", summary: "The mental processes used to perceive, remember, learn, reason, and decide.", canonicalPath: ["Reality", "Domain", "Psychological", "Cognition"], children: ["decision-process"] },
+      cognition: { id: "cognition", label: "Cognition", summary: "The mental processes used to perceive, remember, learn, reason, and decide.", canonicalPath: ["Reality", "Domain", "Psychological", "Cognition"], children: ["decision-process", "reasoning"] },
       "decision-process": { id: "decision-process", label: "Decision process", summary: "A sequence in which an agent interprets information, weighs options, and commits to an action.", canonicalPath: ["Reality", "Domain", "Psychological", "Cognition", "Decision process"] },
+      reasoning: {
+        id: "reasoning",
+        label: "Reasoning",
+        summary: "The process of transforming information, evidence, and premises into conclusions, explanations, or justified actions.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Cognition", "Reasoning"],
+        expansionPolicy: "curated-level-five",
+        children: ["inference"],
+        anatomy: {
+          "Purpose": "Use Reasoning to examine how an agent moves from what is known or assumed toward a conclusion, explanation, or justified action.",
+          "Governing question": "How does the available information support the conclusion, and which assumptions connect the two?",
+          "First principles": "A conclusion is only as strong as its premises, evidence, definitions, inference steps, and treatment of uncertainty.",
+          "Mental model": "A chain of justified moves: inputs are selected, related, tested, and converted into a conclusion that can be challenged.",
+          "Scope": "Reasoning covers cognitive processes for forming and evaluating conclusions; it is distinct from the decision that may follow and from the knowledge artifact that records the result.",
+          "How to use it": "State the question, separate evidence from assumptions, make the inference step explicit, test alternatives, and calibrate confidence to the evidence.",
+          "Common confusion": "Reasoning is not the same as certainty, intelligence, or opinion; a coherent chain can still begin with weak evidence or invalid assumptions.",
+        },
+      },
+      inference: {
+        id: "inference",
+        label: "Inference",
+        summary: "The act of deriving a conclusion from premises, observations, or evidence, with a stated level of uncertainty.",
+        canonicalPath: ["Reality", "Domain", "Psychological", "Cognition", "Reasoning", "Inference"],
+        pareto: {
+          Definition: "The act of deriving a conclusion from premises, observations, or evidence, with a stated level of uncertainty.",
+          Mechanism: "Select relevant premises, apply an explicit or implicit rule, compare alternative explanations, and produce a conclusion whose confidence depends on the support and uncertainty.",
+          "Applies when": "Use Inference when something must be concluded from incomplete, indirect, or connected information rather than directly observed as a fact.",
+          "Breaks when": "It breaks when the premises are false, the rule does not fit the case, important alternatives are ignored, or confidence is presented as certainty.",
+          Example: "A clinician infers that an infection is more likely after combining symptoms, test results, history, and competing explanations.",
+          Counterexample: "Repeating an observation without deriving or testing a conclusion is evidence gathering, not inference.",
+          "Decision rule": "Name the premises, the inference rule, the strongest alternative, and the uncertainty before relying on the conclusion.",
+        },
+      },
       emotion: {
         id: "emotion",
         label: "Emotion",
@@ -3152,6 +3332,7 @@
       Perspective: "#9182a4",
     };
     const destinationLayouts = {
+      2: [[27, 31], [73, 31]],
       5: [[50, 15], [17, 35], [82, 30], [25, 77], [73, 80]],
       6: [[46, 14], [16, 34], [80, 27], [19, 72], [50, 84], [81, 69]],
       7: [[50, 13], [18, 25], [80, 22], [14, 55], [84, 52], [28, 82], [70, 82]],
@@ -3197,6 +3378,13 @@
     const understandMoreSummary = root.querySelector("[data-understand-more-summary]");
     const understandFields = root.querySelector("[data-understand-fields]");
     const shootingStars = root.querySelector("[data-shooting-stars]");
+    const saveConceptButton = root.querySelector("[data-save-concept]");
+    const savedConcepts = root.querySelector("[data-saved-concepts]");
+    const savedCount = root.querySelector("[data-saved-count]");
+    const savedList = root.querySelector("[data-saved-list]");
+    let conceptVisualTrigger = null;
+    let orbitalCursorSuppressedUntil = 0;
+    let touchInteraction = false;
 
     const shootingStarLayout = [
       [12, 18, 5.2, 28, -16],
@@ -3224,11 +3412,130 @@
     const defaultOntologyLevel = 4;
     const terminalOntologyLevel = 5;
     const curatedLevelFivePolicy = "curated-level-five";
-    const history = ["reality"];
+    const navigationStorageKey = "reality-orbit:navigation-history";
+    const selectionStorageKey = "reality-orbit:selected-node";
+    let selectionSyncReady = false;
+    const readNavigationHistory = () => {
+      try {
+        const storedHistory = JSON.parse(window.sessionStorage.getItem(navigationStorageKey) ?? "null");
+        if (!Array.isArray(storedHistory)) return ["reality"];
+        const restoredHistory = storedHistory.reduce((path, nodeId) => {
+          if (typeof nodeId !== "string" || !ontology[nodeId]) return path;
+          if (path.length === 0 && nodeId !== "reality") return path;
+          const parent = ontology[path.at(-1)];
+          if (path.length > 0 && !parent?.children?.includes(nodeId)) return path;
+          path.push(nodeId);
+          return path;
+        }, []);
+        return restoredHistory.length > 0 ? restoredHistory : ["reality"];
+      } catch {
+        return ["reality"];
+      }
+    };
+    const history = readNavigationHistory();
+    const savedConceptStorageKey = "reality-orbit:saved-concepts";
+    const savedConceptIds = new Set();
     let selectedId = "reality";
+    try {
+      const storedSelection = window.sessionStorage.getItem(selectionStorageKey);
+      if (storedSelection && ontology[storedSelection]) selectedId = storedSelection;
+    } catch {
+      // Session storage is an enhancement; the map remains usable when storage is unavailable.
+    }
+
+    try {
+      const storedConcepts = JSON.parse(window.localStorage.getItem(savedConceptStorageKey) ?? "[]");
+      if (Array.isArray(storedConcepts)) {
+        storedConcepts
+          .filter((id) => typeof id === "string" && ontology[id])
+          .forEach((id) => savedConceptIds.add(id));
+      }
+    } catch {
+      // Saving is an enhancement; the map remains usable when storage is unavailable.
+    }
 
     const currentId = () => history[history.length - 1];
     const currentNode = () => ontology[currentId()];
+    const canonicalPathIds = (nodeId) => {
+      const labels = ontology[nodeId]?.canonicalPath ?? [];
+      return labels
+        .map((_, index) => labels.slice(0, index + 1).join("/"))
+        .map((path) => Object.values(ontology).find((node) => node.canonicalPath.join("/") === path)?.id)
+        .filter(Boolean);
+    };
+
+    const persistNavigation = () => {
+      try {
+        window.sessionStorage.setItem(navigationStorageKey, JSON.stringify(history));
+      } catch {
+        // Session storage is an enhancement; navigation must still work when storage is unavailable.
+      }
+      if (selectionSyncReady && window.parent !== window) {
+        window.parent.postMessage({ type: "reality-orbit:navigation", path: [...history] }, "*");
+      }
+    };
+
+    const persistSelection = (nodeId) => {
+      try {
+        window.sessionStorage.setItem(selectionStorageKey, nodeId);
+      } catch {
+        // Session storage is an enhancement; selection must still work when storage is unavailable.
+      }
+      if (selectionSyncReady && window.parent !== window) {
+        window.parent.postMessage({ type: "reality-orbit:selected-node", nodeId }, "*");
+      }
+    };
+
+    const persistSavedConcepts = () => {
+      try {
+        window.localStorage.setItem(savedConceptStorageKey, JSON.stringify([...savedConceptIds]));
+      } catch {
+        // Storage can be blocked by privacy settings without affecting navigation.
+      }
+    };
+
+    const renderSavedConcepts = () => {
+      const nodes = [...savedConceptIds].map((id) => ontology[id]).filter(Boolean);
+      savedConcepts.hidden = nodes.length === 0;
+      savedConcepts.open = nodes.length > 0;
+      savedCount.textContent = String(nodes.length);
+      savedList.replaceChildren(...nodes.map((node) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.savedNodeId = node.id;
+        button.textContent = node.label;
+        button.setAttribute("aria-label", `Open saved concept ${node.label}`);
+        button.addEventListener("click", () => {
+          const targetPath = node.canonicalPath;
+          const nextHistory = targetPath.map((_, index) => {
+            const path = targetPath.slice(0, index + 1);
+            return Object.values(ontology).find((candidate) => candidate.canonicalPath.join("/") === path.join("/"))?.id;
+          }).filter(Boolean);
+          history.splice(0, history.length, ...nextHistory);
+          persistNavigation();
+          renderOrbit();
+          setSelectedNode(node.id, { revealMobileContent: true });
+          savedConcepts.open = false;
+        });
+        return button;
+      }));
+    };
+
+    const updateSavedConcept = (node) => {
+      const isSaved = savedConceptIds.has(node.id);
+      saveConceptButton.setAttribute("aria-pressed", String(isSaved));
+      saveConceptButton.textContent = isSaved ? "★ Saved concept" : "☆ Save concept";
+      saveConceptButton.setAttribute("aria-label", isSaved ? `Remove ${node.label} from saved concepts` : `Save ${node.label} for later`);
+    };
+
+    const toggleSavedConcept = () => {
+      const node = ontology[selectedId];
+      if (savedConceptIds.has(node.id)) savedConceptIds.delete(node.id);
+      else savedConceptIds.add(node.id);
+      persistSavedConcepts();
+      updateSavedConcept(node);
+      renderSavedConcepts();
+    };
     const ontologyLevel = (node) => node.canonicalPath.length - 1;
     const nodeColor = (node) => dimensionColors[node.canonicalPath[1]] ?? "#c99d69";
     const cosmicSceneForNode = (node) => node.id === "reality" ? "reality" : (node.canonicalPath[1] ?? "Reality").toLowerCase();
@@ -3895,6 +4202,10 @@
     const hideOrbitalCursor = (linger = 0) => {
       if (orbitalCursorHideTimer) window.clearTimeout(orbitalCursorHideTimer);
       orbitHoverReticle.dataset.visible = "false";
+      if (typeof isCompactViewport === "function" && isCompactViewport()) {
+        orbitHoverReticle.hidden = true;
+        return;
+      }
       orbitalCursorHideTimer = window.setTimeout(() => {
         orbitHoverReticle.hidden = true;
       }, linger + 140);
@@ -4009,6 +4320,7 @@
       ]);
       const remaining = entries.filter(([label]) => !hiddenLegacyFields.has(label));
 
+      persistSelection(node.id);
       understandView.dataset.selectedNode = node.id;
       understandView.dataset.selectedRole = role.toLowerCase().replaceAll(" ", "-");
       understandEyebrow.textContent = summaryTitleForNode(node, role);
@@ -4140,6 +4452,7 @@
     const openConceptVisual = () => {
       const node = ontology[selectedId];
       if (!node || !canPlayVisualForNode(node)) return;
+      conceptVisualTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       renderConceptVisual(node);
       if (!conceptVisualDialog.open) {
         if (typeof conceptVisualDialog.showModal === "function") conceptVisualDialog.showModal();
@@ -4148,14 +4461,28 @@
       requestAnimationFrame(playConceptVisual);
     };
 
+    const restoreConceptVisualFocus = () => {
+      const trigger = conceptVisualTrigger;
+      conceptVisualTrigger = null;
+      if (!trigger?.isConnected) return;
+      requestAnimationFrame(() => trigger.focus({ preventScroll: true }));
+    };
+
     const closeConceptVisual = () => {
       if (typeof conceptVisualDialog.close === "function") conceptVisualDialog.close();
-      else conceptVisualDialog.removeAttribute("open");
+      else {
+        conceptVisualDialog.removeAttribute("open");
+        restoreConceptVisualFocus();
+      }
     };
+
+    conceptVisualDialog.addEventListener("close", restoreConceptVisualFocus);
 
     const setSelectedNode = (nodeId, { revealMobileContent = false } = {}) => {
       resetOrbitPreview();
       hideOrbitalCursor();
+      orbitalCursorSuppressedUntil = performance.now() + 220;
+      root.dataset.touchSelected = "true";
       selectedId = nodeId;
       const node = ontology[nodeId];
       // Keep the entry map anchored to Reality; a lens scene is revealed only after Explore.
@@ -4170,6 +4497,7 @@
       selectedRole.textContent = context.role;
       selectedRole.hidden = context.role === "Dimension";
       selectedSummary.textContent = context.explanation;
+      updateSavedConcept(node);
       const canPlayVisual = canPlayVisualForNode(node);
       openConceptVisualButton.hidden = !canPlayVisual;
       openConceptVisualButton.disabled = !canPlayVisual;
@@ -4202,9 +4530,46 @@
 
     window.addEventListener("message", (event) => {
       if (event.source !== window.parent) return;
-      if (event.data?.type !== "reality-orbit:select-node") return;
+      if (![
+        "reality-orbit:select-node",
+        "reality-orbit:restore-node",
+        "reality-orbit:restore-navigation",
+      ].includes(event.data?.type)) return;
+      if (event.data.type === "reality-orbit:restore-navigation") {
+        const restoredPath = Array.isArray(event.data.path)
+          ? event.data.path.reduce((path, nodeId) => {
+            if (typeof nodeId !== "string" || !ontology[nodeId]) return path;
+            if (path.length === 0 && nodeId !== "reality") return path;
+            const parent = ontology[path.at(-1)];
+            if (path.length > 0 && !parent?.children?.includes(nodeId)) return path;
+            path.push(nodeId);
+            return path;
+          }, [])
+          : [];
+        const selectedPath = typeof event.data.selectedNodeId === "string"
+          ? canonicalPathIds(event.data.selectedNodeId)
+          : [];
+        const resolvedPath = restoredPath.length === event.data.path?.length
+          ? restoredPath
+          : selectedPath;
+        if (resolvedPath.length === 0) return;
+        history.splice(0, history.length, ...resolvedPath);
+        if (typeof event.data.selectedNodeId === "string" && ontology[event.data.selectedNodeId]) {
+          selectedId = event.data.selectedNodeId;
+        }
+        persistNavigation();
+        renderOrbit();
+        return;
+      }
       const requestedNode = ontology[event.data.nodeId];
       if (!requestedNode) return;
+      if (event.data.type === "reality-orbit:restore-node") {
+        const parent = currentNode();
+        if (requestedNode.id === parent.id || parent.children?.includes(requestedNode.id)) {
+          setSelectedNode(requestedNode.id, { revealMobileContent: true });
+        }
+        return;
+      }
       if (requestedNode.id !== currentId() && canExploreNode(requestedNode)) {
         exploreSelectedNode(requestedNode.id, { revealMap: true });
       } else {
@@ -4214,6 +4579,7 @@
 
     const renderOrbit = () => {
       const parent = currentNode();
+      const preferredSelectedId = selectedId;
       const positions = positionChildren(parent);
       resetOrbitPreview();
       root.style.setProperty("--map-color", nodeColor(parent));
@@ -4268,20 +4634,39 @@
       });
       nodesLayer.appendChild(centreButton);
       setSelectedNode(parent.id);
+      const preferredNode = ontology[preferredSelectedId];
+      if (preferredNode && (preferredSelectedId === parent.id || parent.children?.includes(preferredSelectedId))) {
+        setSelectedNode(preferredSelectedId);
+      }
     };
 
     function exploreSelectedNode(nodeId = selectedId, { revealMap = false } = {}) {
       const node = ontology[nodeId];
       if (!node || node.id === currentId() || !canExploreNode(node)) return;
-      transitionOrbit(() => history.push(nodeId), { revealMap, direction: 1 });
+      transitionOrbit(() => {
+        const canonicalPath = canonicalPathIds(nodeId);
+        history.splice(0, history.length, ...(canonicalPath.length > 0 ? canonicalPath : [...history, nodeId]));
+        persistNavigation();
+      }, { revealMap, direction: 1 });
     }
+
+    const focusOrbitNode = (nodeId) => {
+      const button = [...root.querySelectorAll("[data-node-id]")]
+        .find((candidate) => candidate.dataset.nodeId === nodeId);
+      button?.focus({ preventScroll: true });
+    };
 
     const transitionOrbit = (commitNavigation, { revealMap = false, direction = 1 } = {}) => {
       if (root.dataset.cameraState !== "idle") return;
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const activeElement = document.activeElement;
+      const restoreFocus = activeElement instanceof HTMLElement
+        && root.contains(activeElement)
+        && activeElement.matches("[data-explore-action], [data-context-explore-action], [data-orbit-back]");
       const completeNavigation = () => {
         commitNavigation();
         renderOrbit();
+        if (restoreFocus) focusOrbitNode(currentId());
         if (revealMap) revealOrbitMap();
       };
 
@@ -4295,6 +4680,7 @@
       window.setTimeout(() => {
         commitNavigation();
         renderOrbit();
+        if (restoreFocus) focusOrbitNode(currentId());
         root.dataset.cameraState = "arriving";
         requestAnimationFrame(() => {
           root.dataset.cameraState = "idle";
@@ -4303,6 +4689,7 @@
       }, 220);
     };
 
+    saveConceptButton.addEventListener("click", toggleSavedConcept);
     exploreButton.addEventListener("click", () => exploreSelectedNode(selectedId));
     contextExploreButton.addEventListener("click", () => exploreSelectedNode(selectedId, { revealMap: true }));
     openConceptVisualButton.addEventListener("click", openConceptVisual);
@@ -4313,20 +4700,56 @@
     });
 
     backButton.addEventListener("click", () => {
-      if (history.length > 1) transitionOrbit(() => history.pop(), { direction: -1 });
+      if (history.length > 1) {
+        transitionOrbit(() => {
+          history.pop();
+          persistNavigation();
+        }, { direction: -1 });
+      }
     });
 
-    root.addEventListener("mousemove", showOrbitalCursor);
+    let orbitalCursorFrame = 0;
+    let orbitalCursorEvent = null;
+    const isCompactViewport = () => {
+      const parentViewportWidth = window.parent === window ? window.innerWidth : window.parent.innerWidth;
+      return Math.min(window.innerWidth, parentViewportWidth) <= 980;
+    };
+    const scheduleOrbitalCursor = (event) => {
+      if (isCompactViewport()
+        || window.matchMedia("(max-width: 980px)").matches
+        || window.matchMedia("(hover: none) and (pointer: coarse)").matches
+        || touchInteraction
+        || performance.now() < orbitalCursorSuppressedUntil) {
+        hideOrbitalCursor();
+        return;
+      }
+      orbitalCursorEvent = event;
+      if (orbitalCursorFrame) return;
+      orbitalCursorFrame = requestAnimationFrame(() => {
+        orbitalCursorFrame = 0;
+        if (orbitalCursorEvent) showOrbitalCursor(orbitalCursorEvent);
+      });
+    };
+
+    root.addEventListener("mousemove", scheduleOrbitalCursor);
     root.addEventListener("pointermove", (event) => {
-      if (event.pointerType !== "mouse") showOrbitalCursor(event);
+      if (event.pointerType !== "mouse") scheduleOrbitalCursor(event);
     });
-    root.addEventListener("pointerdown", showOrbitalCursor);
+    root.addEventListener("pointerdown", (event) => {
+      touchInteraction = event.pointerType === "touch";
+      if (touchInteraction) root.dataset.touchSelected = "false";
+      if (!isCompactViewport() || touchInteraction) showOrbitalCursor(event);
+      else hideOrbitalCursor();
+    });
     root.addEventListener("mouseleave", () => hideOrbitalCursor());
     root.addEventListener("pointerleave", (event) => {
       if (event.pointerType !== "touch") hideOrbitalCursor();
     });
     root.addEventListener("pointerup", (event) => {
-      if (event.pointerType === "touch") hideOrbitalCursor();
+      if (event.pointerType === "touch") {
+        orbitalCursorSuppressedUntil = performance.now() + 500;
+        hideOrbitalCursor();
+      }
     });
     root.addEventListener("pointercancel", () => hideOrbitalCursor());
     window.addEventListener("blur", () => hideOrbitalCursor());
@@ -4339,6 +4762,9 @@
     root.dataset.defaultOntologyLevel = String(defaultOntologyLevel);
     root.dataset.cameraState = "idle";
     validateOntology();
+    renderSavedConcepts();
+    persistNavigation();
     renderOrbit();
+    selectionSyncReady = true;
   })();
 </script>

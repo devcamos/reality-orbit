@@ -3,6 +3,8 @@ import { memo, useEffect, useRef, useState, type ReactElement } from "react";
 interface RealityOrbitFrameProps {
   orbitDocument: string;
   requestedNodeId?: string;
+  requestedPath?: string[];
+  requestMode?: "restore" | "select";
 }
 
 type FrameStatus = "loading" | "ready" | "error";
@@ -10,6 +12,8 @@ type FrameStatus = "loading" | "ready" | "error";
 export const RealityOrbitFrame = memo(function RealityOrbitFrame({
   orbitDocument,
   requestedNodeId,
+  requestedPath,
+  requestMode = "restore",
 }: RealityOrbitFrameProps): ReactElement {
   const [frameStatus, setFrameStatus] = useState<FrameStatus>("loading");
   const [frameVersion, setFrameVersion] = useState(0);
@@ -17,15 +21,23 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
 
   const requestNodeSelection = (): void => {
     if (!requestedNodeId || !frameRef.current?.contentWindow) return;
+    if (requestMode === "restore" && (requestedPath?.length ?? 0) > 1) {
+      frameRef.current.contentWindow.postMessage({
+        type: "reality-orbit:restore-navigation",
+        path: requestedPath,
+        selectedNodeId: requestedNodeId,
+      }, window.location.origin);
+      return;
+    }
     frameRef.current.contentWindow.postMessage({
-      type: "reality-orbit:select-node",
+      type: requestMode === "select" ? "reality-orbit:select-node" : "reality-orbit:restore-node",
       nodeId: requestedNodeId,
     }, window.location.origin);
   };
 
   useEffect(() => {
     if (frameStatus === "ready") requestNodeSelection();
-  }, [frameStatus, requestedNodeId]);
+  }, [frameStatus, requestedNodeId, requestedPath, requestMode]);
 
   const reloadFrame = (): void => {
     setFrameStatus("loading");
@@ -33,7 +45,14 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
   };
 
   return (
-    <section className="orbit-frame-shell" aria-label="Reality Orbit observatory">
+    <section
+      className="orbit-frame-shell"
+      aria-busy={frameStatus === "loading"}
+      aria-label="Reality Orbit observatory"
+    >
+      <p id="orbit-frame-instructions" className="visually-hidden">
+        Interactive ontology map. Use Tab to move between concepts, Enter to select a concept, and the Explore action to enter it.
+      </p>
       {frameStatus === "loading" && (
         <output className="orbit-frame-status" aria-live="polite">
           Aligning the observatory…
@@ -59,6 +78,7 @@ export const RealityOrbitFrame = memo(function RealityOrbitFrame({
         referrerPolicy="no-referrer"
         sandbox="allow-scripts allow-same-origin"
         srcDoc={orbitDocument}
+        aria-describedby="orbit-frame-instructions"
         title="Reality Orbit"
       />
     </section>

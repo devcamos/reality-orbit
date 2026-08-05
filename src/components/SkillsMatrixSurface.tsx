@@ -8,22 +8,36 @@ interface SkillsMatrixSurfaceProps {
 const areas = ["All areas", ...new Set(skillSignals.map((skill) => skill.area))];
 
 const pointOffsets: Record<string, readonly [number, number]> = {
-  "systems-thinking": [2.8, 3.6],
-  "first-principles": [-2.8, -3.6],
-  "decision-making": [1.6, 2.4],
-  "clear-communication": [-1.6, -2.4],
-  "learning-loops": [0.8, 1.6],
-  "ethical-judgement": [-0.8, -1.6],
-  "attention-allocation": [0.7, 1.2],
-  "operating-systems": [-0.7, -1.2],
+  "systems-thinking": [4, 8],
+  "first-principles": [-10, 4],
+  "decision-making": [8, -8],
+  "clear-communication": [-8, -10],
+  "learning-loops": [12, 8],
+  "ethical-judgement": [-6, -4],
+  "attention-allocation": [2, -10],
+  "operating-systems": [10, -4],
 };
 
-const clampPercent = (value: number): number => Math.min(94, Math.max(6, value));
+const clampPercent = (value: number, high: boolean): number => high
+  ? Math.min(94, Math.max(56, value))
+  : Math.min(44, Math.max(6, value));
+
+const pointPosition = (skill: SkillSignal): { left: number; bottom: number; quadrant: string } => {
+  const highValue = skill.value >= 0.5;
+  const highEvidence = skill.evidenceQuality >= 0.5;
+  const [xOffset, yOffset] = pointOffsets[skill.id] ?? [0, 0];
+
+  return {
+    left: clampPercent(skill.value * 100 + xOffset, highValue),
+    bottom: clampPercent(skill.evidenceQuality * 100 + yOffset, highEvidence),
+    quadrant: `${highEvidence ? "high" : "low"}-evidence-${highValue ? "high" : "low"}-value`,
+  };
+};
 
 const pointStyle = (skill: SkillSignal): CSSProperties => ({
-  "--skill-left": `${clampPercent(skill.value * 100 + (pointOffsets[skill.id]?.[0] ?? 0))}%`,
-  "--skill-bottom": `${clampPercent(skill.evidenceQuality * 100 + (pointOffsets[skill.id]?.[1] ?? 0))}%`,
-  "--skill-size": `${2.1 + skill.impact * 1.7}rem`,
+  "--skill-left": `${pointPosition(skill).left}%`,
+  "--skill-bottom": `${pointPosition(skill).bottom}%`,
+  "--skill-size": `${2.1 + skill.impact * 1.1}rem`,
 } as CSSProperties);
 
 export function SkillsMatrixSurface({ onExploreNode }: SkillsMatrixSurfaceProps): ReactElement {
@@ -55,8 +69,7 @@ export function SkillsMatrixSurface({ onExploreNode }: SkillsMatrixSurfaceProps)
         </div>
 
         <div className="skills-layout">
-          <fieldset className="skills-matrix">
-            <legend className="visually-hidden">Skills plotted by outcome value and evidence quality</legend>
+          <div className="skills-matrix" role="group" aria-label="Skills plotted by outcome value and evidence quality">
             <div className="skills-matrix__quadrant skills-matrix__quadrant--high">High evidence<br />High value</div>
             <div className="skills-matrix__quadrant skills-matrix__quadrant--low">Low evidence<br />Low value</div>
             <div className="skills-matrix__mobile-axis" aria-hidden="true">Evidence quality ↑</div>
@@ -70,6 +83,7 @@ export function SkillsMatrixSurface({ onExploreNode }: SkillsMatrixSurfaceProps)
                   style={pointStyle(skill)}
                   type="button"
                   data-skill-id={skill.id}
+                  data-quadrant={pointPosition(skill).quadrant}
                   aria-label={`${skill.name}. ${skill.area}. Evidence quality ${Math.round(skill.evidenceQuality * 100)} percent. Outcome value ${Math.round(skill.value * 100)} percent.`}
                   aria-pressed={selectedId === skill.id}
                   onClick={() => setSelectedId(skill.id)}
@@ -78,7 +92,7 @@ export function SkillsMatrixSurface({ onExploreNode }: SkillsMatrixSurfaceProps)
                 </button>
               ))}
             </div>
-          </fieldset>
+          </div>
 
           <div className="skills-mobile-list" aria-label="Skills list">
             {visibleSkills.map((skill) => (

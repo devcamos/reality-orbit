@@ -45,6 +45,34 @@ button {
   white-space: nowrap;
 }
 
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.7rem 1rem;
+  color: #07111f;
+  border: 2px solid #f0d2a6;
+  border-radius: 999px;
+  background: #f5e4c8;
+  box-shadow: 0 0.6rem 1.6rem rgb(0 0 0 / 28%);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transform: translateY(-150%);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+#main-content:focus,
+#app-content:focus {
+  outline: 0;
+}
+
 .app-shell,
 .orbit-frame-shell {
   min-height: 100dvh;
@@ -407,6 +435,7 @@ button {
 
 .skills-matrix {
   position: relative;
+  isolation: isolate;
   min-inline-size: 0;
   margin: 0;
   min-height: clamp(25rem, 55vw, 37rem);
@@ -431,19 +460,23 @@ button {
 
 .skills-matrix::before {
   inset: 16% 0 16%;
+  z-index: 0;
   background: linear-gradient(90deg, rgb(145 105 154 / 8%), transparent 48%, rgb(111 159 154 / 12%));
 }
 
 .skills-matrix::after {
   inset: 0;
+  z-index: 0;
   background: radial-gradient(circle at 50% 50%, transparent 35%, rgb(2 6 13 / 28%) 100%);
 }
 
 .skills-matrix__plot {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 2.6rem;
+  right: 2.8rem;
+  left: 3.5rem;
+  height: calc(clamp(25rem, 55vw, 37rem) - 5.3rem);
+  z-index: 4;
 }
 
 .skills-matrix__axis {
@@ -492,6 +525,7 @@ button {
 
 .skills-point {
   position: absolute;
+  z-index: 3;
   top: calc(100% - var(--skill-bottom));
   left: var(--skill-left);
   display: grid;
@@ -526,6 +560,36 @@ button {
 .skills-point:focus-visible {
   outline: 2px solid #f0d1a3;
   outline-offset: 3px;
+}
+
+.skills-point span {
+  position: absolute;
+  bottom: calc(100% + 0.35rem);
+  left: 50%;
+  z-index: 5;
+  min-width: max-content;
+  max-width: 12rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgb(159 196 214 / 28%);
+  border-radius: 0.45rem;
+  color: #eef6f8;
+  background: rgb(3 12 22 / 94%);
+  box-shadow: 0 0.45rem 1.2rem rgb(0 0 0 / 24%);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 0.3rem);
+  transition: opacity 160ms ease, transform 160ms ease;
+  white-space: normal;
+}
+
+.skills-point:hover span,
+.skills-point:focus-visible span,
+.skills-point--selected span {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
 .skills-detail {
@@ -1448,6 +1512,10 @@ button {
     min-height: 28rem;
   }
 
+  .skills-matrix__plot {
+    height: calc(28rem - 5.3rem);
+  }
+
   /* On touch screens the matrix remains a map, while names move into a readable list below. */
   .skills-point {
     width: 2.25rem;
@@ -1606,6 +1674,13 @@ button {
     font-size: 0.58rem;
   }
 
+  .skills-matrix__plot {
+    top: 2.6rem;
+    right: 1.75rem;
+    left: 2.6rem;
+    height: calc(24rem - 5.3rem);
+  }
+
   .skills-matrix__axis--y {
     left: 0.45rem;
     font-size: 0.58rem;
@@ -1653,6 +1728,10 @@ button {
   }
 
   .observatory-intro__enter {
+    transition: none;
+  }
+
+  .skip-link {
     transition: none;
   }
 

@@ -76,10 +76,12 @@ export function ObservatoryIntroduction({
 
   return (
     <section
+      id="app-content"
       className="observatory-intro"
       style={style}
       aria-labelledby="observatory-intro-title"
       data-observatory-introduction
+      tabIndex={-1}
     >
       <div className="observatory-intro__shell">
         <header className="observatory-intro__header">
@@ -95,8 +97,8 @@ export function ObservatoryIntroduction({
         <div className="observatory-intro__opening">
           <h1 id="observatory-intro-title">Begin with Reality<span>.</span></h1>
           <p className="observatory-intro__lead">
-            The organising reference point for exploring reality through five
-            complementary dimensions.
+            Start with Reality. Use five lenses to see what a thing is, when it
+            changes, where it sits, and how different viewpoints shape it.
           </p>
         </div>
 
