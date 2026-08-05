@@ -139,7 +139,7 @@ test("app tabs expose content surfaces without losing the selected orbit node", 
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Scale");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Scale");
 
-  for (const tab of ["Skills", "Library", "About"]) {
+  for (const tab of ["Library", "About"]) {
     await page.getByRole("button", { name: tab, exact: true }).click();
     await expect(page.locator(`[data-content-surface="${tab.toLowerCase()}"]`)).toBeVisible();
     await expect(page.locator('iframe[title="Reality Orbit"]')).toBeHidden();
@@ -168,67 +168,10 @@ test("app tabs expose content surfaces without losing the selected orbit node", 
   }
 });
 
-test("the Skills matrix exposes evidence, value, and orbit context", async ({ page }) => {
+test("the Skills surface is not exposed in primary navigation", async ({ page }) => {
   await openOrbit(page);
-  await page.getByRole("button", { name: "Skills", exact: true }).click();
-  await expect(page.locator('[data-content-surface="skills"]')).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Skills matrix", exact: true })).toBeVisible();
-  await expect(page.locator("[data-skill-id]")).toHaveCount(8);
-  const quadrants = await page.locator("[data-skill-id]").evaluateAll((points) => Object.fromEntries(points.map((point) => [point.dataset.skillId, point.dataset.quadrant])));
-  expect(quadrants).toEqual({
-    "systems-thinking": "high-evidence-high-value",
-    "first-principles": "high-evidence-high-value",
-    "decision-making": "high-evidence-high-value",
-    "clear-communication": "high-evidence-high-value",
-    "learning-loops": "high-evidence-high-value",
-    "ethical-judgement": "high-evidence-high-value",
-    "attention-allocation": "high-evidence-high-value",
-    "operating-systems": "low-evidence-high-value",
-  });
-  const pointGeometry = await page.locator(".skills-matrix__plot").evaluate((plot) => {
-    const plotRect = plot.getBoundingClientRect();
-    return Object.fromEntries([...plot.querySelectorAll("[data-skill-id]")].map((point) => {
-      const rect = point.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      return [point.dataset.skillId, {
-        inside: centerX >= plotRect.left && centerX <= plotRect.right && centerY >= plotRect.top && centerY <= plotRect.bottom,
-        rightHalf: centerX > plotRect.left + plotRect.width / 2,
-        bottomHalf: centerY > plotRect.top + plotRect.height / 2,
-        expectedRightHalf: point.dataset.quadrant?.endsWith("high-value"),
-        expectedBottomHalf: point.dataset.quadrant?.startsWith("low-evidence"),
-      }];
-    }));
-  });
-  expect(Object.values(pointGeometry).every((point) => point.inside)).toBe(true);
-  expect(Object.values(pointGeometry).every((point) => point.rightHalf === point.expectedRightHalf && point.bottomHalf === point.expectedBottomHalf)).toBe(true);
-  await page.locator("[data-skill-id='systems-thinking']").click();
-  await expect(page.getByRole("heading", { name: "Systems thinking", exact: true })).toBeVisible();
-  await expect(page.getByText("Evidence quality").last()).toBeVisible();
-  await page.getByRole("button", { name: /Explore Systems thinking context/ }).click();
-  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(app(page).locator("[data-understand-title]")).toHaveText("Second-order thinking");
-
-  await page.getByRole("button", { name: "Skills", exact: true }).click();
-  for (const viewport of [
-    { width: 390, height: 844 },
-    { width: 768, height: 1024 },
-    { width: 1280, height: 900 },
-  ]) {
-    await page.setViewportSize(viewport);
-    const surface = page.locator('[data-content-surface="skills"]');
-    const layout = await surface.evaluate((element) => ({
-      horizontalOverflow: element.scrollWidth - element.clientWidth,
-      matrixVisible: Boolean(element.querySelector(".skills-matrix")),
-    }));
-    expect(layout.horizontalOverflow).toBeLessThanOrEqual(1);
-    expect(layout.matrixVisible).toBe(true);
-    if (viewport.width === 390) {
-      await expect(surface.locator(".skills-mobile-list")).toBeVisible();
-      await expect(surface.locator(".skills-mobile-list__item")).toHaveCount(8);
-      expect(await surface.locator(".skills-point span").first().evaluate((element) => getComputedStyle(element).display)).toBe("none");
-    }
-  }
+  await expect(page.getByRole("button", { name: "Skills", exact: true })).toHaveCount(0);
+  await expect(page.locator('[data-content-surface="skills"]')).toHaveCount(0);
 });
 
 test("a Field Note can return to its mapped Paradox node", async ({ page }) => {

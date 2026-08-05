@@ -1,7 +1,6 @@
 import type { ReactElement } from "react";
 import type { AppTab } from "./AppNavigation";
 import { FieldNotesSurface } from "./FieldNotesSurface";
-import { SkillsMatrixSurface } from "./SkillsMatrixSurface";
 
 interface ContentSurfaceProps {
   readonly tab: Exclude<AppTab, "home">;
@@ -14,12 +13,6 @@ const surfaceContent: Record<ContentSurfaceProps["tab"], {
   lead: string;
   sections: readonly { title: string; body: string }[];
 }> = {
-  skills: {
-    eyebrow: "Abilities in practice",
-    title: "Skills matrix",
-    lead: "Compare outcome value with the quality of the evidence behind each assessment.",
-    sections: [],
-  },
   "field-notes": {
     eyebrow: "Ideas in context",
     title: "Notes",
@@ -69,8 +62,6 @@ const surfaceContent: Record<ContentSurfaceProps["tab"], {
 
 export function ContentSurface({ tab, onExploreNode }: ContentSurfaceProps): ReactElement {
   if (tab === "field-notes") return <FieldNotesSurface onExploreNode={onExploreNode} />;
-  if (tab === "skills") return <SkillsMatrixSurface onExploreNode={onExploreNode} />;
-
   const content = surfaceContent[tab];
 
   return (

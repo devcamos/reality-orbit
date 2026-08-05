@@ -16,7 +16,7 @@ const hasEnteredThisSession = (): boolean => {
 const activeTabStorageKey = "reality-orbit-active-tab";
 const selectedNodeStorageKey = "reality-orbit:selected-node";
 const navigationStorageKey = "reality-orbit:navigation-history";
-const appTabs: readonly AppTab[] = ["home", "skills", "field-notes", "library", "about"];
+const appTabs: readonly AppTab[] = ["home", "field-notes", "library", "about"];
 
 const readActiveTab = (): AppTab => {
   try {

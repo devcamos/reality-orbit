@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 
-export type AppTab = "home" | "skills" | "field-notes" | "library" | "about";
+export type AppTab = "home" | "field-notes" | "library" | "about";
 
 interface AppNavigationProps {
   readonly activeTab: AppTab;
@@ -10,7 +10,6 @@ interface AppNavigationProps {
 const tabs: readonly { label: string; value: AppTab }[] = [
   { label: "About", value: "about" },
   { label: "Home", value: "home" },
-  { label: "Skills", value: "skills" },
   { label: "Notes", value: "field-notes" },
   { label: "Library", value: "library" },
 ];
