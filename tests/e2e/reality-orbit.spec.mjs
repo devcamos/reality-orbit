@@ -492,6 +492,9 @@ test("Concept Anatomy sections remain readable across mobile, tablet, and deskto
       const items = [...view.querySelectorAll(".understand-anatomy-item")];
       return {
         horizontalOverflow: view.scrollWidth - view.clientWidth,
+        overflowY: getComputedStyle(view).overflowY,
+        clientHeight: view.clientHeight,
+        scrollHeight: view.scrollHeight,
         sections: sections.length,
         items: items.length,
         itemsAligned: items.every((item) => {
@@ -513,7 +516,41 @@ test("Concept Anatomy sections remain readable across mobile, tablet, and deskto
     expect(anatomyLayout.items, viewport.name).toBe(7);
     expect(anatomyLayout.itemsAligned, viewport.name).toBe(true);
     expect(anatomyLayout.misplaced, viewport.name).toEqual([]);
+    if (viewport.name === "desktop") {
+      expect(anatomyLayout.overflowY, viewport.name).toBe("auto");
+      expect(anatomyLayout.scrollHeight, viewport.name).toBeGreaterThan(anatomyLayout.clientHeight);
+    } else {
+      expect(anatomyLayout.overflowY, viewport.name).toBe("visible");
+    }
   }
+});
+
+test("desktop keeps the orbit visible while Concept Anatomy scrolls independently", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await openOrbit(page);
+  await node(page, "time").click();
+
+  const layout = await app(page).locator("#reality-orbit-prototype").evaluate((root) => {
+    const shell = root.querySelector(".orbit-shell").getBoundingClientRect();
+    const stage = root.querySelector(".orbit-stage").getBoundingClientRect();
+    const anatomy = root.querySelector("[data-understand-view]");
+    const anatomyRect = anatomy.getBoundingClientRect();
+    return {
+      shellOverflow: root.scrollWidth - root.clientWidth,
+      shellWithinViewport: shell.top >= -1 && shell.bottom <= document.documentElement.clientHeight + 1,
+      stageWithinViewport: stage.top >= -1 && stage.bottom <= document.documentElement.clientHeight + 1,
+      anatomyWithinViewport: anatomyRect.top >= -1 && anatomyRect.bottom <= document.documentElement.clientHeight + 1,
+      anatomyOverflowY: getComputedStyle(anatomy).overflowY,
+      anatomyCanScroll: anatomy.scrollHeight > anatomy.clientHeight,
+    };
+  });
+
+  expect(layout.shellOverflow).toBeLessThanOrEqual(1);
+  expect(layout.shellWithinViewport).toBe(true);
+  expect(layout.stageWithinViewport).toBe(true);
+  expect(layout.anatomyWithinViewport).toBe(true);
+  expect(layout.anatomyOverflowY).toBe("auto");
+  expect(layout.anatomyCanScroll).toBe(true);
 });
 
 test("reduced-motion mode removes ambient and navigational animation", async ({ page }) => {

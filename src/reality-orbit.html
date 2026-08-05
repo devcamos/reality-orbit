@@ -1323,6 +1323,48 @@
     border-bottom: 0;
   }
 
+  /* Keep the desktop observatory in one viewport while the anatomy becomes an
+     independent reading surface. The orbit stays spatially stable as longer
+     explanations are explored. */
+  @media (min-width: 981px) {
+    #reality-orbit-prototype {
+      height: calc(100dvh - 0.625rem);
+      min-height: 0;
+    }
+
+    #reality-orbit-prototype .orbit-shell {
+      height: 100%;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    #reality-orbit-prototype .orbit-universe-panel,
+    #reality-orbit-prototype .orbit-workspace,
+    #reality-orbit-prototype .orbit-canvas {
+      height: 100%;
+      min-height: 0;
+    }
+
+    #reality-orbit-prototype .orbit-canvas {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+
+    #reality-orbit-prototype .orbit-stage {
+      height: 100%;
+      min-height: 0;
+    }
+
+    #reality-orbit-prototype .understand-view {
+      max-height: 100%;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      scrollbar-color: rgba(164, 196, 218, 0.42) rgba(3, 10, 19, 0.45);
+    }
+  }
+
   #reality-orbit-prototype .understand-anatomy-item dt,
   #reality-orbit-prototype .understand-anatomy-item dd {
     margin: 0;
@@ -1885,7 +1927,7 @@
         </div>
       </div>
     </section>
-    <aside class="understand-view" data-understand-view aria-labelledby="understand-title">
+    <aside class="understand-view" data-understand-view aria-labelledby="understand-title" tabindex="0">
           <header class="understand-header">
             <div class="understand-header-meta">
               <p class="text-small understand-eyebrow" data-understand-eyebrow></p>
