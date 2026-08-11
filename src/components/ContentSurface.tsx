@@ -1,84 +1,69 @@
 import type { ReactElement } from "react";
 import type { AppTab } from "./AppNavigation";
 import { FieldNotesSurface } from "./FieldNotesSurface";
+import { LibrarySurface } from "./LibrarySurface";
 
 interface ContentSurfaceProps {
   readonly tab: Exclude<AppTab, "home">;
   readonly onExploreNode?: (nodeId: string) => void;
+  readonly initialNoteSlug?: string;
 }
 
-const surfaceContent: Record<ContentSurfaceProps["tab"], {
-  eyebrow: string;
-  title: string;
-  lead: string;
-  sections: readonly { title: string; body: string }[];
-}> = {
-  "field-notes": {
-    eyebrow: "Ideas in context",
-    title: "Notes",
-    lead: "Short explanations that begin with a question and stay anchored to the map of reality.",
-    sections: [
-      {
-        title: "Begin with a node",
-        body: "Each note will connect to one or more ontology nodes, so an idea can be read in context and then explored spatially.",
-      },
-      {
-        title: "Make the connection visible",
-        body: "Notes explain why a concept matters, how it behaves, and which neighbouring ideas help complete the picture.",
-      },
-    ],
-  },
-  library: {
-    eyebrow: "Sources and artefacts",
-    title: "Library",
-    lead: "The sources and references behind the ideas in Reality Orbit.",
-    sections: [
-      {
-        title: "What belongs here",
-        body: "Research papers, books, documentation, datasets, podcasts, and videos that help you check, extend, or apply an idea.",
-      },
-      {
-        title: "How it connects",
-        body: "Each source can point back to the concept it illuminates. The source supports understanding without changing the concept's canonical place.",
-      },
-    ],
-  },
-  about: {
-    eyebrow: "The observatory",
-    title: "About Reality Orbit",
-    lead: "Reality Orbit is a spatial interface for building understanding, one carefully chosen lens at a time.",
-    sections: [
-      {
-        title: "Reality remains central",
-        body: "The map begins with Reality, then uses Domain, Category, Time, Scale, and Perspective to reveal complementary structure.",
-      },
-      {
-        title: "Understanding is the product",
-        body: "Space is the interaction metaphor. The purpose is not to collect nodes, but to see what a concept means, where it applies, and what it connects to.",
-      },
-    ],
-  },
-};
+export function ContentSurface({
+  tab,
+  onExploreNode,
+  initialNoteSlug,
+}: ContentSurfaceProps): ReactElement {
+  if (tab === "field-notes") {
+    return <FieldNotesSurface initialSlug={initialNoteSlug} onExploreNode={onExploreNode} />;
+  }
 
-export function ContentSurface({ tab, onExploreNode }: ContentSurfaceProps): ReactElement {
-  if (tab === "field-notes") return <FieldNotesSurface onExploreNode={onExploreNode} />;
-  const content = surfaceContent[tab];
+  if (tab === "library") {
+    return <LibrarySurface onExploreNode={onExploreNode} />;
+  }
 
   return (
-    <section className="content-surface" aria-labelledby="content-surface-title" data-content-surface={tab}>
+    <section className="content-surface" aria-labelledby="content-surface-title" data-content-surface="about">
       <div className="content-surface__inner">
         <header className="content-surface__header">
-          <p className="content-surface__eyebrow">{content.eyebrow}</p>
-          <h1 id="content-surface-title">{content.title}</h1>
-          <p className="content-surface__lead">{content.lead}</p>
+          <p className="content-surface__eyebrow">The observatory</p>
+          <h1 id="content-surface-title">About Reality Orbit</h1>
+          <p className="content-surface__lead">
+            Reality Orbit is a spatial interface for building understanding, one carefully chosen lens at a time.
+          </p>
         </header>
         <div className="content-surface__sections">
-          {content.sections.map((section) => (
-            <article className="content-surface__card" key={section.title}>
-              <h2>{section.title}</h2>
-              <p>{section.body}</p>
-            </article>
-          ))}
+          <article className="content-surface__card">
+            <h2>Reality remains central</h2>
+            <p>
+              The map begins with Reality, then uses Domain, Category, Time, Scale, and Perspective to reveal complementary structure.
+            </p>
+          </article>
+          <article className="content-surface__card">
+            <h2>Understanding is the product</h2>
+            <p>
+              Space is the interaction metaphor. The purpose is not to collect nodes, but to see what a concept means, where it applies, and what it connects to.
+            </p>
+          </article>
+          <article className="content-surface__card">
+            <h2>The public map stays free</h2>
+            <p>
+              Exploring the ontology, reading Concept Anatomy, and submitting understanding questions remain free. Payment, if it arrives, will attach only to saving, resuming, comparing, or guided study—never to changing what is true.
+            </p>
+          </article>
+          <article className="content-surface__card">
+            <h2>A current teaching example</h2>
+            <p>
+              Potential emergence uses the stone-monkey birth story as an allegory for how unused capacity becomes will or self-awareness. The myth is a teaching vehicle, not a new layer of Reality.
+            </p>
+            <button
+              className="content-surface__action"
+              type="button"
+              onClick={() => onExploreNode?.("potential-emergence")}
+            >
+              Explore Potential Emergence in Reality Orbit <span aria-hidden="true">→</span>
+            </button>
+          </article>
         </div>
       </div>
     </section>

@@ -26,6 +26,7 @@ test("introduces the observatory before revealing the ontology map", async ({ pa
   await expect(page.getByRole("heading", { name: "Begin with Reality." })).toBeVisible();
   await expect(page.getByText("Reality surrounded by the five complementary lenses:", { exact: false })).toBeAttached();
   await expect(page.getByRole("button", { name: "Explore Reality" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Start with a teaching note" })).toBeVisible();
   await expect(page.getByText("See how it works", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("navigation", { name: "Example route" })).toHaveCount(0);
   await expect(page.locator('iframe[title="Reality Orbit"]')).toHaveCount(0);
@@ -199,6 +200,33 @@ test("Potential emergence is a terminal Framework destination with allegory anat
   await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
 });
 
+test("a teaching-note entry opens Potential emergence without hunting the map", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-enter-teaching-note]").click();
+  await expect(page.getByRole("button", { name: "Notes", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.locator("[data-blog-reader='how-potential-becomes-consciousness']")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "How potential becomes consciousness" })).toBeVisible();
+});
+
+test("About states the free map and offers the current teaching example", async ({ page }) => {
+  await openOrbit(page);
+  await page.getByRole("button", { name: "About", exact: true }).click();
+  await expect(page.locator('[data-content-surface="about"]')).toBeVisible();
+  await expect(page.getByRole("heading", { name: "The public map stays free" })).toBeVisible();
+  await page.getByRole("button", { name: /Explore Potential Emergence in Reality Orbit/ }).click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
+});
+
+test("Library sources return to their mapped concepts", async ({ page }) => {
+  await openOrbit(page);
+  await page.getByRole("button", { name: "Library", exact: true }).click();
+  await expect(page.locator("[data-library-sources] [data-library-source]")).toHaveCount(3);
+  await page.getByRole("button", { name: /Explore Potential Emergence in Reality Orbit/ }).click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
+});
+
 test("a Field Note can return to Potential emergence", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
@@ -217,6 +245,7 @@ test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await page.locator("[data-enter-observatory]").click();
   await page.getByRole("button", { name: "Notes", exact: true }).click();
   await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(5);
+  await expect(page.locator('[data-field-note="how-potential-becomes-consciousness"]')).toHaveClass(/blog-card--featured/);
   await expect(page.locator("[data-blog-taxonomy]")).toHaveCount(0);
   await expect(page.locator("[data-blog-filter]")).toBeVisible();
   await page.locator("[data-blog-filter]").selectOption("Resources");
