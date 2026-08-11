@@ -26,6 +26,47 @@ export interface FieldNote {
 
 export const fieldNotes: readonly FieldNote[] = [
   {
+    slug: "how-potential-becomes-consciousness",
+    title: "How potential becomes consciousness",
+    dimension: "Category",
+    category: "Knowledge",
+    subcategory: "Framework",
+    tags: ["Potential emergence", "Development", "Allegory"],
+    date: "2026-08-11",
+    summary: "The birth of Sun Wukong is a teaching allegory for how unused human capacity becomes will, vocation, or self-awareness.",
+    primaryNodeId: "potential-emergence",
+    sections: [
+      {
+        heading: "Keep the myth in its place",
+        body: "Mapped to real life, the stone-monkey birth story is an allegory, not a biography and not a new layer of the ontology. Use it to ask how inherited capacity becomes conscious agency.",
+      },
+      {
+        heading: "The immortality stone",
+        body: "The mountain rock is unused human potential and the unconscious mind. A child is not a blank slate or a finished product; they inherit biological, psychological, and environmental capacity waiting to be tapped.",
+      },
+      {
+        heading: "Heaven and Earth",
+        body: "Heaven, the father or Yang, is mind, intellect, and vision: education, ambition, and the ideas that ignite action. Earth, the mother or Yin, is body, nature, and environment: health, DNA, upbringing, and material conditions.",
+      },
+      {
+        heading: "The divine embryo",
+        body: "When mind and body have nurtured unused capacity long enough, a stone egg forms. In life this is the spark of genius or self-awareness: the realisation of who you are or what you can do.",
+      },
+      {
+        heading: "The wind that hatches it",
+        body: "The monkey appears only when the stone splits and wind hits the egg. Potential stays inert until a crisis, life change, or extreme pressure forces the hard exterior open.",
+      },
+      {
+        heading: "The stone monkey",
+        body: "Wukong is the unrefined, high-energy ego and potential—the monkey mind—before later discipline. Pressure without incubation is only stress; incubation without a catalyst stays unused.",
+      },
+      {
+        heading: "Use the map",
+        body: "Open Framework in the Knowledge branch, then select Potential emergence. Compare it with Development, Identity development, Meaning motivation, and OODA Loop rather than treating the myth as destiny.",
+      },
+    ],
+  },
+  {
     slug: "paradoxes-where-simple-rules-stop-working",
     title: "Paradoxes: Where simple rules stop working",
     dimension: "Category",

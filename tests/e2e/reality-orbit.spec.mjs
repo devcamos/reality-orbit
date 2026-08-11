@@ -174,11 +174,49 @@ test("the Skills surface is not exposed in primary navigation", async ({ page })
   await expect(page.locator('[data-content-surface="skills"]')).toHaveCount(0);
 });
 
+test("Potential emergence is a terminal Framework destination with allegory anatomy", async ({ page }) => {
+  await openOrbit(page);
+
+  await explore(page, "category");
+  await explore(page, "knowledge");
+  await explore(page, "framework");
+
+  await expect(node(page, "framework")).toHaveClass(/orbit-core/);
+  await expect(node(page, "ooda-loop")).toBeVisible();
+  await expect(node(page, "potential-emergence")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(2);
+
+  await node(page, "potential-emergence").click();
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
+  await expect(app(page).locator("[data-understand-pareto-fields]")).toContainText("unused capacity as stone");
+  await app(page).locator("[data-understand-more] summary").click();
+  await expect(app(page).locator("[data-understand-more]")).toContainText("Immortality Stone");
+  await expect(app(page).locator("[data-understand-more]")).toContainText("Stone Monkey");
+
+  await explore(page, "potential-emergence");
+  await expect(node(page, "potential-emergence")).toHaveClass(/orbit-core/);
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Framework");
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
+});
+
+test("a Field Note can return to Potential emergence", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-enter-observatory]").click();
+  await page.getByRole("button", { name: "Notes", exact: true }).click();
+  await page.getByRole("button", { name: "Read How potential becomes consciousness" }).click();
+  await expect(page.locator("[data-blog-reader='how-potential-becomes-consciousness']")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "The immortality stone" })).toBeVisible();
+  await page.getByRole("button", { name: /Explore Potential Emergence in Reality Orbit/ }).click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Potential emergence");
+});
+
 test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
   await page.getByRole("button", { name: "Notes", exact: true }).click();
-  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(4);
+  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(5);
   await expect(page.locator("[data-blog-taxonomy]")).toHaveCount(0);
   await expect(page.locator("[data-blog-filter]")).toBeVisible();
   await page.locator("[data-blog-filter]").selectOption("Resources");
