@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactElement } from "react";
 import { AppNavigation, type AppTab } from "./components/AppNavigation";
 import { ContentSurface } from "./components/ContentSurface";
-import { ObservatoryIntroduction } from "./components/ObservatoryIntroduction";
+import { ObservatoryIntroduction, type ObservatoryDestination } from "./components/ObservatoryIntroduction";
 import { RealityOrbitFrame } from "./components/RealityOrbitFrame";
 import { buildOrbitDocument } from "./lib/orbit-document";
 
@@ -61,6 +61,7 @@ export function App(): ReactElement {
   const [requestedNodeId, setRequestedNodeId] = useState<string | undefined>(readSelectedNode);
   const [requestedPath, setRequestedPath] = useState<string[] | undefined>(readNavigationPath);
   const [requestedNodeMode, setRequestedNodeMode] = useState<"restore" | "select">("restore");
+  const [initialNoteSlug, setInitialNoteSlug] = useState<string>();
 
   useEffect(() => {
     const handleOrbitSelection = (event: MessageEvent): void => {
@@ -109,11 +110,18 @@ export function App(): ReactElement {
     setActiveTab(tab);
   };
 
-  const enterObservatory = (): void => {
+  const enterObservatory = (destination?: ObservatoryDestination): void => {
     try {
       window.sessionStorage.setItem("reality-orbit-entered", "true");
     } catch {
       // Session storage is an enhancement; entry must still work when unavailable.
+    }
+    if (destination?.tab) {
+      rememberActiveTab(destination.tab);
+      setActiveTab(destination.tab);
+    }
+    if (destination?.noteSlug) {
+      setInitialNoteSlug(destination.noteSlug);
     }
     setHasEntered(true);
   };
@@ -134,7 +142,13 @@ export function App(): ReactElement {
                 requestMode={requestedNodeMode}
               />
             </div>
-            {activeTab !== "home" && <ContentSurface tab={activeTab} onExploreNode={exploreNodeFromFieldNote} />}
+            {activeTab !== "home" && (
+              <ContentSurface
+                tab={activeTab}
+                initialNoteSlug={initialNoteSlug}
+                onExploreNode={exploreNodeFromFieldNote}
+              />
+            )}
           </div>
         </div>
       ) : (

@@ -4,6 +4,7 @@ import { FIELD_NOTE_DIMENSIONS, fieldNotes, type FieldNote } from "../lib/field-
 
 interface FieldNotesSurfaceProps {
   readonly onExploreNode?: (nodeId: string) => void;
+  readonly initialSlug?: string;
 }
 
 const labelForNodeId = (nodeId: string): string => nodeId
@@ -13,9 +14,9 @@ const labelForNodeId = (nodeId: string): string => nodeId
 
 const localAdminEnabled = import.meta.env.DEV;
 
-export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): ReactElement {
+export function FieldNotesSurface({ onExploreNode, initialSlug }: FieldNotesSurfaceProps): ReactElement {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [selectedSlug, setSelectedSlug] = useState<string>();
+  const [selectedSlug, setSelectedSlug] = useState<string | undefined>(initialSlug);
   const [notes, setNotes] = useState<readonly FieldNote[]>(fieldNotes);
   const [adminOpen, setAdminOpen] = useState(false);
   const selectedNote = notes.find((note) => note.slug === selectedSlug);
@@ -107,10 +108,11 @@ export function FieldNotesSurface({ onExploreNode }: FieldNotesSurfaceProps): Re
             {visibleNotes.length > 0 ? (
               <div className="blog-card-grid" data-blog-card-grid>
                 {visibleNotes.map((note) => (
-                  <button className={`blog-card blog-card--${note.category.toLowerCase().replaceAll(" ", "-")}`} data-field-note={note.slug} key={note.slug} type="button" onClick={() => setSelectedSlug(note.slug)} aria-label={`Read ${note.title}`}>
+                  <button className={`blog-card blog-card--${note.category.toLowerCase().replaceAll(" ", "-")}${note.featured ? " blog-card--featured" : ""}`} data-field-note={note.slug} key={note.slug} type="button" onClick={() => setSelectedSlug(note.slug)} aria-label={`Read ${note.title}`}>
                     <span className="blog-card__media" aria-hidden="true"><span>{note.category}</span></span>
                     <span className="blog-card__body">
                       <span className="blog-card__meta">
+                        {note.featured && <span>Start here</span>}
                         <span>{note.category} → {note.subcategory ?? "Field note"}</span>
                         <span>{note.date}</span>
                       </span>

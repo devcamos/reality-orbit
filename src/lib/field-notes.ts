@@ -21,6 +21,7 @@ export interface FieldNote {
   readonly date: string;
   readonly summary: string;
   readonly primaryNodeId: string;
+  readonly featured?: boolean;
   readonly sections: readonly FieldNoteSection[];
 }
 
@@ -33,6 +34,7 @@ export const fieldNotes: readonly FieldNote[] = [
     subcategory: "Framework",
     tags: ["Potential emergence", "Development", "Allegory"],
     date: "2026-08-11",
+    featured: true,
     summary: "The birth of Sun Wukong is a teaching allegory for how unused human capacity becomes will, vocation, or self-awareness.",
     primaryNodeId: "potential-emergence",
     sections: [

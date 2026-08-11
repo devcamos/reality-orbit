@@ -1,8 +1,13 @@
 import type { CSSProperties, ReactElement } from "react";
 import observatoryBackgroundUrl from "../../assets/observatory-deep-space.webp";
 
+export interface ObservatoryDestination {
+  readonly tab?: "home" | "field-notes";
+  readonly noteSlug?: string;
+}
+
 interface ObservatoryIntroductionProps {
-  readonly onEnter: () => void;
+  readonly onEnter: (destination?: ObservatoryDestination) => void;
 }
 
 type LensName = "Domain" | "Category" | "Time" | "Scale" | "Perspective";
@@ -95,10 +100,10 @@ export function ObservatoryIntroduction({
         </header>
 
         <div className="observatory-intro__opening">
-          <h1 id="observatory-intro-title">Begin with Reality<span>.</span></h1>
+          <h1 id="observatory-intro-title" aria-label="Begin with Reality.">Begin with Reality<span aria-hidden="true">.</span></h1>
           <p className="observatory-intro__lead">
-            Start with Reality. Use five lenses to see what a thing is, when it
-            changes, where it sits, and how different viewpoints shape it.
+            Use five lenses to see what a thing is, when it changes, where it
+            sits, and how different viewpoints shape it.
           </p>
         </div>
 
@@ -126,15 +131,25 @@ export function ObservatoryIntroduction({
           </figcaption>
         </figure>
 
-        <button
-          className="observatory-intro__enter"
-          type="button"
-          onClick={onEnter}
-          data-enter-observatory
-        >
-          <span>Explore Reality</span>
-          <span aria-hidden="true">→</span>
-        </button>
+        <div className="observatory-intro__actions">
+          <button
+            className="observatory-intro__enter"
+            type="button"
+            onClick={() => onEnter()}
+            data-enter-observatory
+          >
+            <span>Explore Reality</span>
+            <span aria-hidden="true">→</span>
+          </button>
+          <button
+            className="observatory-intro__note"
+            type="button"
+            onClick={() => onEnter({ tab: "field-notes", noteSlug: "how-potential-becomes-consciousness" })}
+            data-enter-teaching-note
+          >
+            Start with a teaching note
+          </button>
+        </div>
       </div>
     </section>
   );
