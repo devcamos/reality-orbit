@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "status": "editorially-curated",
-  "reviewedOn": "2026-07-26",
+  "reviewedOn": "2026-08-11",
   "admissionCriteria": [
     "Fits the stated parent scope.",
     "Uses a distinct, non-ambiguous learner-facing label.",
@@ -13,7 +13,7 @@
     {
       "id": "knowledge",
       "scope": "What is known, claimed, represented, or inferred.",
-    "decision": "Selects the core artifact vocabulary, a small set of named law instances, principles, models, theories, methods, and paradoxes; it does not claim exhaustive coverage.",
+      "decision": "Selects the core artifact vocabulary, a small set of named law instances, principles, frameworks, models, theories, methods, and paradoxes; it does not claim exhaustive coverage.",
       "approvedPaths": [
         [
           "law",
@@ -66,6 +66,10 @@
         [
           "framework",
           "ooda-loop"
+        ],
+        [
+          "framework",
+          "potential-emergence"
         ],
         [
           "model",

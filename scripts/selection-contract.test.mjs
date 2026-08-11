@@ -644,3 +644,23 @@ test("Concept Anatomy maps the simple Pareto model to the selected node", () => 
   assert.match(fragment, /understandEyebrow\.textContent = summaryTitleForNode\(node, role\);/);
   assert.match(fragment, /understandTitle\.textContent = node\.label;/);
 });
+
+test("Potential emergence teaches the stone-monkey allegory without expanding the ontology", () => {
+  const framework = contract.ontology.framework;
+  const emergence = contract.ontology["potential-emergence"];
+  const anatomy = contract.buildConceptAnatomy(emergence);
+
+  assert.ok(framework.children.includes("potential-emergence"));
+  assert.deepEqual(Array.from(emergence.canonicalPath), ["Reality", "Category", "Knowledge", "Framework", "Potential emergence"]);
+  assert.equal(emergence.children?.length ?? 0, 0, "Potential emergence must remain a terminal level-4 framework.");
+  assert.equal(contract.roleForNode(emergence), "Named knowledge artifact");
+  assert.match(emergence.summary, /inherited potential becomes conscious agency/i);
+  assert.match(anatomy["Immortality Stone"], /unconscious mind/i);
+  assert.match(anatomy.Heaven, /mind, intellect, and vision/i);
+  assert.match(anatomy.Earth, /body, nature, and environment/i);
+  assert.match(anatomy["Divine Embryo"], /self-awareness/i);
+  assert.match(anatomy.Wind, /catalyst/i);
+  assert.match(anatomy["Stone Monkey"], /unrefined/i);
+  assert.match(anatomy.Scope, /allegory mapped onto psychology/i);
+  assert.match(anatomy.Scope, /not a claim/i);
+});
