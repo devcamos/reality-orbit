@@ -1561,6 +1561,45 @@
     color: color-mix(in srgb, var(--map-color, #c99d69) 72%, #d7e4e8);
   }
 
+  #reality-orbit-prototype .understand-related-concepts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.55rem;
+    align-items: center;
+  }
+
+  #reality-orbit-prototype .understand-related-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin: 0;
+    padding: 0.2rem 0.05rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: color-mix(in srgb, var(--map-color, #c99d69) 78%, #e8eef1);
+    font: inherit;
+    line-height: 1.3;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    cursor: pointer;
+  }
+
+  #reality-orbit-prototype .understand-related-link:hover,
+  #reality-orbit-prototype .understand-related-link:focus-visible {
+    color: #f3efe6;
+  }
+
+  #reality-orbit-prototype .understand-related-link:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 80%, #f3efe6);
+    outline-offset: 3px;
+  }
+
+  #reality-orbit-prototype .understand-related-remainder {
+    flex: 1 1 100%;
+    color: #c6d1d6;
+  }
+
   #reality-orbit-prototype .understand-context {
     display: grid;
     grid-auto-rows: minmax(0, 1fr);
@@ -4276,6 +4315,65 @@
       .map((principle) => `${principle.charAt(0).toUpperCase()}${principle.slice(1)}`)
       .map((principle) => /[.!?]$/.test(principle) ? principle : `${principle}.`);
 
+    const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const relatedConceptNodesFor = (value) => {
+      const text = String(value ?? "");
+      const labels = [...new Set(Object.values(ontology).map((node) => node.label))]
+        .sort((left, right) => right.length - left.length);
+      if (labels.length === 0 || !text.trim()) return { matches: [], remainder: text };
+      const pattern = new RegExp(labels.map(escapeRegExp).join("|"), "gi");
+      const seen = new Set();
+      const matches = [];
+      for (const match of text.matchAll(pattern)) {
+        const node = Object.values(ontology).find((candidate) =>
+          candidate.label.localeCompare(match[0], undefined, { sensitivity: "accent" }) === 0);
+        if (!node || seen.has(node.id)) continue;
+        seen.add(node.id);
+        matches.push({ node, text: match[0] });
+      }
+      const remainder = text
+        .replace(pattern, " ")
+        .replace(/\b(?:and|or)\b/gi, " ")
+        .replace(/[.,;:]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      return { matches, remainder };
+    };
+
+    const openRelatedConcept = (node) => {
+      if (!node) return;
+      if (node.id === currentId() || !canExploreNode(node)) {
+        setSelectedNode(node.id, { revealMobileContent: true });
+        return;
+      }
+      exploreSelectedNode(node.id, { revealMap: true });
+    };
+
+    const createRelatedConceptsValue = (value) => {
+      const { matches, remainder } = relatedConceptNodesFor(value);
+      if (matches.length === 0) return document.createTextNode(String(value ?? ""));
+      const list = document.createElement("span");
+      list.className = "understand-related-concepts";
+      list.append(...matches.map(({ node, text }) => {
+        const link = document.createElement("button");
+        link.type = "button";
+        link.className = "understand-related-link";
+        link.dataset.relatedNodeId = node.id;
+        link.textContent = text;
+        link.setAttribute("aria-label", `Explore ${node.label}`);
+        link.addEventListener("click", () => openRelatedConcept(node));
+        return link;
+      }));
+      if (remainder) {
+        const leftover = document.createElement("span");
+        leftover.className = "understand-related-remainder";
+        leftover.textContent = remainder;
+        list.append(leftover);
+      }
+      return list;
+    };
+
     const createAnatomyField = ([label, value], className = "") => {
       const field = document.createElement("div");
       field.className = className;
@@ -4293,6 +4391,8 @@
           return item;
         }));
         description.append(principlesList);
+      } else if (label === "Related concepts") {
+        description.append(createRelatedConceptsValue(value));
       } else {
         description.textContent = value;
       }

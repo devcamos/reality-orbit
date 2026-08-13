@@ -215,11 +215,19 @@ test("Survival is a terminal Framework destination for fact versus choice", asyn
   await expect(app(page).locator("[data-understand-more]")).toContainText("Fact");
   await expect(app(page).locator("[data-understand-more]")).toContainText("Negotiable");
   await expect(app(page).locator("[data-understand-more]")).toContainText("Path");
+  const related = app(page).locator('[data-anatomy-field="related-concepts"]');
+  await expect(related.locator("[data-related-node-id]")).toHaveCount(9);
+  await expect(related.locator('[data-related-node-id="organism"]')).toHaveText("Organism");
 
   await explore(page, "survival");
   await expect(node(page, "survival")).toHaveClass(/orbit-core/);
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Framework");
   await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
+
+  await app(page).locator("[data-understand-more] summary").click();
+  await related.locator('[data-related-node-id="organism"]').click();
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Organism");
+  await expect(node(page, "organism")).toHaveClass(/orbit-core/);
 });
 
 test("a teaching-note entry opens Potential emergence without hunting the map", async ({ page }) => {

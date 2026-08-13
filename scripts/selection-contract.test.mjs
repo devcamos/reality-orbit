@@ -628,6 +628,7 @@ test("Concept Anatomy maps the simple Pareto model to the selected node", () => 
   }
   assert.match(fragment, /const principleItemsFor = \(value\)/);
   assert.match(fragment, /if \(label === "First principles"\)/);
+  assert.match(fragment, /if \(label === "Related concepts"\)/);
   assert.match(fragment, /principlesList\.className = "understand-principles"/);
   assert.match(fragment, /<details class="understand-more" data-understand-more hidden>/);
   assert.match(fragment, /understandMore\.open = false;/);
@@ -682,4 +683,18 @@ test("Survival is a terminal Framework for fact, negotiable, and inherited path"
   assert.match(anatomy.Scope, /does not add Bible/i);
   assert.match(anatomy.Scope, /Third eye/i);
   assert.match(anatomy["Related concepts"], /Organism/i);
+  for (const label of ["OODA Loop", "Potential emergence", "Organism", "Living system", "Natural environment", "Ecosystem", "Process", "Physical object", "Matter"]) {
+    assert.ok(
+      Object.values(contract.ontology).some((node) => node.label === label),
+      `Survival related concept "${label}" must be a canonical node so it can render as a link.`,
+    );
+  }
+});
+
+test("Related concepts that match canonical labels render as explorable links", () => {
+  assert.match(fragment, /if \(label === "Related concepts"\)/);
+  assert.match(fragment, /understand-related-link/);
+  assert.match(fragment, /dataset\.relatedNodeId/);
+  assert.match(fragment, /const relatedConceptNodesFor = \(value\)/);
+  assert.match(fragment, /exploreSelectedNode\(node\.id, \{ revealMap: true \}\)/);
 });
