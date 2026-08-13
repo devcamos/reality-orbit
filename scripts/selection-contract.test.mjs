@@ -664,3 +664,22 @@ test("Potential emergence teaches the stone-monkey allegory without expanding th
   assert.match(anatomy.Scope, /allegory mapped onto psychology/i);
   assert.match(anatomy.Scope, /not a claim/i);
 });
+
+test("Survival is a terminal Framework for fact, negotiable, and inherited path", () => {
+  const framework = contract.ontology.framework;
+  const survival = contract.ontology.survival;
+  const anatomy = contract.buildConceptAnatomy(survival);
+
+  assert.ok(framework.children.includes("survival"));
+  assert.deepEqual(Array.from(survival.canonicalPath), ["Reality", "Category", "Knowledge", "Framework", "Survival"]);
+  assert.equal(survival.children?.length ?? 0, 0, "Survival must remain a terminal level-4 framework.");
+  assert.equal(contract.roleForNode(survival), "Named knowledge artifact");
+  assert.match(survival.summary, /fact/i);
+  assert.match(survival.summary, /negotiable/i);
+  assert.match(anatomy.Fact, /does not negotiate/i);
+  assert.match(anatomy.Negotiable, /choice/i);
+  assert.match(anatomy.Path, /evolution/i);
+  assert.match(anatomy.Scope, /does not add Bible/i);
+  assert.match(anatomy.Scope, /Third eye/i);
+  assert.match(anatomy["Related concepts"], /Organism/i);
+});

@@ -186,7 +186,7 @@ Knowledge
 ├── Law       — explains a regularity, relationship, or constraint within scope
 ├── Principle — guides behaviour, design, or action
 ├── Razor     — guides reasoning by preferring or eliminating explanations
-├── Framework — organises analysis, decisions, or execution (OODA Loop; Potential emergence)
+├── Framework — organises analysis, decisions, or execution (OODA Loop; Potential emergence; Survival)
 ├── Model     — represents something for explanation, prediction, or design
 ├── Theorem   — states a proposition established through formal proof
 └── Pattern   — captures a reusable response to a recurring problem

@@ -185,7 +185,8 @@ test("Potential emergence is a terminal Framework destination with allegory anat
   await expect(node(page, "framework")).toHaveClass(/orbit-core/);
   await expect(node(page, "ooda-loop")).toBeVisible();
   await expect(node(page, "potential-emergence")).toBeVisible();
-  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(2);
+  await expect(node(page, "survival")).toBeVisible();
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(3);
 
   await node(page, "potential-emergence").click();
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
@@ -196,6 +197,27 @@ test("Potential emergence is a terminal Framework destination with allegory anat
 
   await explore(page, "potential-emergence");
   await expect(node(page, "potential-emergence")).toHaveClass(/orbit-core/);
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Framework");
+  await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
+});
+
+test("Survival is a terminal Framework destination for fact versus choice", async ({ page }) => {
+  await openOrbit(page);
+
+  await explore(page, "category");
+  await explore(page, "knowledge");
+  await explore(page, "framework");
+
+  await node(page, "survival").click();
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Survival");
+  await expect(app(page).locator("[data-understand-pareto-fields]")).toContainText("given, chosen");
+  await app(page).locator("[data-understand-more] summary").click();
+  await expect(app(page).locator("[data-understand-more]")).toContainText("Fact");
+  await expect(app(page).locator("[data-understand-more]")).toContainText("Negotiable");
+  await expect(app(page).locator("[data-understand-more]")).toContainText("Path");
+
+  await explore(page, "survival");
+  await expect(node(page, "survival")).toHaveClass(/orbit-core/);
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Framework");
   await expect(app(page).locator("[data-orbit-nodes] .orbit-node:not(.orbit-core)")).toHaveCount(0);
 });
@@ -227,6 +249,19 @@ test("Library sources return to their mapped concepts", async ({ page }) => {
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
 });
 
+test("a Field Note can return to Survival", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-enter-observatory]").click();
+  await page.getByRole("button", { name: "Notes", exact: true }).click();
+  await page.getByRole("button", { name: "Read Given, chosen, and the path here" }).click();
+  await expect(page.locator("[data-blog-reader='given-chosen-and-the-path-here']")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Keep Survival on the Knowledge shelf" })).toBeVisible();
+  await page.getByRole("button", { name: /Explore Survival in Reality Orbit/ }).click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Survival");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Survival");
+});
+
 test("a Field Note can return to Potential emergence", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
@@ -244,7 +279,7 @@ test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
   await page.getByRole("button", { name: "Notes", exact: true }).click();
-  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(5);
+  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(6);
   await expect(page.locator('[data-field-note="how-potential-becomes-consciousness"]')).toHaveClass(/blog-card--featured/);
   await expect(page.locator("[data-blog-taxonomy]")).toHaveCount(0);
   await expect(page.locator("[data-blog-filter]")).toBeVisible();
