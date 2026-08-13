@@ -17,7 +17,7 @@ For normal implementation changes, run the narrowest relevant checks and then th
 ## Test design
 
 - Test user outcomes and contracts, not implementation trivia.
-- Add regression coverage for every new interaction or ontology rule.
+- Add regression coverage for every new interaction or ontology rule. Target ≥90% coverage on new code where coverage is measured. If Sonar/CI does not measure coverage, say so; do not invent a percentage.
 - Cover desktop, mobile, keyboard, reduced motion, and accessible naming where relevant.
 - Every UI change must include responsive acceptance at 390px mobile, 768px iPad/tablet, and 1280px desktop widths, including overflow and clipping checks for the changed surface.
 - Keep Playwright journeys readable and focused on meaningful user paths.

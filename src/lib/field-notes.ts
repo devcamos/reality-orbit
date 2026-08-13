@@ -1,3 +1,5 @@
+import survivalFieldNote from "./field-notes/given-chosen-and-the-path-here.json";
+
 export interface FieldNoteSection {
   readonly heading: string;
   readonly body: string;
@@ -68,39 +70,7 @@ export const fieldNotes: readonly FieldNote[] = [
       },
     ],
   },
-  {
-    slug: "given-chosen-and-the-path-here",
-    title: "Given, chosen, and the path here",
-    dimension: "Category",
-    category: "Knowledge",
-    subcategory: "Framework",
-    tags: ["Survival", "Constraints", "Evolution"],
-    date: "2026-08-13",
-    summary: "Survival is a teaching framework for what is fact, what is negotiable, and how evolution arrived at the constraints we still meet.",
-    primaryNodeId: "survival",
-    sections: [
-      {
-        heading: "Keep Survival on the Knowledge shelf",
-        body: "Survival sits under Framework next to OODA Loop and Potential emergence. It organises how to read a situation. It is not a Bible node, not a Third-eye node, and not a new Biological evolution branch.",
-      },
-      {
-        heading: "Fact",
-        body: "Start with what does not negotiate: energy, water, temperature, time, death, and the mineral setting a body depends on. Familiar is not the same as given.",
-      },
-      {
-        heading: "Negotiable",
-        body: "Then name what people still choose or interpret: custom, story, status, tools, and what we build. If it can be otherwise and the body still lives, it is not Fact.",
-      },
-      {
-        heading: "Path",
-        body: "Then name how lineages and environments reached these terms. Evolution and deep time explain why these constraints, not that a culture or market is destiny.",
-      },
-      {
-        heading: "Use the map",
-        body: "Open Framework in the Knowledge branch, then select Survival. Compare Organism, Ecosystem, Matter, and OODA Loop. Understanding is the outcome; do not invent a Third-eye planet.",
-      },
-    ],
-  },
+  survivalFieldNote as FieldNote,
   {
     slug: "paradoxes-where-simple-rules-stop-working",
     title: "Paradoxes: Where simple rules stop working",

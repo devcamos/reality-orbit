@@ -17,7 +17,7 @@ This scope governs the React shell, compatibility frame, visualization, interact
 - Preserve the ontology data contract; do not duplicate canonical node data in UI components.
 - Keep generated `legacy-index.html` synchronised from the readable source fragment.
 - Keep user-facing labels contextual, accessible, and specific to the selected node.
-- Keep Field Notes metadata aligned to the canonical dimensions; do not duplicate the ontology as a second navigation tree inside the library or mutate the canonical graph.
+- Keep Field Notes metadata aligned to the canonical dimensions; do not duplicate the ontology as a second navigation tree inside the library or mutate the canonical graph. New Field Note bodies live as JSON under `src/lib/field-notes/`; TypeScript stays types plus loader so Sonar does not treat the FieldNote shape as duplicated logic.
 - Use semantic HTML, accessible names, live regions only when needed, and visible focus states.
 - Respect reduced-motion preferences and maintain 44px touch targets.
 - Test desktop, mobile, keyboard, hover-capable, touch, and failure states.
