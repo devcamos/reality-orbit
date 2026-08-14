@@ -1,3 +1,5 @@
+import survivalFieldNote from "./field-notes/given-chosen-and-the-path-here.json";
+
 export interface FieldNoteSection {
   readonly heading: string;
   readonly body: string;
@@ -68,6 +70,7 @@ export const fieldNotes: readonly FieldNote[] = [
       },
     ],
   },
+  survivalFieldNote as FieldNote,
   {
     slug: "paradoxes-where-simple-rules-stop-working",
     title: "Paradoxes: Where simple rules stop working",

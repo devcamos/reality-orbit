@@ -1561,6 +1561,45 @@
     color: color-mix(in srgb, var(--map-color, #c99d69) 72%, #d7e4e8);
   }
 
+  #reality-orbit-prototype .understand-related-concepts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.55rem;
+    align-items: center;
+  }
+
+  #reality-orbit-prototype .understand-related-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin: 0;
+    padding: 0.2rem 0.05rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: color-mix(in srgb, var(--map-color, #c99d69) 78%, #e8eef1);
+    font: inherit;
+    line-height: 1.3;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    cursor: pointer;
+  }
+
+  #reality-orbit-prototype .understand-related-link:hover,
+  #reality-orbit-prototype .understand-related-link:focus-visible {
+    color: #f3efe6;
+  }
+
+  #reality-orbit-prototype .understand-related-link:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--map-color, #c99d69) 80%, #f3efe6);
+    outline-offset: 3px;
+  }
+
+  #reality-orbit-prototype .understand-related-remainder {
+    flex: 1 1 100%;
+    color: #c6d1d6;
+  }
+
   #reality-orbit-prototype .understand-context {
     display: grid;
     grid-auto-rows: minmax(0, 1fr);
@@ -2717,7 +2756,7 @@
       },
       razor: { id: "razor", label: "Razor", summary: "A concise reasoning rule used to remove unlikely explanations or prefer one interpretation over another.", canonicalPath: ["Reality", "Category", "Knowledge", "Razor"], children: ["occams-razor"] },
       "occams-razor": { id: "occams-razor", label: "Occam's Razor", summary: "When explanations fit the same evidence, prefer the one that makes fewer unsupported assumptions.", canonicalPath: ["Reality", "Category", "Knowledge", "Razor", "Occam's Razor"] },
-      framework: { id: "framework", label: "Framework", summary: "A reusable structure that organises analysis, decisions, or execution.", canonicalPath: ["Reality", "Category", "Knowledge", "Framework"], children: ["ooda-loop", "potential-emergence"] },
+      framework: { id: "framework", label: "Framework", summary: "A reusable structure that organises analysis, decisions, or execution.", canonicalPath: ["Reality", "Category", "Knowledge", "Framework"], children: ["ooda-loop", "potential-emergence", "survival"] },
       "ooda-loop": { id: "ooda-loop", label: "OODA Loop", summary: "A decision framework that cycles through observing, orienting, deciding, and acting.", canonicalPath: ["Reality", "Category", "Knowledge", "Framework", "OODA Loop"] },
       "potential-emergence": {
         id: "potential-emergence",
@@ -2747,6 +2786,33 @@
           Example: "A child inherits unused capacity; study and health form a vocation; a crisis then forces that vocation into public action.",
           Counterexample: "Pressure without prior incubation is only stress; it does not create Potential emergence if no dormant capacity was being formed.",
           "Decision rule": "Choose Potential emergence when the question is how latent capacity becomes agency; otherwise use Development, Motivation, or OODA Loop.",
+        },
+      },
+      survival: {
+        id: "survival",
+        label: "Survival",
+        summary: "A teaching framework that separates what is fact, what is negotiable, and how evolution arrived at the constraints life still meets.",
+        canonicalPath: ["Reality", "Category", "Knowledge", "Framework", "Survival"],
+        anatomy: {
+          "Purpose": "Use Survival to see what does not negotiate, what remains a human choice, and which inherited path made those the constraints we live inside.",
+          "Governing question": "What here is given, what is negotiable, and how did living systems arrive at this point?",
+          "First principles": "Bodies need energy, water, temperature range, and time. Death ends a lineage that cannot meet those needs. Culture, story, and meaning can change how we meet the same constraints; they do not repeal them.",
+          "Mental model": "Three columns: Fact (given), Negotiable (chosen or interpreted), Path (how evolution and history arrived here). Fill all three before acting.",
+          "Scope": "This framework organises reading, not a biological taxonomy. It does not add Bible, Third eye, History, or Evolution nodes. Understanding is the outcome; related living systems stay under Biological and Environment.",
+          "How to use it": "Name the constraint that does not move. Name what people still choose. Name the inherited path that made those the terms. Then compare Organism, Ecosystem, and OODA Loop.",
+          "Common confusion": "Survival is not a how-to wilderness method, not scripture, and not proof that a myth or market is natural. Fact is not the same as familiar.",
+          "Fact": "What does not negotiate inside the situation: metabolism, gravity, temperature, time, death, and the mineral and chemical conditions a body depends on.",
+          "Negotiable": "What remains interpretation or choice: custom, story, status, tools, cooperation, what we build from rock, and what we call necessary when it is only habitual.",
+          "Path": "How lineages and environments reached these constraints: variation, selection, inheritance, and the long rock-and-water setting life still uses. Teaching, not a new Evolution branch.",
+          "Related concepts": "OODA Loop, Potential emergence, Organism, Living system, Natural environment, Ecosystem, Process, Physical object, and Matter.",
+        },
+        pareto: {
+          Mechanism: "Survival holds a situation in three columns—given, chosen, and inherited path—so the visitor can see constraints without treating culture as physics or physics as optional.",
+          "Applies when": "Use Survival when a decision, story, or fear mixes what bodies require with what people invented.",
+          "Breaks when": "It breaks when Fact is used to launder a preference, or when Path is treated as destiny that forbids choice.",
+          Example: "Granite is given crust chemistry; a temple built from it is chosen; soils and minerals that feed organisms are the inherited path that makes that rock matter to life.",
+          Counterexample: "Calling a fashion, rank, or market 'survival' does not make it Fact. If it can be otherwise and the body still lives, it is Negotiable.",
+          "Decision rule": "Choose Survival when the question is given versus chosen versus inherited path; use OODA Loop to act, Potential emergence for unused capacity, and Organism for the living system itself.",
         },
       },
       model: { id: "model", label: "Model", summary: "A purposeful representation used to explain, predict, or design.", canonicalPath: ["Reality", "Category", "Knowledge", "Model"], children: ["queueing-model", "relationship-exchange-model"] },
@@ -4249,6 +4315,65 @@
       .map((principle) => `${principle.charAt(0).toUpperCase()}${principle.slice(1)}`)
       .map((principle) => /[.!?]$/.test(principle) ? principle : `${principle}.`);
 
+    const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const relatedConceptNodesFor = (value) => {
+      const text = String(value ?? "");
+      const labels = [...new Set(Object.values(ontology).map((node) => node.label))]
+        .sort((left, right) => right.length - left.length);
+      if (labels.length === 0 || !text.trim()) return { matches: [], remainder: text };
+      const pattern = new RegExp(labels.map(escapeRegExp).join("|"), "gi");
+      const seen = new Set();
+      const matches = [];
+      for (const match of text.matchAll(pattern)) {
+        const node = Object.values(ontology).find((candidate) =>
+          candidate.label.localeCompare(match[0], undefined, { sensitivity: "accent" }) === 0);
+        if (!node || seen.has(node.id)) continue;
+        seen.add(node.id);
+        matches.push({ node, text: match[0] });
+      }
+      const remainder = text
+        .replace(pattern, " ")
+        .replace(/\b(?:and|or)\b/gi, " ")
+        .replace(/[.,;:]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      return { matches, remainder };
+    };
+
+    const openRelatedConcept = (node) => {
+      if (!node) return;
+      if (node.id === currentId() || !canExploreNode(node)) {
+        setSelectedNode(node.id, { revealMobileContent: true });
+        return;
+      }
+      exploreSelectedNode(node.id, { revealMap: true });
+    };
+
+    const createRelatedConceptsValue = (value) => {
+      const { matches, remainder } = relatedConceptNodesFor(value);
+      if (matches.length === 0) return document.createTextNode(String(value ?? ""));
+      const list = document.createElement("span");
+      list.className = "understand-related-concepts";
+      list.append(...matches.map(({ node, text }) => {
+        const link = document.createElement("button");
+        link.type = "button";
+        link.className = "understand-related-link";
+        link.dataset.relatedNodeId = node.id;
+        link.textContent = text;
+        link.setAttribute("aria-label", `Explore ${node.label}`);
+        link.addEventListener("click", () => openRelatedConcept(node));
+        return link;
+      }));
+      if (remainder) {
+        const leftover = document.createElement("span");
+        leftover.className = "understand-related-remainder";
+        leftover.textContent = remainder;
+        list.append(leftover);
+      }
+      return list;
+    };
+
     const createAnatomyField = ([label, value], className = "") => {
       const field = document.createElement("div");
       field.className = className;
@@ -4266,6 +4391,8 @@
           return item;
         }));
         description.append(principlesList);
+      } else if (label === "Related concepts") {
+        description.append(createRelatedConceptsValue(value));
       } else {
         description.textContent = value;
       }

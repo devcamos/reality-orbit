@@ -314,6 +314,10 @@ if (!fragment.includes("understand-definition-label") || !fragment.includes(">Co
   failures.push("Concept Anatomy must explicitly identify the selected concept.");
 }
 
+if (!fragment.includes("understand-related-link") || !fragment.includes('label === "Related concepts"')) {
+  failures.push("Related concepts that match canonical node labels must render as explorable links.");
+}
+
 for (const understandLayoutContract of [
   "data-understand-eyebrow",
   "data-understand-title",

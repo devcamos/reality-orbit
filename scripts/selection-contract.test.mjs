@@ -628,6 +628,7 @@ test("Concept Anatomy maps the simple Pareto model to the selected node", () => 
   }
   assert.match(fragment, /const principleItemsFor = \(value\)/);
   assert.match(fragment, /if \(label === "First principles"\)/);
+  assert.match(fragment, /if \(label === "Related concepts"\)/);
   assert.match(fragment, /principlesList\.className = "understand-principles"/);
   assert.match(fragment, /<details class="understand-more" data-understand-more hidden>/);
   assert.match(fragment, /understandMore\.open = false;/);
@@ -663,4 +664,37 @@ test("Potential emergence teaches the stone-monkey allegory without expanding th
   assert.match(anatomy["Stone Monkey"], /unrefined/i);
   assert.match(anatomy.Scope, /allegory mapped onto psychology/i);
   assert.match(anatomy.Scope, /not a claim/i);
+});
+
+test("Survival is a terminal Framework for fact, negotiable, and inherited path", () => {
+  const framework = contract.ontology.framework;
+  const survival = contract.ontology.survival;
+  const anatomy = contract.buildConceptAnatomy(survival);
+
+  assert.ok(framework.children.includes("survival"));
+  assert.deepEqual(Array.from(survival.canonicalPath), ["Reality", "Category", "Knowledge", "Framework", "Survival"]);
+  assert.equal(survival.children?.length ?? 0, 0, "Survival must remain a terminal level-4 framework.");
+  assert.equal(contract.roleForNode(survival), "Named knowledge artifact");
+  assert.match(survival.summary, /fact/i);
+  assert.match(survival.summary, /negotiable/i);
+  assert.match(anatomy.Fact, /does not negotiate/i);
+  assert.match(anatomy.Negotiable, /choice/i);
+  assert.match(anatomy.Path, /evolution/i);
+  assert.match(anatomy.Scope, /does not add Bible/i);
+  assert.match(anatomy.Scope, /Third eye/i);
+  assert.match(anatomy["Related concepts"], /Organism/i);
+  for (const label of ["OODA Loop", "Potential emergence", "Organism", "Living system", "Natural environment", "Ecosystem", "Process", "Physical object", "Matter"]) {
+    assert.ok(
+      Object.values(contract.ontology).some((node) => node.label === label),
+      `Survival related concept "${label}" must be a canonical node so it can render as a link.`,
+    );
+  }
+});
+
+test("Related concepts that match canonical labels render as explorable links", () => {
+  assert.match(fragment, /if \(label === "Related concepts"\)/);
+  assert.match(fragment, /understand-related-link/);
+  assert.match(fragment, /dataset\.relatedNodeId/);
+  assert.match(fragment, /const relatedConceptNodesFor = \(value\)/);
+  assert.match(fragment, /exploreSelectedNode\(node\.id, \{ revealMap: true \}\)/);
 });
