@@ -21,6 +21,25 @@ The quality area uses these five families:
 
 Only **Operability** is materialised in this learning increment.
 
+## Hierarchy sketch
+
+```mermaid
+flowchart TD
+    A["Quality Attributes / NFRs"]
+
+    A --> B["Operability"]
+    B --> B1["Deployability"]
+    B --> B2["Observability"]
+    B --> B3["Recoverability"]
+    B --> B4["Supportability"]
+    B --> B5["Configurability"]
+
+    A --> C["Reliability and resilience"]
+    A --> D["Maintainability and change"]
+    A --> E["Security and governance"]
+    A --> F["Efficiency and experience"]
+```
+
 ## Child artefacts
 
 | Child | Purpose |
@@ -46,3 +65,7 @@ This structure turns vague goals such as “make it reliable” into a design co
 ## Reuse rule
 
 Do not abstract for imagined reuse. Keep a clean boundary for one real use case. Extract a shared component only when a second proven use case has the same stable need.
+
+## Stable pointer
+
+The previous flat reference at [`../../quality-attributes.md`](../../quality-attributes.md) redirects here so `main` history is preserved.

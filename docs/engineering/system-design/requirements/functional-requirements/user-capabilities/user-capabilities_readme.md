@@ -12,7 +12,7 @@ User-capability artefacts describe an action a user can complete and the system 
 
 | L4 artefact | What it teaches |
 | --- | --- |
-| [Create a shopping-list item](create-shopping-list-item.md) | A compact functional requirement, acceptance scenario, and sequence diagram |
+| [Explore the selected ontology node](explore-selected-ontology-node.md) | A compact Reality Orbit functional requirement, acceptance scenario, and sequence diagram |
 
 ## Check before adding an L4
 
