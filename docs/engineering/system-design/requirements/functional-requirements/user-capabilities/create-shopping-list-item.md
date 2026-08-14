@@ -56,4 +56,4 @@ An automated acceptance test should cover the successful save and the blank-name
 
 ## Quality boundary
 
-This document says **what** happens. It does not set a latency target, prescribe a deployment tool, or claim that the system can be operated by someone else. Those are quality attributes. The paired example is [Independent-operator readiness](../../../quality-attributes/operability/independent-operator-readiness.md).
+This document says **what** happens. It does not set a latency target, prescribe a deployment tool, or claim that the system can be operated by someone else. Those are quality attributes. The paired example is [Independent-operator readiness](../../quality-attributes/operability/independent-operator-readiness.md).
