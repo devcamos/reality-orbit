@@ -25,7 +25,7 @@ Only **User Capabilities** is materialised in this learning increment.
 | Child | Purpose |
 | --- | --- |
 | [User Capabilities](user-capabilities/user-capabilities_readme.md) | Functional behaviour initiated by a user |
-| [Create a shopping-list item](user-capabilities/create-shopping-list-item.md) | Small L4 example using a scenario and sequence diagram |
+| [Explore the selected ontology node](user-capabilities/explore-selected-ontology-node.md) | Small L4 Reality Orbit example using a scenario and sequence diagram |
 
 ## Requirement-writing test
 

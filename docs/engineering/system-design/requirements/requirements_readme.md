@@ -12,7 +12,7 @@ Requirements state the outcome that a system must deliver and the qualities it m
 
 | Child | Answers | Current example |
 | --- | --- | --- |
-| [Functional Requirements](functional-requirements/functional-requirements_readme.md) | What must the system enable someone or something to do? | Add a shopping-list item |
+| [Functional Requirements](functional-requirements/functional-requirements_readme.md) | What must the system enable someone or something to do? | Explore the selected ontology node |
 | [Quality Attributes](quality-attributes/quality-attributes_readme.md) | How well must it work, and under what constraints? | An independent engineer can run and recover it |
 
 ## Writing rule
@@ -25,7 +25,7 @@ Do not hide an architecture choice inside a requirement unless that choice is it
 
 Functional requirements and quality attributes are paired:
 
-> A signed-in shopper can add a named item to a shopping list.
+> A visitor can explore the selected Reality Orbit node from the contextual Explore control.
 
 > An engineer who did not build the service can deploy, diagnose, and recover that capability using documented steps.
 

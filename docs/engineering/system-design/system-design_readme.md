@@ -17,7 +17,7 @@ flowchart TD
     SD --> R["L1: Requirements"]
     R --> FR["L2: Functional Requirements"]
     FR --> UC["L3: User Capabilities"]
-    UC --> F1["L4: create-shopping-list-item.md"]
+    UC --> F1["L4: explore-selected-ontology-node.md"]
 
     R --> QA["L2: Quality Attributes"]
     QA --> OP["L3: Operability"]
@@ -48,7 +48,7 @@ Every non-terminal folder contains a file named `<folder>_readme.md`. It records
 | `requirements/` | L1 branch for statements of needed behaviour and measurable qualities |
 | `requirements/functional-requirements/` | L2: what the system must do |
 | `requirements/quality-attributes/` | L2: how well it must work, including constraints |
-| `requirements/functional-requirements/user-capabilities/create-shopping-list-item.md` | L4 functional learning example |
+| `requirements/functional-requirements/user-capabilities/explore-selected-ontology-node.md` | L4 Reality Orbit functional example |
 | `requirements/quality-attributes/operability/independent-operator-readiness.md` | L4 operability learning example |
 
 ## Boundaries
