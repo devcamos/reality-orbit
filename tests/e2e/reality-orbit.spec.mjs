@@ -287,8 +287,10 @@ test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
   await page.getByRole("button", { name: "Notes", exact: true }).click();
-  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(6);
+  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(7);
   await expect(page.locator('[data-field-note="how-potential-becomes-consciousness"]')).toHaveClass(/blog-card--featured/);
+  await expect(page.locator('[data-field-note="probability-is-a-language-for-uncertainty"]')).toBeVisible();
+  await expect(page.locator('[data-field-note="given-chosen-and-the-path-here"]')).toBeVisible();
   await expect(page.locator("[data-blog-taxonomy]")).toHaveCount(0);
   await expect(page.locator("[data-blog-filter]")).toBeVisible();
   await page.locator("[data-blog-filter]").selectOption("Resources");
@@ -303,6 +305,21 @@ test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Paradox");
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Paradox");
+});
+
+test("the probability Field Note teaches decision sequences and returns to Model", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-enter-observatory]").click();
+  await page.getByRole("button", { name: "Notes", exact: true }).click();
+  await expect(page.locator('[data-field-note="probability-is-a-language-for-uncertainty"]')).toBeVisible();
+  await page.getByRole("button", { name: "Read Probability is a language for uncertainty" }).click();
+  await expect(page.locator("[data-blog-reader='probability-is-a-language-for-uncertainty']")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "A decision sequence for uncertain situations" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Probability has a moral boundary" })).toBeVisible();
+  await page.getByRole("button", { name: /Explore Model in Reality Orbit/ }).click();
+  await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(app(page).locator("[data-understand-title]")).toHaveText("Model");
+  await expect(app(page).locator("[data-orbit-path]")).toContainText("Model");
 });
 
 test("a local admin can create and publish a Field Note", async ({ page }) => {

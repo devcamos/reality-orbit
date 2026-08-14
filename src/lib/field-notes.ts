@@ -1,4 +1,5 @@
 import survivalFieldNote from "./field-notes/given-chosen-and-the-path-here.json";
+import probabilityIsALanguageForUncertainty from "./field-notes/probability-is-a-language-for-uncertainty.json";
 
 export interface FieldNoteSection {
   readonly heading: string;
@@ -26,6 +27,8 @@ export interface FieldNote {
   readonly featured?: boolean;
   readonly sections: readonly FieldNoteSection[];
 }
+
+const probabilityFieldNote = probabilityIsALanguageForUncertainty as FieldNote;
 
 export const fieldNotes: readonly FieldNote[] = [
   {
@@ -70,6 +73,7 @@ export const fieldNotes: readonly FieldNote[] = [
       },
     ],
   },
+  probabilityFieldNote,
   survivalFieldNote as FieldNote,
   {
     slug: "paradoxes-where-simple-rules-stop-working",
