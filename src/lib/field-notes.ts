@@ -30,6 +30,13 @@ export interface FieldNote {
 
 const probabilityFieldNote = probabilityIsALanguageForUncertainty as FieldNote;
 
+/** Featured teaching notes shown as “Start here” and linked from the observatory intro. */
+export const teachingNoteSlugs = [
+  "how-potential-becomes-consciousness",
+  "given-chosen-and-the-path-here",
+  "probability-is-a-language-for-uncertainty",
+] as const;
+
 export const fieldNotes: readonly FieldNote[] = [
   {
     slug: "how-potential-becomes-consciousness",

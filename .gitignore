@@ -1,5 +1,6 @@
 .DS_Store
 .vercel
+coverage
 ctrf
 dist
 node_modules

@@ -62,6 +62,7 @@ export function App(): ReactElement {
   const [requestedPath, setRequestedPath] = useState<string[] | undefined>(readNavigationPath);
   const [requestedNodeMode, setRequestedNodeMode] = useState<"restore" | "select">("restore");
   const [initialNoteSlug, setInitialNoteSlug] = useState<string>();
+  const [initialNotesFilter, setInitialNotesFilter] = useState<"start-here" | "all" | undefined>();
 
   useEffect(() => {
     const handleOrbitSelection = (event: MessageEvent): void => {
@@ -123,6 +124,9 @@ export function App(): ReactElement {
     if (destination?.noteSlug) {
       setInitialNoteSlug(destination.noteSlug);
     }
+    if (destination?.notesFilter) {
+      setInitialNotesFilter(destination.notesFilter);
+    }
     setHasEntered(true);
   };
 
@@ -146,6 +150,7 @@ export function App(): ReactElement {
               <ContentSurface
                 tab={activeTab}
                 initialNoteSlug={initialNoteSlug}
+                initialNotesFilter={initialNotesFilter}
                 onExploreNode={exploreNodeFromFieldNote}
               />
             )}

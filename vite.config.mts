@@ -7,6 +7,9 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     outDir: "dist",
+    // Observatory shell + compatibility frame ship as one entry; intentional
+    // single-chunk product surface for v1. Raise only with a code-split plan.
+    chunkSizeWarningLimit: 700,
     rollupOptions: {
       output: {
         assetFileNames: "assets/[name][extname]",

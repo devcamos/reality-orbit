@@ -32,6 +32,7 @@ test("probability Field Note metadata maps to the Model node", () => {
   assert.equal(note.category, "Knowledge");
   assert.equal(note.subcategory, "Model");
   assert.equal(note.primaryNodeId, "model");
+  assert.equal(note.featured, true);
   assert.equal(note.date, "2026-08-14");
   assert.deepEqual(note.tags, ["Probability", "Decision making", "Uncertainty", "Models"]);
   assert.match(note.summary, /does not promise control/i);

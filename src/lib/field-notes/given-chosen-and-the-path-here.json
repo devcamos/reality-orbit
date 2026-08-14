@@ -6,6 +6,7 @@
   "subcategory": "Framework",
   "tags": ["Survival", "Constraints", "Evolution"],
   "date": "2026-08-13",
+  "featured": true,
   "summary": "Survival is a teaching framework for what is fact, what is negotiable, and how evolution arrived at the constraints we still meet.",
   "primaryNodeId": "survival",
   "sections": [

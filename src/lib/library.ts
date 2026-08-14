@@ -14,8 +14,8 @@ export const librarySources: readonly LibrarySource[] = [
     title: "Journey to the West",
     kind: "Literary source",
     year: "c. 1592",
-    summary: "Wu Cheng'en's novel is the literary home of the stone-monkey birth story. Reality Orbit uses that episode as an allegory, not as ontology.",
-    role: "Supports Potential emergence without changing the canonical map.",
+    summary: "Wu Cheng'en's novel is the literary home of the stone-monkey birth story. Reality Orbit borrows that episode as allegory, not as a map claim.",
+    role: "Grounds the Potential emergence teaching example without adding a literary node to the ontology.",
     primaryNodeId: "potential-emergence",
   },
   {
@@ -23,8 +23,8 @@ export const librarySources: readonly LibrarySource[] = [
     title: "Destruction and Creation",
     kind: "Essay",
     year: "1976",
-    summary: "John Boyd's essay is a source for the observe–orient–decide–act loop used as a decision framework.",
-    role: "Supports OODA Loop as a named knowledge artifact.",
+    summary: "John Boyd's essay is a primary source for the observe–orient–decide–act loop used as a decision framework.",
+    role: "Anchors OODA Loop as a named knowledge artefact with a clear origin text.",
     primaryNodeId: "ooda-loop",
   },
   {
@@ -33,7 +33,7 @@ export const librarySources: readonly LibrarySource[] = [
     kind: "Research programme",
     year: "1969–1980",
     summary: "John Bowlby's attachment research organises close bonds, safety seeking, and later relationship expectations.",
-    role: "Supports Attachment theory as a scoped developmental account.",
+    role: "Anchors Attachment theory as a scoped developmental account, not a universal law of love.",
     primaryNodeId: "attachment-theory",
   },
 ];

@@ -6,6 +6,7 @@
   "subcategory": "Model",
   "tags": ["Probability", "Decision making", "Uncertainty", "Models"],
   "date": "2026-08-14",
+  "featured": true,
   "summary": "Probability does not promise control. It helps us recognise the kind of uncertainty we face, protect what matters, and make better next moves.",
   "primaryNodeId": "model",
   "sections": [

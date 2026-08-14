@@ -7,15 +7,23 @@ interface ContentSurfaceProps {
   readonly tab: Exclude<AppTab, "home">;
   readonly onExploreNode?: (nodeId: string) => void;
   readonly initialNoteSlug?: string;
+  readonly initialNotesFilter?: "start-here" | "all";
 }
 
 export function ContentSurface({
   tab,
   onExploreNode,
   initialNoteSlug,
+  initialNotesFilter,
 }: ContentSurfaceProps): ReactElement {
   if (tab === "field-notes") {
-    return <FieldNotesSurface initialSlug={initialNoteSlug} onExploreNode={onExploreNode} />;
+    return (
+      <FieldNotesSurface
+        initialSlug={initialNoteSlug}
+        initialFilter={initialNotesFilter}
+        onExploreNode={onExploreNode}
+      />
+    );
   }
 
   if (tab === "library") {
@@ -52,17 +60,33 @@ export function ContentSurface({
             </p>
           </article>
           <article className="content-surface__card">
-            <h2>A current teaching example</h2>
+            <h2>Current teaching examples</h2>
             <p>
-              Potential emergence uses the stone-monkey birth story as an allegory for how unused capacity becomes will or self-awareness. The myth is a teaching vehicle, not a new layer of Reality.
+              Three Field Notes open existing map concepts without inventing new planets: Potential emergence (Framework allegory), Survival (Framework for fact vs negotiable vs path), and Probability as a Model for uncertainty.
             </p>
-            <button
-              className="content-surface__action"
-              type="button"
-              onClick={() => onExploreNode?.("potential-emergence")}
-            >
-              Explore Potential Emergence in Reality Orbit <span aria-hidden="true">→</span>
-            </button>
+            <div className="about-teaching-actions">
+              <button
+                className="content-surface__action"
+                type="button"
+                onClick={() => onExploreNode?.("potential-emergence")}
+              >
+                Explore Potential Emergence in Reality Orbit <span aria-hidden="true">→</span>
+              </button>
+              <button
+                className="content-surface__action"
+                type="button"
+                onClick={() => onExploreNode?.("survival")}
+              >
+                Explore Survival in Reality Orbit <span aria-hidden="true">→</span>
+              </button>
+              <button
+                className="content-surface__action"
+                type="button"
+                onClick={() => onExploreNode?.("model")}
+              >
+                Explore Model in Reality Orbit <span aria-hidden="true">→</span>
+              </button>
+            </div>
           </article>
         </div>
       </div>
