@@ -35,6 +35,7 @@ If a change crosses scopes, read every relevant scope file. Scoped files add con
 
 ## Universal engineering rules
 
+- **Trunk-based delivery:** `main` is the only long-lived line of truth. Short-lived PR branches only; sync with `ff-only`; delete merged branches; do not keep parallel “integration” histories. See [Engineering best practices](https://app.notion.com/p/36e7233a96ec804f9efade2e8feca9d7).
 - Preserve existing canonical names, paths, relationships, and level boundaries unless explicitly approved.
 - Prefer small, reversible, component-driven changes.
 - Keep user-facing content specific to the selected node and useful for understanding.
