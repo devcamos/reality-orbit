@@ -4,6 +4,7 @@ import observatoryBackgroundUrl from "../../assets/observatory-deep-space.webp";
 export interface ObservatoryDestination {
   readonly tab?: "home" | "field-notes";
   readonly noteSlug?: string;
+  readonly notesFilter?: "start-here" | "all";
 }
 
 interface ObservatoryIntroductionProps {
@@ -144,10 +145,10 @@ export function ObservatoryIntroduction({
           <button
             className="observatory-intro__note"
             type="button"
-            onClick={() => onEnter({ tab: "field-notes", noteSlug: "how-potential-becomes-consciousness" })}
+            onClick={() => onEnter({ tab: "field-notes", notesFilter: "start-here" })}
             data-enter-teaching-note
           >
-            Start with a teaching note
+            Browse teaching notes
           </button>
         </div>
       </div>

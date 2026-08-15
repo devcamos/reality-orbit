@@ -26,7 +26,7 @@ test("introduces the observatory before revealing the ontology map", async ({ pa
   await expect(page.getByRole("heading", { name: "Begin with Reality." })).toBeVisible();
   await expect(page.getByText("Reality surrounded by the five complementary lenses:", { exact: false })).toBeAttached();
   await expect(page.getByRole("button", { name: "Explore Reality" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Start with a teaching note" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Browse teaching notes" })).toBeVisible();
   await expect(page.getByText("See how it works", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("navigation", { name: "Example route" })).toHaveCount(0);
   await expect(page.locator('iframe[title="Reality Orbit"]')).toHaveCount(0);
@@ -100,9 +100,28 @@ test("the welcome call to action feels alive without displacing text or ignoring
   }));
   expect(heartbeat).toEqual({ name: "intro-heartbeat", duration: "1.9s" });
 
+  const presence = await page.locator("[data-observatory-introduction]").evaluate((introduction) => {
+    const orbit = introduction.querySelector(".observatory-intro__map-orbit--outer");
+    const marker = introduction.querySelector(".observatory-intro__map-marker");
+    const brand = introduction.querySelector(".observatory-intro__brand-mark");
+    return {
+      orbit: getComputedStyle(orbit).animationName,
+      marker: getComputedStyle(marker).animationName,
+      brand: getComputedStyle(brand).animationName,
+      reality: getComputedStyle(introduction.querySelector(".observatory-intro__map-reality")).animationName,
+    };
+  });
+  expect(presence.orbit).toBe("intro-orbit-drift");
+  expect(presence.marker).toBe("intro-lens-pulse");
+  expect(presence.brand).toBe("intro-mark-pulse");
+  expect(presence.reality).toBe("intro-reality-breathe");
+
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect
     .poll(() => page.locator("[data-enter-observatory]").evaluate((button) => getComputedStyle(button).animationName))
+    .toBe("none");
+  await expect
+    .poll(() => page.locator(".observatory-intro__map-orbit--outer").evaluate((orbit) => getComputedStyle(orbit).animationName))
     .toBe("none");
 });
 
@@ -230,19 +249,24 @@ test("Survival is a terminal Framework destination for fact versus choice", asyn
   await expect(node(page, "organism")).toHaveClass(/orbit-core/);
 });
 
-test("a teaching-note entry opens Potential emergence without hunting the map", async ({ page }) => {
+test("a teaching-note entry opens curated Start here notes without locking to one allegory", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-teaching-note]").click();
   await expect(page.getByRole("button", { name: "Notes", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(page.locator("[data-blog-reader='how-potential-becomes-consciousness']")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "How potential becomes consciousness" })).toBeVisible();
+  await expect(page.locator("[data-blog-filter]")).toHaveValue("start-here");
+  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(3);
+  await expect(page.locator('[data-field-note="how-potential-becomes-consciousness"]')).toHaveClass(/blog-card--featured/);
+  await expect(page.locator('[data-field-note="given-chosen-and-the-path-here"]')).toHaveClass(/blog-card--featured/);
+  await expect(page.locator('[data-field-note="probability-is-a-language-for-uncertainty"]')).toHaveClass(/blog-card--featured/);
 });
 
-test("About states the free map and offers the current teaching example", async ({ page }) => {
+test("About states the free map and offers current teaching examples", async ({ page }) => {
   await openOrbit(page);
   await page.getByRole("button", { name: "About", exact: true }).click();
   await expect(page.locator('[data-content-surface="about"]')).toBeVisible();
   await expect(page.getByRole("heading", { name: "The public map stays free" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Current teaching examples" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Explore Model in Reality Orbit/ })).toBeVisible();
   await page.getByRole("button", { name: /Explore Potential Emergence in Reality Orbit/ }).click();
   await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
@@ -251,7 +275,13 @@ test("About states the free map and offers the current teaching example", async 
 test("Library sources return to their mapped concepts", async ({ page }) => {
   await openOrbit(page);
   await page.getByRole("button", { name: "Library", exact: true }).click();
+  await expect(page.locator('[data-content-surface="library"]')).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Library", exact: true })).toBeVisible();
+  await expect(page.getByText(/Notes tell a teaching story/)).toBeVisible();
+  await expect(page.getByLabel("How to use the Library")).toContainText("3 sources");
   await expect(page.locator("[data-library-sources] [data-library-source]")).toHaveCount(3);
+  await expect(page.locator('[data-library-source="journey-to-the-west"]')).toContainText("What it is");
+  await expect(page.locator('[data-library-source="journey-to-the-west"]')).toContainText("Opens on the map");
   await page.getByRole("button", { name: /Explore Potential Emergence in Reality Orbit/ }).click();
   await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Potential emergence");
@@ -289,10 +319,12 @@ test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await page.getByRole("button", { name: "Notes", exact: true }).click();
   await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(7);
   await expect(page.locator('[data-field-note="how-potential-becomes-consciousness"]')).toHaveClass(/blog-card--featured/);
-  await expect(page.locator('[data-field-note="probability-is-a-language-for-uncertainty"]')).toBeVisible();
-  await expect(page.locator('[data-field-note="given-chosen-and-the-path-here"]')).toBeVisible();
+  await expect(page.locator('[data-field-note="probability-is-a-language-for-uncertainty"]')).toHaveClass(/blog-card--featured/);
+  await expect(page.locator('[data-field-note="given-chosen-and-the-path-here"]')).toHaveClass(/blog-card--featured/);
   await expect(page.locator("[data-blog-taxonomy]")).toHaveCount(0);
   await expect(page.locator("[data-blog-filter]")).toBeVisible();
+  await page.locator("[data-blog-filter]").selectOption("start-here");
+  await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(3);
   await page.locator("[data-blog-filter]").selectOption("Resources");
   await expect(page.locator("[data-blog-card-grid] .blog-card")).toHaveCount(1);
   await page.locator("[data-blog-filter]").selectOption("all");
@@ -307,6 +339,37 @@ test("a Field Note can return to its mapped Paradox node", async ({ page }) => {
   await expect(app(page).locator("[data-orbit-path]")).toContainText("Paradox");
 });
 
+test("the probability Field Note reader stays usable at 390, 768, and 1280", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-enter-observatory]").click();
+  await page.getByRole("button", { name: "Notes", exact: true }).click();
+  await page.getByRole("button", { name: "Read Probability is a language for uncertainty" }).click();
+  await expect(page.locator("[data-blog-reader='probability-is-a-language-for-uncertainty']")).toBeVisible();
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1280, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const layout = await page.locator("[data-blog-reader='probability-is-a-language-for-uncertainty']").evaluate((reader) => {
+      const explore = [...document.querySelectorAll("button")].find((button) => /Explore Model in Reality Orbit/i.test(button.textContent ?? ""));
+      const exploreRect = explore?.getBoundingClientRect();
+      return {
+        horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        exploreVisible: Boolean(explore && exploreRect && exploreRect.height >= 44 && exploreRect.width >= 44),
+        exploreTop: exploreRect?.top ?? -1,
+      };
+    });
+    expect(layout.horizontalOverflow, `${viewport.width}px`).toBeLessThanOrEqual(1);
+    expect(layout.exploreVisible, `${viewport.width}px`).toBe(true);
+    expect(layout.exploreTop, `${viewport.width}px`).toBeGreaterThanOrEqual(0);
+  }
+
+  await page.getByRole("button", { name: /Explore Model in Reality Orbit/ }).focus();
+  await expect(page.getByRole("button", { name: /Explore Model in Reality Orbit/ })).toBeFocused();
+});
+
 test("the probability Field Note teaches decision sequences and returns to Model", async ({ page }) => {
   await page.goto("/");
   await page.locator("[data-enter-observatory]").click();
@@ -316,6 +379,7 @@ test("the probability Field Note teaches decision sequences and returns to Model
   await expect(page.locator("[data-blog-reader='probability-is-a-language-for-uncertainty']")).toBeVisible();
   await expect(page.getByRole("heading", { name: "A decision sequence for uncertain situations" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Probability has a moral boundary" })).toBeVisible();
+  await expect(page.getByText(/Open Model in the Knowledge branch/i)).toBeVisible();
   await page.getByRole("button", { name: /Explore Model in Reality Orbit/ }).click();
   await expect(page.getByRole("button", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(app(page).locator("[data-understand-title]")).toHaveText("Model");

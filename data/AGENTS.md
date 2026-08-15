@@ -32,3 +32,10 @@ This scope protects the Canonical Reality Ontology and its published curation da
 ## Safety boundary
 
 User popularity, feedback volume, sponsorship, or payment must never directly determine whether an ontology claim is true or whether a canonical node changes.
+
+## Field Notes → existing nodes
+
+- Every Field Note must set `primaryNodeId` to an **existing** canonical ontology node.
+- A teaching example (Probability under Model, Potential emergence under Framework, and similar) is not grounds to invent a new planet or leaf.
+- Ontology expansion requires a separate governance ticket with an approved parent, one-level expansion, and curation update.
+- Field Notes may deepen understanding of a node; they must not mutate the canonical graph.

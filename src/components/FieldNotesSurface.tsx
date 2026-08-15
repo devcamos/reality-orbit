@@ -1,10 +1,11 @@
 import { useState, type ReactElement } from "react";
 import { BlogAdminPanel } from "./BlogAdminPanel";
-import { FIELD_NOTE_DIMENSIONS, fieldNotes, type FieldNote } from "../lib/field-notes";
+import { FIELD_NOTE_DIMENSIONS, fieldNotes, teachingNoteSlugs, type FieldNote } from "../lib/field-notes";
 
 interface FieldNotesSurfaceProps {
   readonly onExploreNode?: (nodeId: string) => void;
   readonly initialSlug?: string;
+  readonly initialFilter?: "start-here" | "all";
 }
 
 const labelForNodeId = (nodeId: string): string => nodeId
@@ -13,19 +14,30 @@ const labelForNodeId = (nodeId: string): string => nodeId
   .join(" ");
 
 const localAdminEnabled = import.meta.env.DEV;
+const START_HERE_FILTER = "start-here";
 
-export function FieldNotesSurface({ onExploreNode, initialSlug }: FieldNotesSurfaceProps): ReactElement {
-  const [activeFilter, setActiveFilter] = useState("all");
+export function FieldNotesSurface({ onExploreNode, initialSlug, initialFilter }: FieldNotesSurfaceProps): ReactElement {
+  const [activeFilter, setActiveFilter] = useState<string>(initialFilter ?? "all");
   const [selectedSlug, setSelectedSlug] = useState<string | undefined>(initialSlug);
   const [notes, setNotes] = useState<readonly FieldNote[]>(fieldNotes);
   const [adminOpen, setAdminOpen] = useState(false);
   const selectedNote = notes.find((note) => note.slug === selectedSlug);
   const subcategoryFilters = [...new Set(notes.map((note) => note.subcategory).filter((subcategory): subcategory is string => Boolean(subcategory)))].sort((left, right) => left.localeCompare(right));
-  const filterOptions = ["all", ...FIELD_NOTE_DIMENSIONS, ...subcategoryFilters];
+  const filterOptions = [START_HERE_FILTER, "all", ...FIELD_NOTE_DIMENSIONS, ...subcategoryFilters];
   const visibleNotes = notes.filter((note) => {
+      if (activeFilter === START_HERE_FILTER) {
+        return Boolean(note.featured) || (teachingNoteSlugs as readonly string[]).includes(note.slug);
+      }
       if (activeFilter === "all") return true;
       return note.dimension === activeFilter || note.subcategory === activeFilter;
     });
+  const sortedNotes = activeFilter === START_HERE_FILTER
+    ? [...visibleNotes].sort((left, right) => {
+        const leftRank = (teachingNoteSlugs as readonly string[]).indexOf(left.slug);
+        const rightRank = (teachingNoteSlugs as readonly string[]).indexOf(right.slug);
+        return (leftRank === -1 ? 99 : leftRank) - (rightRank === -1 ? 99 : rightRank);
+      })
+    : visibleNotes;
 
   if (selectedNote) {
     return (
@@ -95,19 +107,22 @@ export function FieldNotesSurface({ onExploreNode, initialSlug }: FieldNotesSurf
               <span>Filter notes</span>
               <select data-blog-filter value={activeFilter} onChange={(event) => setActiveFilter(event.target.value)}>
                 {filterOptions.map((option) => (
-                  <option key={option} value={option}>{option === "all" ? "All notes" : option}</option>
+                  <option key={option} value={option}>
+                    {option === START_HERE_FILTER ? "Start here" : option === "all" ? "All notes" : option}
+                  </option>
                 ))}
               </select>
             </label>
           </aside>
           <div className="blog-library-results">
             <div className="blog-library-toolbar" aria-live="polite">
-              <span>{visibleNotes.length} {visibleNotes.length === 1 ? "note" : "notes"}</span>
-              {activeFilter !== "all" && <span>filtered by {activeFilter}</span>}
+              <span>{sortedNotes.length} {sortedNotes.length === 1 ? "note" : "notes"}</span>
+              {activeFilter === START_HERE_FILTER && <span>curated teaching entries</span>}
+              {activeFilter !== "all" && activeFilter !== START_HERE_FILTER && <span>filtered by {activeFilter}</span>}
             </div>
-            {visibleNotes.length > 0 ? (
+            {sortedNotes.length > 0 ? (
               <div className="blog-card-grid" data-blog-card-grid>
-                {visibleNotes.map((note) => (
+                {sortedNotes.map((note) => (
                   <button className={`blog-card blog-card--${note.category.toLowerCase().replaceAll(" ", "-")}${note.featured ? " blog-card--featured" : ""}`} data-field-note={note.slug} key={note.slug} type="button" onClick={() => setSelectedSlug(note.slug)} aria-label={`Read ${note.title}`}>
                     <span className="blog-card__media" aria-hidden="true"><span>{note.category}</span></span>
                     <span className="blog-card__body">

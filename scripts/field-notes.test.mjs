@@ -11,7 +11,7 @@ test("Survival Field Note teaches fact, negotiable, and path without new planets
   assert.equal(survivalNote.primaryNodeId, "survival");
   assert.equal(survivalNote.category, "Knowledge");
   assert.equal(survivalNote.subcategory, "Framework");
-  assert.equal(survivalNote.featured, undefined);
+  assert.equal(survivalNote.featured, true);
 
   const headings = survivalNote.sections.map((section) => section.heading);
   assert.deepEqual(headings, [

@@ -1,0 +1,62 @@
+name: SonarCloud
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: sonar-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  sonarcloud:
+    name: SonarCloud coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          cache: npm
+          node-version: 20
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Generate LCOV from contract and unit tests
+        run: npm run test:coverage
+
+      - name: Upload LCOV artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: lcov-coverage
+          path: coverage/lcov.info
+          if-no-files-found: error
+
+      - name: SonarCloud Scan
+        if: ${{ env.SONAR_TOKEN != '' }}
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+      - name: Skip Sonar upload when SONAR_TOKEN is unset
+        if: ${{ env.SONAR_TOKEN == '' }}
+        run: |
+          echo "SONAR_TOKEN is not configured. LCOV was generated and uploaded as an artifact."
+          echo "Add SONAR_TOKEN (and connect the SonarCloud project) to enable the scan step."

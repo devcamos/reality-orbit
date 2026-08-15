@@ -11,6 +11,7 @@
     "frame:desktop": "node scripts/configure-standalone-frame.mjs",
     "preview": "vite preview --host 0.0.0.0 --port 4175 --strictPort",
     "test": "node --test scripts/*.test.mjs",
+    "test:coverage": "c8 --include=scripts/lib/**/*.mjs --reporter=lcov --reporter=text --report-dir=coverage node --test scripts/*.test.mjs",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:smoke": "npm run build && node --test scripts/server-smoke.mjs",
@@ -26,6 +27,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.5",
+    "c8": "^10.1.3",
     "playwright-ctrf-json-reporter": "^0.0.29",
     "typescript": "^7.0.2",
     "vite": "^8.2.1"
