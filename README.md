@@ -2,6 +2,17 @@
 
 Reality Orbit is an expandable spatial destination map. Reality begins at the centre with its five canonical dimensions. Selecting any concept automatically updates its adjacent **Concept Anatomy** view; no separate Understand action is required. The contextual **Explore {node}** action focuses any non-root concept and adopts that node's dimension colour. Focusing a container reveals its curated children; focusing a terminal concept establishes the final exploration endpoint.
 
+## Operating runbook
+
+**Checklist (live):** [Reality Orbit](https://app.notion.com/p/3be7233a96ec815f813bf14e529f1e3c)  
+Tick boxes on Notion. Do not copy the checklist into git.
+
+**Local:** http://localhost:4175  
+**GitHub:** https://github.com/devcamos/reality-orbit  
+**Pipeline:** PR [verify.yml](https://github.com/devcamos/reality-orbit/actions/workflows/verify.yml) · [playwright.yml](https://github.com/devcamos/reality-orbit/actions/workflows/playwright.yml) · Preview Health [preview-health.yml](https://github.com/devcamos/reality-orbit/actions/workflows/preview-health.yml). Preview ≠ Production.  
+**Production:** https://reality-orbit.vercel.app  
+**Surface:** local + Preview. Pipeline on Preview is not a new Production GO.
+
 Selecting a node updates the permanent detail strip with its name, type, and explanation. Canonical paths, parents, typed relationships, and child IDs remain internal application context for traversal, validation, and a future grounded chat integration; they are not displayed as teaching content. Floating explanation cards are deliberately excluded because they can cover an unrelated destination and falsely imply that the explanation belongs to it.
 
 On larger screens, the Concept Anatomy view remains alongside the orbit map so selection changes meaning without removing spatial context. It uses an editorial layout: the concept and definition establish the header, one dominant story card presents the governing idea and foundations, a context rail highlights scope, application, and limits, and specialised supporting fields remain available below. This presentation hierarchy is derived from each node's existing anatomy rather than introducing a second content model.

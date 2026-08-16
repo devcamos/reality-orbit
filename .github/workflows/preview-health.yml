@@ -1,0 +1,70 @@
+# Preview Health — Reality Orbit
+# Shape from API Sandbox PR #33 (Preview URL + health). Preview ≠ Production.
+# Production is already live; this job still only checks Preview deployments.
+
+name: Preview Health
+
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Preview URL to health-check (never Production)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-health-${{ github.event.deployment.id || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  health:
+    name: Verify Preview /
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.deployment_status.state == 'success' &&
+        github.event.deployment.environment != 'Production' &&
+        github.event.deployment.environment != 'production' &&
+        github.event.deployment_status.target_url != ''
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      DEPLOYMENT_URL: ${{ github.event.deployment_status.target_url || inputs.base_url }}
+      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+    steps:
+      - name: GET /
+        run: |
+          set -euo pipefail
+          test -n "${DEPLOYMENT_URL}"
+          probe="${DEPLOYMENT_URL%/}/"
+          extra_headers=()
+          if [ -n "${VERCEL_AUTOMATION_BYPASS_SECRET:-}" ]; then
+            extra_headers+=(-H "x-vercel-protection-bypass: ${VERCEL_AUTOMATION_BYPASS_SECRET}")
+            extra_headers+=(-H "x-vercel-set-bypass-cookie: true")
+          fi
+          body="$(mktemp)"
+          http_code="$(curl --silent --show-error --retry 8 --retry-all-errors \
+            --connect-timeout 10 --max-time 30 \
+            -o "${body}" -w "%{http_code}" \
+            "${extra_headers[@]}" \
+            "${probe}")"
+          echo "HTTP ${http_code} ${probe}"
+          if [ "${http_code}" != "200" ]; then
+            echo "Preview / expected HTTP 200, got ${http_code}"
+            head -c 400 "${body}"; echo
+            if [ -z "${VERCEL_AUTOMATION_BYPASS_SECRET:-}" ]; then
+              echo "If this Preview is SSO-gated, set GitHub secret VERCEL_AUTOMATION_BYPASS_SECRET."
+            fi
+            exit 1
+          fi
+          if grep -qi "vercel authentication" "${body}"; then
+            echo "Response looks like Vercel SSO HTML. Set VERCEL_AUTOMATION_BYPASS_SECRET (not in git)."
+            exit 1
+          fi
+          grep -qi "reality orbit" "${body}"
+          echo "Preview / passed"
