@@ -99,3 +99,30 @@ jobs:
 
       - name: Audit locked dependencies
         run: npm audit --audit-level=high
+
+  coverage:
+    name: Coverage
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          cache: npm
+          node-version: 20
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Generate LCOV from contract and unit tests
+        run: npm run test:coverage
+
+      - name: Upload LCOV artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: lcov-coverage
+          path: coverage/lcov.info
+          if-no-files-found: error
